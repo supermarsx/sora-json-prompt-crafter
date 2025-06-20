@@ -7,7 +7,7 @@ import { Switch } from '@/components/ui/switch';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
 import { DashboardOptions } from './Dashboard';
 
 interface ControlPanelProps {
@@ -39,11 +39,14 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
   };
 
   return (
-    <div className="p-6 space-y-8">
+    <div className="p-6 space-y-6">
       {/* Basic Settings */}
-      <Card className="border-l-4 border-l-blue-500">
-        <CardHeader>
-          <CardTitle className="text-lg">Basic Settings</CardTitle>
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Badge variant="outline" className="bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300">Basic</Badge>
+            Application Settings
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
@@ -88,20 +91,23 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
       </Card>
 
       {/* Features */}
-      <Card className="border-l-4 border-l-purple-500">
-        <CardHeader>
-          <CardTitle className="text-lg">Features</CardTitle>
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Badge variant="outline" className="bg-purple-50 dark:bg-purple-950 text-purple-700 dark:text-purple-300">Features</Badge>
+            Enabled Features
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 gap-3">
             {availableFeatures.map((feature) => (
-              <div key={feature.id} className="flex items-center space-x-2">
+              <div key={feature.id} className="flex items-center space-x-3 p-2 rounded-lg hover:bg-muted/50 transition-colors">
                 <Checkbox
                   id={feature.id}
                   checked={options.features.includes(feature.id)}
                   onCheckedChange={(checked) => handleFeatureToggle(feature.id, checked === true)}
                 />
-                <Label htmlFor={feature.id} className="text-sm font-medium">
+                <Label htmlFor={feature.id} className="text-sm font-medium cursor-pointer flex-1">
                   {feature.label}
                 </Label>
               </div>
@@ -111,9 +117,12 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
       </Card>
 
       {/* Database Settings */}
-      <Card className="border-l-4 border-l-green-500">
-        <CardHeader>
-          <CardTitle className="text-lg">Database Configuration</CardTitle>
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Badge variant="outline" className="bg-green-50 dark:bg-green-950 text-green-700 dark:text-green-300">Database</Badge>
+            Database Configuration
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
@@ -135,17 +144,23 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
             </Select>
           </div>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center justify-between p-3 rounded-lg border">
+            <div className="space-y-0.5">
+              <Label htmlFor="ssl" className="text-sm font-medium">Enable SSL</Label>
+              <p className="text-xs text-muted-foreground">Secure database connections</p>
+            </div>
             <Switch
               id="ssl"
               checked={options.database.ssl}
               onCheckedChange={(checked) => updateNestedOptions('database.ssl', checked)}
             />
-            <Label htmlFor="ssl">Enable SSL</Label>
           </div>
 
-          <div className="space-y-2">
-            <Label>Connection Pool Size: {options.database.poolSize}</Label>
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <Label className="text-sm font-medium">Connection Pool Size</Label>
+              <Badge variant="secondary">{options.database.poolSize}</Badge>
+            </div>
             <Slider
               value={[options.database.poolSize]}
               onValueChange={(value) => updateNestedOptions('database.poolSize', value[0])}
@@ -159,18 +174,24 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
       </Card>
 
       {/* Authentication */}
-      <Card className="border-l-4 border-l-orange-500">
-        <CardHeader>
-          <CardTitle className="text-lg">Authentication</CardTitle>
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Badge variant="outline" className="bg-orange-50 dark:bg-orange-950 text-orange-700 dark:text-orange-300">Auth</Badge>
+            Authentication
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center justify-between p-3 rounded-lg border">
+            <div className="space-y-0.5">
+              <Label htmlFor="auth-enabled" className="text-sm font-medium">Enable Authentication</Label>
+              <p className="text-xs text-muted-foreground">Require user authentication</p>
+            </div>
             <Switch
               id="auth-enabled"
               checked={options.authentication.enabled}
               onCheckedChange={(checked) => updateNestedOptions('authentication.enabled', checked)}
             />
-            <Label htmlFor="auth-enabled">Enable Authentication</Label>
           </div>
 
           {options.authentication.enabled && (
@@ -194,8 +215,11 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <Label>Session Timeout (seconds): {options.authentication.timeout}</Label>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <Label className="text-sm font-medium">Session Timeout (seconds)</Label>
+                  <Badge variant="secondary">{options.authentication.timeout}</Badge>
+                </div>
                 <Slider
                   value={[options.authentication.timeout]}
                   onValueChange={(value) => updateNestedOptions('authentication.timeout', value[0])}
@@ -211,18 +235,24 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
       </Card>
 
       {/* Logging */}
-      <Card className="border-l-4 border-l-red-500">
-        <CardHeader>
-          <CardTitle className="text-lg">Logging Configuration</CardTitle>
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Badge variant="outline" className="bg-red-50 dark:bg-red-950 text-red-700 dark:text-red-300">Logging</Badge>
+            Logging Configuration
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center justify-between p-3 rounded-lg border">
+            <div className="space-y-0.5">
+              <Label htmlFor="logging-enabled" className="text-sm font-medium">Enable Logging</Label>
+              <p className="text-xs text-muted-foreground">Record application events</p>
+            </div>
             <Switch
               id="logging-enabled"
               checked={options.logging.enabled}
               onCheckedChange={(checked) => updateNestedOptions('logging.enabled', checked)}
             />
-            <Label htmlFor="logging-enabled">Enable Logging</Label>
           </div>
 
           {options.logging.enabled && (
