@@ -1,5 +1,49 @@
 # Welcome to your Lovable project
 
+## Sora JSON Prompt Crafter
+
+Sora JSON Prompt Crafter is a web interface for building configuration files for Sora's generative models. Adjust sliders and dropdowns to fine‑tune parameters like style preset, aspect ratio, video duration and more. The app generates a JSON snippet you can copy and use directly with Sora.
+
+### Quick Start
+
+```sh
+npm install
+npm run dev
+```
+Then open http://localhost:5173 in your browser.
+
+### Features
+
+- Edit prompts and negative prompts with live JSON output
+- Select model versions and quality presets
+- Adjust dimensions, aspect ratio and output format
+- Configure camera movement, motion strength and video length
+- Toggle advanced options like high‑res fix and safety filter
+
+Example JSON output:
+
+```json
+{
+  "prompt": "A breathtaking cinematic scene ...",
+  "negative_prompt": "blurry, low-res, ...",
+  "seed": 1337,
+  "aspect_ratio": "16:9",
+  "duration_seconds": 5
+}
+```
+
+### Screenshots
+
+Add a screenshot of the app here (e.g. `public/placeholder.svg`).
+
+### Contributing
+
+Pull requests are welcome. Please open an issue first to discuss major changes.
+
+### License
+
+This project is licensed under the MIT License.
+
 ## Project info
 
 **URL**: https://lovable.dev/projects/385b40c5-6b5e-49fc-9f0a-e6a0f9a36181
