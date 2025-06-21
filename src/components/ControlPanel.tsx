@@ -7,6 +7,7 @@ import { DimensionsFormatSection } from './sections/DimensionsFormatSection';
 import { StyleSection } from './sections/StyleSection';
 import { CameraCompositionSection } from './sections/CameraCompositionSection';
 import { VideoMotionSection } from './sections/VideoMotionSection';
+import { LightingSection } from './sections/LightingSection';
 import { MaterialSection } from './sections/MaterialSection';
 import { SettingsLocationSection } from './sections/SettingsLocationSection';
 import { FaceSection } from './sections/FaceSection';
@@ -50,12 +51,17 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         isEnabled={options.use_camera_composition}
         onToggle={(enabled) => updateOptions({ use_camera_composition: enabled })}
       />
-      
-      <VideoMotionSection 
-        options={options} 
+
+      <VideoMotionSection
+        options={options}
         updateOptions={updateOptions}
         isEnabled={options.use_motion_animation}
         onToggle={(enabled) => updateOptions({ use_motion_animation: enabled })}
+      />
+
+      <LightingSection
+        options={options}
+        updateOptions={updateOptions}
       />
       
       <MaterialSection 
