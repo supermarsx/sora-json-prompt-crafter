@@ -55,6 +55,83 @@ const compositionRulesOptions = [
   "worm's eye perspective"
 ];
 
+const cameraTypeOptions = [
+  "default (auto/any camera)",
+  "not defined",
+  "as is",
+  "keep original",
+  "DSLR (digital single-lens reflex)",
+  "mirrorless (compact, digital interchangeable lens)",
+  "rangefinder (classic street photography)",
+  "SLR (film single-lens reflex)",
+  "point and shoot (compact, easy use)",
+  "bridge camera (hybrid zoom)",
+  "medium format (pro, ultra high-res)",
+  "large format (fine art, tilt/shift)",
+  "instant camera (Polaroid, Instax style)",
+  "disposable camera (lo-fi, retro)",
+  "pinhole camera (experimental, soft focus)",
+  "toy camera (Holga, Diana, quirky looks)",
+  "twin-lens reflex (TLR, vintage)",
+  "box camera (early 20th century style)",
+  "folding camera (vintage portable)",
+  "subminiature camera (spy, tiny format)",
+  "action camera (GoPro, sports)",
+  "360 camera (panoramic, immersive)",
+  "smartphone camera (modern, casual)",
+  "old phone camera (lo-fi, nostalgic)",
+  "old iPhone camera (retro digital look)",
+  "webcam (lo-fi, candid)",
+  "camcorder (video, home movies)",
+  "handheld camcorder (retro video)",
+  "old handheld camera (vintage, shaky aesthetic)",
+  "film camera (general analog)",
+  "super 8 camera (home movies, film grain)",
+  "vhs camcorder (analog video aesthetic)",
+  "security camera (CCTV, fisheye)",
+  "dashcam (in-car, wide angle)",
+  "drone camera (aerial, birds-eye)",
+  "thermal camera (heat vision, IR effect)",
+  "infrared camera (night vision, special effect)",
+  "night vision camera (low-light scenes)",
+  "stereo camera (3D, VR)",
+  "holographic camera (sci-fi, virtual capture)",
+  "digital back (pro, modular studio)",
+  "modular camera system (customizable pro)",
+  "underwater camera (diving, marine shots)",
+  "body camera (POV, documentary)",
+  "surveillance camera (hidden, covert)",
+  "robotic camera (automated, sci-fi)",
+  "AI camera (smart, auto-enhanced)",
+  "cinema camera (professional movie making)",
+  "IMAX camera (ultra-wide, blockbuster)",
+  "panoramic camera (wide landscapes)",
+  "tilt-shift camera (architectural, creative DOF)",
+  "field camera (large format outdoor)",
+  "studio camera (broadcast, TV)",
+  "toy digital camera (kids, low-fi)",
+  "Sony Alpha 1 (flagship mirrorless)",
+  "Sony Alpha 7R V (high-res full-frame)",
+  "Sony FX6 (cinema line)",
+  "Sony Venice (digital cinema camera)",
+  "RED Komodo (compact cinema)",
+  "RED V-Raptor (high-end cinema)",
+  "RED Helium 8K (legendary cinema)",
+  "Nikon Z9 (flagship mirrorless)",
+  "Nikon D6 (pro DSLR)",
+  "Nikon F6 (classic film SLR)",
+  "Panasonic GH6 (hybrid mirrorless)",
+  "Panasonic S1H (cinema mirrorless)",
+  "Fujifilm GFX100 (medium format)",
+  "Fujifilm X-T5 (APS-C mirrorless)",
+  "Blackmagic Pocket Cinema Camera 6K",
+  "Blackmagic URSA Mini Pro 12K",
+  "DJI Osmo Pocket (portable gimbal)",
+  "DJI Mavic 3 (drone camera)",
+  "GoPro HERO12 Black (action camera)",
+  "GoPro Max (360 action cam)"
+];
+
 export const CameraCompositionSection: React.FC<CameraCompositionSectionProps> = ({
   options,
   updateOptions,
@@ -73,6 +150,16 @@ export const CameraCompositionSection: React.FC<CameraCompositionSectionProps> =
       onToggle={onToggle}
     >
       <div className="grid grid-cols-1 gap-4">
+        <div>
+          <Label>Camera Type</Label>
+          <SearchableDropdown
+            options={cameraTypeOptions}
+            value={options.camera_type}
+            onValueChange={(value) => updateOptions({ camera_type: value })}
+            label="Camera Type"
+          />
+        </div>
+
         <div>
           <Label>Shot Type</Label>
           <SearchableDropdown
