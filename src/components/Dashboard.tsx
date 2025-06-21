@@ -424,11 +424,11 @@ const Dashboard = () => {
     setOptions(prev => ({ ...prev, ...updates }));
   };
 
-  const updateNestedOptions = (path: string, value: any) => {
+  const updateNestedOptions = (path: string, value: unknown) => {
     setOptions(prev => {
       const newOptions = { ...prev };
       const keys = path.split('.');
-      let current: any = newOptions;
+      let current: Record<string, unknown> = newOptions as Record<string, unknown>;
       
       for (let i = 0; i < keys.length - 1; i++) {
         current[keys[i]] = { ...current[keys[i]] };
