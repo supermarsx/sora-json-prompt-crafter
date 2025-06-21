@@ -27,7 +27,6 @@ export interface SoraOptions {
   temperature: number;
   clip_skip: number;
   batch_size: number;
-  image_count: number;
   dynamic_range: 'SDR' | 'HDR';
   output_format: 'png' | 'jpg' | 'webp';
   duration_seconds: number;
@@ -152,7 +151,6 @@ const Dashboard = () => {
     temperature: 1.1,
     clip_skip: 2,
     batch_size: 1,
-    image_count: 4,
     dynamic_range: 'HDR',
     output_format: 'png',
     duration_seconds: 5,
@@ -419,7 +417,8 @@ const Dashboard = () => {
     delete cleanOptions.use_subject_mood;
     delete cleanOptions.use_sword_type;
     delete cleanOptions.use_camera_composition;
-    
+    delete (cleanOptions as { image_count?: number }).image_count;
+
     setJsonString(JSON.stringify(cleanOptions, null, 2));
   }, [options]);
 
@@ -465,7 +464,6 @@ const Dashboard = () => {
       temperature: 1.1,
       clip_skip: 2,
       batch_size: 1,
-      image_count: 4,
       dynamic_range: 'HDR',
       output_format: 'png',
       duration_seconds: 5,
