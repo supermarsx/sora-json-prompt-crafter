@@ -36,6 +36,8 @@ Example JSON output:
 
 ### Screenshots
 
+![image](https://github.com/user-attachments/assets/6d254018-994f-47cf-b4d6-9ea6e6f08c12)
+
 Add a screenshot of the app here (e.g. `public/placeholder.svg`).
 
 ### Contributing
