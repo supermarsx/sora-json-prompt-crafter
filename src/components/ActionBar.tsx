@@ -10,6 +10,8 @@ import {
   RotateCcw,
   RefreshCw,
   Shuffle,
+  Eye,
+  EyeOff,
   Trash2,
   ChevronDown,
   ChevronUp,
@@ -24,6 +26,8 @@ interface ActionBarProps {
   onReset: () => void;
   onRegenerate: () => void;
   onRandomize: () => void;
+  trackingEnabled: boolean;
+  onToggleTracking: () => void;
   copied: boolean;
 }
 
@@ -36,6 +40,8 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   onReset,
   onRegenerate,
   onRandomize,
+  trackingEnabled,
+  onToggleTracking,
   copied,
 }) => {
   const [minimized, setMinimized] = useState(false);
@@ -83,6 +89,17 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={onRandomize} className="gap-2">
             <Shuffle className="w-4 h-4" /> Randomize
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={onToggleTracking} className="gap-2">
+            {trackingEnabled ? (
+              <>
+                <EyeOff className="w-4 h-4" /> Disable Tracking
+              </>
+            ) : (
+              <>
+                <Eye className="w-4 h-4" /> Enable Tracking
+              </>
+            )}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

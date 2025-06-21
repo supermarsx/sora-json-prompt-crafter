@@ -13,6 +13,7 @@ import Footer from './Footer';
 import DisclaimerModal from './DisclaimerModal';
 import { useIsSingleColumn } from '@/hooks/use-single-column';
 import { useDarkMode } from '@/hooks/use-dark-mode';
+import { useTracking } from '@/hooks/use-tracking';
 
 export interface SoraOptions {
   prompt: string;
@@ -251,8 +252,10 @@ const Dashboard = () => {
     }
   });
   const jsonRef = React.useRef<HTMLDivElement>(null);
+  const jsonContainerRef = React.useRef<HTMLDivElement>(null);
   const isSingleColumn = useIsSingleColumn();
   const [darkMode, setDarkMode] = useDarkMode();
+  const [trackingEnabled, setTrackingEnabled] = useTracking();
 
   useEffect(() => {
     localStorage.setItem('jsonHistory', JSON.stringify(history));
@@ -260,6 +263,18 @@ const Dashboard = () => {
 
   useEffect(() => {
     localStorage.setItem('currentJson', jsonString);
+  }, [jsonString]);
+
+  useEffect(() => {
+    const container = jsonContainerRef.current;
+    if (!container) return;
+    const atBottom = Math.abs(container.scrollHeight - container.scrollTop - container.clientHeight) < 5;
+    const atTop = container.scrollTop === 0;
+    if (atBottom) {
+      container.scrollTop = container.scrollHeight;
+    } else if (atTop) {
+      container.scrollTop = 0;
+    }
   }, [jsonString]);
 
   useEffect(() => {
@@ -695,8 +710,8 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto p-6">
+    <div className="min-h-screen flex flex-col bg-background">
+      <div className="container mx-auto p-6 flex flex-col flex-1">
         <div className="mb-8 flex items-start justify-between">
           <div>
             <h1 className="text-4xl font-bold mb-2 flex items-center gap-3 select-none">
@@ -707,10 +722,11 @@ const Dashboard = () => {
             <div className="flex items-center gap-2 mt-2">
               <a
                 className="github-button"
-                href="https://github.com/supermarsx"
+                href="https://github.com/sponsors/supermarsx"
                 data-icon="octicon-heart"
                 data-size="large"
                 aria-label="Sponsor supermarsx"
+                data-color-scheme={darkMode ? 'dark_high_contrast' : 'light_high_contrast'}
               >
                 Sponsor
               </a>
@@ -721,6 +737,7 @@ const Dashboard = () => {
                 data-show-count="true"
                 data-size="large"
                 aria-label="Star supermarsx/sora-json-prompt-crafter on GitHub"
+                data-color-scheme={darkMode ? 'dark_high_contrast' : 'light_high_contrast'}
               >
                 Star
               </a>
@@ -742,7 +759,7 @@ const Dashboard = () => {
           </Button>
         </div>
         
-        <div className="grid lg:grid-cols-2 gap-6 h-[calc(100vh-12rem)]">
+        <div className="grid lg:grid-cols-2 gap-6 flex-1">
           <Card className="flex flex-col" ref={jsonRef}>
             <CardHeader className="border-b">
               <CardTitle className="flex items-center gap-2">
@@ -769,7 +786,7 @@ const Dashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 p-0 overflow-hidden">
-              <div className="h-full overflow-y-auto">
+              <div className="h-full overflow-y-auto" ref={jsonContainerRef}>
                 <pre className="p-6 text-sm font-mono whitespace-pre-wrap break-words leading-relaxed">
                   <code>{jsonString}</code>
                 </pre>
@@ -798,6 +815,8 @@ const Dashboard = () => {
         onReset={resetJson}
         onRegenerate={regenerateJson}
         onRandomize={randomizeJson}
+        trackingEnabled={trackingEnabled}
+        onToggleTracking={() => setTrackingEnabled(!trackingEnabled)}
         copied={copied}
       />
       <ShareModal
