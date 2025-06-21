@@ -66,19 +66,18 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
           <Label htmlFor="use_upscale_factor">Use Upscale Factor</Label>
         </div>
 
-        {options.use_upscale_factor && (
-          <div>
-            <Label htmlFor="upscale">Upscale Factor: {options.upscale}</Label>
-            <Slider
-              value={[options.upscale]}
-              onValueChange={(value) => updateOptions({ upscale: value[0] })}
-              min={1}
-              max={4}
-              step={0.1}
-              className="mt-2"
-            />
-          </div>
-        )}
+        <div>
+          <Label htmlFor="upscale">Upscale Factor: {options.upscale}</Label>
+          <Slider
+            value={[options.upscale]}
+            onValueChange={(value) => updateOptions({ upscale: value[0] })}
+            min={1}
+            max={4}
+            step={0.1}
+            className="mt-2"
+            disabled={!options.use_upscale_factor}
+          />
+        </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox
