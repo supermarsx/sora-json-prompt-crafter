@@ -721,7 +721,7 @@ const Dashboard = () => {
               <img
                 src="/web-app-manifest-512x512.png"
                 alt=""
-                className="w-10 h-10 animate-rainbow"
+                className="w-10 h-10 animate-rainbow dark:invert"
               />
               Sora JSON Prompt Crafter
             </h1>
@@ -804,7 +804,10 @@ const Dashboard = () => {
             </CardContent>
           </Card>
 
-          <Card id="generated-json" className="flex flex-col lg:sticky lg:top-24">
+          <Card
+            id="generated-json"
+            className="flex flex-col lg:sticky lg:top-24 lg:max-h-[calc(100vh-6rem)]"
+          >
             <CardHeader className="border-b">
               <CardTitle className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
@@ -822,16 +825,6 @@ const Dashboard = () => {
         </div>
       </div>
       
-      {isSingleColumn && (
-        <Button
-          onClick={scrollToJson}
-          variant="default"
-          size="sm"
-          className="fixed bottom-28 right-4 z-50"
-        >
-          Jump to JSON
-        </Button>
-      )}
       <ActionBar
         onCopy={copyToClipboard}
         onClear={clearJson}
@@ -844,6 +837,8 @@ const Dashboard = () => {
         trackingEnabled={trackingEnabled}
         onToggleTracking={() => setTrackingEnabled(!trackingEnabled)}
         copied={copied}
+        showJumpToJson={isSingleColumn}
+        onJumpToJson={scrollToJson}
       />
       <ShareModal
         isOpen={showShareModal}
