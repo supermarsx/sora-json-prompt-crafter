@@ -1,30 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-interface FooterProps {
-  trackingEnabled: boolean;
-}
-
-const GA_ID = 'G-RVR9TSBQL7';
-
-const Footer: React.FC<FooterProps> = ({ trackingEnabled }) => {
-  useEffect(() => {
-    const win = window as Window & Record<string, unknown>;
-    if (!trackingEnabled) {
-      win[`ga-disable-${GA_ID}`] = true;
-      return;
-    }
-    win[`ga-disable-${GA_ID}`] = false;
-    if (document.getElementById('ga-script')) return;
-    const script = document.createElement('script');
-    script.id = 'ga-script';
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
-    document.body.appendChild(script);
-
-    const inline = document.createElement('script');
-    inline.innerHTML = `window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', '${GA_ID}');`;
-    document.body.appendChild(inline);
-  }, [trackingEnabled]);
+const Footer: React.FC = () => {
 
   return (
     <footer className="py-6 text-center text-sm text-muted-foreground">

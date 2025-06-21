@@ -857,7 +857,7 @@ const Dashboard = () => {
         onImport={importJson}
       />
       <DisclaimerModal open={showDisclaimer} onOpenChange={setShowDisclaimer} />
-      <Footer trackingEnabled={trackingEnabled} />
+      <Footer />
       <ProgressBar />
     </div>
   );
