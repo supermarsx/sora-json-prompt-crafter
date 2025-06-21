@@ -21,23 +21,23 @@ export const DimensionsFormatSection: React.FC<DimensionsFormatSectionProps> = (
   onToggle
 }) => {
   const qualityOptions = [
-    'defective',
-    'unacceptable', 
-    'poor',
-    'bad',
-    'below standard',
-    'minimum',
-    'moderate',
-    'medium',
-    'draft',
-    'standard',
-    'good',
-    'high',
-    'excellent',
-    'ultra',
     'maximum',
-    'low'
-  ].sort();
+    'ultra',
+    'excellent',
+    'high',
+    'good',
+    'standard',
+    'draft',
+    'medium',
+    'moderate',
+    'minimum',
+    'low',
+    'below standard',
+    'bad',
+    'poor',
+    'unacceptable',
+    'defective'
+  ];
 
   const formatLabel = (value: string) => {
     return value.split(' ').map(word => 

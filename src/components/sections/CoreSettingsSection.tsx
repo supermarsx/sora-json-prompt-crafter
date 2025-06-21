@@ -15,10 +15,10 @@ interface CoreSettingsSectionProps {
 }
 
 const qualityOptions = [
-  'defective', 'unacceptable', 'poor', 'bad', 'below standard', 
-  'minimum', 'moderate', 'medium', 'draft', 'standard', 
-  'good', 'high', 'excellent', 'ultra', 'maximum', 'low'
-].sort();
+  'maximum', 'ultra', 'excellent', 'high', 'good', 'standard',
+  'draft', 'medium', 'moderate', 'minimum', 'low',
+  'below standard', 'bad', 'poor', 'unacceptable', 'defective'
+];
 
 export const CoreSettingsSection: React.FC<CoreSettingsSectionProps> = ({
   options,
