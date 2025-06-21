@@ -128,6 +128,95 @@ export interface SoraOptions {
   use_duration: boolean;
 }
 
+const disabledFieldMap: Record<string, string[]> = {
+  use_core_settings: [
+    'seed',
+    'quality',
+    'steps',
+    'guidance_scale',
+    'temperature',
+    'cfg_rescale',
+  ],
+  use_dimensions_format: [
+    'aspect_ratio',
+    'dynamic_range',
+    'output_format',
+    'quality',
+    'use_dimensions',
+    'width',
+    'height',
+  ],
+  use_motion_animation: [
+    'duration_seconds',
+    'fps',
+    'motion_strength',
+    'camera_motion',
+    'motion_direction',
+    'frame_interpolation',
+    'use_duration',
+    'extended_fps',
+    'extended_motion_strength',
+  ],
+  use_material: [
+    'made_out_of',
+    'use_secondary_material',
+    'secondary_material',
+  ],
+  use_enhancement_safety: [
+    'prevent_deformities',
+    'use_upscale_factor',
+    'upscale',
+    'use_safety_filter',
+    'safety_filter',
+    'keep_typography_details',
+    'use_quality_booster',
+    'quality_booster',
+    'enhance_object_reflections',
+    'keep_key_details',
+  ],
+  use_face_enhancements: [
+    'face_enhance',
+    'add_same_face',
+    'dont_change_face',
+    'use_subject_gender',
+    'subject_gender',
+    'use_makeup_style',
+    'makeup_style',
+    'use_character_mood',
+    'character_mood',
+  ],
+  use_dimensions: ['width', 'height'],
+  use_signature: ['signature'],
+  use_season: ['season'],
+  use_atmosphere_mood: ['atmosphere_mood'],
+  use_subject_mood: ['subject_mood'],
+  use_sword_type: ['sword_type', 'sword_vibe'],
+  use_secondary_material: ['secondary_material'],
+  use_upscale_factor: ['upscale'],
+  use_safety_filter: ['safety_filter'],
+  use_quality_booster: ['quality_booster'],
+  use_subject_gender: ['subject_gender'],
+  use_makeup_style: ['makeup_style'],
+  use_character_mood: ['character_mood'],
+  use_location: ['location'],
+  use_special_effects: ['special_effects'],
+  use_lut_preset: ['lut_preset'],
+  use_dnd_character_race: ['dnd_character_race'],
+  use_dnd_character_class: ['dnd_character_class'],
+  use_dnd_character_background: ['dnd_character_background'],
+  use_dnd_character_alignment: ['dnd_character_alignment'],
+  use_dnd_monster_type: ['dnd_monster_type'],
+  use_dnd_environment: ['dnd_environment'],
+  use_dnd_magic_school: ['dnd_magic_school'],
+  use_dnd_item_type: ['dnd_item_type'],
+  use_camera_angle: ['camera_angle'],
+  use_lens_type: ['lens'],
+  use_aperture: ['aperture'],
+  use_dof: ['depth_of_field'],
+  use_blur_style: ['blur_style'],
+  use_duration: ['duration_seconds'],
+};
+
 const Dashboard = () => {
   const [options, setOptions] = useState<SoraOptions>({
     prompt: 'A breathtaking cinematic scene of a futuristic city at sunset, flying cars zipping between glass skyscrapers, vibrant colors, ultra-detailed, 8K, masterful lighting, trending on ArtStation',
@@ -233,47 +322,24 @@ const Dashboard = () => {
   const [showShareModal, setShowShareModal] = useState(false);
 
   useEffect(() => {
-    const cleanOptions = { ...options };
-    
-    // Remove control flags and unused optional fields
+    const cleanOptions = { ...options } as Record<string, unknown>;
+
+    Object.entries(disabledFieldMap).forEach(([flag, fields]) => {
+      const enabled = (options as Record<string, boolean>)[flag];
+      if (enabled === false || enabled === undefined) {
+        fields.forEach(field => {
+          delete cleanOptions[field];
+        });
+      }
+      delete cleanOptions[flag];
+    });
+
     Object.keys(cleanOptions).forEach(key => {
-      if (key.startsWith('use_') || key.startsWith('extended_')) {
+      if (key.startsWith('extended_')) {
         delete cleanOptions[key];
       }
     });
 
-    // Remove optional fields if not enabled
-    if (!options.use_dimensions) {
-      delete cleanOptions.width;
-      delete cleanOptions.height;
-    }
-    if (!options.use_signature) {
-      delete cleanOptions.signature;
-    }
-    if (!options.use_season) {
-      delete cleanOptions.season;
-    }
-    if (!options.use_atmosphere_mood) {
-      delete cleanOptions.atmosphere_mood;
-    }
-    if (!options.use_subject_mood) {
-      delete cleanOptions.subject_mood;
-    }
-    if (!options.use_sword_type) {
-      delete cleanOptions.sword_type;
-      delete cleanOptions.sword_vibe;
-    }
-    
-    // Remove control flags from final JSON
-    delete cleanOptions.use_dimensions;
-    delete cleanOptions.use_signature;
-    delete cleanOptions.use_motion_animation;
-    delete cleanOptions.use_enhancement_safety;
-    delete cleanOptions.use_season;
-    delete cleanOptions.use_atmosphere_mood;
-    delete cleanOptions.use_subject_mood;
-    delete cleanOptions.use_sword_type;
-    
     setJsonString(JSON.stringify(cleanOptions, null, 2));
   }, [options]);
 
