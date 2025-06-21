@@ -132,6 +132,54 @@ const cameraTypeOptions = [
   "GoPro Max (360 action cam)"
 ];
 
+const apertureOptions = [
+  "default (auto aperture)",
+  "not defined",
+  "as is",
+  "f/0.7 (ultra fast, extreme bokeh, specialty lens)",
+  "f/0.8 (ultra fast, creamy background blur)",
+  "f/0.95 (legendary bokeh, dreamy rendering)",
+  "f/1.0 (super shallow depth, rare portraiture)",
+  "f/1.2 (artistic bokeh, extreme low light)",
+  "f/1.4 (classic fast prime, buttery background)",
+  "f/1.7 (vintage look, character rendering)",
+  "f/1.8 (common fast prime, strong subject isolation)",
+  "f/2.0 (soft background, bright, low light)",
+  "f/2.2 (gentle bokeh, classic street/portrait)",
+  "f/2.4 (subtle separation, natural background)",
+  "f/2.8 (standard bright zoom, low light workhorse)",
+  "f/3.2 (transition zone, more context)",
+  "f/3.5 (vintage zoom/aperture, moderate depth)",
+  "f/4.0 (versatile, landscape, travel, sharper background)",
+  "f/4.5 (good for group photos, more clarity)",
+  "f/5.0 (mild background blur, more sharpness)",
+  "f/5.6 (classic landscape, sharp across frame)",
+  "f/6.3 (good depth, sunlight outdoors)",
+  "f/6.7 (subtle isolation, older lens feel)",
+  "f/7.1 (sharper, more in focus, environmental shots)",
+  "f/8.0 (street, travel, deep focus, best sharpness)",
+  "f/9.0 (rich context, large DOF)",
+  "f/9.5 (older lens, specialty use)",
+  "f/10 (transition to full sharpness, few effects)",
+  "f/11 (great for landscapes, wide clarity)",
+  "f/13 (full depth, less diffraction)",
+  "f/14 (extra depth, rare specialty)",
+  "f/16 (everything in focus, bright scenes)",
+  "f/18 (full clarity, maximum daylight)",
+  "f/19 (extreme DOF, creative look)",
+  "f/20 (very deep focus, rare use)",
+  "f/22 (maximum DOF, sharp foreground/background)",
+  "f/25 (large format, specialty use)",
+  "f/29 (hyper focus, creative/fine art)",
+  "f/32 (ultimate landscape, nearly pinhole effect)",
+  "f/36 (rare, technical, maximum DOF)",
+  "f/40 (extreme focus, special lenses)",
+  "f/45 (large format, technical camera work)",
+  "f/51 (historic large format/technical use)",
+  "f/57 (very rare, large format only)",
+  "f/64 (famous Ansel Adams, Group f/64, maximum depth)"
+];
+
 export const CameraCompositionSection: React.FC<CameraCompositionSectionProps> = ({
   options,
   updateOptions,
@@ -219,6 +267,26 @@ export const CameraCompositionSection: React.FC<CameraCompositionSectionProps> =
             onValueChange={handleCompositionRulesChange}
             label="Composition Rules"
             placeholder="Select composition rules..."
+          />
+        </div>
+
+        <div className="flex items-center space-x-2 mb-4">
+          <Checkbox
+            id="use_aperture"
+            checked={options.use_aperture}
+            onCheckedChange={(checked) => updateOptions({ use_aperture: !!checked })}
+          />
+          <Label htmlFor="use_aperture">Use Aperture</Label>
+        </div>
+
+        <div>
+          <Label>Aperture</Label>
+          <SearchableDropdown
+            options={apertureOptions}
+            value={options.aperture}
+            onValueChange={(value) => updateOptions({ aperture: value })}
+            label="Aperture"
+            disabled={!options.use_aperture}
           />
         </div>
       </div>

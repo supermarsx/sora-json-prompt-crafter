@@ -284,6 +284,10 @@ const Dashboard = () => {
       delete cleanOptions.camera_type;
     }
 
+    if (!options.use_aperture) {
+      delete cleanOptions.aperture;
+    }
+
     if (!options.use_motion_animation) {
       delete cleanOptions.duration_seconds;
       delete cleanOptions.fps;
