@@ -16,7 +16,7 @@ import { DnDSection } from './sections/DnDSection';
 interface ControlPanelProps {
   options: SoraOptions;
   updateOptions: (updates: Partial<SoraOptions>) => void;
-  updateNestedOptions: (path: string, value: any) => void;
+  updateNestedOptions: (path: string, value: unknown) => void;
 }
 
 export const ControlPanel: React.FC<ControlPanelProps> = ({

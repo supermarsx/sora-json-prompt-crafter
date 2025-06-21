@@ -7,7 +7,7 @@ import { SoraOptions } from '../Dashboard';
 
 interface StyleSectionProps {
   options: SoraOptions;
-  updateNestedOptions: (path: string, value: any) => void;
+  updateNestedOptions: (path: string, value: unknown) => void;
 }
 
 const stylePresets = {
