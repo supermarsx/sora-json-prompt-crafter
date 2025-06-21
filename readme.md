@@ -106,7 +106,50 @@ This project is built with:
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/385b40c5-6b5e-49fc-9f0a-e6a0f9a36181) and click on Share -> Publish.
+You can deploy the built application to any static hosting service. Below is a
+typical workflow using [Vercel](https://vercel.com) as an example. If you
+prefer, you can simply open
+ [Lovable](https://lovable.dev/projects/385b40c5-6b5e-49fc-9f0a-e6a0f9a36181)
+and click **Share → Publish**.
+
+### 1. Clone the repository
+
+```sh
+git clone <YOUR_GIT_URL>
+cd sora-json-prompt-crafter
+```
+
+### 2. Install dependencies
+
+```sh
+npm install
+```
+
+### 3. Build the project
+
+```sh
+npm run build
+```
+
+This generates a `dist` directory containing the production build.
+
+### 4. Deploy to Vercel
+
+First install the Vercel CLI if you haven't already:
+
+```sh
+npm install -g vercel
+```
+
+Run the deploy command and follow the prompts:
+
+```sh
+vercel --prod
+```
+
+After completing the prompts, Vercel will upload the `dist` folder and provide a
+URL where your application is hosted. You can use any other hosting provider in
+a similar fashion by pointing it to the `dist` folder.
 
 ## Can I connect a custom domain to my Lovable project?
 
