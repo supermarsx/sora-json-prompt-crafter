@@ -4,6 +4,8 @@ import {
   Copy,
   Check,
   Share,
+  Import,
+  History,
   RotateCcw,
   RefreshCw,
   Shuffle,
@@ -16,6 +18,7 @@ interface ActionBarProps {
   onCopy: () => void;
   onClear: () => void;
   onShare: () => void;
+  onImport: () => void;
   onHistory: () => void;
   onReset: () => void;
   onRegenerate: () => void;
@@ -27,6 +30,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   onCopy,
   onClear,
   onShare,
+  onImport,
   onHistory,
   onReset,
   onRegenerate,
@@ -60,7 +64,12 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         <Share className="w-4 h-4" />
         Share
       </Button>
+      <Button onClick={onImport} variant="outline" size="sm" className="gap-2">
+        <Import className="w-4 h-4" />
+        Import
+      </Button>
       <Button onClick={onHistory} variant="outline" size="sm" className="gap-2">
+        <History className="w-4 h-4" />
         History
       </Button>
       <Button onClick={onReset} variant="outline" size="sm" className="gap-2">
