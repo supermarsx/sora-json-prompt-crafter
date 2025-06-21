@@ -252,9 +252,37 @@ const Dashboard = () => {
     }
   });
   const jsonRef = React.useRef<HTMLDivElement>(null);
+  const jsonDisplayRef = React.useRef<HTMLDivElement>(null);
+  const pinnedRef = React.useRef<'top' | 'bottom' | null>(null);
   const isSingleColumn = useIsSingleColumn();
   const [darkMode, setDarkMode] = useDarkMode();
   const [trackingEnabled, setTrackingEnabled] = useTracking();
+
+  useEffect(() => {
+    const div = jsonDisplayRef.current;
+    if (!div) return;
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = div;
+      const threshold = 10;
+      if (scrollTop <= threshold) pinnedRef.current = 'top';
+      else if (scrollTop + clientHeight >= scrollHeight - threshold)
+        pinnedRef.current = 'bottom';
+      else pinnedRef.current = null;
+    };
+    div.addEventListener('scroll', handleScroll);
+    handleScroll();
+    return () => div.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const div = jsonDisplayRef.current;
+    if (!div) return;
+    if (pinnedRef.current === 'top') {
+      div.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (pinnedRef.current === 'bottom') {
+      div.scrollTo({ top: div.scrollHeight - div.clientHeight, behavior: 'smooth' });
+    }
+  }, [jsonString]);
 
   useEffect(() => {
     localStorage.setItem('jsonHistory', JSON.stringify(history));
@@ -708,20 +736,24 @@ const Dashboard = () => {
             <p className="text-muted-foreground select-none">Configure your Sora generation settings and get the perfect JSON prompt for stunning AI-generated content.</p>
             <div className="flex items-center gap-2 mt-2">
               <a
+                key={`sponsor-${darkMode}`}
                 className="github-button"
-                href="https://github.com/supermarsx"
+                href="https://github.com/sponsors/supermarsx"
                 data-icon="octicon-heart"
                 data-size="large"
+                data-color-scheme={darkMode ? 'dark_high_contrast' : 'light_high_contrast'}
                 aria-label="Sponsor supermarsx"
               >
                 Sponsor
               </a>
               <a
+                key={`star-${darkMode}`}
                 className="github-button"
                 href="https://github.com/supermarsx/sora-json-prompt-crafter"
                 data-icon="octicon-star"
                 data-show-count="true"
                 data-size="large"
+                data-color-scheme={darkMode ? 'dark_high_contrast' : 'light_high_contrast'}
                 aria-label="Star supermarsx/sora-json-prompt-crafter on GitHub"
               >
                 Star
@@ -771,7 +803,7 @@ const Dashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 p-0 overflow-hidden">
-              <div className="h-full overflow-y-auto">
+              <div className="h-full overflow-y-auto" ref={jsonDisplayRef}>
                 <pre className="p-6 text-sm font-mono whitespace-pre-wrap break-words leading-relaxed">
                   <code>{jsonString}</code>
                 </pre>
