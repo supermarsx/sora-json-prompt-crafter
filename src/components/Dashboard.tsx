@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Copy, Check, Sparkles } from 'lucide-react';
+import { Copy, Check, Sparkles, RotateCcw, Share, Trash2, RefreshCw, Shuffle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
@@ -12,15 +12,18 @@ export interface SoraOptions {
   seed: number | null;
   steps: number;
   guidance_scale: number;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
+  use_dimensions: boolean;
   aspect_ratio: '16:9' | '21:9' | '4:3' | '1:1' | '9:16';
-  model_version: 'sora-v2.1' | 'sora-v2.0' | 'default';
   sampler: 'Euler a' | 'DPM++ 2M Karras' | 'DDIM' | 'PLMS';
   cfg_rescale: number;
   highres_fix: boolean;
-  style_preset: 'cinematic' | 'anime' | '3d' | 'photographic' | 'digital-art' | 'comic-book' | 'fantasy-art' | 'line-art' | 'analog-film' | 'neon-punk' | 'isometric' | 'low-poly' | 'origami' | 'modeling-compound' | 'tile-texture';
-  quality: 'draft' | 'standard' | 'high' | 'ultra';
+  style_preset: {
+    category: string;
+    style: string;
+  };
+  quality: 'draft' | 'standard' | 'high' | 'ultra' | 'low';
   temperature: number;
   clip_skip: number;
   batch_size: number;
@@ -30,22 +33,41 @@ export interface SoraOptions {
   duration_seconds: number;
   fps: number;
   motion_strength: number;
-  camera_motion: 'static' | 'dolly_in' | 'dolly_out' | 'orbit' | 'pan_left' | 'pan_right' | 'tilt_up' | 'tilt_down' | 'zoom_in' | 'zoom_out';
+  camera_motion: string;
   motion_direction: 'forward' | 'backward' | 'left' | 'right' | 'up' | 'down';
-  camera_angle: 'eye' | 'high' | 'low' | 'bird_eye' | 'worm_eye';
-  shot_type: 'closeup' | 'medium' | 'wide' | 'establishing' | 'extreme_closeup' | 'full_body';
+  camera_angle: string;
+  shot_type: string;
   subject_focus: 'center' | 'left' | 'right' | 'top' | 'bottom';
   composition_rules: string[];
-  lighting: 'natural' | 'studio' | 'golden_hour' | 'blue_hour' | 'sunset' | 'sunrise' | 'night' | 'neon' | 'soft' | 'hard' | 'dramatic' | 'rim' | 'backlighting';
-  color_grade: 'none' | 'teal_and_orange' | 'vintage' | 'warm' | 'cool' | 'desaturated' | 'high_contrast' | 'film_noir' | 'cyberpunk';
-  depth_of_field: 'shallow' | 'deep' | 'medium';
-  lens: 'anamorphic' | '35mm' | '50mm' | '85mm' | 'macro' | 'fisheye' | 'telephoto' | 'wide_angle';
+  lighting: string;
+  color_grade: string;
+  depth_of_field: string;
+  lens: string;
   frame_interpolation: 'smooth' | 'realistic' | 'sharp';
   face_enhance: boolean;
   upscale: number;
   safety_filter: 'strict' | 'moderate' | 'off';
   nsfw: boolean;
   chaos: number;
+  made_out_of: string;
+  environment: string;
+  use_signature: boolean;
+  signature?: string;
+  blur_style: string;
+  aperture: string;
+  use_motion_animation: boolean;
+  use_enhancement_safety: boolean;
+  camera_type: string;
+  year: number;
+  use_season: boolean;
+  season?: string;
+  use_atmosphere_mood: boolean;
+  atmosphere_mood?: string;
+  use_subject_mood: boolean;
+  subject_mood?: string;
+  use_sword_type: boolean;
+  sword_type?: string;
+  sword_vibe?: string;
 }
 
 const Dashboard = () => {
@@ -57,12 +79,15 @@ const Dashboard = () => {
     guidance_scale: 7.5,
     width: 1024,
     height: 576,
+    use_dimensions: true,
     aspect_ratio: '16:9',
-    model_version: 'sora-v2.1',
     sampler: 'DPM++ 2M Karras',
     cfg_rescale: 0.7,
     highres_fix: true,
-    style_preset: 'cinematic',
+    style_preset: {
+      category: 'Photography & Cinematic',
+      style: 'cinematic'
+    },
     quality: 'high',
     temperature: 1.1,
     clip_skip: 2,
@@ -89,6 +114,19 @@ const Dashboard = () => {
     safety_filter: 'moderate',
     nsfw: false,
     chaos: 0.1,
+    made_out_of: 'default',
+    environment: 'default',
+    use_signature: false,
+    blur_style: 'default',
+    aperture: 'default (auto aperture)',
+    use_motion_animation: true,
+    use_enhancement_safety: true,
+    camera_type: 'default (auto/any camera)',
+    year: new Date().getFullYear(),
+    use_season: false,
+    use_atmosphere_mood: false,
+    use_subject_mood: false,
+    use_sword_type: false,
   });
 
   const [copied, setCopied] = useState(false);
@@ -99,6 +137,39 @@ const Dashboard = () => {
       ...options,
       seed: options.seed === 0 ? null : options.seed,
     };
+    
+    // Remove optional fields if not enabled
+    if (!cleanOptions.use_dimensions) {
+      delete cleanOptions.width;
+      delete cleanOptions.height;
+    }
+    if (!cleanOptions.use_signature) {
+      delete cleanOptions.signature;
+    }
+    if (!cleanOptions.use_season) {
+      delete cleanOptions.season;
+    }
+    if (!cleanOptions.use_atmosphere_mood) {
+      delete cleanOptions.atmosphere_mood;
+    }
+    if (!cleanOptions.use_subject_mood) {
+      delete cleanOptions.subject_mood;
+    }
+    if (!cleanOptions.use_sword_type) {
+      delete cleanOptions.sword_type;
+      delete cleanOptions.sword_vibe;
+    }
+    
+    // Remove control flags from final JSON
+    delete cleanOptions.use_dimensions;
+    delete cleanOptions.use_signature;
+    delete cleanOptions.use_motion_animation;
+    delete cleanOptions.use_enhancement_safety;
+    delete cleanOptions.use_season;
+    delete cleanOptions.use_atmosphere_mood;
+    delete cleanOptions.use_subject_mood;
+    delete cleanOptions.use_sword_type;
+    
     setJsonString(JSON.stringify(cleanOptions, null, 2));
   }, [options]);
 
@@ -111,6 +182,110 @@ const Dashboard = () => {
     } catch (err) {
       toast.error('Failed to copy to clipboard');
     }
+  };
+
+  const clearJson = () => {
+    setJsonString('{}');
+    toast.success('JSON cleared!');
+  };
+
+  const shareJson = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Sora JSON Prompt',
+          text: jsonString,
+        });
+        toast.success('JSON shared!');
+      } catch (err) {
+        toast.error('Failed to share');
+      }
+    } else {
+      await copyToClipboard();
+      toast.success('JSON copied for sharing!');
+    }
+  };
+
+  const resetJson = () => {
+    setOptions({
+      prompt: 'A breathtaking cinematic scene of a futuristic city at sunset, flying cars zipping between glass skyscrapers, vibrant colors, ultra-detailed, 8K, masterful lighting, trending on ArtStation',
+      negative_prompt: 'blurry, low-res, dark, extra limbs, cropped, watermark, text, signature, logo, nsfw',
+      seed: 1337,
+      steps: 30,
+      guidance_scale: 7.5,
+      width: 1024,
+      height: 576,
+      use_dimensions: true,
+      aspect_ratio: '16:9',
+      sampler: 'DPM++ 2M Karras',
+      cfg_rescale: 0.7,
+      highres_fix: true,
+      style_preset: {
+        category: 'Photography & Cinematic',
+        style: 'cinematic'
+      },
+      quality: 'high',
+      temperature: 1.1,
+      clip_skip: 2,
+      batch_size: 1,
+      image_count: 4,
+      dynamic_range: 'HDR',
+      output_format: 'png',
+      duration_seconds: 5,
+      fps: 30,
+      motion_strength: 0.85,
+      camera_motion: 'dolly_in',
+      motion_direction: 'forward',
+      camera_angle: 'low',
+      shot_type: 'wide',
+      subject_focus: 'center',
+      composition_rules: ['rule_of_thirds', 'leading_lines'],
+      lighting: 'golden_hour',
+      color_grade: 'teal_and_orange',
+      depth_of_field: 'shallow',
+      lens: 'anamorphic',
+      frame_interpolation: 'smooth',
+      face_enhance: false,
+      upscale: 2,
+      safety_filter: 'moderate',
+      nsfw: false,
+      chaos: 0.1,
+      made_out_of: 'default',
+      environment: 'default',
+      use_signature: false,
+      blur_style: 'default',
+      aperture: 'default (auto aperture)',
+      use_motion_animation: true,
+      use_enhancement_safety: true,
+      camera_type: 'default (auto/any camera)',
+      year: new Date().getFullYear(),
+      use_season: false,
+      use_atmosphere_mood: false,
+      use_subject_mood: false,
+      use_sword_type: false,
+    });
+    toast.success('Settings reset to defaults!');
+  };
+
+  const regenerateJson = () => {
+    setOptions(prev => ({ ...prev, seed: Math.floor(Math.random() * 10000) }));
+    toast.success('JSON regenerated with new seed!');
+  };
+
+  const randomizeJson = () => {
+    // Randomize key options
+    const randomOptions: Partial<SoraOptions> = {
+      seed: Math.floor(Math.random() * 10000),
+      steps: Math.floor(Math.random() * 31) + 20, // 20-50
+      guidance_scale: Math.random() * 12 + 3, // 3-15
+      quality: ['draft', 'standard', 'high', 'ultra', 'low'][Math.floor(Math.random() * 5)] as any,
+      temperature: Math.random() * 0.5 + 0.8, // 0.8-1.3
+      chaos: Math.random(), // 0-1
+      motion_strength: Math.random(), // 0-1
+    };
+    
+    setOptions(prev => ({ ...prev, ...randomOptions }));
+    toast.success('Options randomized!');
   };
 
   const updateOptions = (updates: Partial<SoraOptions>) => {
@@ -172,15 +347,62 @@ const Dashboard = () => {
                   <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                   Sora JSON Prompt
                 </div>
-                <Button
-                  onClick={copyToClipboard}
-                  variant="outline"
-                  size="sm"
-                  className="gap-2"
-                >
-                  {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                  {copied ? 'Copied!' : 'Copy JSON'}
-                </Button>
+                <div className="flex gap-2 flex-wrap">
+                  <Button
+                    onClick={copyToClipboard}
+                    variant="outline"
+                    size="sm"
+                    className="gap-2"
+                  >
+                    {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    Copy
+                  </Button>
+                  <Button
+                    onClick={clearJson}
+                    variant="outline"
+                    size="sm"
+                    className="gap-2"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    Clear
+                  </Button>
+                  <Button
+                    onClick={shareJson}
+                    variant="outline"
+                    size="sm"
+                    className="gap-2"
+                  >
+                    <Share className="w-4 h-4" />
+                    Share
+                  </Button>
+                  <Button
+                    onClick={resetJson}
+                    variant="outline"
+                    size="sm"
+                    className="gap-2"
+                  >
+                    <RotateCcw className="w-4 h-4" />
+                    Reset
+                  </Button>
+                  <Button
+                    onClick={regenerateJson}
+                    variant="outline"
+                    size="sm"
+                    className="gap-2"
+                  >
+                    <RefreshCw className="w-4 h-4" />
+                    Regenerate
+                  </Button>
+                  <Button
+                    onClick={randomizeJson}
+                    variant="outline"
+                    size="sm"
+                    className="gap-2"
+                  >
+                    <Shuffle className="w-4 h-4" />
+                    Randomize
+                  </Button>
+                </div>
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 p-0 overflow-hidden">
