@@ -8,7 +8,7 @@ const Footer: React.FC<FooterProps> = ({ onShowDisclaimer }) => {
   return (
     <footer className="py-6 text-center text-sm text-muted-foreground">
       <p>
-        I ♥ Open-Source software @ 2025 –{' '}
+        Open-Source software made with ♥ @ 2025 –{' '}
         <a
           href="https://github.com/supermarsx/sora-json-prompt-crafter"
           className="underline"
