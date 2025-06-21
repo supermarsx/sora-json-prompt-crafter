@@ -130,7 +130,7 @@ export const SettingsLocationSection: React.FC<SettingsLocationSectionProps> = (
       isEnabled={options.use_settings_location}
       onToggle={(enabled) => updateOptions({ use_settings_location: enabled })}
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4">
         <div>
           <Label htmlFor="year">Year</Label>
           <Input
@@ -152,7 +152,7 @@ export const SettingsLocationSection: React.FC<SettingsLocationSectionProps> = (
           <Label htmlFor="use_environment">Use Environment</Label>
         </div>
 
-        <div className="md:col-span-2">
+        <div>
           <Label>Environment</Label>
           <SearchableDropdown
             options={environmentOptions}
@@ -172,7 +172,7 @@ export const SettingsLocationSection: React.FC<SettingsLocationSectionProps> = (
           <Label htmlFor="use_location">Use Location</Label>
         </div>
 
-        <div className="md:col-span-2">
+        <div>
           <Label>Location</Label>
           <SearchableDropdown
             options={locationOptions}

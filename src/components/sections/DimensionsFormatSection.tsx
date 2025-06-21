@@ -52,7 +52,7 @@ export const DimensionsFormatSection: React.FC<DimensionsFormatSectionProps> = (
       isEnabled={isEnabled}
       onToggle={onToggle}
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4">
         <div>
           <Label htmlFor="aspect_ratio">Aspect Ratio</Label>
           <Select

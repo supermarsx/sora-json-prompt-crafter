@@ -28,7 +28,7 @@ export const VideoMotionSection: React.FC<VideoMotionSectionProps> = ({
       isEnabled={isEnabled}
       onToggle={onToggle}
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4">
         <div className="flex items-center space-x-2">
           <Checkbox
             id="use_duration"

@@ -63,7 +63,7 @@ export const CameraCompositionSection: React.FC<CameraCompositionSectionProps> =
 
   return (
     <CollapsibleSection title="Camera & Composition">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4">
         <div>
           <Label>Shot Type</Label>
           <SearchableDropdown
@@ -115,7 +115,7 @@ export const CameraCompositionSection: React.FC<CameraCompositionSectionProps> =
           </Select>
         </div>
 
-        <div className="md:col-span-2">
+        <div>
           <Label>Composition Rules</Label>
           <MultiSelectDropdown
             options={compositionRulesOptions}
