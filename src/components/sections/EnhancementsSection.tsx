@@ -4,6 +4,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { SearchableDropdown } from '../SearchableDropdown';
 import { CollapsibleSection } from '../CollapsibleSection';
+import { Slider } from '@/components/ui/slider';
 import { SoraOptions } from '../Dashboard';
 
 interface EnhancementsSectionProps {
@@ -64,6 +65,20 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
           />
           <Label htmlFor="use_upscale_factor">Use Upscale Factor</Label>
         </div>
+
+        {options.use_upscale_factor && (
+          <div>
+            <Label htmlFor="upscale">Upscale Factor: {options.upscale}</Label>
+            <Slider
+              value={[options.upscale]}
+              onValueChange={(value) => updateOptions({ upscale: value[0] })}
+              min={1}
+              max={4}
+              step={0.1}
+              className="mt-2"
+            />
+          </div>
+        )}
 
         <div className="flex items-center space-x-2">
           <Checkbox
