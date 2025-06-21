@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { diffChars, Change } from 'diff';
 import { Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -252,6 +253,8 @@ const Dashboard = () => {
     }
   });
   const jsonContainerRef = React.useRef<HTMLDivElement>(null);
+  const prevJsonRef = React.useRef(jsonString);
+  const [diffParts, setDiffParts] = useState<Change[] | null>(null);
   const isSingleColumn = useIsSingleColumn();
   const [darkMode, setDarkMode] = useDarkMode();
   const [trackingEnabled, setTrackingEnabled] = useTracking();
@@ -262,6 +265,16 @@ const Dashboard = () => {
 
   useEffect(() => {
     localStorage.setItem('currentJson', jsonString);
+  }, [jsonString]);
+
+  useEffect(() => {
+    const diff = diffChars(prevJsonRef.current, jsonString).filter(p => !p.removed);
+    prevJsonRef.current = jsonString;
+    setDiffParts(diff);
+    const timer = setTimeout(() => {
+      setDiffParts(diff.map(p => ({ ...p, added: false } as Change)));
+    }, 2000);
+    return () => clearTimeout(timer);
   }, [jsonString]);
 
   useEffect(() => {
@@ -721,7 +734,7 @@ const Dashboard = () => {
               <img
                 src="/web-app-manifest-512x512.png"
                 alt=""
-                className="w-10 h-10 animate-rainbow dark:invert"
+                className="w-10 h-10 animate-rainbow dark:animate-rainbow-dark"
               />
               Sora JSON Prompt Crafter
             </h1>
@@ -817,7 +830,18 @@ const Dashboard = () => {
             <CardContent className="flex-1 p-0 overflow-hidden">
               <div className="h-full overflow-y-auto" ref={jsonContainerRef}>
                 <pre className="p-6 text-sm font-mono whitespace-pre-wrap break-words leading-relaxed">
-                  <code>{jsonString}</code>
+                  <code>
+                    {diffParts
+                      ? diffParts.map((part, idx) => (
+                          <span
+                            key={idx}
+                            className={part.added ? "animate-highlight" : undefined}
+                          >
+                            {part.value}
+                          </span>
+                        ))
+                      : jsonString}
+                  </code>
                 </pre>
               </div>
             </CardContent>

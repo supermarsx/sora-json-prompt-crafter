@@ -81,12 +81,22 @@ export default {
                                 rainbow: {
                                         '0%': { filter: 'hue-rotate(0deg)' },
                                         '100%': { filter: 'hue-rotate(360deg)' }
+                                },
+                                'rainbow-dark': {
+                                        '0%': { filter: 'invert(100%) brightness(70%) hue-rotate(0deg)' },
+                                        '100%': { filter: 'invert(100%) brightness(70%) hue-rotate(360deg)' }
+                                },
+                                highlight: {
+                                        '0%': { backgroundColor: 'rgba(253, 224, 71, 0.4)' },
+                                        '100%': { backgroundColor: 'transparent' }
                                 }
                         },
                         animation: {
                                 'accordion-down': 'accordion-down 0.2s ease-out',
                                 'accordion-up': 'accordion-up 0.2s ease-out',
-                                rainbow: 'rainbow 10s linear infinite'
+                                rainbow: 'rainbow 10s linear infinite',
+                                'rainbow-dark': 'rainbow-dark 10s linear infinite',
+                                highlight: 'highlight 2s ease-in-out'
                         }
                 }
         },
