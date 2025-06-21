@@ -78,7 +78,7 @@ export const DimensionsFormatSection: React.FC<DimensionsFormatSectionProps> = (
           <Label htmlFor="quality">Quality</Label>
           <Select
             value={options.quality}
-            onValueChange={(value) => updateOptions({ quality: value as any })}
+            onValueChange={(value) => updateOptions({ quality: value as SoraOptions['quality'] })}
           >
             <SelectTrigger>
               <SelectValue />

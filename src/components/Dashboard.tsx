@@ -410,7 +410,9 @@ const Dashboard = () => {
       seed: Math.floor(Math.random() * 10000),
       steps: Math.floor(Math.random() * 31) + 20,
       guidance_scale: Math.random() * 12 + 3,
-      quality: ['defective', 'poor', 'moderate', 'high', 'excellent'][Math.floor(Math.random() * 5)] as any,
+      quality: ['defective', 'poor', 'moderate', 'high', 'excellent'][
+        Math.floor(Math.random() * 5)
+      ] as SoraOptions['quality'],
       temperature: Math.random() * 0.5 + 0.8,
       chaos: Math.random(),
       motion_strength: Math.random(),

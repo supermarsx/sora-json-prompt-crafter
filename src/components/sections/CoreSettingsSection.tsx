@@ -47,7 +47,7 @@ export const CoreSettingsSection: React.FC<CoreSettingsSectionProps> = ({
         
         <div>
           <Label htmlFor="quality">Quality</Label>
-          <Select value={options.quality} onValueChange={(value) => updateOptions({ quality: value as any })}>
+          <Select value={options.quality} onValueChange={(value) => updateOptions({ quality: value as SoraOptions['quality'] })}>
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
