@@ -12,6 +12,10 @@ npm install
 npm run dev
 ```
 Then open http://localhost:5173 in your browser.
+### Test Instance
+
+A test instance is available at [https://sora-json-prompt-crafter.lovable.app/](https://sora-json-prompt-crafter.lovable.app/).
+
 
 ### Features
 
