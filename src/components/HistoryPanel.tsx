@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -32,6 +32,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu'
+import ClipboardImportModal from './ClipboardImportModal'
 
 export interface HistoryEntry {
   id: number
@@ -62,29 +63,8 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
 }) => {
   const [preview, setPreview] = useState<HistoryEntry | null>(null)
   const [confirmClear, setConfirmClear] = useState(false)
-
-  const handleSingleClipboardImport = async () => {
-    try {
-      const text = await navigator.clipboard.readText()
-      JSON.parse(text)
-      onImport([text])
-    } catch {
-      /* ignore invalid */
-    }
-  }
-
-  const handleBulkClipboardImport = async () => {
-    try {
-      const text = await navigator.clipboard.readText()
-      const arr = JSON.parse(text)
-      if (Array.isArray(arr)) {
-        const strings = arr.map(j => (typeof j === 'string' ? j : JSON.stringify(j)))
-        onImport(strings)
-      }
-    } catch {
-      /* ignore */
-    }
-  }
+  const [showClipboard, setShowClipboard] = useState(false)
+  const [showBulkClipboard, setShowBulkClipboard] = useState(false)
 
   const handleFileImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -141,10 +121,10 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem onSelect={handleSingleClipboardImport}>
+                  <DropdownMenuItem onSelect={() => setShowClipboard(true)}>
                     Paste from clipboard
                   </DropdownMenuItem>
-                  <DropdownMenuItem onSelect={handleBulkClipboardImport}>
+                  <DropdownMenuItem onSelect={() => setShowBulkClipboard(true)}>
                     Bulk paste from clipboard
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
@@ -304,6 +284,18 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
           )}
         </DialogContent>
       </Dialog>
+      <ClipboardImportModal
+        open={showClipboard}
+        onOpenChange={setShowClipboard}
+        onImport={onImport}
+        title="Import from Clipboard"
+      />
+      <ClipboardImportModal
+        open={showBulkClipboard}
+        onOpenChange={setShowBulkClipboard}
+        onImport={onImport}
+        title="Bulk Import from Clipboard"
+      />
     </>
   )
 }
