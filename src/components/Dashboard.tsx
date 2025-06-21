@@ -42,8 +42,6 @@ export interface SoraOptions {
   frame_interpolation: 'smooth' | 'realistic' | 'sharp';
   upscale: number;
   safety_filter: 'strict' | 'moderate' | 'off';
-  nsfw: boolean;
-  chaos: number;
   made_out_of: string;
   environment: string;
   use_signature: boolean;
@@ -129,7 +127,7 @@ export interface SoraOptions {
 const Dashboard = () => {
   const [options, setOptions] = useState<SoraOptions>({
     prompt: 'A breathtaking cinematic scene of a futuristic city at sunset, flying cars zipping between glass skyscrapers, vibrant colors, ultra-detailed, 8K, masterful lighting, trending on ArtStation',
-    negative_prompt: 'blurry, low-res, dark, extra limbs, cropped, watermark, text, signature, logo, nsfw',
+    negative_prompt: 'blurry, low-res, dark, extra limbs, cropped, watermark, text, signature, logo',
     seed: 1337,
     steps: 30,
     guidance_scale: 7.5,
@@ -162,8 +160,6 @@ const Dashboard = () => {
     frame_interpolation: 'smooth',
     upscale: 2,
     safety_filter: 'moderate',
-    nsfw: false,
-    chaos: 0.1,
     made_out_of: 'default',
     environment: 'default',
     use_signature: false,
@@ -443,7 +439,7 @@ const Dashboard = () => {
     // Reset to default options
     setOptions({
       prompt: 'A breathtaking cinematic scene of a futuristic city at sunset, flying cars zipping between glass skyscrapers, vibrant colors, ultra-detailed, 8K, masterful lighting, trending on ArtStation',
-      negative_prompt: 'blurry, low-res, dark, extra limbs, cropped, watermark, text, signature, logo, nsfw',
+      negative_prompt: 'blurry, low-res, dark, extra limbs, cropped, watermark, text, signature, logo',
       seed: 1337,
       steps: 30,
       guidance_scale: 7.5,
@@ -476,8 +472,6 @@ const Dashboard = () => {
       frame_interpolation: 'smooth',
       upscale: 2,
       safety_filter: 'moderate',
-      nsfw: false,
-      chaos: 0.1,
       made_out_of: 'default',
       environment: 'default',
       use_signature: false,
@@ -554,7 +548,6 @@ const Dashboard = () => {
         Math.floor(Math.random() * 5)
       ] as SoraOptions['quality'],
       temperature: Math.random() * 0.5 + 0.8,
-      chaos: Math.random(),
       motion_strength: Math.random(),
     };
     
