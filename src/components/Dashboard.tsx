@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { diffChars, Change } from 'diff';
-import { Sun, Moon } from 'lucide-react';
+import { Sun, Moon, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
@@ -776,7 +776,9 @@ const Dashboard = () => {
                   href="https://lovable.dev/projects/385b40c5-6b5e-49fc-9f0a-e6a0f9a36181"
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="flex items-center gap-1"
                 >
+                  <Heart className="w-4 h-4" />
                   View on Lovable
                 </a>
               </Button>
@@ -819,7 +821,7 @@ const Dashboard = () => {
 
           <Card
             id="generated-json"
-            className="flex flex-col lg:sticky lg:top-24 lg:max-h-[calc(100vh-6rem)]"
+            className="flex flex-col lg:sticky lg:top-4 lg:max-h-[calc(100vh-1rem)]"
           >
             <CardHeader className="border-b">
               <CardTitle className="flex items-center gap-2">
