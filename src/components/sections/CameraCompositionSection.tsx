@@ -11,6 +11,8 @@ import { SoraOptions } from '../Dashboard';
 interface CameraCompositionSectionProps {
   options: SoraOptions;
   updateOptions: (updates: Partial<SoraOptions>) => void;
+  isEnabled: boolean;
+  onToggle: (enabled: boolean) => void;
 }
 
 const shotTypeOptions = [
@@ -55,14 +57,21 @@ const compositionRulesOptions = [
 
 export const CameraCompositionSection: React.FC<CameraCompositionSectionProps> = ({
   options,
-  updateOptions
+  updateOptions,
+  isEnabled,
+  onToggle
 }) => {
   const handleCompositionRulesChange = (selectedRules: string[]) => {
     updateOptions({ composition_rules: selectedRules });
   };
 
   return (
-    <CollapsibleSection title="Camera & Composition">
+    <CollapsibleSection
+      title="Camera & Composition"
+      isOptional={true}
+      isEnabled={isEnabled}
+      onToggle={onToggle}
+    >
       <div className="grid grid-cols-1 gap-4">
         <div>
           <Label>Shot Type</Label>

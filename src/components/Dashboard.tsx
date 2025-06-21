@@ -124,6 +124,7 @@ export interface SoraOptions {
   use_aperture: boolean;
   use_dof: boolean;
   use_blur_style: boolean;
+  use_camera_composition: boolean;
   extended_motion_strength: boolean;
   extended_fps: boolean;
   use_duration: boolean;
@@ -220,6 +221,7 @@ const Dashboard = () => {
     use_dnd_environment: false,
     use_dnd_magic_school: false,
     use_dnd_item_type: false,
+    use_camera_composition: true,
     use_camera_angle: false,
     use_lens_type: false,
     use_aperture: false,
@@ -270,6 +272,13 @@ const Dashboard = () => {
       delete cleanOptions.secondary_material;
     } else if (!options.use_secondary_material) {
       delete cleanOptions.secondary_material;
+    }
+
+    if (!options.use_camera_composition) {
+      delete cleanOptions.camera_angle;
+      delete cleanOptions.shot_type;
+      delete cleanOptions.subject_focus;
+      delete cleanOptions.composition_rules;
     }
 
     if (!options.use_motion_animation) {
@@ -362,6 +371,7 @@ const Dashboard = () => {
     delete cleanOptions.use_atmosphere_mood;
     delete cleanOptions.use_subject_mood;
     delete cleanOptions.use_sword_type;
+    delete cleanOptions.use_camera_composition;
     
     setJsonString(JSON.stringify(cleanOptions, null, 2));
   }, [options]);
@@ -478,6 +488,7 @@ const Dashboard = () => {
       use_dnd_environment: false,
       use_dnd_magic_school: false,
       use_dnd_item_type: false,
+      use_camera_composition: true,
       use_camera_angle: false,
       use_lens_type: false,
       use_aperture: false,
