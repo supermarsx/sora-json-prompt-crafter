@@ -156,7 +156,7 @@ const Dashboard = () => {
     subject_focus: 'center',
     composition_rules: ['rule_of_thirds', 'leading_lines'],
     lighting: 'golden_hour',
-    color_grade: 'teal_and_orange',
+    color_grade: 'default (no specific color grading)',
     depth_of_field: 'shallow',
     lens_type: 'default',
     frame_interpolation: 'smooth',
@@ -291,6 +291,10 @@ const Dashboard = () => {
 
     if (!options.use_blur_style) {
       delete cleanOptions.blur_style;
+    }
+
+    if (!options.use_color_grading) {
+      delete cleanOptions.color_grade;
     }
 
     if (!options.use_motion_animation) {
@@ -478,7 +482,7 @@ const Dashboard = () => {
       subject_focus: 'center',
       composition_rules: ['rule_of_thirds', 'leading_lines'],
       lighting: 'golden_hour',
-      color_grade: 'teal_and_orange',
+      color_grade: 'default (no specific color grading)',
       depth_of_field: 'shallow',
       lens_type: 'default',
       frame_interpolation: 'smooth',

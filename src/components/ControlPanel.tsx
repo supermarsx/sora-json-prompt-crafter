@@ -8,6 +8,7 @@ import { StyleSection } from './sections/StyleSection';
 import { CameraCompositionSection } from './sections/CameraCompositionSection';
 import { VideoMotionSection } from './sections/VideoMotionSection';
 import { MaterialSection } from './sections/MaterialSection';
+import { ColorGradingSection } from './sections/ColorGradingSection';
 import { SettingsLocationSection } from './sections/SettingsLocationSection';
 import { FaceSection } from './sections/FaceSection';
 import { EnhancementsSection } from './sections/EnhancementsSection';
@@ -62,13 +63,18 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         onToggle={(enabled) => updateOptions({ use_motion_animation: enabled })}
       />
       
-      <MaterialSection 
-        options={options} 
+      <MaterialSection
+        options={options}
         updateOptions={updateOptions}
       />
-      
-      <SettingsLocationSection 
-        options={options} 
+
+      <ColorGradingSection
+        options={options}
+        updateOptions={updateOptions}
+      />
+
+      <SettingsLocationSection
+        options={options}
         updateOptions={updateOptions}
       />
       
