@@ -25,6 +25,7 @@ import {
   Eye,
   Import as ImportIcon,
   Download,
+  Check,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import {
@@ -34,6 +35,7 @@ import {
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu'
 import ClipboardImportModal from './ClipboardImportModal'
+import BulkFileImportModal from './BulkFileImportModal'
 
 export interface HistoryEntry {
   id: number
@@ -66,23 +68,11 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
   const [confirmClear, setConfirmClear] = useState(false)
   const [showClipboard, setShowClipboard] = useState(false)
   const [showBulkClipboard, setShowBulkClipboard] = useState(false)
+  const [showBulkFile, setShowBulkFile] = useState(false)
+  const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null)
+  const [editedId, setEditedId] = useState<number | null>(null)
+  const [copiedId, setCopiedId] = useState<number | null>(null)
 
-  const handleFileImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    const text = await file.text()
-    try {
-      const parsed = JSON.parse(text)
-      if (Array.isArray(parsed)) {
-        const strings = parsed.map(j => (typeof j === 'string' ? j : JSON.stringify(j)))
-        onImport(strings)
-      } else {
-        onImport([JSON.stringify(parsed)])
-      }
-    } catch {
-      /* ignore */
-    }
-  }
 
   const exportClipboard = async () => {
     try {
@@ -119,6 +109,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
     a.download = `history-${datetime}-${rand}.json`
     a.click()
     URL.revokeObjectURL(url)
+    toast.success('History downloaded!')
   }
 
   return (
@@ -146,16 +137,8 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                   <DropdownMenuItem onSelect={() => setShowBulkClipboard(true)}>
                     Bulk paste from clipboard
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <label className="w-full cursor-pointer">
-                      Bulk file import
-                      <input
-                        type="file"
-                        accept=".json"
-                        onChange={handleFileImport}
-                        className="hidden"
-                      />
-                    </label>
+                  <DropdownMenuItem onSelect={() => setShowBulkFile(true)}>
+                    Bulk file import
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -225,18 +208,40 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => onEdit(entry.json)}
-                      className="gap-1"
+                      onClick={() => {
+                        onEdit(entry.json)
+                        setEditedId(entry.id)
+                        setTimeout(() => {
+                          setEditedId(prev => (prev === entry.id ? null : prev))
+                        }, 1500)
+                      }}
+                      className={`gap-1 ${editedId === entry.id ? 'text-green-600 animate-pulse' : ''}`}
                     >
-                      <Edit className="w-4 h-4" /> Edit
+                      {editedId === entry.id ? (
+                        <Check className="w-4 h-4" />
+                      ) : (
+                        <Edit className="w-4 h-4" />
+                      )}{' '}
+                      {editedId === entry.id ? 'Edited' : 'Edit'}
                     </Button>
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => onCopy(entry.json)}
-                      className="gap-1"
+                      onClick={() => {
+                        onCopy(entry.json)
+                        setCopiedId(entry.id)
+                        setTimeout(() => {
+                          setCopiedId(prev => (prev === entry.id ? null : prev))
+                        }, 1500)
+                      }}
+                      className={`gap-1 ${copiedId === entry.id ? 'text-green-600 animate-pulse' : ''}`}
                     >
-                      <Clipboard className="w-4 h-4" /> Copy
+                      {copiedId === entry.id ? (
+                        <Check className="w-4 h-4" />
+                      ) : (
+                        <Clipboard className="w-4 h-4" />
+                      )}{' '}
+                      {copiedId === entry.id ? 'Copied' : 'Copy'}
                     </Button>
                     <Button
                       size="sm"
@@ -249,10 +254,21 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                     <Button
                       size="sm"
                       variant="destructive"
-                      onClick={() => onDelete(entry.id)}
-                      className="gap-1"
+                      onClick={() => {
+                        if (confirmDeleteId === entry.id) {
+                          onDelete(entry.id)
+                          setConfirmDeleteId(null)
+                        } else {
+                          setConfirmDeleteId(entry.id)
+                          setTimeout(() => {
+                            setConfirmDeleteId(prev => (prev === entry.id ? null : prev))
+                          }, 1500)
+                        }
+                      }}
+                      className={`gap-1 ${confirmDeleteId === entry.id ? 'animate-pulse' : ''}`}
                     >
-                      <Trash2 className="w-4 h-4" /> Delete
+                      <Trash2 className="w-4 h-4" />
+                      {confirmDeleteId === entry.id ? 'Confirm' : 'Delete'}
                     </Button>
                   </div>
                 </div>
@@ -314,6 +330,11 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
         onOpenChange={setShowBulkClipboard}
         onImport={onImport}
         title="Bulk Import from Clipboard"
+      />
+      <BulkFileImportModal
+        open={showBulkFile}
+        onOpenChange={setShowBulkFile}
+        onImport={onImport}
       />
     </>
   )

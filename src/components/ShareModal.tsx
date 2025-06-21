@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Facebook, Twitter, Instagram, MessageCircle, Send } from 'lucide-react';
+import { Facebook, Twitter, Instagram, MessageCircle, Send, Copy, Check } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface ShareModalProps {
@@ -17,6 +17,7 @@ interface ShareModalProps {
 }
 
 export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, jsonContent }) => {
+  const [copied, setCopied] = useState(false);
   const shareToFacebook = () => {
     const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent('Check out my Sora prompt configuration!')}`;
     window.open(url, '_blank', 'width=600,height=400');
@@ -47,6 +48,8 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, jsonCon
   const copyLink = async () => {
     try {
       await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
       toast.success('Link copied to clipboard!');
     } catch (err) {
       toast.error('Failed to copy link');
@@ -78,7 +81,12 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, jsonCon
           </Button>
         </div>
         <div className="flex justify-center pt-4 border-t">
-          <Button onClick={copyLink} variant="default" className="w-full">
+          <Button onClick={copyLink} variant="default" className="w-full gap-2">
+            {copied ? (
+              <Check className="w-4 h-4 animate-pulse" />
+            ) : (
+              <Copy className="w-4 h-4" />
+            )}
             Copy Link
           </Button>
         </div>

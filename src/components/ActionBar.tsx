@@ -16,6 +16,7 @@ import {
   Cog,
   ChevronDown,
   ChevronUp,
+  MoveDown,
 } from 'lucide-react';
 
 interface ActionBarProps {
@@ -50,6 +51,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   onJumpToJson,
 }) => {
   const [minimized, setMinimized] = useState(false);
+  const [clearing, setClearing] = useState(false);
 
   if (minimized) {
     return (
@@ -68,8 +70,17 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
         Copy
       </Button>
-      <Button onClick={onClear} variant="outline" size="sm" className="gap-2">
-        <Trash2 className="w-4 h-4" />
+      <Button
+        onClick={() => {
+          setClearing(true);
+          onClear();
+          setTimeout(() => setClearing(false), 500);
+        }}
+        variant="outline"
+        size="sm"
+        className="gap-2"
+      >
+        <Trash2 className={`w-4 h-4 ${clearing ? 'animate-spin' : ''}`} />
         Clear
       </Button>
       <Button onClick={onShare} variant="outline" size="sm" className="gap-2">
@@ -113,7 +124,8 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         History
       </Button>
       {showJumpToJson && (
-        <Button onClick={onJumpToJson} variant="outline" size="sm">
+        <Button onClick={onJumpToJson} variant="outline" size="sm" className="gap-2">
+          <MoveDown className="w-4 h-4" />
           Jump to JSON
         </Button>
       )}
