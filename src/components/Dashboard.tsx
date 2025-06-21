@@ -25,8 +25,6 @@ export interface SoraOptions {
   };
   quality: 'defective' | 'unacceptable' | 'poor' | 'bad' | 'below standard' | 'minimum' | 'moderate' | 'medium' | 'draft' | 'standard' | 'good' | 'high' | 'excellent' | 'ultra' | 'maximum' | 'low';
   temperature: number;
-  clip_skip: number;
-  image_count: number;
   dynamic_range: 'SDR' | 'HDR';
   output_format: 'png' | 'jpg' | 'webp';
   duration_seconds: number;
@@ -149,8 +147,6 @@ const Dashboard = () => {
     },
     quality: 'high',
     temperature: 1.1,
-    clip_skip: 2,
-    image_count: 4,
     dynamic_range: 'HDR',
     output_format: 'png',
     duration_seconds: 5,
@@ -417,7 +413,8 @@ const Dashboard = () => {
     delete cleanOptions.use_subject_mood;
     delete cleanOptions.use_sword_type;
     delete cleanOptions.use_camera_composition;
-    
+    delete (cleanOptions as { image_count?: number }).image_count;
+
     setJsonString(JSON.stringify(cleanOptions, null, 2));
   }, [options]);
 
@@ -461,8 +458,6 @@ const Dashboard = () => {
       },
       quality: 'high',
       temperature: 1.1,
-      clip_skip: 2,
-      image_count: 4,
       dynamic_range: 'HDR',
       output_format: 'png',
       duration_seconds: 5,
