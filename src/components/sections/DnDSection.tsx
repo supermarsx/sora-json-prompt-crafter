@@ -9,6 +9,8 @@ import { SoraOptions } from '../Dashboard';
 interface DnDSectionProps {
   options: SoraOptions;
   updateOptions: (updates: Partial<SoraOptions>) => void;
+  isEnabled: boolean;
+  onToggle: (enabled: boolean) => void;
 }
 
 const characterRaceOptions = [
@@ -65,10 +67,17 @@ const itemTypeOptions = [
 
 export const DnDSection: React.FC<DnDSectionProps> = ({
   options,
-  updateOptions
+  updateOptions,
+  isEnabled,
+  onToggle
 }) => {
   return (
-    <CollapsibleSection title="Dungeons & Dragons">
+    <CollapsibleSection
+      title="Dungeons & Dragons"
+      isOptional={true}
+      isEnabled={isEnabled}
+      onToggle={onToggle}
+    >
       <div className="grid grid-cols-1 gap-4">
         <div className="flex items-center space-x-2">
           <Checkbox

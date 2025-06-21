@@ -103,6 +103,7 @@ export interface SoraOptions {
   special_effects?: string[];
   use_lut_preset: boolean;
   lut_preset?: string;
+  use_dnd_section: boolean;
   use_dnd_character_race: boolean;
   dnd_character_race?: string;
   use_dnd_character_class: boolean;
@@ -212,6 +213,7 @@ const Dashboard = () => {
     use_location: false,
     use_special_effects: false,
     use_lut_preset: false,
+    use_dnd_section: false,
     use_dnd_character_race: false,
     use_dnd_character_class: false,
     use_dnd_character_background: false,
@@ -351,6 +353,42 @@ const Dashboard = () => {
     if (!options.use_upscale_factor) {
       delete cleanOptions.upscale;
     }
+
+    if (!options.use_dnd_section) {
+      delete cleanOptions.dnd_character_race;
+      delete cleanOptions.dnd_character_class;
+      delete cleanOptions.dnd_character_background;
+      delete cleanOptions.dnd_character_alignment;
+      delete cleanOptions.dnd_monster_type;
+      delete cleanOptions.dnd_environment;
+      delete cleanOptions.dnd_magic_school;
+      delete cleanOptions.dnd_item_type;
+    } else {
+      if (!options.use_dnd_character_race) {
+        delete cleanOptions.dnd_character_race;
+      }
+      if (!options.use_dnd_character_class) {
+        delete cleanOptions.dnd_character_class;
+      }
+      if (!options.use_dnd_character_background) {
+        delete cleanOptions.dnd_character_background;
+      }
+      if (!options.use_dnd_character_alignment) {
+        delete cleanOptions.dnd_character_alignment;
+      }
+      if (!options.use_dnd_monster_type) {
+        delete cleanOptions.dnd_monster_type;
+      }
+      if (!options.use_dnd_environment) {
+        delete cleanOptions.dnd_environment;
+      }
+      if (!options.use_dnd_magic_school) {
+        delete cleanOptions.dnd_magic_school;
+      }
+      if (!options.use_dnd_item_type) {
+        delete cleanOptions.dnd_item_type;
+      }
+    }
     
     // Remove control flags from final JSON
     delete cleanOptions.use_dimensions;
@@ -470,6 +508,7 @@ const Dashboard = () => {
       use_location: false,
       use_special_effects: false,
       use_lut_preset: false,
+      use_dnd_section: false,
       use_dnd_character_race: false,
       use_dnd_character_class: false,
       use_dnd_character_background: false,
