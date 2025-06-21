@@ -44,7 +44,12 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
       
       <StyleSection options={options} updateNestedOptions={updateNestedOptions} />
       
-      <CameraCompositionSection options={options} updateOptions={updateOptions} />
+      <CameraCompositionSection
+        options={options}
+        updateOptions={updateOptions}
+        isEnabled={options.use_camera_composition}
+        onToggle={(enabled) => updateOptions({ use_camera_composition: enabled })}
+      />
       
       <VideoMotionSection 
         options={options} 
