@@ -13,6 +13,7 @@ import {
   Eye,
   EyeOff,
   Trash2,
+  Cog,
   ChevronDown,
   ChevronUp,
 } from 'lucide-react';
@@ -74,7 +75,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm" className="gap-2">
-            <Import className="w-4 h-4" /> Manage
+            <Cog className="w-4 h-4" /> Manage
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>

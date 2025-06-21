@@ -26,6 +26,7 @@ import {
   Import as ImportIcon,
   Download,
 } from 'lucide-react'
+import { toast } from 'sonner'
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -86,6 +87,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
   const exportClipboard = async () => {
     try {
       await navigator.clipboard.writeText(JSON.stringify(history, null, 2))
+      toast.success('Copied all history to clipboard!')
     } catch {
       /* ignore */
     }
@@ -96,8 +98,25 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
     const blob = new Blob([data], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
+    const now = new Date()
+    const datetime = `${now.getFullYear()}${(now.getMonth() + 1)
+      .toString()
+      .padStart(2, '0')}${now
+      .getDate()
+      .toString()
+      .padStart(2, '0')}-${now
+      .getHours()
+      .toString()
+      .padStart(2, '0')}${now
+      .getMinutes()
+      .toString()
+      .padStart(2, '0')}${now
+      .getSeconds()
+      .toString()
+      .padStart(2, '0')}`
+    const rand = Math.random().toString(16).slice(2, 8)
     a.href = url
-    a.download = 'history.json'
+    a.download = `history-${datetime}-${rand}.json`
     a.click()
     URL.revokeObjectURL(url)
   }
