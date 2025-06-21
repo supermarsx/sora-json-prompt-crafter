@@ -10,6 +10,7 @@ import { ActionBar } from './ActionBar';
 export interface SoraOptions {
   prompt: string;
   negative_prompt: string;
+  use_negative_prompt: boolean;
   seed: number | null;
   steps: number;
   guidance_scale: number;
@@ -129,6 +130,7 @@ const Dashboard = () => {
   const [options, setOptions] = useState<SoraOptions>({
     prompt: 'A breathtaking cinematic scene of a futuristic city at sunset, flying cars zipping between glass skyscrapers, vibrant colors, ultra-detailed, 8K, masterful lighting, trending on ArtStation',
     negative_prompt: 'blurry, low-res, dark, extra limbs, cropped, watermark, text, signature, logo',
+    use_negative_prompt: true,
     seed: 1337,
     steps: 30,
     guidance_scale: 7.5,
@@ -259,6 +261,10 @@ const Dashboard = () => {
 
     if (!options.use_style_preset) {
       delete cleanOptions.style_preset;
+    }
+
+    if (!options.use_negative_prompt) {
+      delete cleanOptions.negative_prompt;
     }
 
     if (!options.use_material) {
@@ -424,6 +430,7 @@ const Dashboard = () => {
     delete cleanOptions.use_subject_mood;
     delete cleanOptions.use_sword_type;
     delete cleanOptions.use_style_preset;
+    delete cleanOptions.use_negative_prompt;
     delete cleanOptions.use_camera_composition;
     delete (cleanOptions as { image_count?: number }).image_count;
 
@@ -455,6 +462,7 @@ const Dashboard = () => {
     setOptions({
       prompt: 'A breathtaking cinematic scene of a futuristic city at sunset, flying cars zipping between glass skyscrapers, vibrant colors, ultra-detailed, 8K, masterful lighting, trending on ArtStation',
       negative_prompt: 'blurry, low-res, dark, extra limbs, cropped, watermark, text, signature, logo',
+      use_negative_prompt: true,
       seed: 1337,
       steps: 30,
       guidance_scale: 7.5,
