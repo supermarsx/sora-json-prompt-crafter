@@ -13,6 +13,7 @@ import Footer from './Footer';
 import DisclaimerModal from './DisclaimerModal';
 import { useIsSingleColumn } from '@/hooks/use-single-column';
 import { useDarkMode } from '@/hooks/use-dark-mode';
+import { useTracking } from '@/hooks/use-tracking';
 
 export interface SoraOptions {
   prompt: string;
@@ -253,6 +254,7 @@ const Dashboard = () => {
   const jsonRef = React.useRef<HTMLDivElement>(null);
   const isSingleColumn = useIsSingleColumn();
   const [darkMode, setDarkMode] = useDarkMode();
+  const [trackingEnabled, setTrackingEnabled] = useTracking();
 
   useEffect(() => {
     localStorage.setItem('jsonHistory', JSON.stringify(history));
@@ -695,8 +697,8 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto p-6">
+    <div className="min-h-screen flex flex-col bg-background">
+      <div className="container mx-auto p-6 flex-1 flex flex-col">
         <div className="mb-8 flex items-start justify-between">
           <div>
             <h1 className="text-4xl font-bold mb-2 flex items-center gap-3 select-none">
@@ -742,7 +744,7 @@ const Dashboard = () => {
           </Button>
         </div>
         
-        <div className="grid lg:grid-cols-2 gap-6 h-[calc(100vh-12rem)]">
+        <div className="grid lg:grid-cols-2 gap-6 flex-1">
           <Card className="flex flex-col" ref={jsonRef}>
             <CardHeader className="border-b">
               <CardTitle className="flex items-center gap-2">
@@ -799,6 +801,8 @@ const Dashboard = () => {
         onRegenerate={regenerateJson}
         onRandomize={randomizeJson}
         copied={copied}
+        trackingEnabled={trackingEnabled}
+        onToggleTracking={setTrackingEnabled}
       />
       <ShareModal
         isOpen={showShareModal}
@@ -821,7 +825,7 @@ const Dashboard = () => {
         onImport={importJson}
       />
       <DisclaimerModal open={showDisclaimer} onOpenChange={setShowDisclaimer} />
-      <Footer />
+      <Footer trackingEnabled={trackingEnabled} />
       <ProgressBar />
     </div>
   );
