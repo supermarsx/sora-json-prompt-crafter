@@ -25,7 +25,6 @@ export interface SoraOptions {
   };
   quality: 'defective' | 'unacceptable' | 'poor' | 'bad' | 'below standard' | 'minimum' | 'moderate' | 'medium' | 'draft' | 'standard' | 'good' | 'high' | 'excellent' | 'ultra' | 'maximum' | 'low';
   temperature: number;
-  clip_skip: number;
   batch_size: number;
   image_count: number;
   dynamic_range: 'SDR' | 'HDR';
@@ -150,7 +149,6 @@ const Dashboard = () => {
     },
     quality: 'high',
     temperature: 1.1,
-    clip_skip: 2,
     batch_size: 1,
     image_count: 4,
     dynamic_range: 'HDR',
@@ -463,7 +461,6 @@ const Dashboard = () => {
       },
       quality: 'high',
       temperature: 1.1,
-      clip_skip: 2,
       batch_size: 1,
       image_count: 4,
       dynamic_range: 'HDR',
