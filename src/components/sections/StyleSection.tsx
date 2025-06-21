@@ -8,6 +8,7 @@ import { SoraOptions } from '../Dashboard';
 interface StyleSectionProps {
   options: SoraOptions;
   updateNestedOptions: (path: string, value: unknown) => void;
+  updateOptions: (updates: Partial<SoraOptions>) => void;
 }
 
 const stylePresets = {
@@ -79,7 +80,8 @@ const stylePresets = {
 
 export const StyleSection: React.FC<StyleSectionProps> = ({
   options,
-  updateNestedOptions
+  updateNestedOptions,
+  updateOptions
 }) => {
   const formatLabel = (value: string) => {
     return value.split(' ').map(word => 
@@ -88,7 +90,12 @@ export const StyleSection: React.FC<StyleSectionProps> = ({
   };
 
   return (
-    <CollapsibleSection title="Style Preset">
+    <CollapsibleSection
+      title="Style Preset"
+      isOptional={true}
+      isEnabled={options.use_style_preset}
+      onToggle={(enabled) => updateOptions({ use_style_preset: enabled })}
+    >
       <div className="grid grid-cols-1 gap-4">
         <div>
           <Label htmlFor="style_category">Style Category</Label>
