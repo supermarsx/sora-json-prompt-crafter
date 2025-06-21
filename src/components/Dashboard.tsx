@@ -733,6 +733,16 @@ const Dashboard = () => {
               <a
                 className="github-button"
                 href="https://github.com/supermarsx/sora-json-prompt-crafter"
+                data-icon="octicon-mark-github"
+                data-size="large"
+                aria-label="GitHub supermarsx/sora-json-prompt-crafter"
+                data-color-scheme={darkMode ? 'dark_high_contrast' : 'light_high_contrast'}
+              >
+                GitHub
+              </a>
+              <a
+                className="github-button"
+                href="https://github.com/supermarsx/sora-json-prompt-crafter"
                 data-icon="octicon-star"
                 data-show-count="true"
                 data-size="large"
@@ -740,6 +750,13 @@ const Dashboard = () => {
                 data-color-scheme={darkMode ? 'dark_high_contrast' : 'light_high_contrast'}
               >
                 Star
+              </a>
+              <a
+                className="github-button"
+                href="https://lovable.dev/projects/385b40c5-6b5e-49fc-9f0a-e6a0f9a36181"
+                data-size="large"
+              >
+                View on Lovable
               </a>
             </div>
             <p className="text-xs mt-2 text-muted-foreground">
