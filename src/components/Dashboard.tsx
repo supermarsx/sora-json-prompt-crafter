@@ -1,10 +1,11 @@
-
 import React, { useState, useEffect } from 'react';
 import { Copy, Check, Sparkles, RotateCcw, Share, Trash2, RefreshCw, Shuffle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { ControlPanel } from './ControlPanel';
+import { ShareModal } from './ShareModal';
+import { ProgressBar } from './ProgressBar';
 
 export interface SoraOptions {
   prompt: string;
@@ -16,14 +17,13 @@ export interface SoraOptions {
   height?: number;
   use_dimensions: boolean;
   aspect_ratio: '16:9' | '21:9' | '4:3' | '1:1' | '9:16';
-  sampler: 'Euler a' | 'DPM++ 2M Karras' | 'DDIM' | 'PLMS';
   cfg_rescale: number;
   highres_fix: boolean;
   style_preset: {
     category: string;
     style: string;
   };
-  quality: 'draft' | 'standard' | 'high' | 'ultra' | 'low';
+  quality: 'defective' | 'unacceptable' | 'poor' | 'bad' | 'below standard' | 'minimum' | 'moderate' | 'medium' | 'draft' | 'standard' | 'good' | 'high' | 'excellent' | 'ultra' | 'maximum' | 'low';
   temperature: number;
   clip_skip: number;
   batch_size: number;
@@ -68,6 +68,64 @@ export interface SoraOptions {
   use_sword_type: boolean;
   sword_type?: string;
   sword_vibe?: string;
+  use_core_settings: boolean;
+  use_dimensions_format: boolean;
+  use_lighting: boolean;
+  use_material: boolean;
+  use_secondary_material: boolean;
+  secondary_material?: string;
+  use_color_grading: boolean;
+  use_environment: boolean;
+  use_time_of_year: boolean;
+  use_character_mood: boolean;
+  use_sword_details: boolean;
+  prevent_deformities: boolean;
+  use_upscale_factor: boolean;
+  use_safety_filter: boolean;
+  keep_typography_details: boolean;
+  use_face_enhancements: boolean;
+  add_same_face: boolean;
+  dont_change_face: boolean;
+  use_subject_gender: boolean;
+  subject_gender?: string;
+  use_makeup_style: boolean;
+  makeup_style?: string;
+  use_quality_booster: boolean;
+  quality_booster?: string;
+  enhance_object_reflections: boolean;
+  keep_key_details: boolean;
+  use_black_and_white: boolean;
+  black_and_white_preset?: string;
+  use_location: boolean;
+  location?: string;
+  use_special_effects: boolean;
+  special_effects?: string[];
+  use_lut_preset: boolean;
+  lut_preset?: string;
+  use_dnd_character_race: boolean;
+  dnd_character_race?: string;
+  use_dnd_character_class: boolean;
+  dnd_character_class?: string;
+  use_dnd_character_background: boolean;
+  dnd_character_background?: string;
+  use_dnd_character_alignment: boolean;
+  dnd_character_alignment?: string;
+  use_dnd_monster_type: boolean;
+  dnd_monster_type?: string;
+  use_dnd_environment: boolean;
+  dnd_environment?: string;
+  use_dnd_magic_school: boolean;
+  dnd_magic_school?: string;
+  use_dnd_item_type: boolean;
+  dnd_item_type?: string;
+  use_camera_angle: boolean;
+  use_lens_type: boolean;
+  use_aperture: boolean;
+  use_dof: boolean;
+  use_blur_style: boolean;
+  extended_motion_strength: boolean;
+  extended_fps: boolean;
+  use_duration: boolean;
 }
 
 const Dashboard = () => {
@@ -81,7 +139,6 @@ const Dashboard = () => {
     height: 576,
     use_dimensions: true,
     aspect_ratio: '16:9',
-    sampler: 'DPM++ 2M Karras',
     cfg_rescale: 0.7,
     highres_fix: true,
     style_preset: {
@@ -127,35 +184,82 @@ const Dashboard = () => {
     use_atmosphere_mood: false,
     use_subject_mood: false,
     use_sword_type: false,
+    use_core_settings: true,
+    use_dimensions_format: true,
+    use_lighting: false,
+    use_material: false,
+    use_secondary_material: false,
+    use_color_grading: false,
+    use_environment: false,
+    use_time_of_year: false,
+    use_character_mood: false,
+    use_sword_details: false,
+    prevent_deformities: false,
+    use_upscale_factor: false,
+    use_safety_filter: false,
+    keep_typography_details: false,
+    use_face_enhancements: false,
+    add_same_face: false,
+    dont_change_face: false,
+    use_subject_gender: false,
+    use_makeup_style: false,
+    use_quality_booster: false,
+    enhance_object_reflections: false,
+    keep_key_details: false,
+    use_black_and_white: false,
+    use_location: false,
+    use_special_effects: false,
+    use_lut_preset: false,
+    use_dnd_character_race: false,
+    use_dnd_character_class: false,
+    use_dnd_character_background: false,
+    use_dnd_character_alignment: false,
+    use_dnd_monster_type: false,
+    use_dnd_environment: false,
+    use_dnd_magic_school: false,
+    use_dnd_item_type: false,
+    use_camera_angle: false,
+    use_lens_type: false,
+    use_aperture: false,
+    use_dof: false,
+    use_blur_style: false,
+    extended_motion_strength: false,
+    extended_fps: false,
+    use_duration: false,
   });
 
   const [copied, setCopied] = useState(false);
   const [jsonString, setJsonString] = useState('');
+  const [showShareModal, setShowShareModal] = useState(false);
 
   useEffect(() => {
-    const cleanOptions = {
-      ...options,
-      seed: options.seed === 0 ? null : options.seed,
-    };
+    const cleanOptions = { ...options };
     
+    // Remove control flags and unused optional fields
+    Object.keys(cleanOptions).forEach(key => {
+      if (key.startsWith('use_') || key.startsWith('extended_')) {
+        delete cleanOptions[key];
+      }
+    });
+
     // Remove optional fields if not enabled
-    if (!cleanOptions.use_dimensions) {
+    if (!options.use_dimensions) {
       delete cleanOptions.width;
       delete cleanOptions.height;
     }
-    if (!cleanOptions.use_signature) {
+    if (!options.use_signature) {
       delete cleanOptions.signature;
     }
-    if (!cleanOptions.use_season) {
+    if (!options.use_season) {
       delete cleanOptions.season;
     }
-    if (!cleanOptions.use_atmosphere_mood) {
+    if (!options.use_atmosphere_mood) {
       delete cleanOptions.atmosphere_mood;
     }
-    if (!cleanOptions.use_subject_mood) {
+    if (!options.use_subject_mood) {
       delete cleanOptions.subject_mood;
     }
-    if (!cleanOptions.use_sword_type) {
+    if (!options.use_sword_type) {
       delete cleanOptions.sword_type;
       delete cleanOptions.sword_vibe;
     }
@@ -189,24 +293,12 @@ const Dashboard = () => {
     toast.success('JSON cleared!');
   };
 
-  const shareJson = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: 'Sora JSON Prompt',
-          text: jsonString,
-        });
-        toast.success('JSON shared!');
-      } catch (err) {
-        toast.error('Failed to share');
-      }
-    } else {
-      await copyToClipboard();
-      toast.success('JSON copied for sharing!');
-    }
+  const shareJson = () => {
+    setShowShareModal(true);
   };
 
   const resetJson = () => {
+    // Reset to default options
     setOptions({
       prompt: 'A breathtaking cinematic scene of a futuristic city at sunset, flying cars zipping between glass skyscrapers, vibrant colors, ultra-detailed, 8K, masterful lighting, trending on ArtStation',
       negative_prompt: 'blurry, low-res, dark, extra limbs, cropped, watermark, text, signature, logo, nsfw',
@@ -217,7 +309,6 @@ const Dashboard = () => {
       height: 576,
       use_dimensions: true,
       aspect_ratio: '16:9',
-      sampler: 'DPM++ 2M Karras',
       cfg_rescale: 0.7,
       highres_fix: true,
       style_preset: {
@@ -263,6 +354,48 @@ const Dashboard = () => {
       use_atmosphere_mood: false,
       use_subject_mood: false,
       use_sword_type: false,
+      use_core_settings: true,
+      use_dimensions_format: true,
+      use_lighting: false,
+      use_material: false,
+      use_secondary_material: false,
+      use_color_grading: false,
+      use_environment: false,
+      use_time_of_year: false,
+      use_character_mood: false,
+      use_sword_details: false,
+      prevent_deformities: false,
+      use_upscale_factor: false,
+      use_safety_filter: false,
+      keep_typography_details: false,
+      use_face_enhancements: false,
+      add_same_face: false,
+      dont_change_face: false,
+      use_subject_gender: false,
+      use_makeup_style: false,
+      use_quality_booster: false,
+      enhance_object_reflections: false,
+      keep_key_details: false,
+      use_black_and_white: false,
+      use_location: false,
+      use_special_effects: false,
+      use_lut_preset: false,
+      use_dnd_character_race: false,
+      use_dnd_character_class: false,
+      use_dnd_character_background: false,
+      use_dnd_character_alignment: false,
+      use_dnd_monster_type: false,
+      use_dnd_environment: false,
+      use_dnd_magic_school: false,
+      use_dnd_item_type: false,
+      use_camera_angle: false,
+      use_lens_type: false,
+      use_aperture: false,
+      use_dof: false,
+      use_blur_style: false,
+      extended_motion_strength: false,
+      extended_fps: false,
+      use_duration: false,
     });
     toast.success('Settings reset to defaults!');
   };
@@ -273,15 +406,14 @@ const Dashboard = () => {
   };
 
   const randomizeJson = () => {
-    // Randomize key options
     const randomOptions: Partial<SoraOptions> = {
       seed: Math.floor(Math.random() * 10000),
-      steps: Math.floor(Math.random() * 31) + 20, // 20-50
-      guidance_scale: Math.random() * 12 + 3, // 3-15
-      quality: ['draft', 'standard', 'high', 'ultra', 'low'][Math.floor(Math.random() * 5)] as any,
-      temperature: Math.random() * 0.5 + 0.8, // 0.8-1.3
-      chaos: Math.random(), // 0-1
-      motion_strength: Math.random(), // 0-1
+      steps: Math.floor(Math.random() * 31) + 20,
+      guidance_scale: Math.random() * 12 + 3,
+      quality: ['defective', 'poor', 'moderate', 'high', 'excellent'][Math.floor(Math.random() * 5)] as any,
+      temperature: Math.random() * 0.5 + 0.8,
+      chaos: Math.random(),
+      motion_strength: Math.random(),
     };
     
     setOptions(prev => ({ ...prev, ...randomOptions }));
@@ -320,7 +452,6 @@ const Dashboard = () => {
         </div>
         
         <div className="grid lg:grid-cols-2 gap-6 h-[calc(100vh-12rem)]">
-          {/* Controls Panel */}
           <Card className="flex flex-col">
             <CardHeader className="border-b">
               <CardTitle className="flex items-center gap-2">
@@ -339,7 +470,6 @@ const Dashboard = () => {
             </CardContent>
           </Card>
 
-          {/* JSON Preview Panel */}
           <Card className="flex flex-col">
             <CardHeader className="border-b">
               <CardTitle className="flex items-center justify-between">
@@ -348,57 +478,27 @@ const Dashboard = () => {
                   Sora JSON Prompt
                 </div>
                 <div className="flex gap-2 flex-wrap">
-                  <Button
-                    onClick={copyToClipboard}
-                    variant="outline"
-                    size="sm"
-                    className="gap-2"
-                  >
+                  <Button onClick={copyToClipboard} variant="outline" size="sm" className="gap-2">
                     {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                     Copy
                   </Button>
-                  <Button
-                    onClick={clearJson}
-                    variant="outline"
-                    size="sm"
-                    className="gap-2"
-                  >
+                  <Button onClick={clearJson} variant="outline" size="sm" className="gap-2">
                     <Trash2 className="w-4 h-4" />
                     Clear
                   </Button>
-                  <Button
-                    onClick={shareJson}
-                    variant="outline"
-                    size="sm"
-                    className="gap-2"
-                  >
+                  <Button onClick={shareJson} variant="outline" size="sm" className="gap-2">
                     <Share className="w-4 h-4" />
                     Share
                   </Button>
-                  <Button
-                    onClick={resetJson}
-                    variant="outline"
-                    size="sm"
-                    className="gap-2"
-                  >
+                  <Button onClick={resetJson} variant="outline" size="sm" className="gap-2">
                     <RotateCcw className="w-4 h-4" />
                     Reset
                   </Button>
-                  <Button
-                    onClick={regenerateJson}
-                    variant="outline"
-                    size="sm"
-                    className="gap-2"
-                  >
+                  <Button onClick={regenerateJson} variant="outline" size="sm" className="gap-2">
                     <RefreshCw className="w-4 h-4" />
                     Regenerate
                   </Button>
-                  <Button
-                    onClick={randomizeJson}
-                    variant="outline"
-                    size="sm"
-                    className="gap-2"
-                  >
+                  <Button onClick={randomizeJson} variant="outline" size="sm" className="gap-2">
                     <Shuffle className="w-4 h-4" />
                     Randomize
                   </Button>
@@ -415,6 +515,13 @@ const Dashboard = () => {
           </Card>
         </div>
       </div>
+      
+      <ShareModal 
+        isOpen={showShareModal} 
+        onClose={() => setShowShareModal(false)} 
+        jsonContent={jsonString} 
+      />
+      <ProgressBar />
     </div>
   );
 };
