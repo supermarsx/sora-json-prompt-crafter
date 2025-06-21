@@ -25,13 +25,17 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
 
   return (
     <div className="border border-border rounded-lg">
-      <div className="flex items-center justify-between p-4 bg-muted/30">
+      <div
+        className="flex items-center justify-between p-4 bg-muted/30 cursor-pointer"
+        onClick={() => setIsOpen(!isOpen)}
+      >
         <div className="flex items-center gap-3">
           {isOptional && (
             <Checkbox
               checked={isEnabled}
               onCheckedChange={onToggle}
               className="flex-shrink-0"
+              onClick={(e) => e.stopPropagation()}
             />
           )}
           <h3 className="font-semibold text-lg">{title}</h3>
@@ -39,7 +43,10 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsOpen(!isOpen);
+          }}
           className="p-1"
         >
           {isOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
