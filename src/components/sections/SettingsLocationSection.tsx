@@ -124,7 +124,12 @@ export const SettingsLocationSection: React.FC<SettingsLocationSectionProps> = (
   updateOptions
 }) => {
   return (
-    <CollapsibleSection title="Settings & Location">
+    <CollapsibleSection
+      title="Settings & Location"
+      isOptional={true}
+      isEnabled={options.use_settings_location}
+      onToggle={(enabled) => updateOptions({ use_settings_location: enabled })}
+    >
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <Label htmlFor="year">Year</Label>

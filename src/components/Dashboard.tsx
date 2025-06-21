@@ -58,6 +58,7 @@ export interface SoraOptions {
   use_motion_animation: boolean;
   use_enhancement_safety: boolean;
   camera_type: string;
+  use_settings_location: boolean;
   year: number;
   use_season: boolean;
   season?: string;
@@ -179,6 +180,7 @@ const Dashboard = () => {
     use_motion_animation: true,
     use_enhancement_safety: true,
     camera_type: 'default (auto/any camera)',
+    use_settings_location: false,
     year: new Date().getFullYear(),
     use_season: false,
     use_atmosphere_mood: false,
@@ -250,6 +252,20 @@ const Dashboard = () => {
     if (!options.use_signature) {
       delete cleanOptions.signature;
     }
+    if (!options.use_settings_location) {
+      delete cleanOptions.year;
+      delete cleanOptions.environment;
+      delete cleanOptions.location;
+      delete cleanOptions.season;
+      delete cleanOptions.atmosphere_mood;
+    } else {
+      if (!options.use_environment) {
+        delete cleanOptions.environment;
+      }
+      if (!options.use_location) {
+        delete cleanOptions.location;
+      }
+    }
     if (!options.use_season) {
       delete cleanOptions.season;
     }
@@ -269,6 +285,7 @@ const Dashboard = () => {
     delete cleanOptions.use_signature;
     delete cleanOptions.use_motion_animation;
     delete cleanOptions.use_enhancement_safety;
+    delete cleanOptions.use_settings_location;
     delete cleanOptions.use_season;
     delete cleanOptions.use_atmosphere_mood;
     delete cleanOptions.use_subject_mood;
@@ -349,6 +366,7 @@ const Dashboard = () => {
       use_motion_animation: true,
       use_enhancement_safety: true,
       camera_type: 'default (auto/any camera)',
+      use_settings_location: false,
       year: new Date().getFullYear(),
       use_season: false,
       use_atmosphere_mood: false,
