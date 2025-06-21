@@ -16,6 +16,7 @@ interface ActionBarProps {
   onCopy: () => void;
   onClear: () => void;
   onShare: () => void;
+  onHistory: () => void;
   onReset: () => void;
   onRegenerate: () => void;
   onRandomize: () => void;
@@ -26,6 +27,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   onCopy,
   onClear,
   onShare,
+  onHistory,
   onReset,
   onRegenerate,
   onRandomize,
@@ -57,6 +59,9 @@ export const ActionBar: React.FC<ActionBarProps> = ({
       <Button onClick={onShare} variant="outline" size="sm" className="gap-2">
         <Share className="w-4 h-4" />
         Share
+      </Button>
+      <Button onClick={onHistory} variant="outline" size="sm" className="gap-2">
+        History
       </Button>
       <Button onClick={onReset} variant="outline" size="sm" className="gap-2">
         <RotateCcw className="w-4 h-4" />

@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Sparkles } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { ControlPanel } from './ControlPanel';
 import { ShareModal } from './ShareModal';
 import { ProgressBar } from './ProgressBar';
 import { ActionBar } from './ActionBar';
+import HistoryPanel, { HistoryEntry } from './HistoryPanel';
+import { useIsSingleColumn } from '@/hooks/use-single-column';
 
 export interface SoraOptions {
   prompt: string;
@@ -227,6 +230,20 @@ const Dashboard = () => {
   const [copied, setCopied] = useState(false);
   const [jsonString, setJsonString] = useState('');
   const [showShareModal, setShowShareModal] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
+  const [history, setHistory] = useState<HistoryEntry[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('jsonHistory') || '[]');
+    } catch {
+      return [];
+    }
+  });
+  const jsonRef = React.useRef<HTMLDivElement>(null);
+  const isSingleColumn = useIsSingleColumn();
+
+  useEffect(() => {
+    localStorage.setItem('jsonHistory', JSON.stringify(history));
+  }, [history]);
 
   useEffect(() => {
     const cleanOptions = { ...options };
@@ -438,13 +455,21 @@ const Dashboard = () => {
     delete cleanOptions.use_camera_composition;
     delete (cleanOptions as { image_count?: number }).image_count;
 
-    setJsonString(JSON.stringify(cleanOptions, null, 2));
+    const json = JSON.stringify(cleanOptions, null, 2);
+    setJsonString(json);
+    localStorage.setItem('currentJson', json);
   }, [options]);
 
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(jsonString);
       setCopied(true);
+      const entry: HistoryEntry = {
+        id: Date.now(),
+        date: new Date().toLocaleString(),
+        json: jsonString,
+      };
+      setHistory((prev) => [entry, ...prev]);
       toast.success('Sora JSON copied to clipboard!');
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
@@ -603,6 +628,35 @@ const Dashboard = () => {
     });
   };
 
+  const deleteHistoryEntry = (id: number) => {
+    setHistory(prev => prev.filter(e => e.id !== id));
+  };
+
+  const clearHistory = () => setHistory([]);
+
+  const copyHistoryEntry = async (json: string) => {
+    try {
+      await navigator.clipboard.writeText(json);
+      toast.success('Sora JSON copied to clipboard!');
+    } catch {
+      toast.error('Failed to copy to clipboard');
+    }
+  };
+
+  const editHistoryEntry = (json: string) => {
+    try {
+      const obj = JSON.parse(json);
+      setOptions(prev => ({ ...prev, ...obj }));
+      jsonRef.current?.scrollIntoView({ behavior: 'smooth' });
+    } catch {
+      toast.error('Invalid JSON');
+    }
+  };
+
+  const scrollToJson = () => {
+    jsonRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto p-6">
@@ -615,7 +669,7 @@ const Dashboard = () => {
         </div>
         
         <div className="grid lg:grid-cols-2 gap-6 h-[calc(100vh-12rem)]">
-          <Card className="flex flex-col">
+          <Card className="flex flex-col" ref={jsonRef}>
             <CardHeader className="border-b">
               <CardTitle className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
@@ -651,10 +705,21 @@ const Dashboard = () => {
         </div>
       </div>
       
+      {isSingleColumn && (
+        <Button
+          onClick={scrollToJson}
+          variant="default"
+          size="sm"
+          className="fixed bottom-28 right-4 z-50"
+        >
+          Jump to JSON
+        </Button>
+      )}
       <ActionBar
         onCopy={copyToClipboard}
         onClear={clearJson}
         onShare={shareJson}
+        onHistory={() => setShowHistory(true)}
         onReset={resetJson}
         onRegenerate={regenerateJson}
         onRandomize={randomizeJson}
@@ -664,6 +729,15 @@ const Dashboard = () => {
         isOpen={showShareModal}
         onClose={() => setShowShareModal(false)}
         jsonContent={jsonString}
+      />
+      <HistoryPanel
+        open={showHistory}
+        onOpenChange={setShowHistory}
+        history={history}
+        onDelete={deleteHistoryEntry}
+        onClear={clearHistory}
+        onCopy={copyHistoryEntry}
+        onEdit={editHistoryEntry}
       />
       <ProgressBar />
     </div>
