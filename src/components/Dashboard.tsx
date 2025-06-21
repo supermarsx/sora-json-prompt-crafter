@@ -281,6 +281,7 @@ const Dashboard = () => {
       delete cleanOptions.shot_type;
       delete cleanOptions.subject_focus;
       delete cleanOptions.composition_rules;
+      delete cleanOptions.camera_type;
     }
 
     if (!options.use_motion_animation) {
