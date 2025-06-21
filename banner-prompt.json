@@ -1,0 +1,29 @@
+{
+  "prompt": "A realistic modern LLM prompt like ChatGPT in a hellish landscape trying to run away from gruelish monsters coming from a void, in a reddish and black tones only photograph. Prompt has a placeholder saying \"welcome to hell\".",
+  "aspect_ratio": "21:9",
+  "style_preset": {
+    "category": "Famous Artists/Influences",
+    "style": "in the style of Rick & Morty"
+  },
+  "dynamic_range": "HDR",
+  "output_format": "png",
+  "camera_angle": "worm's eye",
+  "shot_type": "as is",
+  "subject_focus": "top",
+  "composition_rules": [
+    "rule_of_thirds",
+    "leading_lines"
+  ],
+  "lighting": "golden hour",
+  "depth_of_field": "sharp foreground, blurred background",
+  "upscale": 2,
+  "environment": "post-apocalyptic wasteland",
+  "camera_type": "RED Helium 8K (legendary cinema)",
+  "year": 2050,
+  "prevent_deformities": true,
+  "keep_typography_details": false,
+  "enhance_object_reflections": true,
+  "keep_key_details": true,
+  "quality_booster": "art station quality",
+  "atmosphere_mood": "haunting"
+}
