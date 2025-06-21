@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Copy, Check, Sparkles, RotateCcw, Share, Trash2, RefreshCw, Shuffle } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Sparkles } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { ControlPanel } from './ControlPanel';
 import { ShareModal } from './ShareModal';
 import { ProgressBar } from './ProgressBar';
+import { ActionBar } from './ActionBar';
 
 export interface SoraOptions {
   prompt: string;
@@ -619,37 +619,9 @@ const Dashboard = () => {
 
           <Card className="flex flex-col">
             <CardHeader className="border-b">
-              <CardTitle className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  Sora JSON Prompt
-                </div>
-                <div className="flex gap-2 flex-wrap">
-                  <Button onClick={copyToClipboard} variant="outline" size="sm" className="gap-2">
-                    {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                    Copy
-                  </Button>
-                  <Button onClick={clearJson} variant="outline" size="sm" className="gap-2">
-                    <Trash2 className="w-4 h-4" />
-                    Clear
-                  </Button>
-                  <Button onClick={shareJson} variant="outline" size="sm" className="gap-2">
-                    <Share className="w-4 h-4" />
-                    Share
-                  </Button>
-                  <Button onClick={resetJson} variant="outline" size="sm" className="gap-2">
-                    <RotateCcw className="w-4 h-4" />
-                    Reset
-                  </Button>
-                  <Button onClick={regenerateJson} variant="outline" size="sm" className="gap-2">
-                    <RefreshCw className="w-4 h-4" />
-                    Regenerate
-                  </Button>
-                  <Button onClick={randomizeJson} variant="outline" size="sm" className="gap-2">
-                    <Shuffle className="w-4 h-4" />
-                    Randomize
-                  </Button>
-                </div>
+              <CardTitle className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                Sora JSON Prompt
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 p-0 overflow-hidden">
@@ -663,10 +635,19 @@ const Dashboard = () => {
         </div>
       </div>
       
-      <ShareModal 
-        isOpen={showShareModal} 
-        onClose={() => setShowShareModal(false)} 
-        jsonContent={jsonString} 
+      <ActionBar
+        onCopy={copyToClipboard}
+        onClear={clearJson}
+        onShare={shareJson}
+        onReset={resetJson}
+        onRegenerate={regenerateJson}
+        onRandomize={randomizeJson}
+        copied={copied}
+      />
+      <ShareModal
+        isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
+        jsonContent={jsonString}
       />
       <ProgressBar />
     </div>
