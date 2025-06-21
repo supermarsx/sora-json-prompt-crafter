@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
@@ -10,6 +10,7 @@ import { ActionBar } from './ActionBar';
 import HistoryPanel, { HistoryEntry } from './HistoryPanel';
 import ImportModal from './ImportModal';
 import { useIsSingleColumn } from '@/hooks/use-single-column';
+import { useDarkMode } from '@/hooks/use-dark-mode';
 
 export interface SoraOptions {
   prompt: string;
@@ -160,8 +161,8 @@ const Dashboard = () => {
     camera_angle: 'low',
     shot_type: 'wide',
     subject_focus: 'center',
-    composition_rules: ['rule_of_thirds', 'leading_lines'],
-    lighting: 'golden_hour',
+    composition_rules: [],
+    lighting: '',
     color_grade: 'default (no specific color grading)',
     depth_of_field: 'shallow',
     lens_type: 'default',
@@ -248,6 +249,7 @@ const Dashboard = () => {
   });
   const jsonRef = React.useRef<HTMLDivElement>(null);
   const isSingleColumn = useIsSingleColumn();
+  const [darkMode, setDarkMode] = useDarkMode();
 
   useEffect(() => {
     localStorage.setItem('jsonHistory', JSON.stringify(history));
@@ -540,8 +542,8 @@ const Dashboard = () => {
       camera_angle: 'low',
       shot_type: 'wide',
       subject_focus: 'center',
-      composition_rules: ['rule_of_thirds', 'leading_lines'],
-      lighting: 'golden_hour',
+      composition_rules: [],
+      lighting: '',
       color_grade: 'default (no specific color grading)',
       depth_of_field: 'shallow',
       lens_type: 'default',
@@ -692,12 +694,22 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto p-6">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 flex items-center gap-3">
-            <Sparkles className="w-10 h-10 text-purple-500" />
-            Sora JSON Prompt Crafter
-          </h1>
-          <p className="text-muted-foreground">Configure your Sora generation settings and get the perfect JSON prompt for stunning AI-generated content.</p>
+        <div className="mb-8 flex items-start justify-between">
+          <div>
+            <h1 className="text-4xl font-bold mb-2 flex items-center gap-3 select-none">
+              <Sparkles className="w-10 h-10 text-purple-500 animate-rainbow" />
+              Sora JSON Prompt Crafter
+            </h1>
+            <p className="text-muted-foreground select-none">Configure your Sora generation settings and get the perfect JSON prompt for stunning AI-generated content.</p>
+          </div>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setDarkMode(!darkMode)}
+            aria-label="Toggle dark mode"
+          >
+            {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+          </Button>
         </div>
         
         <div className="grid lg:grid-cols-2 gap-6 h-[calc(100vh-12rem)]">
@@ -719,7 +731,7 @@ const Dashboard = () => {
             </CardContent>
           </Card>
 
-          <Card className="flex flex-col">
+          <Card className="flex flex-col lg:sticky lg:top-24">
             <CardHeader className="border-b">
               <CardTitle className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>

@@ -195,13 +195,26 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                     try {
                       const obj = JSON.parse(entry.json)
                       const { prompt, ...rest } = obj
-                      const keys = Object.keys(rest)
+                      const flatten = (o: Record<string, unknown>, p = ''): Record<string, unknown> => {
+                        return Object.keys(o).reduce((acc, k) => {
+                          const v = o[k]
+                          const key = p ? `${p}.${k}` : k
+                          if (v && typeof v === 'object' && !Array.isArray(v)) {
+                            Object.assign(acc, flatten(v, key))
+                          } else {
+                            acc[key] = v
+                          }
+                          return acc
+                        }, {} as Record<string, unknown>)
+                      }
+                      const flat = flatten(rest)
+                      const keys = Object.keys(flat)
                       const sample = keys.sort(() => 0.5 - Math.random()).slice(0, 3)
                       return (
                         <div className="space-y-1 text-xs text-muted-foreground">
                           <div className="font-medium break-words">{prompt}</div>
                           <div>
-                            {sample.map(key => `${key}: ${String(rest[key])}`).join(', ')}
+                            {sample.map(key => `${key}: ${String(flat[key])}`).join(', ')}
                           </div>
                         </div>
                       )
