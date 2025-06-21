@@ -41,7 +41,6 @@ export interface SoraOptions {
   depth_of_field: string;
   lens_type: string;
   frame_interpolation: 'smooth' | 'realistic' | 'sharp';
-  face_enhance: boolean;
   upscale: number;
   safety_filter: 'strict' | 'moderate' | 'off';
   nsfw: boolean;
@@ -163,7 +162,6 @@ const Dashboard = () => {
     depth_of_field: 'shallow',
     lens_type: 'default',
     frame_interpolation: 'smooth',
-    face_enhance: false,
     upscale: 2,
     safety_filter: 'moderate',
     nsfw: false,
@@ -479,7 +477,6 @@ const Dashboard = () => {
       depth_of_field: 'shallow',
       lens_type: 'default',
       frame_interpolation: 'smooth',
-      face_enhance: false,
       upscale: 2,
       safety_filter: 'moderate',
       nsfw: false,
