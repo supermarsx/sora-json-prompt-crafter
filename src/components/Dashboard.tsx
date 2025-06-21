@@ -279,6 +279,10 @@ const Dashboard = () => {
       delete cleanOptions.lens_type;
     }
 
+    if (!options.use_dof) {
+      delete cleanOptions.depth_of_field;
+    }
+
     if (!options.use_blur_style) {
       delete cleanOptions.blur_style;
     }

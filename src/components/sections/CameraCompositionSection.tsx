@@ -284,6 +284,35 @@ const blurStyleOptions = [
   "zoom burst blur"
 ];
 
+const depthOfFieldOptions = [
+  "default",
+  "keep original",
+  "not defined",
+  "as is",
+  "ultra shallow depth of field",
+  "very shallow depth of field",
+  "shallow depth of field",
+  "medium depth of field",
+  "deep depth of field",
+  "very deep depth of field",
+  "infinite depth of field",
+  "selective focus",
+  "split focus",
+  "rack focus",
+  "focus stacking",
+  "tilt-shift effect",
+  "macro focus",
+  "bokeh background",
+  "background blur",
+  "foreground blur",
+  "sharp foreground, blurred background",
+  "sharp background, blurred foreground",
+  "everything in focus",
+  "subject in focus",
+  "foreground in focus",
+  "background in focus"
+];
+
 export const CameraCompositionSection: React.FC<CameraCompositionSectionProps> = ({
   options,
   updateOptions,
@@ -411,6 +440,26 @@ export const CameraCompositionSection: React.FC<CameraCompositionSectionProps> =
             onValueChange={(value) => updateOptions({ aperture: value })}
             label="Aperture"
             disabled={!options.use_aperture}
+          />
+        </div>
+
+        <div className="flex items-center space-x-2 mb-4">
+          <Checkbox
+            id="use_dof"
+            checked={options.use_dof}
+            onCheckedChange={(checked) => updateOptions({ use_dof: !!checked })}
+          />
+          <Label htmlFor="use_dof">Use Depth of Field</Label>
+        </div>
+
+        <div>
+          <Label>Depth of Field</Label>
+          <SearchableDropdown
+            options={depthOfFieldOptions}
+            value={options.depth_of_field || 'default'}
+            onValueChange={(value) => updateOptions({ depth_of_field: value })}
+            label="Depth of Field Options"
+            disabled={!options.use_dof}
           />
         </div>
 
