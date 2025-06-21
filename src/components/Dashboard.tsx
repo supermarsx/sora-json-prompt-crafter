@@ -253,6 +253,27 @@ const Dashboard = () => {
   const jsonRef = React.useRef<HTMLDivElement>(null);
   const isSingleColumn = useIsSingleColumn();
   const [darkMode, setDarkMode] = useDarkMode();
+  const [trackingEnabled, setTrackingEnabled] = useState(() => {
+    try {
+      const stored = localStorage.getItem('trackingEnabled');
+      return stored ? JSON.parse(stored) : true;
+    } catch {
+      return true;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('trackingEnabled', JSON.stringify(trackingEnabled));
+    } catch {
+      /* ignore */
+    }
+    (
+      window as unknown as {
+        'ga-disable-G-RVR9TSBQL7': boolean
+      }
+    )['ga-disable-G-RVR9TSBQL7'] = !trackingEnabled;
+  }, [trackingEnabled]);
 
   useEffect(() => {
     localStorage.setItem('jsonHistory', JSON.stringify(history));
@@ -695,8 +716,8 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto p-6">
+    <div className="min-h-screen bg-background flex flex-col">
+      <div className="container mx-auto p-6 flex-grow">
         <div className="mb-8 flex items-start justify-between">
           <div>
             <h1 className="text-4xl font-bold mb-2 flex items-center gap-3 select-none">
@@ -742,7 +763,7 @@ const Dashboard = () => {
           </Button>
         </div>
         
-        <div className="grid lg:grid-cols-2 gap-6 h-[calc(100vh-12rem)]">
+        <div className="grid lg:grid-cols-2 gap-6 min-h-[calc(100vh-12rem)]">
           <Card className="flex flex-col" ref={jsonRef}>
             <CardHeader className="border-b">
               <CardTitle className="flex items-center gap-2">
@@ -799,6 +820,8 @@ const Dashboard = () => {
         onRegenerate={regenerateJson}
         onRandomize={randomizeJson}
         copied={copied}
+        trackingEnabled={trackingEnabled}
+        onTrackingChange={setTrackingEnabled}
       />
       <ShareModal
         isOpen={showShareModal}
