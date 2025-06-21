@@ -22,6 +22,7 @@ export interface SoraOptions {
     category: string;
     style: string;
   };
+  use_style_preset: boolean;
   quality: 'defective' | 'unacceptable' | 'poor' | 'bad' | 'below standard' | 'minimum' | 'moderate' | 'medium' | 'draft' | 'standard' | 'good' | 'high' | 'excellent' | 'ultra' | 'maximum' | 'low';
   temperature: number;
   dynamic_range: 'SDR' | 'HDR';
@@ -140,6 +141,7 @@ const Dashboard = () => {
       category: 'Photography & Cinematic',
       style: 'cinematic'
     },
+    use_style_preset: false,
     quality: 'high',
     temperature: 1.1,
     dynamic_range: 'HDR',
@@ -253,6 +255,10 @@ const Dashboard = () => {
     } else if (!options.use_dimensions) {
       delete cleanOptions.width;
       delete cleanOptions.height;
+    }
+
+    if (!options.use_style_preset) {
+      delete cleanOptions.style_preset;
     }
 
     if (!options.use_material) {
@@ -409,6 +415,7 @@ const Dashboard = () => {
     delete cleanOptions.use_atmosphere_mood;
     delete cleanOptions.use_subject_mood;
     delete cleanOptions.use_sword_type;
+    delete cleanOptions.use_style_preset;
     delete cleanOptions.use_camera_composition;
     delete (cleanOptions as { image_count?: number }).image_count;
 
@@ -452,6 +459,7 @@ const Dashboard = () => {
         category: 'Photography & Cinematic',
         style: 'cinematic'
       },
+      use_style_preset: false,
       quality: 'high',
       temperature: 1.1,
       dynamic_range: 'HDR',

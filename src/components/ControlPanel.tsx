@@ -42,7 +42,11 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         onToggle={(enabled) => updateOptions({ use_dimensions_format: enabled })}
       />
       
-      <StyleSection options={options} updateNestedOptions={updateNestedOptions} />
+      <StyleSection
+        options={options}
+        updateNestedOptions={updateNestedOptions}
+        updateOptions={updateOptions}
+      />
       
       <CameraCompositionSection
         options={options}
