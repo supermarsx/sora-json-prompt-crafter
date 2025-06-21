@@ -72,7 +72,7 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
           className="w-full justify-between"
           disabled={disabled}
         >
-          <span className="truncate">{formatLabel(value)}</span>
+          <span className="truncate">{value ? formatLabel(value) : placeholder}</span>
           <ChevronDown className="w-4 h-4 ml-2 flex-shrink-0" />
         </Button>
       </DialogTrigger>

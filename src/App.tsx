@@ -12,8 +12,9 @@ const queryClient = new QueryClient();
 
 const App = () => {
   useEffect(() => {
-    // Enable dark mode by default
-    document.documentElement.classList.add('dark');
+    if (localStorage.getItem('darkMode') === null) {
+      document.documentElement.classList.add('dark');
+    }
   }, []);
 
   return (

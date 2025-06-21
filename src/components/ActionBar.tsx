@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import {
   Copy,
   Check,
@@ -64,25 +65,30 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         <Share className="w-4 h-4" />
         Share
       </Button>
-      <Button onClick={onImport} variant="outline" size="sm" className="gap-2">
-        <Import className="w-4 h-4" />
-        Import
-      </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" size="sm" className="gap-2">
+            <Import className="w-4 h-4" /> Manage
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem onSelect={onImport} className="gap-2">
+            <Import className="w-4 h-4" /> Import
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={onReset} className="gap-2">
+            <RotateCcw className="w-4 h-4" /> Reset
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={onRegenerate} className="gap-2">
+            <RefreshCw className="w-4 h-4" /> Regenerate
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={onRandomize} className="gap-2">
+            <Shuffle className="w-4 h-4" /> Randomize
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
       <Button onClick={onHistory} variant="outline" size="sm" className="gap-2">
         <History className="w-4 h-4" />
         History
-      </Button>
-      <Button onClick={onReset} variant="outline" size="sm" className="gap-2">
-        <RotateCcw className="w-4 h-4" />
-        Reset
-      </Button>
-      <Button onClick={onRegenerate} variant="outline" size="sm" className="gap-2">
-        <RefreshCw className="w-4 h-4" />
-        Regenerate
-      </Button>
-      <Button onClick={onRandomize} variant="outline" size="sm" className="gap-2">
-        <Shuffle className="w-4 h-4" />
-        Randomize
       </Button>
       <Button onClick={() => setMinimized(true)} variant="ghost" size="icon" className="ml-auto">
         <ChevronDown className="w-4 h-4" />

@@ -130,9 +130,10 @@ export const LightingSection: React.FC<LightingSectionProps> = ({ options, updat
           <Label>Lighting</Label>
           <SearchableDropdown
             options={lightingOptions}
-            value={options.lighting || 'default (auto lighting)'}
+            value={options.lighting || ''}
             onValueChange={(value) => updateOptions({ lighting: value })}
             label="Lighting Options"
+            placeholder="Select lighting..."
             disabled={!options.use_lighting}
           />
         </div>
