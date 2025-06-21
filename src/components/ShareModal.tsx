@@ -57,7 +57,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, jsonCon
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Share Your Sora Configuration</DialogTitle>
+          <DialogTitle>Share your JSON prompt</DialogTitle>
         </DialogHeader>
         <div className="grid grid-cols-2 gap-4 py-4">
           <Button onClick={shareToFacebook} variant="outline" className="gap-2">
