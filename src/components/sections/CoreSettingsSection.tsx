@@ -33,7 +33,7 @@ export const CoreSettingsSection: React.FC<CoreSettingsSectionProps> = ({
       isEnabled={isEnabled}
       onToggle={onToggle}
     >
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4">
         <div>
           <Label htmlFor="seed">Seed</Label>
           <Input
