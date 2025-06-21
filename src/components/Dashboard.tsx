@@ -283,6 +283,10 @@ const Dashboard = () => {
       delete cleanOptions.blur_style;
     }
 
+    if (!options.use_lighting) {
+      delete cleanOptions.lighting;
+    }
+
     if (!options.use_motion_animation) {
       delete cleanOptions.duration_seconds;
       delete cleanOptions.fps;

@@ -5,6 +5,7 @@ import { PromptSection } from './sections/PromptSection';
 import { CoreSettingsSection } from './sections/CoreSettingsSection';
 import { DimensionsFormatSection } from './sections/DimensionsFormatSection';
 import { StyleSection } from './sections/StyleSection';
+import { LightingSection } from './sections/LightingSection';
 import { CameraCompositionSection } from './sections/CameraCompositionSection';
 import { VideoMotionSection } from './sections/VideoMotionSection';
 import { MaterialSection } from './sections/MaterialSection';
@@ -41,9 +42,14 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         isEnabled={options.use_dimensions_format}
         onToggle={(enabled) => updateOptions({ use_dimensions_format: enabled })}
       />
-      
+
       <StyleSection options={options} updateNestedOptions={updateNestedOptions} />
-      
+
+      <LightingSection
+        options={options}
+        updateOptions={updateOptions}
+      />
+
       <CameraCompositionSection
         options={options}
         updateOptions={updateOptions}
