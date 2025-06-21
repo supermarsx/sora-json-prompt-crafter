@@ -597,7 +597,7 @@ const Dashboard = () => {
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2 flex items-center gap-3">
             <Sparkles className="w-10 h-10 text-purple-500" />
-            Sora Prompt Generator
+            Sora JSON Prompt Crafter
           </h1>
           <p className="text-muted-foreground">Configure your Sora generation settings and get the perfect JSON prompt for stunning AI-generated content.</p>
         </div>
