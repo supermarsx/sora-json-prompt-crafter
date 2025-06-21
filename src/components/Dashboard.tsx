@@ -348,6 +348,9 @@ const Dashboard = () => {
       delete cleanOptions.sword_type;
       delete cleanOptions.sword_vibe;
     }
+    if (!options.use_upscale_factor) {
+      delete cleanOptions.upscale;
+    }
     
     // Remove control flags from final JSON
     delete cleanOptions.use_dimensions;
