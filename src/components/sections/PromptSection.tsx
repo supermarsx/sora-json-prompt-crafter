@@ -2,6 +2,7 @@
 import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
 import { SoraOptions } from '../Dashboard';
 
 interface PromptSectionProps {
@@ -26,15 +27,25 @@ export const PromptSection: React.FC<PromptSectionProps> = ({ options, updateOpt
       </div>
       
       <div>
-        <Label htmlFor="negative_prompt" className="text-base font-semibold mb-2 block">
-          Negative Prompt
-        </Label>
+        <div className="flex items-center space-x-2 mb-2">
+          <Checkbox
+            id="use_negative_prompt"
+            checked={options.use_negative_prompt}
+            onCheckedChange={(checked) =>
+              updateOptions({ use_negative_prompt: !!checked })
+            }
+          />
+          <Label htmlFor="negative_prompt" className="text-base font-semibold">
+            Negative Prompt
+          </Label>
+        </div>
         <Textarea
           id="negative_prompt"
           value={options.negative_prompt}
           onChange={(e) => updateOptions({ negative_prompt: e.target.value })}
           placeholder="Describe what you want to avoid..."
           className="min-h-[80px] resize-y"
+          disabled={!options.use_negative_prompt}
         />
       </div>
     </div>

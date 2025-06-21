@@ -13,6 +13,7 @@ Then open http://localhost:5173 in your browser.
 ### Features
 
 - Edit prompts and negative prompts with live JSON output
+- Edit prompts and optionally include negative prompts via a checkbox
 - Select model versions and quality presets
 - Adjust dimensions, aspect ratio and output format
 - Configure camera movement, motion strength and video length
