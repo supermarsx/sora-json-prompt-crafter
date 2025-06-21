@@ -288,6 +288,10 @@ const Dashboard = () => {
       delete cleanOptions.aperture;
     }
 
+    if (!options.use_blur_style) {
+      delete cleanOptions.blur_style;
+    }
+
     if (!options.use_motion_animation) {
       delete cleanOptions.duration_seconds;
       delete cleanOptions.fps;

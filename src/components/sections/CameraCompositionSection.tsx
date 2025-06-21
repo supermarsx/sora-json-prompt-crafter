@@ -180,6 +180,70 @@ const apertureOptions = [
   "f/64 (famous Ansel Adams, Group f/64, maximum depth)"
 ];
 
+const blurStyleOptions = [
+  "default",
+  "no blur",
+  "as is",
+  "background blur",
+  "foreground blur",
+  "subject blur",
+  "radial blur",
+  "motion blur",
+  "directional blur",
+  "linear blur",
+  "vertical blur",
+  "horizontal blur",
+  "zoom blur",
+  "tilt-shift blur",
+  "bokeh blur",
+  "soft blur",
+  "strong blur",
+  "gaussian blur",
+  "box blur",
+  "lens blur",
+  "surface blur",
+  "median blur",
+  "bilateral blur",
+  "edge blur",
+  "depth blur",
+  "field blur",
+  "iris blur",
+  "spin blur",
+  "path blur",
+  "dreamlike blur",
+  "ethereal blur",
+  "glow blur",
+  "crystal blur",
+  "fractal blur",
+  "pixelated blur",
+  "anamorphic blur",
+  "old handheld blur",
+  "old iPhone blur",
+  "old lens blur",
+  "old phone blur",
+  "vintage blur",
+  "chromatic blur",
+  "halo blur",
+  "vignette blur",
+  "atmospheric blur",
+  "mist blur",
+  "haze blur",
+  "fog blur",
+  "cloud blur",
+  "water blur",
+  "heat haze blur",
+  "double vision blur",
+  "ghosting blur",
+  "glass blur",
+  "frosted blur",
+  "prism blur",
+  "mirror blur",
+  "diffraction blur",
+  "neon blur",
+  "glitter blur",
+  "zoom burst blur"
+];
+
 export const CameraCompositionSection: React.FC<CameraCompositionSectionProps> = ({
   options,
   updateOptions,
@@ -287,6 +351,26 @@ export const CameraCompositionSection: React.FC<CameraCompositionSectionProps> =
             onValueChange={(value) => updateOptions({ aperture: value })}
             label="Aperture"
             disabled={!options.use_aperture}
+          />
+        </div>
+
+        <div className="flex items-center space-x-2 mb-4">
+          <Checkbox
+            id="use_blur_style"
+            checked={options.use_blur_style}
+            onCheckedChange={(checked) => updateOptions({ use_blur_style: !!checked })}
+          />
+          <Label htmlFor="use_blur_style">Use Blur Style</Label>
+        </div>
+
+        <div>
+          <Label>Blur Style</Label>
+          <SearchableDropdown
+            options={blurStyleOptions}
+            value={options.blur_style || 'default'}
+            onValueChange={(value) => updateOptions({ blur_style: value })}
+            label="Blur Style Options"
+            disabled={!options.use_blur_style}
           />
         </div>
       </div>
