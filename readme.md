@@ -1,6 +1,4 @@
-# Welcome to your Lovable project
-
-## Sora JSON Prompt Crafter
+# Sora JSON Prompt Crafter
 
 Sora JSON Prompt Crafter is a web interface for building configuration files for Sora's generative models. Adjust sliders and dropdowns to fine‑tune parameters like style preset, aspect ratio, video duration and more. The app generates a JSON snippet you can copy and use directly with Sora.
 
