@@ -62,8 +62,8 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
     <CollapsibleSection
       title="Face"
       isOptional={true}
-      isEnabled={options.use_face_enhancement}
-      onToggle={(enabled) => updateOptions({ use_face_enhancement: enabled })}
+      isEnabled={options.use_face_enhancements}
+      onToggle={(enabled) => updateOptions({ use_face_enhancements: enabled })}
     >
       <div className="space-y-4">
         <div className="flex items-center space-x-2">
