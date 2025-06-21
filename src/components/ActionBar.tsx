@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
+import { Switch } from '@/components/ui/switch';
 import {
   Copy,
   Check,
@@ -25,6 +26,8 @@ interface ActionBarProps {
   onRegenerate: () => void;
   onRandomize: () => void;
   copied: boolean;
+  trackingEnabled: boolean;
+  onToggleTracking: (enabled: boolean) => void;
 }
 
 export const ActionBar: React.FC<ActionBarProps> = ({
@@ -37,6 +40,8 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   onRegenerate,
   onRandomize,
   copied,
+  trackingEnabled,
+  onToggleTracking,
 }) => {
   const [minimized, setMinimized] = useState(false);
 
@@ -83,6 +88,13 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={onRandomize} className="gap-2">
             <Shuffle className="w-4 h-4" /> Randomize
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="gap-2">
+            <span className="mr-2">Tracking</span>
+            <Switch
+              checked={trackingEnabled}
+              onCheckedChange={onToggleTracking}
+            />
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
