@@ -4,6 +4,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { SearchableDropdown } from '../SearchableDropdown';
+import { MultiSelectDropdown } from '../MultiSelectDropdown';
 import { CollapsibleSection } from '../CollapsibleSection';
 import { SoraOptions } from '../Dashboard';
 
@@ -116,13 +117,10 @@ export const CameraCompositionSection: React.FC<CameraCompositionSectionProps> =
 
         <div className="md:col-span-2">
           <Label>Composition Rules</Label>
-          <SearchableDropdown
+          <MultiSelectDropdown
             options={compositionRulesOptions}
-            value={options.composition_rules.join(', ')}
-            onValueChange={(value) => {
-              const rules = value.split(', ').filter(rule => rule.trim());
-              handleCompositionRulesChange(rules);
-            }}
+            value={options.composition_rules}
+            onValueChange={handleCompositionRulesChange}
             label="Composition Rules"
             placeholder="Select composition rules..."
           />
