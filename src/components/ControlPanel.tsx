@@ -75,9 +75,11 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         onToggle={(enabled) => updateOptions({ use_enhancement_safety: enabled })}
       />
       
-      <DnDSection 
-        options={options} 
+      <DnDSection
+        options={options}
         updateOptions={updateOptions}
+        isEnabled={options.use_dnd_section}
+        onToggle={(enabled) => updateOptions({ use_dnd_section: enabled })}
       />
     </div>
   );

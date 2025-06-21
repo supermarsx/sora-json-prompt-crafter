@@ -102,6 +102,7 @@ export interface SoraOptions {
   special_effects?: string[];
   use_lut_preset: boolean;
   lut_preset?: string;
+  use_dnd_section: boolean;
   use_dnd_character_race: boolean;
   dnd_character_race?: string;
   use_dnd_character_class: boolean;
@@ -210,6 +211,7 @@ const Dashboard = () => {
     use_location: false,
     use_special_effects: false,
     use_lut_preset: false,
+    use_dnd_section: false,
     use_dnd_character_race: false,
     use_dnd_character_class: false,
     use_dnd_character_background: false,
@@ -263,6 +265,16 @@ const Dashboard = () => {
       delete cleanOptions.sword_type;
       delete cleanOptions.sword_vibe;
     }
+    if (!options.use_dnd_section) {
+      delete cleanOptions.dnd_character_race;
+      delete cleanOptions.dnd_character_class;
+      delete cleanOptions.dnd_character_background;
+      delete cleanOptions.dnd_character_alignment;
+      delete cleanOptions.dnd_monster_type;
+      delete cleanOptions.dnd_environment;
+      delete cleanOptions.dnd_magic_school;
+      delete cleanOptions.dnd_item_type;
+    }
     
     // Remove control flags from final JSON
     delete cleanOptions.use_dimensions;
@@ -273,6 +285,7 @@ const Dashboard = () => {
     delete cleanOptions.use_atmosphere_mood;
     delete cleanOptions.use_subject_mood;
     delete cleanOptions.use_sword_type;
+    delete cleanOptions.use_dnd_section;
     
     setJsonString(JSON.stringify(cleanOptions, null, 2));
   }, [options]);
@@ -380,6 +393,7 @@ const Dashboard = () => {
       use_location: false,
       use_special_effects: false,
       use_lut_preset: false,
+      use_dnd_section: false,
       use_dnd_character_race: false,
       use_dnd_character_class: false,
       use_dnd_character_background: false,
