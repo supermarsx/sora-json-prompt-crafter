@@ -9,6 +9,8 @@ import { ProgressBar } from './ProgressBar';
 import { ActionBar } from './ActionBar';
 import HistoryPanel, { HistoryEntry } from './HistoryPanel';
 import ImportModal from './ImportModal';
+import Footer from './Footer';
+import DisclaimerModal from './DisclaimerModal';
 import { useIsSingleColumn } from '@/hooks/use-single-column';
 import { useDarkMode } from '@/hooks/use-dark-mode';
 
@@ -239,6 +241,7 @@ const Dashboard = () => {
   });
   const [showShareModal, setShowShareModal] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [history, setHistory] = useState<HistoryEntry[]>(() => {
     try {
@@ -701,6 +704,33 @@ const Dashboard = () => {
               Sora JSON Prompt Crafter
             </h1>
             <p className="text-muted-foreground select-none">Configure your Sora generation settings and get the perfect JSON prompt for stunning AI-generated content.</p>
+            <div className="flex items-center gap-2 mt-2">
+              <a
+                className="github-button"
+                href="https://github.com/supermarsx"
+                data-icon="octicon-heart"
+                data-size="large"
+                aria-label="Sponsor supermarsx"
+              >
+                Sponsor
+              </a>
+              <a
+                className="github-button"
+                href="https://github.com/supermarsx/sora-json-prompt-crafter"
+                data-icon="octicon-star"
+                data-show-count="true"
+                data-size="large"
+                aria-label="Star supermarsx/sora-json-prompt-crafter on GitHub"
+              >
+                Star
+              </a>
+            </div>
+            <p className="text-xs mt-2 text-muted-foreground">
+              By using this tool you agree by the{' '}
+              <button onClick={() => setShowDisclaimer(true)} className="underline">
+                full disclaimer
+              </button>
+            </p>
           </div>
           <Button
             variant="outline"
@@ -790,6 +820,8 @@ const Dashboard = () => {
         onClose={() => setShowImportModal(false)}
         onImport={importJson}
       />
+      <DisclaimerModal open={showDisclaimer} onOpenChange={setShowDisclaimer} />
+      <Footer />
       <ProgressBar />
     </div>
   );
