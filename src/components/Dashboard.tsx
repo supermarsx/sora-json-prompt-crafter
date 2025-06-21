@@ -8,6 +8,7 @@ import { ShareModal } from './ShareModal';
 import { ProgressBar } from './ProgressBar';
 import { ActionBar } from './ActionBar';
 import HistoryPanel, { HistoryEntry } from './HistoryPanel';
+import ImportModal from './ImportModal';
 import { useIsSingleColumn } from '@/hooks/use-single-column';
 
 export interface SoraOptions {
@@ -228,8 +229,15 @@ const Dashboard = () => {
   });
 
   const [copied, setCopied] = useState(false);
-  const [jsonString, setJsonString] = useState('');
+  const [jsonString, setJsonString] = useState(() => {
+    try {
+      return localStorage.getItem('currentJson') || '';
+    } catch {
+      return '';
+    }
+  });
   const [showShareModal, setShowShareModal] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [history, setHistory] = useState<HistoryEntry[]>(() => {
     try {
@@ -244,6 +252,10 @@ const Dashboard = () => {
   useEffect(() => {
     localStorage.setItem('jsonHistory', JSON.stringify(history));
   }, [history]);
+
+  useEffect(() => {
+    localStorage.setItem('currentJson', jsonString);
+  }, [jsonString]);
 
   useEffect(() => {
     const cleanOptions = { ...options };
@@ -486,6 +498,17 @@ const Dashboard = () => {
     setShowShareModal(true);
   };
 
+  const importJson = (json: string) => {
+    try {
+      const obj = JSON.parse(json);
+      setOptions(prev => ({ ...prev, ...obj }));
+      setShowImportModal(false);
+      toast.success('JSON imported!');
+    } catch {
+      toast.error('Invalid JSON');
+    }
+  };
+
   const resetJson = () => {
     // Reset to default options
     setOptions({
@@ -653,6 +676,15 @@ const Dashboard = () => {
     }
   };
 
+  const importHistoryEntries = (jsons: string[]) => {
+    const entries = jsons.map(j => ({
+      id: Date.now() + Math.random(),
+      date: new Date().toLocaleString(),
+      json: j,
+    }));
+    setHistory(prev => [...entries, ...prev]);
+  };
+
   const scrollToJson = () => {
     jsonRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -719,6 +751,7 @@ const Dashboard = () => {
         onCopy={copyToClipboard}
         onClear={clearJson}
         onShare={shareJson}
+        onImport={() => setShowImportModal(true)}
         onHistory={() => setShowHistory(true)}
         onReset={resetJson}
         onRegenerate={regenerateJson}
@@ -738,6 +771,12 @@ const Dashboard = () => {
         onClear={clearHistory}
         onCopy={copyHistoryEntry}
         onEdit={editHistoryEntry}
+        onImport={importHistoryEntries}
+      />
+      <ImportModal
+        isOpen={showImportModal}
+        onClose={() => setShowImportModal(false)}
+        onImport={importJson}
       />
       <ProgressBar />
     </div>
