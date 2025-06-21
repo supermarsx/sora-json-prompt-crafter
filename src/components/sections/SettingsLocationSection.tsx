@@ -147,17 +147,16 @@ export const SettingsLocationSection: React.FC<SettingsLocationSectionProps> = (
           <Label htmlFor="use_environment">Use Environment</Label>
         </div>
 
-        {options.use_environment && (
-          <div className="md:col-span-2">
-            <Label>Environment</Label>
-            <SearchableDropdown
-              options={environmentOptions}
-              value={options.environment}
-              onValueChange={(value) => updateOptions({ environment: value })}
-              label="Environment Options"
-            />
-          </div>
-        )}
+        <div className="md:col-span-2">
+          <Label>Environment</Label>
+          <SearchableDropdown
+            options={environmentOptions}
+            value={options.environment}
+            onValueChange={(value) => updateOptions({ environment: value })}
+            label="Environment Options"
+            disabled={!options.use_environment}
+          />
+        </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox
@@ -168,17 +167,16 @@ export const SettingsLocationSection: React.FC<SettingsLocationSectionProps> = (
           <Label htmlFor="use_location">Use Location</Label>
         </div>
 
-        {options.use_location && (
-          <div className="md:col-span-2">
-            <Label>Location</Label>
-            <SearchableDropdown
-              options={locationOptions}
-              value={options.location || 'Berlin, Germany'}
-              onValueChange={(value) => updateOptions({ location: value })}
-              label="Location Options"
-            />
-          </div>
-        )}
+        <div className="md:col-span-2">
+          <Label>Location</Label>
+          <SearchableDropdown
+            options={locationOptions}
+            value={options.location || 'Berlin, Germany'}
+            onValueChange={(value) => updateOptions({ location: value })}
+            label="Location Options"
+            disabled={!options.use_location}
+          />
+        </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox
@@ -189,17 +187,16 @@ export const SettingsLocationSection: React.FC<SettingsLocationSectionProps> = (
           <Label htmlFor="use_season">Use Season</Label>
         </div>
 
-        {options.use_season && (
-          <div>
-            <Label>Season</Label>
-            <SearchableDropdown
-              options={seasonOptions}
-              value={options.season || 'default (any season)'}
-              onValueChange={(value) => updateOptions({ season: value })}
-              label="Season Options"
-            />
-          </div>
-        )}
+        <div>
+          <Label>Season</Label>
+          <SearchableDropdown
+            options={seasonOptions}
+            value={options.season || 'default (any season)'}
+            onValueChange={(value) => updateOptions({ season: value })}
+            label="Season Options"
+            disabled={!options.use_season}
+          />
+        </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox
@@ -210,17 +207,16 @@ export const SettingsLocationSection: React.FC<SettingsLocationSectionProps> = (
           <Label htmlFor="use_atmosphere_mood">Use Atmosphere Mood</Label>
         </div>
 
-        {options.use_atmosphere_mood && (
-          <div>
-            <Label>Atmosphere Mood</Label>
-            <SearchableDropdown
-              options={atmosphereMoodOptions}
-              value={options.atmosphere_mood || 'default (neutral mood)'}
-              onValueChange={(value) => updateOptions({ atmosphere_mood: value })}
-              label="Atmosphere Mood Options"
-            />
-          </div>
-        )}
+        <div>
+          <Label>Atmosphere Mood</Label>
+          <SearchableDropdown
+            options={atmosphereMoodOptions}
+            value={options.atmosphere_mood || 'default (neutral mood)'}
+            onValueChange={(value) => updateOptions({ atmosphere_mood: value })}
+            label="Atmosphere Mood Options"
+            disabled={!options.use_atmosphere_mood}
+          />
+        </div>
       </div>
     </CollapsibleSection>
   );

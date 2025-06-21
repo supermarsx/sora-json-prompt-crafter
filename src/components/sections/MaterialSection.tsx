@@ -78,17 +78,16 @@ export const MaterialSection: React.FC<MaterialSectionProps> = ({
           <Label htmlFor="use_secondary_material">Use Secondary Material</Label>
         </div>
 
-        {options.use_secondary_material && (
-          <div>
-            <Label>Secondary Material</Label>
-            <SearchableDropdown
-              options={materialOptions}
-              value={options.secondary_material || 'default'}
-              onValueChange={(value) => updateOptions({ secondary_material: value })}
-              label="Secondary Material Options"
-            />
-          </div>
-        )}
+        <div>
+          <Label>Secondary Material</Label>
+          <SearchableDropdown
+            options={materialOptions}
+            value={options.secondary_material || 'default'}
+            onValueChange={(value) => updateOptions({ secondary_material: value })}
+            label="Secondary Material Options"
+            disabled={!options.use_secondary_material}
+          />
+        </div>
       </div>
     </CollapsibleSection>
   );

@@ -82,17 +82,16 @@ export const CameraCompositionSection: React.FC<CameraCompositionSectionProps> =
           <Label htmlFor="use_camera_angle">Use Camera Angle</Label>
         </div>
 
-        {options.use_camera_angle && (
-          <div>
-            <Label>Camera Angle</Label>
-            <SearchableDropdown
-              options={cameraAngleOptions}
-              value={options.camera_angle}
-              onValueChange={(value) => updateOptions({ camera_angle: value })}
-              label="Camera Angle"
-            />
-          </div>
-        )}
+        <div>
+          <Label>Camera Angle</Label>
+          <SearchableDropdown
+            options={cameraAngleOptions}
+            value={options.camera_angle}
+            onValueChange={(value) => updateOptions({ camera_angle: value })}
+            label="Camera Angle"
+            disabled={!options.use_camera_angle}
+          />
+        </div>
 
         <div>
           <Label htmlFor="subject_focus">Subject Focus</Label>

@@ -74,17 +74,16 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
           <Label htmlFor="use_safety_filter">Use Safety Filter</Label>
         </div>
 
-        {options.use_safety_filter && (
-          <div>
-            <Label>Safety Filter</Label>
-            <SearchableDropdown
-              options={safetyFilterOptions}
-              value={options.safety_filter || 'default (auto safety level)'}
-              onValueChange={(value) => updateOptions({ safety_filter: value })}
-              label="Safety Filter Options"
-            />
-          </div>
-        )}
+        <div>
+          <Label>Safety Filter</Label>
+          <SearchableDropdown
+            options={safetyFilterOptions}
+            value={options.safety_filter || 'default (auto safety level)'}
+            onValueChange={(value) => updateOptions({ safety_filter: value })}
+            label="Safety Filter Options"
+            disabled={!options.use_safety_filter}
+          />
+        </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox
@@ -104,17 +103,16 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
           <Label htmlFor="use_quality_booster">Use Quality Booster</Label>
         </div>
 
-        {options.use_quality_booster && (
-          <div>
-            <Label>Quality Booster</Label>
-            <SearchableDropdown
-              options={qualityBoosterOptions}
-              value={options.quality_booster || 'default (standard quality)'}
-              onValueChange={(value) => updateOptions({ quality_booster: value })}
-              label="Quality Booster Options"
-            />
-          </div>
-        )}
+        <div>
+          <Label>Quality Booster</Label>
+          <SearchableDropdown
+            options={qualityBoosterOptions}
+            value={options.quality_booster || 'default (standard quality)'}
+            onValueChange={(value) => updateOptions({ quality_booster: value })}
+            label="Quality Booster Options"
+            disabled={!options.use_quality_booster}
+          />
+        </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox

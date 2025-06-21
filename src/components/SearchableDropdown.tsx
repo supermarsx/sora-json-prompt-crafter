@@ -1,5 +1,5 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -18,6 +18,7 @@ interface SearchableDropdownProps {
   onValueChange: (value: string) => void;
   placeholder?: string;
   label?: string;
+  disabled?: boolean;
 }
 
 export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
@@ -25,10 +26,17 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
   value,
   onValueChange,
   placeholder = "Select option...",
-  label = "Options"
+  label = "Options",
+  disabled = false
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    if (disabled) {
+      setIsOpen(false);
+    }
+  }, [disabled]);
 
   const sortedOptions = useMemo(() => {
     const priorityOptions = ['default', 'as is', 'not defined', 'keep original'];
@@ -57,9 +65,13 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={(open) => !disabled && setIsOpen(open)}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="w-full justify-between">
+        <Button
+          variant="outline"
+          className="w-full justify-between"
+          disabled={disabled}
+        >
           <span className="truncate">{formatLabel(value)}</span>
           <ChevronDown className="w-4 h-4 ml-2 flex-shrink-0" />
         </Button>
@@ -76,6 +88,7 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
+              disabled={disabled}
             />
           </div>
           <ScrollArea className="h-[300px]">
@@ -86,6 +99,7 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
                   variant={value === option ? "default" : "ghost"}
                   className="w-full justify-start text-left h-auto py-2 px-3"
                   onClick={() => handleSelect(option)}
+                  disabled={disabled}
                 >
                   <span className="break-words">{formatLabel(option)}</span>
                 </Button>
