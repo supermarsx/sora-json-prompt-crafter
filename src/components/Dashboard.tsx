@@ -619,7 +619,7 @@ const Dashboard = () => {
             <CardHeader className="border-b">
               <CardTitle className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                Sora JSON Prompt
+                Generated JSON Prompt
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 p-0 overflow-hidden">
