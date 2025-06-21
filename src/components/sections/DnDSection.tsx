@@ -1,0 +1,243 @@
+
+import React from 'react';
+import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
+import { SearchableDropdown } from '../SearchableDropdown';
+import { CollapsibleSection } from '../CollapsibleSection';
+import { SoraOptions } from '../Dashboard';
+
+interface DnDSectionProps {
+  options: SoraOptions;
+  updateOptions: (updates: Partial<SoraOptions>) => void;
+}
+
+const characterRaceOptions = [
+  "human", "elf", "half-elf", "drow", "high elf", "wood elf", "dark elf",
+  "orc", "half-orc", "dwarf", "hill dwarf", "mountain dwarf", "gnome",
+  "halfling", "tiefling", "dragonborn", "goblin", "kobold", "tabaxi",
+  "firbolg", "goliath", "aasimar", "genasi", "lizardfolk", "tortle",
+  "yuan-ti", "triton", "minotaur", "bugbear", "kenku", "changeling",
+  "warforged", "shifter", "centaur", "satyr", "fairy"
+];
+
+const characterClassOptions = [
+  "barbarian", "bard", "cleric", "druid", "fighter", "monk", "paladin",
+  "ranger", "rogue", "sorcerer", "warlock", "wizard", "artificer", "blood hunter"
+];
+
+const characterBackgroundOptions = [
+  "acolyte", "charlatan", "criminal", "entertainer", "folk hero", "guild artisan",
+  "hermit", "noble", "outlander", "sage", "sailor", "soldier", "urchin",
+  "gladiator", "knight", "pirate", "spy"
+];
+
+const characterAlignmentOptions = [
+  "lawful good", "neutral good", "chaotic good", "lawful neutral", "true neutral",
+  "chaotic neutral", "lawful evil", "neutral evil", "chaotic evil"
+];
+
+const monsterTypeOptions = [
+  "dragon", "beholder", "lich", "mind flayer", "vampire", "werewolf", "skeleton",
+  "zombie", "goblin", "troll", "ogre", "basilisk", "giant", "demon", "devil",
+  "fey", "aberration", "construct", "elemental", "undead", "plant", "ooze",
+  "celestial", "fiend"
+];
+
+const dndEnvironmentOptions = [
+  "dungeon", "cave", "ruins", "ancient temple", "enchanted forest", "mountain pass",
+  "underground lake", "sewer", "city tavern", "market square", "castle keep",
+  "royal court", "wizard's tower", "elven city", "dwarven mine", "orc camp",
+  "abandoned village", "desert", "arctic tundra", "swamp", "haunted graveyard",
+  "mystic portal", "floating island"
+];
+
+const magicSchoolOptions = [
+  "abjuration", "conjuration", "divination", "enchantment", "evocation",
+  "illusion", "necromancy", "transmutation"
+];
+
+const itemTypeOptions = [
+  "magic sword", "enchanted shield", "healing potion", "scroll", "spellbook",
+  "ring of invisibility", "amulet", "bag of holding", "wand", "staff", "orb",
+  "cloak of protection", "boots of speed", "helmet", "armor", "key", "map",
+  "trap", "treasure chest", "mimic", "artifact"
+];
+
+export const DnDSection: React.FC<DnDSectionProps> = ({
+  options,
+  updateOptions
+}) => {
+  return (
+    <CollapsibleSection title="Dungeons & Dragons">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="use_character_race"
+            checked={options.use_character_race}
+            onCheckedChange={(checked) => updateOptions({ use_character_race: !!checked })}
+          />
+          <Label htmlFor="use_character_race">Use Character Race</Label>
+        </div>
+
+        {options.use_character_race && (
+          <div>
+            <Label>Character Race</Label>
+            <SearchableDropdown
+              options={characterRaceOptions}
+              value={options.character_race || 'human'}
+              onValueChange={(value) => updateOptions({ character_race: value })}
+              label="Character Race Options"
+            />
+          </div>
+        )}
+
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="use_character_class"
+            checked={options.use_character_class}
+            onCheckedChange={(checked) => updateOptions({ use_character_class: !!checked })}
+          />
+          <Label htmlFor="use_character_class">Use Character Class</Label>
+        </div>
+
+        {options.use_character_class && (
+          <div>
+            <Label>Character Class</Label>
+            <SearchableDropdown
+              options={characterClassOptions}
+              value={options.character_class || 'fighter'}
+              onValueChange={(value) => updateOptions({ character_class: value })}
+              label="Character Class Options"
+            />
+          </div>
+        )}
+
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="use_character_background"
+            checked={options.use_character_background}
+            onCheckedChange={(checked) => updateOptions({ use_character_background: !!checked })}
+          />
+          <Label htmlFor="use_character_background">Use Character Background</Label>
+        </div>
+
+        {options.use_character_background && (
+          <div>
+            <Label>Character Background</Label>
+            <SearchableDropdown
+              options={characterBackgroundOptions}
+              value={options.character_background || 'soldier'}
+              onValueChange={(value) => updateOptions({ character_background: value })}
+              label="Character Background Options"
+            />
+          </div>
+        )}
+
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="use_character_alignment"
+            checked={options.use_character_alignment}
+            onCheckedChange={(checked) => updateOptions({ use_character_alignment: !!checked })}
+          />
+          <Label htmlFor="use_character_alignment">Use Character Alignment</Label>
+        </div>
+
+        {options.use_character_alignment && (
+          <div>
+            <Label>Character Alignment</Label>
+            <SearchableDropdown
+              options={characterAlignmentOptions}
+              value={options.character_alignment || 'lawful good'}
+              onValueChange={(value) => updateOptions({ character_alignment: value })}
+              label="Character Alignment Options"
+            />
+          </div>
+        )}
+
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="use_monster_type"
+            checked={options.use_monster_type}
+            onCheckedChange={(checked) => updateOptions({ use_monster_type: !!checked })}
+          />
+          <Label htmlFor="use_monster_type">Use Monster Type</Label>
+        </div>
+
+        {options.use_monster_type && (
+          <div>
+            <Label>Monster Type</Label>
+            <SearchableDropdown
+              options={monsterTypeOptions}
+              value={options.monster_type || 'dragon'}
+              onValueChange={(value) => updateOptions({ monster_type: value })}
+              label="Monster Type Options"
+            />
+          </div>
+        )}
+
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="use_dnd_environment"
+            checked={options.use_dnd_environment}
+            onCheckedChange={(checked) => updateOptions({ use_dnd_environment: !!checked })}
+          />
+          <Label htmlFor="use_dnd_environment">Use D&D Environment</Label>
+        </div>
+
+        {options.use_dnd_environment && (
+          <div>
+            <Label>D&D Environment</Label>
+            <SearchableDropdown
+              options={dndEnvironmentOptions}
+              value={options.dnd_environment || 'dungeon'}
+              onValueChange={(value) => updateOptions({ dnd_environment: value })}
+              label="D&D Environment Options"
+            />
+          </div>
+        )}
+
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="use_magic_school"
+            checked={options.use_magic_school}
+            onCheckedChange={(checked) => updateOptions({ use_magic_school: !!checked })}
+          />
+          <Label htmlFor="use_magic_school">Use Magic School</Label>
+        </div>
+
+        {options.use_magic_school && (
+          <div>
+            <Label>Magic School</Label>
+            <SearchableDropdown
+              options={magicSchoolOptions}
+              value={options.magic_school || 'evocation'}
+              onValueChange={(value) => updateOptions({ magic_school: value })}
+              label="Magic School Options"
+            />
+          </div>
+        )}
+
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="use_item_type"
+            checked={options.use_item_type}
+            onCheckedChange={(checked) => updateOptions({ use_item_type: !!checked })}
+          />
+          <Label htmlFor="use_item_type">Use Item Type</Label>
+        </div>
+
+        {options.use_item_type && (
+          <div>
+            <Label>Item Type</Label>
+            <SearchableDropdown
+              options={itemTypeOptions}
+              value={options.item_type || 'magic sword'}
+              onValueChange={(value) => updateOptions({ item_type: value })}
+              label="Item Type Options"
+            />
+          </div>
+        )}
+      </div>
+    </CollapsibleSection>
+  );
+};
