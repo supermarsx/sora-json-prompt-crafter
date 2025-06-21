@@ -1,13 +1,10 @@
 import React from 'react';
-import { useTracking } from '@/hooks/use-tracking';
 
 interface FooterProps {
   onShowDisclaimer: () => void;
 }
 
 const Footer: React.FC<FooterProps> = ({ onShowDisclaimer }) => {
-  const [trackingEnabled] = useTracking();
-
   return (
     <footer className="py-6 text-center text-sm text-muted-foreground">
       <p>
@@ -24,20 +21,7 @@ const Footer: React.FC<FooterProps> = ({ onShowDisclaimer }) => {
           Disclaimer
         </button>
       </p>
-      {trackingEnabled && (
-        <>
-          {/* Google tag (gtag.js) */}
-          <script async src="https://www.googletagmanager.com/gtag/js?id=G-RVR9TSBQL7"></script>
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-RVR9TSBQL7');`,
-            }}
-          />
-        </>
-      )}
+      {/* Tracking scripts moved to index.html */}
     </footer>
   );
 };

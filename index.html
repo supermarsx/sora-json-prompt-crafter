@@ -15,6 +15,25 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@lovable_dev" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <script>
+      (function () {
+        try {
+          const enabled = localStorage.getItem('trackingEnabled');
+          if (enabled === null || enabled === 'true') {
+            const s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=G-RVR9TSBQL7';
+            document.head.appendChild(s);
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-RVR9TSBQL7');
+          }
+        } catch (e) {
+          console.error('Tracking initialization failed', e);
+        }
+      })();
+    </script>
   </head>
 
   <body>

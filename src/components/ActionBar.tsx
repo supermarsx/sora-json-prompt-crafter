@@ -30,6 +30,8 @@ interface ActionBarProps {
   trackingEnabled: boolean;
   onToggleTracking: () => void;
   copied: boolean;
+  showJumpToJson?: boolean;
+  onJumpToJson?: () => void;
 }
 
 export const ActionBar: React.FC<ActionBarProps> = ({
@@ -44,6 +46,8 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   trackingEnabled,
   onToggleTracking,
   copied,
+  showJumpToJson,
+  onJumpToJson,
 }) => {
   const [minimized, setMinimized] = useState(false);
 
@@ -108,6 +112,11 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         <History className="w-4 h-4" />
         History
       </Button>
+      {showJumpToJson && (
+        <Button onClick={onJumpToJson} variant="outline" size="sm">
+          Jump to JSON
+        </Button>
+      )}
       <Button onClick={() => setMinimized(true)} variant="ghost" size="icon" className="ml-auto">
         <ChevronDown className="w-4 h-4" />
       </Button>
