@@ -18,7 +18,6 @@ export interface SoraOptions {
   use_dimensions: boolean;
   aspect_ratio: '16:9' | '21:9' | '4:3' | '1:1' | '9:16';
   cfg_rescale: number;
-  highres_fix: boolean;
   style_preset: {
     category: string;
     style: string;
@@ -139,7 +138,6 @@ const Dashboard = () => {
     use_dimensions: true,
     aspect_ratio: '16:9',
     cfg_rescale: 0.7,
-    highres_fix: true,
     style_preset: {
       category: 'Photography & Cinematic',
       style: 'cinematic'
@@ -454,7 +452,6 @@ const Dashboard = () => {
       use_dimensions: true,
       aspect_ratio: '16:9',
       cfg_rescale: 0.7,
-      highres_fix: true,
       style_preset: {
         category: 'Photography & Cinematic',
         style: 'cinematic'
