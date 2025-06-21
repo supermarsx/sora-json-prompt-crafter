@@ -38,19 +38,18 @@ export const VideoMotionSection: React.FC<VideoMotionSectionProps> = ({
           <Label htmlFor="use_duration">Use Duration</Label>
         </div>
 
-        {options.use_duration && (
-          <div>
-            <Label htmlFor="duration_seconds">Duration (seconds)</Label>
-            <Input
-              id="duration_seconds"
-              type="number"
-              value={options.duration_seconds}
-              onChange={(e) => updateOptions({ duration_seconds: parseInt(e.target.value) })}
-              min="1"
-              max="30"
-            />
-          </div>
-        )}
+        <div>
+          <Label htmlFor="duration_seconds">Duration (seconds)</Label>
+          <Input
+            id="duration_seconds"
+            type="number"
+            value={options.duration_seconds}
+            onChange={(e) => updateOptions({ duration_seconds: parseInt(e.target.value) })}
+            min="1"
+            max="30"
+            disabled={!options.use_duration}
+          />
+        </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox

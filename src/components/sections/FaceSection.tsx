@@ -93,17 +93,16 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
           <Label htmlFor="use_subject_gender">Use Subject Gender</Label>
         </div>
 
-        {options.use_subject_gender && (
-          <div>
-            <Label>Subject Gender</Label>
-            <SearchableDropdown
-              options={subjectGenderOptions}
-              value={options.subject_gender || 'default (auto/inferred gender)'}
-              onValueChange={(value) => updateOptions({ subject_gender: value })}
-              label="Subject Gender Options"
-            />
-          </div>
-        )}
+        <div>
+          <Label>Subject Gender</Label>
+          <SearchableDropdown
+            options={subjectGenderOptions}
+            value={options.subject_gender || 'default (auto/inferred gender)'}
+            onValueChange={(value) => updateOptions({ subject_gender: value })}
+            label="Subject Gender Options"
+            disabled={!options.use_subject_gender}
+          />
+        </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox
@@ -114,17 +113,16 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
           <Label htmlFor="use_makeup_style">Use Makeup Style</Label>
         </div>
 
-        {options.use_makeup_style && (
-          <div>
-            <Label>Makeup Style</Label>
-            <SearchableDropdown
-              options={makeupStyleOptions}
-              value={options.makeup_style || 'default (no specific makeup)'}
-              onValueChange={(value) => updateOptions({ makeup_style: value })}
-              label="Makeup Style Options"
-            />
-          </div>
-        )}
+        <div>
+          <Label>Makeup Style</Label>
+          <SearchableDropdown
+            options={makeupStyleOptions}
+            value={options.makeup_style || 'default (no specific makeup)'}
+            onValueChange={(value) => updateOptions({ makeup_style: value })}
+            label="Makeup Style Options"
+            disabled={!options.use_makeup_style}
+          />
+        </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox
@@ -135,17 +133,16 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
           <Label htmlFor="use_character_mood">Use Character Mood</Label>
         </div>
 
-        {options.use_character_mood && (
-          <div>
-            <Label>Character Mood</Label>
-            <SearchableDropdown
-              options={characterMoodOptions}
-              value={options.character_mood || 'default (neutral mood)'}
-              onValueChange={(value) => updateOptions({ character_mood: value })}
-              label="Character Mood Options"
-            />
-          </div>
-        )}
+        <div>
+          <Label>Character Mood</Label>
+          <SearchableDropdown
+            options={characterMoodOptions}
+            value={options.character_mood || 'default (neutral mood)'}
+            onValueChange={(value) => updateOptions({ character_mood: value })}
+            label="Character Mood Options"
+            disabled={!options.use_character_mood}
+          />
+        </div>
       </div>
     </CollapsibleSection>
   );

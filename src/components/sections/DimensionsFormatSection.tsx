@@ -102,28 +102,28 @@ export const DimensionsFormatSection: React.FC<DimensionsFormatSectionProps> = (
           <Label htmlFor="use_dimensions">Use Custom Dimensions</Label>
         </div>
 
-        {options.use_dimensions && (
-          <>
-            <div>
-              <Label htmlFor="width">Width</Label>
-              <Input
-                id="width"
-                type="number"
-                value={options.width || 1024}
-                onChange={(e) => updateOptions({ width: parseInt(e.target.value) })}
-              />
-            </div>
-            <div>
-              <Label htmlFor="height">Height</Label>
-              <Input
-                id="height"
-                type="number"
-                value={options.height || 576}
-                onChange={(e) => updateOptions({ height: parseInt(e.target.value) })}
-              />
-            </div>
-          </>
-        )}
+        <>
+          <div>
+            <Label htmlFor="width">Width</Label>
+            <Input
+              id="width"
+              type="number"
+              value={options.width || 1024}
+              onChange={(e) => updateOptions({ width: parseInt(e.target.value) })}
+              disabled={!options.use_dimensions}
+            />
+          </div>
+          <div>
+            <Label htmlFor="height">Height</Label>
+            <Input
+              id="height"
+              type="number"
+              value={options.height || 576}
+              onChange={(e) => updateOptions({ height: parseInt(e.target.value) })}
+              disabled={!options.use_dimensions}
+            />
+          </div>
+        </>
 
         <div>
           <Label htmlFor="output_format">Output Format</Label>

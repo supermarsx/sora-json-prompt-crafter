@@ -79,17 +79,16 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
           <Label htmlFor="use_character_race">Use Character Race</Label>
         </div>
 
-        {options.use_character_race && (
-          <div>
-            <Label>Character Race</Label>
-            <SearchableDropdown
-              options={characterRaceOptions}
-              value={options.character_race || 'human'}
-              onValueChange={(value) => updateOptions({ character_race: value })}
-              label="Character Race Options"
-            />
-          </div>
-        )}
+        <div>
+          <Label>Character Race</Label>
+          <SearchableDropdown
+            options={characterRaceOptions}
+            value={options.character_race || 'human'}
+            onValueChange={(value) => updateOptions({ character_race: value })}
+            label="Character Race Options"
+            disabled={!options.use_character_race}
+          />
+        </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox
@@ -100,17 +99,16 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
           <Label htmlFor="use_character_class">Use Character Class</Label>
         </div>
 
-        {options.use_character_class && (
-          <div>
-            <Label>Character Class</Label>
-            <SearchableDropdown
-              options={characterClassOptions}
-              value={options.character_class || 'fighter'}
-              onValueChange={(value) => updateOptions({ character_class: value })}
-              label="Character Class Options"
-            />
-          </div>
-        )}
+        <div>
+          <Label>Character Class</Label>
+          <SearchableDropdown
+            options={characterClassOptions}
+            value={options.character_class || 'fighter'}
+            onValueChange={(value) => updateOptions({ character_class: value })}
+            label="Character Class Options"
+            disabled={!options.use_character_class}
+          />
+        </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox
@@ -121,17 +119,16 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
           <Label htmlFor="use_character_background">Use Character Background</Label>
         </div>
 
-        {options.use_character_background && (
-          <div>
-            <Label>Character Background</Label>
-            <SearchableDropdown
-              options={characterBackgroundOptions}
-              value={options.character_background || 'soldier'}
-              onValueChange={(value) => updateOptions({ character_background: value })}
-              label="Character Background Options"
-            />
-          </div>
-        )}
+        <div>
+          <Label>Character Background</Label>
+          <SearchableDropdown
+            options={characterBackgroundOptions}
+            value={options.character_background || 'soldier'}
+            onValueChange={(value) => updateOptions({ character_background: value })}
+            label="Character Background Options"
+            disabled={!options.use_character_background}
+          />
+        </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox
@@ -142,17 +139,16 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
           <Label htmlFor="use_character_alignment">Use Character Alignment</Label>
         </div>
 
-        {options.use_character_alignment && (
-          <div>
-            <Label>Character Alignment</Label>
-            <SearchableDropdown
-              options={characterAlignmentOptions}
-              value={options.character_alignment || 'lawful good'}
-              onValueChange={(value) => updateOptions({ character_alignment: value })}
-              label="Character Alignment Options"
-            />
-          </div>
-        )}
+        <div>
+          <Label>Character Alignment</Label>
+          <SearchableDropdown
+            options={characterAlignmentOptions}
+            value={options.character_alignment || 'lawful good'}
+            onValueChange={(value) => updateOptions({ character_alignment: value })}
+            label="Character Alignment Options"
+            disabled={!options.use_character_alignment}
+          />
+        </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox
@@ -163,17 +159,16 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
           <Label htmlFor="use_monster_type">Use Monster Type</Label>
         </div>
 
-        {options.use_monster_type && (
-          <div>
-            <Label>Monster Type</Label>
-            <SearchableDropdown
-              options={monsterTypeOptions}
-              value={options.monster_type || 'dragon'}
-              onValueChange={(value) => updateOptions({ monster_type: value })}
-              label="Monster Type Options"
-            />
-          </div>
-        )}
+        <div>
+          <Label>Monster Type</Label>
+          <SearchableDropdown
+            options={monsterTypeOptions}
+            value={options.monster_type || 'dragon'}
+            onValueChange={(value) => updateOptions({ monster_type: value })}
+            label="Monster Type Options"
+            disabled={!options.use_monster_type}
+          />
+        </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox
@@ -184,17 +179,16 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
           <Label htmlFor="use_dnd_environment">Use D&D Environment</Label>
         </div>
 
-        {options.use_dnd_environment && (
-          <div>
-            <Label>D&D Environment</Label>
-            <SearchableDropdown
-              options={dndEnvironmentOptions}
-              value={options.dnd_environment || 'dungeon'}
-              onValueChange={(value) => updateOptions({ dnd_environment: value })}
-              label="D&D Environment Options"
-            />
-          </div>
-        )}
+        <div>
+          <Label>D&D Environment</Label>
+          <SearchableDropdown
+            options={dndEnvironmentOptions}
+            value={options.dnd_environment || 'dungeon'}
+            onValueChange={(value) => updateOptions({ dnd_environment: value })}
+            label="D&D Environment Options"
+            disabled={!options.use_dnd_environment}
+          />
+        </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox
@@ -205,17 +199,16 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
           <Label htmlFor="use_magic_school">Use Magic School</Label>
         </div>
 
-        {options.use_magic_school && (
-          <div>
-            <Label>Magic School</Label>
-            <SearchableDropdown
-              options={magicSchoolOptions}
-              value={options.magic_school || 'evocation'}
-              onValueChange={(value) => updateOptions({ magic_school: value })}
-              label="Magic School Options"
-            />
-          </div>
-        )}
+        <div>
+          <Label>Magic School</Label>
+          <SearchableDropdown
+            options={magicSchoolOptions}
+            value={options.magic_school || 'evocation'}
+            onValueChange={(value) => updateOptions({ magic_school: value })}
+            label="Magic School Options"
+            disabled={!options.use_magic_school}
+          />
+        </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox
@@ -226,17 +219,16 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
           <Label htmlFor="use_item_type">Use Item Type</Label>
         </div>
 
-        {options.use_item_type && (
-          <div>
-            <Label>Item Type</Label>
-            <SearchableDropdown
-              options={itemTypeOptions}
-              value={options.item_type || 'magic sword'}
-              onValueChange={(value) => updateOptions({ item_type: value })}
-              label="Item Type Options"
-            />
-          </div>
-        )}
+        <div>
+          <Label>Item Type</Label>
+          <SearchableDropdown
+            options={itemTypeOptions}
+            value={options.item_type || 'magic sword'}
+            onValueChange={(value) => updateOptions({ item_type: value })}
+            label="Item Type Options"
+            disabled={!options.use_item_type}
+          />
+        </div>
       </div>
     </CollapsibleSection>
   );
