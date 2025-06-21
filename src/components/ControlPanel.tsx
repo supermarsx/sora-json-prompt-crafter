@@ -8,6 +8,7 @@ import { StyleSection } from './sections/StyleSection';
 import { CameraCompositionSection } from './sections/CameraCompositionSection';
 import { VideoMotionSection } from './sections/VideoMotionSection';
 import { MaterialSection } from './sections/MaterialSection';
+import { LightingSection } from './sections/LightingSection';
 import { ColorGradingSection } from './sections/ColorGradingSection';
 import { SettingsLocationSection } from './sections/SettingsLocationSection';
 import { FaceSection } from './sections/FaceSection';
@@ -64,6 +65,11 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
       />
       
       <MaterialSection
+        options={options}
+        updateOptions={updateOptions}
+      />
+
+      <LightingSection
         options={options}
         updateOptions={updateOptions}
       />

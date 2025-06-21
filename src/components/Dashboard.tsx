@@ -303,6 +303,10 @@ const Dashboard = () => {
       delete cleanOptions.color_grade;
     }
 
+    if (!options.use_lighting) {
+      delete cleanOptions.lighting;
+    }
+
     if (!options.use_motion_animation) {
       delete cleanOptions.duration_seconds;
       delete cleanOptions.fps;
