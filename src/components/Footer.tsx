@@ -1,7 +1,11 @@
 import React from 'react';
 import { useTracking } from '@/hooks/use-tracking';
 
-const Footer = () => {
+interface FooterProps {
+  onDisclaimer: () => void;
+}
+
+const Footer: React.FC<FooterProps> = ({ onDisclaimer }) => {
   const [trackingEnabled] = useTracking();
 
   return (
@@ -15,7 +19,11 @@ const Footer = () => {
           rel="noopener noreferrer"
         >
           GitHub Source
-        </a>
+        </a>{' '}
+        –{' '}
+        <button onClick={onDisclaimer} className="underline">
+          Disclaimer
+        </button>
       </p>
       {trackingEnabled && (
         <>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sparkles, Sun, Moon } from 'lucide-react';
+import { Sun, Moon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
@@ -706,7 +706,8 @@ const Dashboard = () => {
   };
 
   const scrollToJson = () => {
-    jsonRef.current?.scrollIntoView({ behavior: 'smooth' });
+    const section = document.getElementById('json-section');
+    section?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -715,7 +716,11 @@ const Dashboard = () => {
         <div className="mb-8 flex items-start justify-between">
           <div>
             <h1 className="text-4xl font-bold mb-2 flex items-center gap-3 select-none">
-              <Sparkles className="w-10 h-10 text-purple-500 animate-rainbow" />
+              <img
+                src="/web-app-manifest-512x512.png"
+                alt="App Icon"
+                className="w-10 h-10 animate-rainbow"
+              />
               Sora JSON Prompt Crafter
             </h1>
             <p className="text-muted-foreground select-none">Configure your Sora generation settings and get the perfect JSON prompt for stunning AI-generated content.</p>
@@ -751,13 +756,15 @@ const Dashboard = () => {
               >
                 Star
               </a>
-              <a
-                className="github-button"
-                href="https://lovable.dev/projects/385b40c5-6b5e-49fc-9f0a-e6a0f9a36181"
-                data-size="large"
-              >
-                View on Lovable
-              </a>
+              <Button asChild variant="outline" size="sm">
+                <a
+                  href="https://lovable.dev/projects/385b40c5-6b5e-49fc-9f0a-e6a0f9a36181"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View on Lovable
+                </a>
+              </Button>
             </div>
             <p className="text-xs mt-2 text-muted-foreground">
               By using this tool you agree by the{' '}
@@ -777,7 +784,7 @@ const Dashboard = () => {
         </div>
         
         <div className="grid lg:grid-cols-2 gap-6 flex-1">
-          <Card className="flex flex-col" ref={jsonRef}>
+          <Card className="flex flex-col">
             <CardHeader className="border-b">
               <CardTitle className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
@@ -795,7 +802,11 @@ const Dashboard = () => {
             </CardContent>
           </Card>
 
-          <Card className="flex flex-col lg:sticky lg:top-24">
+          <Card
+            className="flex flex-col lg:sticky lg:top-24"
+            ref={jsonRef}
+            id="json-section"
+          >
             <CardHeader className="border-b">
               <CardTitle className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
@@ -857,7 +868,7 @@ const Dashboard = () => {
         onImport={importJson}
       />
       <DisclaimerModal open={showDisclaimer} onOpenChange={setShowDisclaimer} />
-      <Footer />
+      <Footer onDisclaimer={() => setShowDisclaimer(true)} />
       <ProgressBar />
     </div>
   );
