@@ -42,7 +42,7 @@ export interface SoraOptions {
   lighting: string;
   color_grade: string;
   depth_of_field: string;
-  lens: string;
+  lens_type: string;
   frame_interpolation: 'smooth' | 'realistic' | 'sharp';
   face_enhance: boolean;
   upscale: number;
@@ -167,7 +167,7 @@ const Dashboard = () => {
     lighting: 'golden_hour',
     color_grade: 'teal_and_orange',
     depth_of_field: 'shallow',
-    lens: 'anamorphic',
+    lens_type: 'default',
     frame_interpolation: 'smooth',
     face_enhance: false,
     upscale: 2,
@@ -282,10 +282,15 @@ const Dashboard = () => {
       delete cleanOptions.subject_focus;
       delete cleanOptions.composition_rules;
       delete cleanOptions.camera_type;
+      delete cleanOptions.lens_type;
     }
 
     if (!options.use_aperture) {
       delete cleanOptions.aperture;
+    }
+
+    if (!options.use_lens_type) {
+      delete cleanOptions.lens_type;
     }
 
     if (!options.use_blur_style) {
@@ -480,7 +485,7 @@ const Dashboard = () => {
       lighting: 'golden_hour',
       color_grade: 'teal_and_orange',
       depth_of_field: 'shallow',
-      lens: 'anamorphic',
+      lens_type: 'default',
       frame_interpolation: 'smooth',
       face_enhance: false,
       upscale: 2,

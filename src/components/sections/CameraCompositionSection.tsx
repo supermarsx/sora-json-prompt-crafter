@@ -132,6 +132,46 @@ const cameraTypeOptions = [
   "GoPro Max (360 action cam)"
 ];
 
+const lensTypeOptions = [
+  "default",
+  "as is",
+  "not defined",
+  "keep original",
+  "standard 50mm",
+  "wide 24mm",
+  "ultra wide 14mm",
+  "fisheye 8mm",
+  "telephoto 85mm",
+  "super telephoto 300mm",
+  "macro 100mm",
+  "micro 5mm",
+  "zoom 24-70mm",
+  "prime 35mm",
+  "prime 85mm",
+  "prime 135mm",
+  "anamorphic 40mm",
+  "cinema 50mm",
+  "portrait 85mm",
+  "tilt-shift 90mm",
+  "pinhole 35mm",
+  "soft focus 80mm",
+  "mirror 500mm",
+  "catadioptric 250mm",
+  "infrared 720nm",
+  "ultraviolet 365nm",
+  "vintage 35mm",
+  "toy 22mm",
+  "plastic 35mm",
+  "crystal 28mm",
+  "split diopter 50mm",
+  "dual 35mm",
+  "periscope 24mm",
+  "rectilinear 24mm",
+  "defocus 100mm",
+  "superzoom 18-200mm",
+  "perspective control 24mm"
+];
+
 const apertureOptions = [
   "default (auto aperture)",
   "not defined",
@@ -269,6 +309,26 @@ export const CameraCompositionSection: React.FC<CameraCompositionSectionProps> =
             value={options.camera_type}
             onValueChange={(value) => updateOptions({ camera_type: value })}
             label="Camera Type"
+          />
+        </div>
+
+        <div className="flex items-center space-x-2 mb-4">
+          <Checkbox
+            id="use_lens_type"
+            checked={options.use_lens_type}
+            onCheckedChange={(checked) => updateOptions({ use_lens_type: !!checked })}
+          />
+          <Label htmlFor="use_lens_type">Use Lens Type</Label>
+        </div>
+
+        <div>
+          <Label>Lens Type</Label>
+          <SearchableDropdown
+            options={lensTypeOptions}
+            value={options.lens_type}
+            onValueChange={(value) => updateOptions({ lens_type: value })}
+            label="Lens Type"
+            disabled={!options.use_lens_type}
           />
         </div>
 
