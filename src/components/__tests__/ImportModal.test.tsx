@@ -34,10 +34,14 @@ describe('ImportModal', () => {
     class MockFileReader {
       onload: ((ev: ProgressEvent<FileReader>) => void) | null = null
       readAsText(_file: Blob) {
-        this.onload?.({ target: { result: fileContent } } as any)
+        this.onload?.({
+          target: { result: fileContent },
+        } as unknown as ProgressEvent<FileReader>)
       }
     }
-    ;(global as any).FileReader = jest.fn(() => new MockFileReader())
+    ;(global as unknown as { FileReader: jest.Mock }).FileReader = jest.fn(
+      () => new MockFileReader()
+    )
 
     render(<ImportModal isOpen={true} onClose={onClose} onImport={onImport} />)
     const input = document.querySelector('input[type="file"]') as HTMLInputElement

@@ -3,6 +3,11 @@ import type React from 'react'
 import fs from 'fs'
 import ts from 'typescript'
 
+interface GlobalVariables {
+  __COMMIT_HASH__?: string
+  __COMMIT_DATE__?: string
+}
+
 function loadFooter() {
   const tsCode = fs.readFileSync(require.resolve('../Footer.tsx'), 'utf8')
   const replaced = tsCode
@@ -11,7 +16,9 @@ function loadFooter() {
   const js = ts.transpileModule(replaced, {
     compilerOptions: { module: ts.ModuleKind.CommonJS, jsx: 'react-jsx' },
   }).outputText
-  const module = { exports: {} } as any
+  const module: { exports: { default?: React.FC<{ onShowDisclaimer: () => void }> } } = {
+    exports: {},
+  }
   const fn = new Function('require', 'module', 'exports', js)
   fn(require, module, module.exports)
   return module.exports.default as React.FC<{ onShowDisclaimer: () => void }>
@@ -21,14 +28,14 @@ let Footer: React.FC<{ onShowDisclaimer: () => void }>
 
 describe('Footer', () => {
   beforeEach(() => {
-    ;(globalThis as any).__COMMIT_HASH__ = 'abcd123'
-    ;(globalThis as any).__COMMIT_DATE__ = '2024-06-01'
+    ;(globalThis as GlobalVariables).__COMMIT_HASH__ = 'abcd123'
+    ;(globalThis as GlobalVariables).__COMMIT_DATE__ = '2024-06-01'
     Footer = loadFooter()
   })
 
   afterEach(() => {
-    delete (globalThis as any).__COMMIT_HASH__
-    delete (globalThis as any).__COMMIT_DATE__
+    delete (globalThis as GlobalVariables).__COMMIT_HASH__
+    delete (globalThis as GlobalVariables).__COMMIT_DATE__
   })
 
   test('renders commit hash and date', () => {
