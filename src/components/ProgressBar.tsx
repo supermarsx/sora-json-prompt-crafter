@@ -12,8 +12,8 @@ export const ProgressBar: React.FC = () => {
     const updateScrollProgress = () => {
       const scrollTop = window.scrollY
       const docHeight = document.documentElement.scrollHeight - window.innerHeight
-      const progress = (scrollTop / docHeight) * 100
-      setScrollProgress(Math.min(progress, 100))
+      const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0
+      setScrollProgress(Math.min(Math.max(progress, 0), 100))
       if (!reported && progress >= 99) {
         trackEvent(trackingEnabled, 'scroll_bottom')
         setReported(true)
