@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { SoraOptions } from './Dashboard';
+import type { SoraOptions } from '@/lib/soraOptions';
 import { PromptSection } from './sections/PromptSection';
 import { CoreSettingsSection } from './sections/CoreSettingsSection';
 import { DimensionsFormatSection } from './sections/DimensionsFormatSection';

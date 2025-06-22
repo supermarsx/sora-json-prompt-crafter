@@ -15,7 +15,11 @@ describe('trackEvent', () => {
 
   test('updates localStorage and dispatches event when enabled', () => {
     const dispatchSpy = jest.spyOn(window, 'dispatchEvent')
-    ;(window as any).gtag = jest.fn()
+    ;(
+      window as unknown as {
+        gtag?: jest.Mock
+      }
+    ).gtag = jest.fn()
     trackEvent(true, 'scroll_bottom')
     const stored = JSON.parse(localStorage.getItem('trackingHistory') || '[]')
     expect(stored[0].action).toBe('scroll_bottom')
