@@ -4,13 +4,19 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { SoraOptions } from '../Dashboard';
+import { useResizeTracker } from '@/hooks/use-resize-tracker';
 
 interface PromptSectionProps {
   options: SoraOptions;
   updateOptions: (updates: Partial<SoraOptions>) => void;
+  trackingEnabled: boolean;
 }
 
-export const PromptSection: React.FC<PromptSectionProps> = ({ options, updateOptions }) => {
+export const PromptSection: React.FC<PromptSectionProps> = ({ options, updateOptions, trackingEnabled }) => {
+  const promptRef = React.useRef<HTMLTextAreaElement>(null)
+  const negativeRef = React.useRef<HTMLTextAreaElement>(null)
+  useResizeTracker(promptRef, trackingEnabled, 'prompt_resize')
+  useResizeTracker(negativeRef, trackingEnabled, 'negative_prompt_resize')
   return (
     <div className="space-y-4">
       <div>
@@ -23,9 +29,10 @@ export const PromptSection: React.FC<PromptSectionProps> = ({ options, updateOpt
           onChange={(e) => updateOptions({ prompt: e.target.value })}
           placeholder="Describe what you want to generate..."
           className="min-h-[100px] resize-y"
+          ref={promptRef}
         />
       </div>
-      
+
       <div>
         <div className="flex items-center space-x-2 mb-2">
           <Checkbox
@@ -46,6 +53,7 @@ export const PromptSection: React.FC<PromptSectionProps> = ({ options, updateOpt
           placeholder="Describe what you want to avoid..."
           className="min-h-[80px] resize-y"
           disabled={!options.use_negative_prompt}
+          ref={negativeRef}
         />
       </div>
     </div>
