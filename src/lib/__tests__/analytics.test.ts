@@ -4,6 +4,7 @@ describe('trackEvent', () => {
   beforeEach(async () => {
     localStorage.clear()
     jest.restoreAllMocks()
+    delete (window as unknown as { gtag?: unknown }).gtag
     jest.resetModules()
     ;({ trackEvent } = await import('../analytics'))
   })
@@ -46,6 +47,20 @@ describe('trackEvent', () => {
       'Tracking History: There was an error.'
     )
     expect(gtagMock).toHaveBeenCalled()
+  })
+
+  test('does not call gtag when missing', () => {
+    const errorSpy = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {})
+
+    trackEvent(true, 'foo')
+    trackEvent(true, 'bar')
+
+    expect(errorSpy).toHaveBeenCalledWith(
+      'Tracking Analytics: gtag function missing.'
+    )
+    expect(errorSpy).toHaveBeenCalledTimes(1)
   })
 
   test('gtag errors stop further tracking', () => {

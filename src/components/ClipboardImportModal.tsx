@@ -10,7 +10,9 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { toast } from '@/components/ui/sonner-toast';
+import { toast } from '@/components/ui/sonner-toast'
+import { isValidOptions } from '@/lib/validateOptions'
+
 
 interface ClipboardImportModalProps {
   open: boolean;
@@ -46,24 +48,26 @@ const ClipboardImportModal: React.FC<ClipboardImportModalProps> = ({
     const type = title.toLowerCase().includes('bulk') ? 'bulk_clipboard' : 'clipboard'
     try {
       const parsed = JSON.parse(text)
-      if (Array.isArray(parsed)) {
-        const strings = parsed.map(j => {
-          if (typeof j === 'string') return j
-          if (j && typeof j === 'object' && 'json' in j) return j.json as string
-          return JSON.stringify(j)
-        })
-        onImport(strings)
-      } else {
-        onImport([
-          typeof parsed === 'string'
-            ? parsed
-            : parsed && typeof parsed === 'object' && 'json' in parsed
-              ? (parsed as { json: string }).json
-              : JSON.stringify(parsed)
-        ])
+      const arr = Array.isArray(parsed) ? parsed : [parsed]
+      const strings: string[] = []
+      for (const item of arr) {
+        let obj: unknown = item
+        if (typeof item === 'string') {
+          try { obj = JSON.parse(item) } catch { obj = undefined }
+        } else if (item && typeof item === 'object' && 'json' in item) {
+          obj = (item as { json: string }).json
+          try { obj = JSON.parse(String(obj)) } catch {}
+        }
+        if (obj && typeof obj === 'object' && isValidOptions(obj)) {
+          strings.push(JSON.stringify(obj))
+        }
       }
+      if (!strings.length) throw new Error('invalid')
+      onImport(strings)
     } catch {
-      onImport([text])
+      toast.error('Invalid JSON')
+      onOpenChange(false)
+      return
     }
     trackEvent(trackingEnabled, 'history_import', { type })
     setText('')

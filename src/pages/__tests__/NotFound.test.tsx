@@ -4,7 +4,8 @@ import NotFound from '@/pages/NotFound'
 
 // Mock useLocation from react-router-dom to return a specific path
 jest.mock('react-router-dom', () => ({
-  useLocation: () => ({ pathname: '/missing-page' })
+  useLocation: () => ({ pathname: '/missing-page' }),
+  Navigate: () => null
 }))
 
 describe('NotFound page', () => {

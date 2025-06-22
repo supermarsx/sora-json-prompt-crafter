@@ -37,6 +37,7 @@ import ClipboardImportModal from './ClipboardImportModal'
 import BulkFileImportModal from './BulkFileImportModal'
 import { trackEvent } from '@/lib/analytics'
 import { useTracking } from '@/hooks/use-tracking'
+import { safeGet, safeSet, safeRemove } from '@/lib/storage'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 
 export interface HistoryEntry {
@@ -171,7 +172,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
   }
 
   const clearActions = () => {
-    localStorage.removeItem('trackingHistory')
+    safeRemove('trackingHistory')
     window.dispatchEvent(new Event('trackingHistoryUpdate'))
     toast.success('Actions cleared!')
   }
@@ -179,9 +180,13 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
   const requestClearActions = () => setConfirmClearActions(true)
 
   const deleteAction = (idx: number) => {
-    const list = JSON.parse(localStorage.getItem('trackingHistory') || '[]')
+    const list = safeGet<{ date: string; action: string }[]>(
+      'trackingHistory',
+      [],
+      true
+    )
     list.splice(idx, 1)
-    localStorage.setItem('trackingHistory', JSON.stringify(list))
+    safeSet('trackingHistory', list, true)
     window.dispatchEvent(new Event('trackingHistoryUpdate'))
     toast.success('Action deleted!')
   }
