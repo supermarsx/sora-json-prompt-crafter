@@ -27,9 +27,10 @@ go "my eyes!" when there's bright white lights.
 - Always on-screen live JSON generation with diff highlighting
 - Edit prompts and negative prompts
 - Privacy-first local storage only data
-- Locally generated JSON
-- Optional JSON composition based on sections
-- Extended JSON generation management options
+- Dark mode first for eye confort
+- 100% locally generated JSON
+- Optional JSON composition based on option sections
+- JSON generation lifecycle functions
 - Current generated JSON persists through page reloads
 - Stores up to 100 copied JSON prompts in a dedicated history panel
 - Import and Export functions for copied JSON entries
