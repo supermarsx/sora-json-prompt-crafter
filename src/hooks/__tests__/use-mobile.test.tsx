@@ -13,7 +13,7 @@ describe('useIsMobile', () => {
     window.matchMedia = jest.fn().mockReturnValue({
       addEventListener: add,
       removeEventListener: remove,
-    }) as any
+    }) as unknown as typeof window.matchMedia
   })
 
   afterEach(() => {
@@ -49,7 +49,7 @@ describe('useIsSingleColumn', () => {
     window.matchMedia = jest.fn().mockReturnValue({
       addEventListener: add,
       removeEventListener: remove,
-    }) as any
+    }) as unknown as typeof window.matchMedia
   })
 
   afterEach(() => {
