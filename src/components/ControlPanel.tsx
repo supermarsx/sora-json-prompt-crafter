@@ -103,18 +103,6 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         onToggle={(enabled) =>
           updateOptions({
             use_dnd_section: enabled,
-            ...(enabled
-              ? {}
-              : {
-                  use_dnd_character_race: false,
-                  use_dnd_character_class: false,
-                  use_dnd_character_background: false,
-                  use_dnd_character_alignment: false,
-                  use_dnd_monster_type: false,
-                  use_dnd_environment: false,
-                  use_dnd_magic_school: false,
-                  use_dnd_item_type: false,
-                })
           })
         }
       />
