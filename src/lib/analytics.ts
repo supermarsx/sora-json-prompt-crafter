@@ -33,7 +33,7 @@ export function trackEvent(
   ).gtag
 
   try {
-    if (typeof gtag !== 'function') throw new Error('gtag function missing')
+    if (typeof gtag !== 'function') console.error('gtag function missing')
     gtag('event', 'page_action', {
       send_to: MEASUREMENT_ID,
       action: event,
@@ -42,11 +42,11 @@ export function trackEvent(
   } catch (e) {
     trackingFailures++
     if (trackingFailures <= 5) {
-      throw new Error('Tracking error')
+      console.error('Tracking error')
     }
     if (!trackingDead) {
       trackingDead = true
-      throw new Error('Tracking permanently failed')
+      console.error('Tracking permanently failed')
     }
   }
 }
