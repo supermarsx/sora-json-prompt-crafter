@@ -1,9 +1,23 @@
-import { safeSet, safeRemove } from '../storage'
+import { safeGet, safeSet, safeRemove } from '../storage'
 
 describe('storage utils', () => {
   beforeEach(() => {
     localStorage.clear()
     jest.restoreAllMocks()
+  })
+
+  test('safeGet returns default for missing key', () => {
+    expect(safeGet('missing', 'def')).toBe('def')
+  })
+
+  test('safeGet returns default when JSON.parse throws', () => {
+    localStorage.setItem('bad', '{oops')
+    expect(safeGet('bad', 'fallback', true)).toBe('fallback')
+  })
+
+  test('safeGet parses JSON when present', () => {
+    localStorage.setItem('obj', '{"a":1}')
+    expect(safeGet<{ a: number }>('obj', null, true)).toEqual({ a: 1 })
   })
 
   test('safeSet logs warning when setItem fails', () => {
@@ -13,6 +27,12 @@ describe('storage utils', () => {
     })
     expect(safeSet('k', 'v')).toBe(false)
     expect(warnSpy).toHaveBeenCalled()
+  })
+
+  test('safeSet returns true when setItem succeeds', () => {
+    const spy = jest.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {})
+    expect(safeSet('k', 'v')).toBe(true)
+    expect(spy).toHaveBeenCalledWith('k', 'v')
   })
 
   test('safeSet logs warning when value is not string and stringify is false', () => {
@@ -28,5 +48,13 @@ describe('storage utils', () => {
     })
     expect(safeRemove('k')).toBe(false)
     expect(warnSpy).toHaveBeenCalled()
+  })
+
+  test('safeRemove returns true when removeItem succeeds', () => {
+    const spy = jest
+      .spyOn(Storage.prototype, 'removeItem')
+      .mockImplementation(() => {})
+    expect(safeRemove('k')).toBe(true)
+    expect(spy).toHaveBeenCalledWith('k')
   })
 })
