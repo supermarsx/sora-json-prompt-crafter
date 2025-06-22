@@ -9,3 +9,16 @@ try {
   }
 }
 export const MEASUREMENT_ID = measurementId ?? 'G-RVR9TSBQL7'
+
+let disableAnalytics: string | undefined
+try {
+  disableAnalytics = new Function(
+    'return import.meta.env.VITE_DISABLE_ANALYTICS'
+  )() as string | undefined
+} catch {
+  if (typeof process !== 'undefined') {
+    disableAnalytics = process.env.VITE_DISABLE_ANALYTICS
+  }
+}
+export const DISABLE_ANALYTICS =
+  disableAnalytics === 'true' || disableAnalytics === '1'
