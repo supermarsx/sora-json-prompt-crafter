@@ -1,6 +1,5 @@
 import { safeGet, safeSet } from './storage'
-
-const MEASUREMENT_ID = 'G-RVR9TSBQL7'
+import { MEASUREMENT_ID } from './config'
 
 let trackingFailures = 0
 let trackingDead = false
