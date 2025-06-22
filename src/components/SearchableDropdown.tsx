@@ -6,6 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -79,6 +80,9 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
       <DialogContent className="max-w-md max-h-[80vh]">
         <DialogHeader>
           <DialogTitle>{label}</DialogTitle>
+          <DialogDescription>
+            Search for an option and select a single value.
+          </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
           <div className="relative">
