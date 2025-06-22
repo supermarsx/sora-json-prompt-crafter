@@ -118,6 +118,8 @@ a similar fashion by pointing it to the `dist` folder.
 
 ## Environment Variables
 
+Copy `.env.example` to `.env` and adjust values as needed.
+
 - **`VITE_MEASUREMENT_ID`** (optional) – Google Analytics measurement ID. Defaults to `G-RVR9TSBQL7` if not set.
 
 ## Contributing
