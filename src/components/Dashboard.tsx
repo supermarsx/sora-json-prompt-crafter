@@ -884,7 +884,7 @@ const Dashboard = () => {
               Sora JSON Prompt Crafter
             </h1>
             <p className="text-muted-foreground select-none">Configure your Sora generation settings and get the perfect JSON prompt for stunning AI-generated content.</p>
-            <div className="flex items-center gap-2 mt-2">
+            <div className="flex flex-wrap items-center gap-2 mt-2">
               <Button asChild variant="outline" size="sm" className="gap-1">
                 <a
                   href="https://github.com/sponsors/supermarsx"
