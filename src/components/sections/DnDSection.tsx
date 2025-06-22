@@ -81,101 +81,101 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
       <div className="grid grid-cols-1 gap-4">
         <div className="flex items-center space-x-2">
           <Checkbox
-            id="use_character_race"
-            checked={options.use_character_race}
-            onCheckedChange={(checked) => updateOptions({ use_character_race: !!checked })}
+            id="use_dnd_character_race"
+            checked={options.use_dnd_character_race}
+            onCheckedChange={(checked) => updateOptions({ use_dnd_character_race: !!checked })}
           />
-          <Label htmlFor="use_character_race">Use Character Race</Label>
+          <Label htmlFor="use_dnd_character_race">Use Character Race</Label>
         </div>
 
         <div>
           <Label>Character Race</Label>
           <SearchableDropdown
             options={characterRaceOptions}
-            value={options.character_race || 'human'}
-            onValueChange={(value) => updateOptions({ character_race: value })}
+            value={options.dnd_character_race || 'human'}
+            onValueChange={(value) => updateOptions({ dnd_character_race: value })}
             label="Character Race Options"
-            disabled={!options.use_character_race}
+            disabled={!options.use_dnd_character_race}
           />
         </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox
-            id="use_character_class"
-            checked={options.use_character_class}
-            onCheckedChange={(checked) => updateOptions({ use_character_class: !!checked })}
+            id="use_dnd_character_class"
+            checked={options.use_dnd_character_class}
+            onCheckedChange={(checked) => updateOptions({ use_dnd_character_class: !!checked })}
           />
-          <Label htmlFor="use_character_class">Use Character Class</Label>
+          <Label htmlFor="use_dnd_character_class">Use Character Class</Label>
         </div>
 
         <div>
           <Label>Character Class</Label>
           <SearchableDropdown
             options={characterClassOptions}
-            value={options.character_class || 'fighter'}
-            onValueChange={(value) => updateOptions({ character_class: value })}
+            value={options.dnd_character_class || 'fighter'}
+            onValueChange={(value) => updateOptions({ dnd_character_class: value })}
             label="Character Class Options"
-            disabled={!options.use_character_class}
+            disabled={!options.use_dnd_character_class}
           />
         </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox
-            id="use_character_background"
-            checked={options.use_character_background}
-            onCheckedChange={(checked) => updateOptions({ use_character_background: !!checked })}
+            id="use_dnd_character_background"
+            checked={options.use_dnd_character_background}
+            onCheckedChange={(checked) => updateOptions({ use_dnd_character_background: !!checked })}
           />
-          <Label htmlFor="use_character_background">Use Character Background</Label>
+          <Label htmlFor="use_dnd_character_background">Use Character Background</Label>
         </div>
 
         <div>
           <Label>Character Background</Label>
           <SearchableDropdown
             options={characterBackgroundOptions}
-            value={options.character_background || 'soldier'}
-            onValueChange={(value) => updateOptions({ character_background: value })}
+            value={options.dnd_character_background || 'soldier'}
+            onValueChange={(value) => updateOptions({ dnd_character_background: value })}
             label="Character Background Options"
-            disabled={!options.use_character_background}
+            disabled={!options.use_dnd_character_background}
           />
         </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox
-            id="use_character_alignment"
-            checked={options.use_character_alignment}
-            onCheckedChange={(checked) => updateOptions({ use_character_alignment: !!checked })}
+            id="use_dnd_character_alignment"
+            checked={options.use_dnd_character_alignment}
+            onCheckedChange={(checked) => updateOptions({ use_dnd_character_alignment: !!checked })}
           />
-          <Label htmlFor="use_character_alignment">Use Character Alignment</Label>
+          <Label htmlFor="use_dnd_character_alignment">Use Character Alignment</Label>
         </div>
 
         <div>
           <Label>Character Alignment</Label>
           <SearchableDropdown
             options={characterAlignmentOptions}
-            value={options.character_alignment || 'lawful good'}
-            onValueChange={(value) => updateOptions({ character_alignment: value })}
+            value={options.dnd_character_alignment || 'lawful good'}
+            onValueChange={(value) => updateOptions({ dnd_character_alignment: value })}
             label="Character Alignment Options"
-            disabled={!options.use_character_alignment}
+            disabled={!options.use_dnd_character_alignment}
           />
         </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox
-            id="use_monster_type"
-            checked={options.use_monster_type}
-            onCheckedChange={(checked) => updateOptions({ use_monster_type: !!checked })}
+            id="use_dnd_monster_type"
+            checked={options.use_dnd_monster_type}
+            onCheckedChange={(checked) => updateOptions({ use_dnd_monster_type: !!checked })}
           />
-          <Label htmlFor="use_monster_type">Use Monster Type</Label>
+          <Label htmlFor="use_dnd_monster_type">Use Monster Type</Label>
         </div>
 
         <div>
           <Label>Monster Type</Label>
           <SearchableDropdown
             options={monsterTypeOptions}
-            value={options.monster_type || 'dragon'}
-            onValueChange={(value) => updateOptions({ monster_type: value })}
+            value={options.dnd_monster_type || 'dragon'}
+            onValueChange={(value) => updateOptions({ dnd_monster_type: value })}
             label="Monster Type Options"
-            disabled={!options.use_monster_type}
+            disabled={!options.use_dnd_monster_type}
           />
         </div>
 
@@ -201,41 +201,41 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
 
         <div className="flex items-center space-x-2">
           <Checkbox
-            id="use_magic_school"
-            checked={options.use_magic_school}
-            onCheckedChange={(checked) => updateOptions({ use_magic_school: !!checked })}
+            id="use_dnd_magic_school"
+            checked={options.use_dnd_magic_school}
+            onCheckedChange={(checked) => updateOptions({ use_dnd_magic_school: !!checked })}
           />
-          <Label htmlFor="use_magic_school">Use Magic School</Label>
+          <Label htmlFor="use_dnd_magic_school">Use Magic School</Label>
         </div>
 
         <div>
           <Label>Magic School</Label>
           <SearchableDropdown
             options={magicSchoolOptions}
-            value={options.magic_school || 'evocation'}
-            onValueChange={(value) => updateOptions({ magic_school: value })}
+            value={options.dnd_magic_school || 'evocation'}
+            onValueChange={(value) => updateOptions({ dnd_magic_school: value })}
             label="Magic School Options"
-            disabled={!options.use_magic_school}
+            disabled={!options.use_dnd_magic_school}
           />
         </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox
-            id="use_item_type"
-            checked={options.use_item_type}
-            onCheckedChange={(checked) => updateOptions({ use_item_type: !!checked })}
+            id="use_dnd_item_type"
+            checked={options.use_dnd_item_type}
+            onCheckedChange={(checked) => updateOptions({ use_dnd_item_type: !!checked })}
           />
-          <Label htmlFor="use_item_type">Use Item Type</Label>
+          <Label htmlFor="use_dnd_item_type">Use Item Type</Label>
         </div>
 
         <div>
           <Label>Item Type</Label>
           <SearchableDropdown
             options={itemTypeOptions}
-            value={options.item_type || 'magic sword'}
-            onValueChange={(value) => updateOptions({ item_type: value })}
+            value={options.dnd_item_type || 'magic sword'}
+            onValueChange={(value) => updateOptions({ dnd_item_type: value })}
             label="Item Type Options"
-            disabled={!options.use_item_type}
+            disabled={!options.use_dnd_item_type}
           />
         </div>
       </div>

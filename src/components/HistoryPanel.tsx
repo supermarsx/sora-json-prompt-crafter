@@ -78,6 +78,8 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
   const [editedId, setEditedId] = useState<number | null>(null)
   const [copiedId, setCopiedId] = useState<number | null>(null)
   const [tab, setTab] = useState('prompts')
+  const [confirmClearActions, setConfirmClearActions] = useState(false)
+  const [confirmDeleteActionIdx, setConfirmDeleteActionIdx] = useState<number | null>(null)
 
   useEffect(() => {
     if (open) {
@@ -170,13 +172,26 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
     toast.success('Actions cleared!')
   }
 
+  const requestClearActions = () => setConfirmClearActions(true)
+
   const deleteAction = (idx: number) => {
-    if (!window.confirm('Delete this action?')) return
     const list = JSON.parse(localStorage.getItem('trackingHistory') || '[]')
     list.splice(idx, 1)
     localStorage.setItem('trackingHistory', JSON.stringify(list))
     window.dispatchEvent(new Event('trackingHistoryUpdate'))
     toast.success('Action deleted!')
+  }
+
+  const requestDeleteAction = (idx: number) => {
+    if (confirmDeleteActionIdx === idx) {
+      deleteAction(idx)
+      setConfirmDeleteActionIdx(null)
+    } else {
+      setConfirmDeleteActionIdx(idx)
+      setTimeout(() => {
+        setConfirmDeleteActionIdx(prev => (prev === idx ? null : prev))
+      }, 1500)
+    }
   }
 
   return (
@@ -398,8 +413,8 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                   <Button size="sm" variant="outline" className="gap-1" onClick={exportActions}>
                     <Download className="w-4 h-4" /> Export
                   </Button>
-                  <Button size="sm" variant="destructive" onClick={clearActions}>
-                    Clear
+                  <Button size="sm" variant="destructive" onClick={requestClearActions}>
+                    Clear actions
                   </Button>
                 </div>
               </div>
@@ -410,7 +425,14 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                       <span>{a.date}</span>
                       <span className="flex items-center gap-2">
                         {a.action}
-                        <Trash2 className="w-3.5 h-3.5 cursor-pointer" onClick={() => deleteAction(idx)} />
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className={`p-0 w-3.5 h-3.5 ${confirmDeleteActionIdx === idx ? 'text-destructive animate-pulse' : ''}`}
+                          onClick={() => requestDeleteAction(idx)}
+                        >
+                          {confirmDeleteActionIdx === idx ? <Check className="w-3.5 h-3.5" /> : <Trash2 className="w-3.5 h-3.5" />}
+                        </Button>
                       </span>
                     </div>
                   ))}
@@ -439,6 +461,28 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                 trackEvent(trackingEnabled, 'history_clear_confirm')
                 onClear()
                 setConfirmClear(false)
+              }}
+            >
+              Clear
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={confirmClearActions} onOpenChange={setConfirmClearActions}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Clear latest actions?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will remove all action entries permanently.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                clearActions()
+                setConfirmClearActions(false)
               }}
             >
               Clear
