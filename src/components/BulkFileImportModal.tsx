@@ -35,8 +35,18 @@ const BulkFileImportModal: React.FC<BulkFileImportModalProps> = ({
       const text = await file.text();
       const parsed = JSON.parse(text);
       const jsons = Array.isArray(parsed)
-        ? parsed.map(j => (typeof j === 'string' ? j : JSON.stringify(j)))
-        : [typeof parsed === 'string' ? parsed : JSON.stringify(parsed)];
+        ? parsed.map(j => {
+            if (typeof j === 'string') return j;
+            if (j && typeof j === 'object' && 'json' in j) return j.json as string;
+            return JSON.stringify(j);
+          })
+        : [
+            typeof parsed === 'string'
+              ? parsed
+              : parsed && typeof parsed === 'object' && 'json' in parsed
+                ? (parsed as { json: string }).json
+                : JSON.stringify(parsed),
+          ];
       onImport(jsons);
       toast.success('File imported!');
       trackEvent(trackingEnabled, 'history_import', { type: 'bulk_file' })
