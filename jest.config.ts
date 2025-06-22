@@ -8,7 +8,7 @@ const config: Config = {
   },
   globals: {
     'ts-jest': {
-      tsconfig: 'tsconfig.app.json',
+      tsconfig: './tsconfig.app.json',
     },
   },
 }
