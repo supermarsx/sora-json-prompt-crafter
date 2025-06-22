@@ -1,9 +1,11 @@
-let measurementId: string | undefined
-try {
-  measurementId = new Function(
-    'return import.meta.env.VITE_MEASUREMENT_ID'
-  )() as string | undefined
-} catch {
-  measurementId = process.env.VITE_MEASUREMENT_ID
+function readEnv(key: string): string | undefined {
+  try {
+    return new Function(`return import.meta.env.${key}`)() as string | undefined
+  } catch {
+    return process.env[key]
+  }
 }
-export const MEASUREMENT_ID = measurementId ?? 'G-RVR9TSBQL7'
+
+export const MEASUREMENT_ID =
+  readEnv('VITE_MEASUREMENT_ID') ?? 'G-RVR9TSBQL7'
+export const DISABLE_ANALYTICS = readEnv('VITE_DISABLE_ANALYTICS') === 'true'
