@@ -1,0 +1,3 @@
+export const MOBILE_BREAKPOINT = 768
+export const SINGLE_COLUMN_BREAKPOINT = 1024
+
