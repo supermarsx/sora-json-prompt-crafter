@@ -1,3 +1,5 @@
+const MEASUREMENT_ID = 'G-RVR9TSBQL7'
+
 export function trackEvent(
   enabled: boolean,
   event: string,
@@ -27,6 +29,6 @@ export function trackEvent(
     }
   ).gtag
   if (typeof gtag === 'function') {
-    gtag('event', event, params)
+    gtag('event', event, { send_to: MEASUREMENT_ID, ...params })
   }
 }
