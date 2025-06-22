@@ -36,6 +36,13 @@ describe('useIsMobile', () => {
     unmount()
     expect(remove).toHaveBeenCalledWith('change', handler)
   })
+
+  test('defaults to false when matchMedia is missing', () => {
+    delete (window as any).matchMedia
+    window.innerWidth = 500
+    const { result } = renderHook(() => useIsMobile())
+    expect(result.current).toBe(false)
+  })
 })
 
 describe('useIsSingleColumn', () => {
@@ -71,5 +78,12 @@ describe('useIsSingleColumn', () => {
     const handler = add.mock.calls[0][1]
     unmount()
     expect(remove).toHaveBeenCalledWith('change', handler)
+  })
+
+  test('defaults to false when matchMedia is missing', () => {
+    delete (window as any).matchMedia
+    window.innerWidth = 900
+    const { result } = renderHook(() => useIsSingleColumn())
+    expect(result.current).toBe(false)
   })
 })
