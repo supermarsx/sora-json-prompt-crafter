@@ -164,7 +164,7 @@ const Dashboard = () => {
         date: new Date().toLocaleString(),
         json: jsonString,
       };
-      setHistory((prev) => [entry, ...prev]);
+      setHistory(prev => [entry, ...prev].slice(0, 100));
       toast.success('Sora JSON copied to clipboard!');
       const opts = options as unknown as Record<string, unknown>
       const sections = Object.keys(options).filter(key => key.startsWith('use_') && opts[key])
@@ -389,7 +389,7 @@ const Dashboard = () => {
       date: new Date().toLocaleString(),
       json: j,
     }));
-    setHistory(prev => [...entries, ...prev]);
+    setHistory(prev => [...entries, ...prev].slice(0, 100));
     trackEvent(trackingEnabled, 'history_import', { type: 'bulk' });
   };
 
