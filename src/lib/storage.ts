@@ -14,7 +14,8 @@ export function safeSet(key: string, value: unknown, stringify = false): boolean
     const data = stringify ? JSON.stringify(value) : (value as string)
     localStorage.setItem(key, data)
     return true
-  } catch {
+  } catch (e) {
+    console.warn(`safeSet: failed for key "${key}"`, e)
     return false
   }
 }
@@ -23,7 +24,8 @@ export function safeRemove(key: string): boolean {
   try {
     localStorage.removeItem(key)
     return true
-  } catch {
+  } catch (e) {
+    console.warn(`safeRemove: failed for key "${key}"`, e)
     return false
   }
 }
