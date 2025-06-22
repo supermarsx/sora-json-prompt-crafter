@@ -24,9 +24,10 @@ go "my eyes!" when there's bright white lights.
 
 ## Features
 
-- Live JSON generation with diff highlighting
+- Always on-screen live JSON generation with diff highlighting
 - Edit prompts and negative prompts
 - Privacy-first local storage only data
+- Locally generated JSON
 - Optional JSON composition based on sections
 - Extended JSON generation management options
 - Current generated JSON persists through page reloads
