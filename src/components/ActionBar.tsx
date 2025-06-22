@@ -142,7 +142,15 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         History
       </Button>
       {showJumpToJson && (
-        <Button onClick={onJumpToJson} variant="outline" size="sm" className="gap-2">
+        <Button
+          onClick={() => {
+            onJumpToJson?.()
+            trackEvent(trackingEnabled, 'jump_to_json')
+          }}
+          variant="outline"
+          size="sm"
+          className="gap-2"
+        >
           <MoveDown className="w-4 h-4" />
           Jump to JSON
         </Button>

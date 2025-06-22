@@ -38,6 +38,7 @@ import ClipboardImportModal from './ClipboardImportModal'
 import BulkFileImportModal from './BulkFileImportModal'
 import { trackEvent } from '@/lib/analytics'
 import { useTracking } from '@/hooks/use-tracking'
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 
 export interface HistoryEntry {
   id: number
@@ -49,6 +50,7 @@ interface HistoryPanelProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   history: HistoryEntry[]
+  actionHistory: { date: string; action: string }[]
   onDelete: (id: number) => void
   onClear: () => void
   onCopy: (json: string) => void
@@ -60,6 +62,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
   open,
   onOpenChange,
   history,
+  actionHistory,
   onDelete,
   onClear,
   onCopy,
@@ -127,13 +130,19 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
               This is your clipboard copied prompt history, every copied prompt goes here. You can review them, export them or delete them when you don't need them any longer
             </DialogDescription>
           </DialogHeader>
-          <div className="mb-4 flex justify-between items-center gap-2">
-            <div className="flex gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="gap-1">
-                    <ImportIcon className="w-4 h-4" /> Import
-                  </Button>
+          <Tabs defaultValue="prompts">
+            <TabsList className="mb-4">
+              <TabsTrigger value="prompts">JSON Prompts</TabsTrigger>
+              <TabsTrigger value="actions">Latest Actions</TabsTrigger>
+            </TabsList>
+            <TabsContent value="prompts">
+              <div className="mb-4 flex justify-between items-center gap-2">
+              <div className="flex gap-2">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="gap-1">
+                      <ImportIcon className="w-4 h-4" /> Import
+                    </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem
@@ -187,20 +196,20 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            </div>
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={() => {
-                trackEvent(trackingEnabled, 'history_clear_click')
-                setConfirmClear(true)
-              }}
-            >
-              Clear History
-            </Button>
-          </div>
-          <ScrollArea className="h-[60vh]">
-            <div className="space-y-4 pb-2">
+              </div>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => {
+                  trackEvent(trackingEnabled, 'history_clear_click')
+                  setConfirmClear(true)
+                }}
+              >
+                Clear History
+              </Button>
+              </div>
+              <ScrollArea className="h-[60vh]">
+                <div className="space-y-4 pb-2">
               {history.map((entry) => (
                 <div key={entry.id} className="border p-3 rounded-md space-y-2">
                   <div className="text-xs text-muted-foreground flex justify-between">
@@ -317,8 +326,28 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                   We're lonely here, please generate some prompts and copy them 🥺
                 </p>
               )}
-            </div>
-          </ScrollArea>
+              </div>
+              </ScrollArea>
+            </TabsContent>
+            <TabsContent value="actions">
+              <p className="text-sm text-muted-foreground mb-2">
+                This is your latest actions, they will be kept here for you to know. If you disable tracking you'll disable this history too
+              </p>
+              <ScrollArea className="h-[60vh]">
+                <div className="space-y-2 pb-2">
+                  {actionHistory.map((a, idx) => (
+                    <div key={idx} className="border p-2 rounded-md flex justify-between text-xs">
+                      <span>{a.date}</span>
+                      <span>{a.action}</span>
+                    </div>
+                  ))}
+                  {actionHistory.length === 0 && (
+                    <p className="text-center text-sm text-muted-foreground">No actions yet</p>
+                  )}
+                </div>
+              </ScrollArea>
+            </TabsContent>
+          </Tabs>
         </DialogContent>
       </Dialog>
 
