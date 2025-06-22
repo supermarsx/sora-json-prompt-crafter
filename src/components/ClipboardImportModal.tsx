@@ -42,10 +42,20 @@ const ClipboardImportModal: React.FC<ClipboardImportModalProps> = ({
     try {
       const parsed = JSON.parse(text)
       if (Array.isArray(parsed)) {
-        const strings = parsed.map(j => (typeof j === 'string' ? j : JSON.stringify(j)))
+        const strings = parsed.map(j => {
+          if (typeof j === 'string') return j
+          if (j && typeof j === 'object' && 'json' in j) return j.json as string
+          return JSON.stringify(j)
+        })
         onImport(strings)
       } else {
-        onImport([typeof parsed === 'string' ? parsed : JSON.stringify(parsed)])
+        onImport([
+          typeof parsed === 'string'
+            ? parsed
+            : parsed && typeof parsed === 'object' && 'json' in parsed
+              ? (parsed as { json: string }).json
+              : JSON.stringify(parsed)
+        ])
       }
     } catch {
       onImport([text])
