@@ -3,7 +3,7 @@ import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { CollapsibleSection } from '../CollapsibleSection';
-import { SoraOptions } from '../Dashboard';
+import type { SoraOptions } from '@/lib/soraOptions';
 
 interface StyleSectionProps {
   options: SoraOptions;

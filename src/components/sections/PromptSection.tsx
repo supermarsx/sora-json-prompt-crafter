@@ -3,7 +3,7 @@ import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { SoraOptions } from '../Dashboard';
+import type { SoraOptions } from '@/lib/soraOptions';
 import { useResizeTracker } from '@/hooks/use-resize-tracker';
 
 interface PromptSectionProps {

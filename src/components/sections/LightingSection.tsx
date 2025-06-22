@@ -2,7 +2,7 @@ import React from 'react';
 import { Label } from '@/components/ui/label';
 import { SearchableDropdown } from '../SearchableDropdown';
 import { CollapsibleSection } from '../CollapsibleSection';
-import { SoraOptions } from '../Dashboard';
+import type { SoraOptions } from '@/lib/soraOptions';
 
 interface LightingSectionProps {
   options: SoraOptions;
