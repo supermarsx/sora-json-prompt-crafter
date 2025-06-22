@@ -1,0 +1,34 @@
+import { render, screen } from '@testing-library/react'
+import { jest } from '@jest/globals'
+import DisclaimerModal from '../DisclaimerModal'
+
+describe('DisclaimerModal', () => {
+  const originalFetch = global.fetch
+  beforeEach(() => {
+    jest.restoreAllMocks()
+  })
+
+  afterEach(() => {
+    global.fetch = originalFetch
+  })
+
+  test('renders fetched text on success', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      text: () => Promise.resolve('loaded text'),
+    } as Response)
+
+    render(<DisclaimerModal open={true} onOpenChange={() => {}} />)
+
+    expect(await screen.findByText('loaded text')).toBeDefined()
+  })
+
+  test('renders fallback text on fetch failure', async () => {
+    global.fetch = jest.fn().mockRejectedValue(new Error('fail'))
+
+    render(<DisclaimerModal open={true} onOpenChange={() => {}} />)
+
+    expect(
+      await screen.findByText('Failed to load disclaimer.')
+    ).toBeDefined()
+  })
+})
