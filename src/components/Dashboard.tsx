@@ -403,6 +403,7 @@ const Dashboard = () => {
               <img
                 src="/web-app-manifest-512x512.png"
                 alt=""
+                role="presentation"
                 className="w-10 h-10 animate-rainbow dark:animate-rainbow-dark"
               />
               Sora JSON Prompt Crafter
