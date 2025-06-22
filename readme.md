@@ -50,6 +50,12 @@ Add a screenshot of the app here (e.g. `public/placeholder.svg`).
 
 Pull requests are welcome. Please open an issue first to discuss major changes.
 
+### Disclaimer
+
+The full legal disclaimer displayed in the application is stored in
+`public/disclaimer.txt`. This file is copied to the `dist` directory during the
+build so it can be viewed at `/disclaimer.txt` in production.
+
 ### License
 
 This project is licensed under the MIT License.
