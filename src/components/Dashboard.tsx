@@ -261,7 +261,11 @@ const Dashboard = () => {
   const [darkMode, setDarkMode] = useDarkMode();
   const [trackingEnabled, setTrackingEnabled] = useTracking();
   const actionHistory = useActionHistory();
-  const [githubStats, setGithubStats] = useState<{ stars: number; forks: number }>()
+  const [githubStats, setGithubStats] = useState<{
+    stars: number
+    forks: number
+    issues: number
+  }>()
 
   useEffect(() => {
     fetch('https://api.github.com/repos/supermarsx/sora-json-prompt-crafter')
@@ -270,6 +274,7 @@ const Dashboard = () => {
         setGithubStats({
           stars: data.stargazers_count,
           forks: data.forks_count,
+          issues: data.open_issues_count,
         })
       )
       .catch(() => {})
@@ -940,7 +945,7 @@ const Dashboard = () => {
                   onClick={() => trackEvent(trackingEnabled, 'open_issues')}
                 >
                   <Bug className="w-4 h-4" />
-                  Issues
+                  Issues{githubStats?.issues ? ` ${githubStats.issues}` : ''}
                 </a>
               </Button>
               <Button asChild variant="outline" size="sm" className="gap-1">
