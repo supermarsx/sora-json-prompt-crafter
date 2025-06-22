@@ -12,7 +12,12 @@
 ![Issues](https://img.shields.io/github/issues/supermarsx/sora-json-prompt-crafter?style=for-the-badge)
 
 
-Sora JSON Prompt Crafter is a web interface for building configuration files for Sora's generative models. Adjust sliders and dropdowns to fine‑tune parameters like style preset, aspect ratio, video duration and more. The app generates a JSON snippet you can copy and use directly with Sora. The app has a privacy-first approach where everything is kept on your browser, no prompt data is shared or tracked.
+Sora JSON Prompt Crafter is a web interface for building configuration files for Sora's
+generative models. Adjust sliders and dropdowns to fine‑tune parameters like style preset, 
+aspect ratio, video duration and more. The app generates a JSON snippet you can copy and 
+use directly with Sora. The app has a privacy-first approach where everything is kept on your 
+browser, no prompt data is shared or tracked. Dark mode is used as default for those of us that 
+go "my eyes!" when there's bright white lights.
 
 [![Go to Lovable](https://img.shields.io/badge/Demo-at%20%F0%9F%92%96%20Lovable-white?style=for-the-badge&logo=lovable)](https://sora-json-prompt-crafter.lovable.app)
 
@@ -23,12 +28,17 @@ Sora JSON Prompt Crafter is a web interface for building configuration files for
 - Edit prompts and negative prompts
 - Privacy-first local storage only data
 - Optional JSON composition based on sections
+- Extended JSON generation management options
+- Current generated JSON persists through page reloads
+- Stores up to 100 copied JSON prompts in a dedicated history panel
+- Import and Export functions for copied JSON entries
 - Extensive quality, ambient and setting presets
 - Lots of pop culture presets
 - Specific framing, dimension and base presets
 - Presets and options for video like camera and motion
 - Advanced specialized prompting options
 - Artifact and defect correction presets
+- No-fuss tracking toggle
 
 Example JSON output:
 
