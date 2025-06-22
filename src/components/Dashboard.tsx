@@ -97,7 +97,7 @@ const Dashboard = () => {
     }, 2000);
     trackEvent(trackingEnabled, 'json_changed');
     return () => clearTimeout(timer);
-  }, [jsonString]);
+  }, [jsonString, trackingEnabled]);
 
   useEffect(() => {
     const container = jsonContainerRef.current;
