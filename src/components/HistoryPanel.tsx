@@ -1,10 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -78,6 +77,22 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
   const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null)
   const [editedId, setEditedId] = useState<number | null>(null)
   const [copiedId, setCopiedId] = useState<number | null>(null)
+  const [tab, setTab] = useState('prompts')
+
+  useEffect(() => {
+    if (open) {
+      trackEvent(trackingEnabled, 'history_open')
+    }
+  }, [open, trackingEnabled])
+
+  useEffect(() => {
+    if (!open) return
+    if (tab === 'prompts') {
+      trackEvent(trackingEnabled, 'history_view_prompts')
+    } else if (tab === 'actions') {
+      trackEvent(trackingEnabled, 'history_view_actions')
+    }
+  }, [tab, open, trackingEnabled])
 
 
   const exportClipboard = async () => {
@@ -120,22 +135,66 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
     trackEvent(trackingEnabled, 'history_export', { type: 'file' })
   }
 
+  const exportActions = () => {
+    const data = JSON.stringify(actionHistory, null, 2)
+    const blob = new Blob([data], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    const now = new Date()
+    const datetime = `${now.getFullYear()}${(now.getMonth() + 1)
+      .toString()
+      .padStart(2, '0')}${now
+      .getDate()
+      .toString()
+      .padStart(2, '0')}-${now
+      .getHours()
+      .toString()
+      .padStart(2, '0')}${now
+      .getMinutes()
+      .toString()
+      .padStart(2, '0')}${now
+      .getSeconds()
+      .toString()
+      .padStart(2, '0')}`
+    const rand = Math.random().toString(16).slice(2, 8)
+    a.href = url
+    a.download = `latest-actions-${datetime}-${rand}.json`
+    a.click()
+    URL.revokeObjectURL(url)
+    toast.success('Actions downloaded!')
+  }
+
+  const clearActions = () => {
+    localStorage.removeItem('trackingHistory')
+    window.dispatchEvent(new Event('trackingHistoryUpdate'))
+    toast.success('Actions cleared!')
+  }
+
+  const deleteAction = (idx: number) => {
+    if (!window.confirm('Delete this action?')) return
+    const list = JSON.parse(localStorage.getItem('trackingHistory') || '[]')
+    list.splice(idx, 1)
+    localStorage.setItem('trackingHistory', JSON.stringify(list))
+    window.dispatchEvent(new Event('trackingHistoryUpdate'))
+    toast.success('Action deleted!')
+  }
+
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>History</DialogTitle>
-            <DialogDescription>
-              This is your clipboard copied prompt history, every copied prompt goes here. You can review them, export them or delete them when you don't need them any longer
-            </DialogDescription>
           </DialogHeader>
-          <Tabs defaultValue="prompts">
+          <Tabs value={tab} onValueChange={setTab}>
             <TabsList className="mb-4">
               <TabsTrigger value="prompts">JSON Prompts</TabsTrigger>
               <TabsTrigger value="actions">Latest Actions</TabsTrigger>
             </TabsList>
             <TabsContent value="prompts">
+              <p className="text-sm text-muted-foreground mb-2">
+                This is your clipboard copied prompt history, every copied prompt goes here. You can review them, export them or delete them when you don't need them any longer
+              </p>
               <div className="mb-4 flex justify-between items-center gap-2">
               <div className="flex gap-2">
                 <DropdownMenu>
@@ -305,6 +364,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                         if (confirmDeleteId === entry.id) {
                           trackEvent(trackingEnabled, 'history_delete_confirm')
                           onDelete(entry.id)
+                          toast.success('Entry deleted!')
                           setConfirmDeleteId(null)
                         } else {
                           setConfirmDeleteId(entry.id)
@@ -330,15 +390,28 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
               </ScrollArea>
             </TabsContent>
             <TabsContent value="actions">
-              <p className="text-sm text-muted-foreground mb-2">
-                This is your latest actions, they will be kept here for you to know. If you disable tracking you'll disable this history too
-              </p>
+              <div className="flex justify-between items-center mb-2">
+                <p className="text-sm text-muted-foreground">
+                  This is your latest actions, they will be kept here for you to know. If you disable tracking you'll disable this history too
+                </p>
+                <div className="flex gap-2">
+                  <Button size="sm" variant="outline" className="gap-1" onClick={exportActions}>
+                    <Download className="w-4 h-4" /> Export
+                  </Button>
+                  <Button size="sm" variant="destructive" onClick={clearActions}>
+                    Clear
+                  </Button>
+                </div>
+              </div>
               <ScrollArea className="h-[60vh]">
                 <div className="space-y-2 pb-2">
                   {actionHistory.map((a, idx) => (
-                    <div key={idx} className="border p-2 rounded-md flex justify-between text-xs">
+                    <div key={idx} className="border p-2 rounded-md flex justify-between items-center text-xs">
                       <span>{a.date}</span>
-                      <span>{a.action}</span>
+                      <span className="flex items-center gap-2">
+                        {a.action}
+                        <Trash2 className="w-3.5 h-3.5 cursor-pointer" onClick={() => deleteAction(idx)} />
+                      </span>
                     </div>
                   ))}
                   {actionHistory.length === 0 && (
@@ -382,7 +455,13 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
           {preview && (
             <ScrollArea className="h-[60vh]">
               <pre className="whitespace-pre-wrap text-xs p-2">
-                {preview.json}
+                {(() => {
+                  try {
+                    return JSON.stringify(JSON.parse(preview.json), null, 2)
+                  } catch {
+                    return preview.json
+                  }
+                })()}
               </pre>
             </ScrollArea>
           )}
