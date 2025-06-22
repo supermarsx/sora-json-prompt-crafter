@@ -34,7 +34,7 @@ jest.mock('../BulkFileImportModal', () => ({
 jest.mock('@/components/ui/dropdown-menu', () => ({
   __esModule: true,
   DropdownMenu: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  DropdownMenuTrigger: ({ children, ...props }: React.HTMLAttributes<HTMLSpanElement>) => (
+  DropdownMenuTrigger: ({ children, asChild: _asChild, ...props }: React.HTMLAttributes<HTMLSpanElement> & { asChild?: boolean }) => (
     <span {...props}>{children}</span>
   ),
   DropdownMenuContent: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
