@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { safeGet, safeSet } from '@/lib/storage'
+import { DISABLE_ANALYTICS } from '@/lib/config'
 
 export function useTracking() {
   const [enabled, setEnabled] = useState(() => {
+    if (DISABLE_ANALYTICS) return false
     const stored = safeGet('trackingEnabled')
     if (stored !== null) {
       try {
