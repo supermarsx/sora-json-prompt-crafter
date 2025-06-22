@@ -132,14 +132,20 @@ const Dashboard = () => {
     }
   }, [jsonString]);
 
+  const firstLoadRef = React.useRef(true)
   useEffect(() => {
+    if (firstLoadRef.current) {
+      firstLoadRef.current = false
+      const stored = localStorage.getItem('currentJson')
+      if (stored) return
+    }
     try {
       const json = generateJson(options)
       setJsonString(json)
       localStorage.setItem('currentJson', json)
     } catch (error) {
-      console.error('Error generating JSON:', error);
-      setJsonString('{}');
+      console.error('Error generating JSON:', error)
+      setJsonString('{}')
     }
   }, [options])
 
