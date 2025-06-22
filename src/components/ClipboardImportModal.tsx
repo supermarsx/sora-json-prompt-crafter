@@ -33,7 +33,12 @@ const ClipboardImportModal: React.FC<ClipboardImportModalProps> = ({
   useEffect(() => {
     if (open) {
       if ('clipboard' in navigator) {
-        navigator.clipboard.readText().then(setText).catch(() => {});
+        navigator.clipboard
+          .readText()
+          .then(setText)
+          .catch(() => {
+            /* ignore clipboard read errors */
+          });
       } else {
         toast.error('Clipboard not supported');
       }
@@ -56,7 +61,11 @@ const ClipboardImportModal: React.FC<ClipboardImportModalProps> = ({
           try { obj = JSON.parse(item) } catch { obj = undefined }
         } else if (item && typeof item === 'object' && 'json' in item) {
           obj = (item as { json: string }).json
-          try { obj = JSON.parse(String(obj)) } catch {}
+          try {
+            obj = JSON.parse(String(obj))
+          } catch {
+            /* ignore parse errors */
+          }
         }
         if (obj && typeof obj === 'object' && isValidOptions(obj)) {
           strings.push(JSON.stringify(obj))

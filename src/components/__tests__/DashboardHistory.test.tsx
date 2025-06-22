@@ -10,8 +10,8 @@ let importFn: ((jsons: string[]) => void) | null = null
 
 jest.mock('../HistoryPanel', () => ({
   __esModule: true,
-  default: (props: any) => {
-    importFn = props.onImport
+  default: ({ onImport }: { onImport: (jsons: string[]) => void }) => {
+    importFn = onImport
     return null
   },
 }))
@@ -42,9 +42,16 @@ describe('Dashboard history limit', () => {
   beforeEach(() => {
     localStorage.clear()
     importFn = null
-    ;(navigator as any).clipboard = { writeText: jest.fn().mockResolvedValue(undefined) }
-    global.fetch = jest.fn().mockResolvedValue({ json: () => Promise.resolve({}) })
-    window.matchMedia = jest.fn().mockReturnValue({ addEventListener: jest.fn(), removeEventListener: jest.fn() }) as any
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText: jest.fn().mockResolvedValue(undefined) },
+      configurable: true,
+    });
+    global.fetch = jest
+      .fn()
+      .mockResolvedValue({ json: () => Promise.resolve({}) });
+    window.matchMedia = jest
+      .fn()
+      .mockReturnValue({ addEventListener: jest.fn(), removeEventListener: jest.fn() }) as unknown as typeof window.matchMedia;
   })
 
   test('caps history at 100 entries', async () => {
