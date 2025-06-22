@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { diffChars, Change } from 'diff';
-import { Sun, Moon, Heart, Github, Star } from 'lucide-react';
+import { Sun, Moon, Heart, Github, Star, GitFork } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
@@ -261,6 +261,19 @@ const Dashboard = () => {
   const [darkMode, setDarkMode] = useDarkMode();
   const [trackingEnabled, setTrackingEnabled] = useTracking();
   const actionHistory = useActionHistory();
+  const [githubStats, setGithubStats] = useState<{ stars: number; forks: number }>()
+
+  useEffect(() => {
+    fetch('https://api.github.com/repos/supermarsx/sora-json-prompt-crafter')
+      .then(res => res.json())
+      .then(data =>
+        setGithubStats({
+          stars: data.stargazers_count,
+          forks: data.forks_count,
+        })
+      )
+      .catch(() => {})
+  }, [])
 
   useEffect(() => {
     const times = [3, 5, 10, 30, 60]
@@ -814,7 +827,20 @@ const Dashboard = () => {
                   className="flex items-center gap-1"
                   onClick={() => trackEvent(trackingEnabled, 'star_github')}
                 >
-                  <Star className="w-4 h-4" /> Star
+                  <Star className="w-4 h-4" />
+                  Star{githubStats?.stars ? ` ${githubStats.stars}` : ''}
+                </a>
+              </Button>
+              <Button asChild variant="outline" size="sm" className="gap-1">
+                <a
+                  href="https://github.com/supermarsx/sora-json-prompt-crafter/fork"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1"
+                  onClick={() => trackEvent(trackingEnabled, 'fork_github')}
+                >
+                  <GitFork className="w-4 h-4" />
+                  Fork{githubStats?.forks ? ` ${githubStats.forks}` : ''}
                 </a>
               </Button>
               <Button asChild variant="outline" size="sm" className="gap-1">
