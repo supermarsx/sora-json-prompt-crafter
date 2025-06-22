@@ -1,20 +1,28 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
+import { useTracking } from '@/hooks/use-tracking'
+import { trackEvent } from '@/lib/analytics'
 
 export const ProgressBar: React.FC = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [trackingEnabled] = useTracking()
+  const [reported, setReported] = useState(false)
 
   useEffect(() => {
     const updateScrollProgress = () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = (scrollTop / docHeight) * 100;
-      setScrollProgress(Math.min(progress, 100));
-    };
+      const scrollTop = window.scrollY
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight
+      const progress = (scrollTop / docHeight) * 100
+      setScrollProgress(Math.min(progress, 100))
+      if (!reported && progress >= 99) {
+        trackEvent(trackingEnabled, 'scroll_bottom')
+        setReported(true)
+      }
+    }
 
-    window.addEventListener('scroll', updateScrollProgress);
-    return () => window.removeEventListener('scroll', updateScrollProgress);
-  }, []);
+    window.addEventListener('scroll', updateScrollProgress)
+    return () => window.removeEventListener('scroll', updateScrollProgress)
+  }, [reported, trackingEnabled])
 
   return (
     <div className="fixed bottom-0 left-0 w-full h-1 bg-muted z-50">

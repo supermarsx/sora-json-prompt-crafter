@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { diffChars, Change } from 'diff';
-import { Sun, Moon, Heart } from 'lucide-react';
+import { Sun, Moon, Heart, Github, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
@@ -15,6 +15,7 @@ import DisclaimerModal from './DisclaimerModal';
 import { useIsSingleColumn } from '@/hooks/use-single-column';
 import { useDarkMode } from '@/hooks/use-dark-mode';
 import { useTracking } from '@/hooks/use-tracking';
+import { useActionHistory } from '@/hooks/use-action-history';
 import { trackEvent } from '@/lib/analytics'
 
 export interface SoraOptions {
@@ -259,6 +260,7 @@ const Dashboard = () => {
   const isSingleColumn = useIsSingleColumn();
   const [darkMode, setDarkMode] = useDarkMode();
   const [trackingEnabled, setTrackingEnabled] = useTracking();
+  const actionHistory = useActionHistory();
 
   useEffect(() => {
     const times = [3, 5, 10, 30, 60]
@@ -685,7 +687,24 @@ const Dashboard = () => {
   };
 
   const updateOptions = (updates: Partial<SoraOptions>) => {
-    setOptions(prev => ({ ...prev, ...updates }));
+    setOptions(prev => {
+      const next = { ...prev, ...updates }
+      Object.keys(updates).forEach(key => {
+        if (key.startsWith('use_')) {
+          const value = (updates as Record<string, unknown>)[key]
+          if (
+            typeof value === 'boolean' &&
+            value !== (prev as Record<string, unknown>)[key]
+          ) {
+            trackEvent(trackingEnabled, 'section_toggle', {
+              section: key,
+              enabled: value,
+            })
+          }
+        }
+      })
+      return next
+    })
   };
 
   const updateNestedOptions = (path: string, value: unknown) => {
@@ -727,6 +746,7 @@ const Dashboard = () => {
       document
         .getElementById('generated-json')
         ?.scrollIntoView({ behavior: 'smooth' });
+      trackEvent(trackingEnabled, 'selected_json_prompt');
       trackEvent(trackingEnabled, 'history_edit');
     } catch {
       toast.error('Invalid JSON');
@@ -764,40 +784,39 @@ const Dashboard = () => {
             </h1>
             <p className="text-muted-foreground select-none">Configure your Sora generation settings and get the perfect JSON prompt for stunning AI-generated content.</p>
             <div className="flex items-center gap-2 mt-2">
-              <a
-                onClick={() => trackEvent(trackingEnabled, 'click_sponsor')}
-                className="github-button"
-                href="https://github.com/sponsors/supermarsx"
-                data-icon="octicon-heart"
-                data-size="large"
-                aria-label="Sponsor supermarsx"
-                data-color-scheme={darkMode ? 'dark_high_contrast' : 'light_high_contrast'}
-              >
-                Sponsor
-              </a>
-              <a
-                onClick={() => trackEvent(trackingEnabled, 'see_github')}
-                className="github-button"
-                href="https://github.com/supermarsx/sora-json-prompt-crafter"
-                data-icon="octicon-mark-github"
-                data-size="large"
-                aria-label="GitHub supermarsx/sora-json-prompt-crafter"
-                data-color-scheme={darkMode ? 'dark_high_contrast' : 'light_high_contrast'}
-              >
-                GitHub
-              </a>
-              <a
-                onClick={() => trackEvent(trackingEnabled, 'star_github')}
-                className="github-button"
-                href="https://github.com/supermarsx/sora-json-prompt-crafter"
-                data-icon="octicon-star"
-                data-show-count="true"
-                data-size="large"
-                aria-label="Star supermarsx/sora-json-prompt-crafter on GitHub"
-                data-color-scheme={darkMode ? 'dark_high_contrast' : 'light_high_contrast'}
-              >
-                Star
-              </a>
+              <Button asChild variant="outline" size="sm" className="gap-1">
+                <a
+                  href="https://github.com/sponsors/supermarsx"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1"
+                  onClick={() => trackEvent(trackingEnabled, 'click_sponsor')}
+                >
+                  <Heart className="w-4 h-4" /> Sponsor
+                </a>
+              </Button>
+              <Button asChild variant="outline" size="sm" className="gap-1">
+                <a
+                  href="https://github.com/supermarsx/sora-json-prompt-crafter"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1"
+                  onClick={() => trackEvent(trackingEnabled, 'see_github')}
+                >
+                  <Github className="w-4 h-4" /> GitHub
+                </a>
+              </Button>
+              <Button asChild variant="outline" size="sm" className="gap-1">
+                <a
+                  href="https://github.com/supermarsx/sora-json-prompt-crafter"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1"
+                  onClick={() => trackEvent(trackingEnabled, 'star_github')}
+                >
+                  <Star className="w-4 h-4" /> Star
+                </a>
+              </Button>
               <Button asChild variant="outline" size="sm" className="gap-1">
                 <a
                   href="https://lovable.dev/projects/385b40c5-6b5e-49fc-9f0a-e6a0f9a36181"
@@ -813,7 +832,13 @@ const Dashboard = () => {
             </div>
             <p className="text-xs mt-2 text-muted-foreground">
               By using this tool you agree by the{' '}
-              <button onClick={() => setShowDisclaimer(true)} className="underline">
+              <button
+                onClick={() => {
+                  setShowDisclaimer(true)
+                  trackEvent(trackingEnabled, 'open_disclaimer')
+                }}
+                className="underline"
+              >
                 full disclaimer
               </button>
             </p>
@@ -906,6 +931,7 @@ const Dashboard = () => {
         open={showHistory}
         onOpenChange={setShowHistory}
         history={history}
+        actionHistory={actionHistory}
         onDelete={deleteHistoryEntry}
         onClear={clearHistory}
         onCopy={copyHistoryEntry}
@@ -918,7 +944,12 @@ const Dashboard = () => {
         onImport={importJson}
       />
       <DisclaimerModal open={showDisclaimer} onOpenChange={setShowDisclaimer} />
-      <Footer onShowDisclaimer={() => setShowDisclaimer(true)} />
+      <Footer
+        onShowDisclaimer={() => {
+          setShowDisclaimer(true)
+          trackEvent(trackingEnabled, 'open_disclaimer')
+        }}
+      />
       <ProgressBar />
     </div>
   );
