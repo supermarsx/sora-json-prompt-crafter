@@ -1,5 +1,6 @@
 
 import { reducer } from '../use-toast'
+import type { State } from '../use-toast'
 
 const baseToast = {
   id: '1',
@@ -23,7 +24,7 @@ describe('use-toast reducer', () => {
   })
 
   test('DISMISS_TOAST closes toast and REMOVE_TOAST removes it', () => {
-    let state = { toasts: [baseToast] }
+    let state: State = { toasts: [baseToast] }
     state = reducer(state, { type: 'DISMISS_TOAST', toastId: '1' })
     expect(state.toasts[0]?.open).toBe(false)
     state = reducer(state, { type: 'REMOVE_TOAST', toastId: '1' })
