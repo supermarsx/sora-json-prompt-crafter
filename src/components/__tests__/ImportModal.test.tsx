@@ -14,6 +14,19 @@ describe('ImportModal', () => {
     ;(toast.error as jest.Mock).mockClear()
   })
 
+  test('imports valid JSON from textarea and closes', () => {
+    const onImport = jest.fn()
+    const onClose = jest.fn()
+    render(<ImportModal isOpen={true} onClose={onClose} onImport={onImport} />)
+    const textarea = screen.getByPlaceholderText(/paste json/i)
+    fireEvent.change(textarea, { target: { value: '{"prompt":"test"}' } })
+    const button = screen.getByRole('button', { name: /import/i })
+    fireEvent.click(button)
+
+    expect(onImport).toHaveBeenCalledWith('{"prompt":"test"}')
+    expect(onClose).toHaveBeenCalled()
+  })
+
   test('file input populates textarea and imports valid JSON', async () => {
     const onImport = jest.fn()
     const onClose = jest.fn()
