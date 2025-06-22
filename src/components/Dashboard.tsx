@@ -31,6 +31,8 @@ const Dashboard = () => {
     }
   });
 
+  const firstLoadRef = React.useRef(true)
+
   const [copied, setCopied] = useState(false);
   const [jsonString, setJsonString] = useState(() => {
     try {
@@ -133,10 +135,14 @@ const Dashboard = () => {
   }, [jsonString]);
 
   useEffect(() => {
+    if (firstLoadRef.current) {
+      firstLoadRef.current = false;
+      return;
+    }
     try {
-      const json = generateJson(options)
-      setJsonString(json)
-      localStorage.setItem('currentJson', json)
+      const json = generateJson(options);
+      setJsonString(json);
+      localStorage.setItem('currentJson', json);
     } catch (error) {
       console.error('Error generating JSON:', error);
       setJsonString('{}');
