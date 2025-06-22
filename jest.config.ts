@@ -8,10 +8,8 @@ const config: Config = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
-  globals: {
-    'ts-jest': {
-      tsconfig: './tsconfig.app.json',
-    },
+  transform: {
+    '^.+\\.[tj]sx?$': ['ts-jest', { tsconfig: './tsconfig.app.json', useESM: true }],
   },
 }
 
