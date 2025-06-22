@@ -7,6 +7,7 @@
 ![Stars](https://img.shields.io/github/stars/supermarsx/sora-json-prompt-crafter?style=for-the-badge)
 ![Forks](https://img.shields.io/github/forks/supermarsx/sora-json-prompt-crafter?style=for-the-badge)
 ![Watchers](https://img.shields.io/github/watchers/supermarsx/sora-json-prompt-crafter?style=for-the-badge)
+
 ![Build](https://img.shields.io/github/actions/workflow/status/supermarsx/sora-json-prompt-crafter/ci.yml?style=for-the-badge)
 ![Issues](https://img.shields.io/github/issues/supermarsx/sora-json-prompt-crafter?style=for-the-badge)
 
