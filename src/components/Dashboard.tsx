@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { diffChars, Change } from 'diff';
-import { Sun, Moon, Heart, Github, Star, GitFork } from 'lucide-react';
+import { Sun, Moon, Heart, Github, Star, GitFork, Bug } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
@@ -526,6 +526,12 @@ const Dashboard = () => {
     delete cleanOptions.use_camera_composition;
     delete (cleanOptions as { image_count?: number }).image_count;
 
+    Object.keys(cleanOptions).forEach(k => {
+      if ((cleanOptions as Record<string, unknown>)[k] === false) {
+        delete (cleanOptions as Record<string, unknown>)[k]
+      }
+    })
+
     const json = JSON.stringify(cleanOptions, null, 2);
     setJsonString(json);
     localStorage.setItem('currentJson', json);
@@ -703,8 +709,8 @@ const Dashboard = () => {
     setOptions(prev => {
       const next = { ...prev, ...updates }
       Object.keys(updates).forEach(key => {
+        const value = (updates as Record<string, unknown>)[key]
         if (key.startsWith('use_')) {
-          const value = (updates as Record<string, unknown>)[key]
           if (
             typeof value === 'boolean' &&
             value !== (prev as Record<string, unknown>)[key]
@@ -714,6 +720,12 @@ const Dashboard = () => {
               enabled: value,
             })
           }
+        } else if (key === 'prompt') {
+          trackEvent(trackingEnabled, 'prompt_change')
+        } else if (key === 'negative_prompt') {
+          trackEvent(trackingEnabled, 'negative_prompt_change')
+        } else {
+          trackEvent(trackingEnabled, 'input_change')
         }
       })
       return next
@@ -732,6 +744,7 @@ const Dashboard = () => {
       }
       
       current[keys[keys.length - 1]] = value;
+      trackEvent(trackingEnabled, 'input_change')
       return newOptions;
     });
   };
@@ -920,6 +933,18 @@ const Dashboard = () => {
               </Button>
               <Button asChild variant="outline" size="sm" className="gap-1">
                 <a
+                  href="https://github.com/supermarsx/sora-json-prompt-crafter/issues/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1"
+                  onClick={() => trackEvent(trackingEnabled, 'open_issues')}
+                >
+                  <Bug className="w-4 h-4" />
+                  Issues
+                </a>
+              </Button>
+              <Button asChild variant="outline" size="sm" className="gap-1">
+                <a
                   href="https://lovable.dev/projects/385b40c5-6b5e-49fc-9f0a-e6a0f9a36181"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -967,10 +992,11 @@ const Dashboard = () => {
             </CardHeader>
             <CardContent className="flex-1 p-0 overflow-hidden">
               <div className="h-full overflow-y-auto">
-                <ControlPanel 
-                  options={options} 
+                <ControlPanel
+                  options={options}
                   updateOptions={updateOptions}
                   updateNestedOptions={updateNestedOptions}
+                  trackingEnabled={trackingEnabled}
                 />
               </div>
             </CardContent>

@@ -19,16 +19,22 @@ interface ControlPanelProps {
   options: SoraOptions;
   updateOptions: (updates: Partial<SoraOptions>) => void;
   updateNestedOptions: (path: string, value: unknown) => void;
+  trackingEnabled: boolean;
 }
 
 export const ControlPanel: React.FC<ControlPanelProps> = ({
   options,
   updateOptions,
   updateNestedOptions,
+  trackingEnabled,
 }) => {
   return (
     <div className="space-y-6 p-6">
-      <PromptSection options={options} updateOptions={updateOptions} />
+      <PromptSection
+        options={options}
+        updateOptions={updateOptions}
+        trackingEnabled={trackingEnabled}
+      />
       
       <CoreSettingsSection 
         options={options} 
