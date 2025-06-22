@@ -11,7 +11,6 @@ Sora JSON Prompt Crafter is a web interface for building configuration files for
 git clone https://github.com/supermarsx/sora-json-prompt-crafter
 cd sora-json-prompt-crafter
 npm install
-npm run build
 npm run dev
 ```
 Then open http://localhost:5173 in your browser.
