@@ -23,20 +23,35 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ open, onOpenChange })
       return;
     }
 
-    fetch('/disclaimer.txt')
+    const controller = new AbortController();
+    const { signal } = controller;
+
+    fetch('/disclaimer.txt', { signal })
       .then((res) => {
         if (!res.ok) {
           throw new Error('Failed to fetch disclaimer');
         }
         return res.text();
       })
-      .then(setText)
-      .catch(() => {
-        setText('Failed to load disclaimer.');
+      .then((txt) => {
+        if (!signal.aborted) {
+          setText(txt);
+        }
+      })
+      .catch((err) => {
+        if (err.name !== 'AbortError') {
+          setText('Failed to load disclaimer.');
+        }
       })
       .finally(() => {
-        setHasFetched(true);
+        if (!signal.aborted) {
+          setHasFetched(true);
+        }
       });
+
+    return () => {
+      controller.abort();
+    };
   }, [open, hasFetched]);
 
   return (

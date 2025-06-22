@@ -95,4 +95,24 @@ describe('DisclaimerModal', () => {
 
     expect(mockFetch).toHaveBeenCalledTimes(1)
   })
+
+  test('no state update after unmount', async () => {
+    let aborted = false
+    global.fetch = jest.fn().mockImplementation((_url, init) => {
+      const signal = (init as RequestInit)?.signal
+      signal?.addEventListener('abort', () => {
+        aborted = true
+      })
+      return new Promise(() => {}) as unknown as Promise<Response>
+    }) as unknown as typeof fetch
+
+    const { unmount } = render(
+      <DisclaimerModal open={true} onOpenChange={() => {}} />
+    )
+    unmount()
+
+    expect(aborted).toBe(true)
+    await Promise.resolve()
+    expect(warnSpy).not.toHaveBeenCalled()
+  })
 })
