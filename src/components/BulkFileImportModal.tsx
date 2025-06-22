@@ -43,7 +43,11 @@ const BulkFileImportModal: React.FC<BulkFileImportModalProps> = ({
           try { obj = JSON.parse(item); } catch { obj = undefined; }
         } else if (item && typeof item === 'object' && 'json' in item) {
           obj = (item as { json: string }).json;
-          try { obj = JSON.parse(String(obj)); } catch {}
+          try {
+            obj = JSON.parse(String(obj));
+          } catch {
+            /* ignore parse errors */
+          }
         }
         if (obj && typeof obj === 'object' && isValidOptions(obj)) {
           jsons.push(JSON.stringify(obj));

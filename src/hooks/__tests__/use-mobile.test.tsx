@@ -38,7 +38,7 @@ describe('useIsMobile', () => {
   })
 
   test('defaults to false when matchMedia is missing', () => {
-    delete (window as any).matchMedia
+    delete (window as unknown as { matchMedia?: typeof window.matchMedia }).matchMedia
     window.innerWidth = 500
     const { result } = renderHook(() => useIsMobile())
     expect(result.current).toBe(false)
@@ -81,7 +81,7 @@ describe('useIsSingleColumn', () => {
   })
 
   test('defaults to false when matchMedia is missing', () => {
-    delete (window as any).matchMedia
+    delete (window as unknown as { matchMedia?: typeof window.matchMedia }).matchMedia
     window.innerWidth = 900
     const { result } = renderHook(() => useIsSingleColumn())
     expect(result.current).toBe(false)
