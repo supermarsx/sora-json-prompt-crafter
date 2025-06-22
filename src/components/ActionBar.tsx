@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import React, { useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { toast } from 'sonner'
+import { trackEvent } from '@/lib/analytics'
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import {
   Copy,
@@ -56,7 +58,15 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   if (minimized) {
     return (
       <div className="fixed bottom-4 right-4 z-50">
-        <Button onClick={() => setMinimized(false)} variant="default" size="sm" className="gap-1">
+        <Button
+          onClick={() => {
+            setMinimized(false)
+            trackEvent(trackingEnabled, 'restore_actions')
+          }}
+          variant="default"
+          size="sm"
+          className="gap-1"
+        >
           Actions
           <ChevronUp className="w-4 h-4" />
         </Button>
@@ -106,7 +116,15 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           <DropdownMenuItem onSelect={onRandomize} className="gap-2">
             <Shuffle className="w-4 h-4" /> Randomize
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={onToggleTracking} className="gap-2">
+          <DropdownMenuItem
+            onSelect={() => {
+              onToggleTracking()
+              const newStatus = !trackingEnabled
+              toast.success(newStatus ? 'Tracking enabled' : 'Tracking disabled')
+              trackEvent(trackingEnabled, 'toggle_tracking', { enabled: newStatus })
+            }}
+            className="gap-2"
+          >
             {trackingEnabled ? (
               <>
                 <EyeOff className="w-4 h-4" /> Disable Tracking
@@ -129,7 +147,15 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           Jump to JSON
         </Button>
       )}
-      <Button onClick={() => setMinimized(true)} variant="ghost" size="icon" className="ml-auto">
+      <Button
+        onClick={() => {
+          setMinimized(true)
+          trackEvent(trackingEnabled, 'minimize_actions')
+        }}
+        variant="ghost"
+        size="icon"
+        className="ml-auto"
+      >
         <ChevronDown className="w-4 h-4" />
       </Button>
     </div>

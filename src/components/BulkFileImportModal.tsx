@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import { trackEvent } from '@/lib/analytics'
+import { useTracking } from '@/hooks/use-tracking'
 import {
   Dialog,
   DialogContent,
@@ -22,6 +24,7 @@ const BulkFileImportModal: React.FC<BulkFileImportModalProps> = ({
   onImport,
 }) => {
   const [file, setFile] = useState<File | null>(null);
+  const [trackingEnabled] = useTracking();
 
   const handleImport = async () => {
     if (!file) {
@@ -36,6 +39,7 @@ const BulkFileImportModal: React.FC<BulkFileImportModalProps> = ({
         : [typeof parsed === 'string' ? parsed : JSON.stringify(parsed)];
       onImport(jsons);
       toast.success('File imported!');
+      trackEvent(trackingEnabled, 'history_import', { type: 'bulk_file' })
       setFile(null);
       onOpenChange(false);
     } catch {

@@ -1,5 +1,7 @@
 
-import React, { useState } from 'react';
+import React, { useState } from 'react'
+import { trackEvent } from '@/lib/analytics'
+import { useTracking } from '@/hooks/use-tracking'
 import {
   Dialog,
   DialogContent,
@@ -18,10 +20,12 @@ interface ShareModalProps {
 
 export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, jsonContent }) => {
   const [copied, setCopied] = useState(false);
+  const [trackingEnabled] = useTracking();
   const shareToFacebook = () => {
     const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent('Check out my Sora prompt configuration!')}`;
     window.open(url, '_blank', 'width=600,height=400');
     toast.success('Shared to Facebook!');
+    trackEvent(trackingEnabled, 'share_facebook');
   };
 
   const shareToTwitter = () => {
@@ -29,6 +33,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, jsonCon
     const url = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(window.location.href)}`;
     window.open(url, '_blank', 'width=600,height=400');
     toast.success('Shared to Twitter!');
+    trackEvent(trackingEnabled, 'share_twitter');
   };
 
   const shareToWhatsApp = () => {
@@ -36,6 +41,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, jsonCon
     const url = `https://wa.me/?text=${text}`;
     window.open(url, '_blank');
     toast.success('Shared to WhatsApp!');
+    trackEvent(trackingEnabled, 'share_whatsapp');
   };
 
   const shareToTelegram = () => {
@@ -43,6 +49,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, jsonCon
     const url = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${text}`;
     window.open(url, '_blank');
     toast.success('Shared to Telegram!');
+    trackEvent(trackingEnabled, 'share_telegram');
   };
 
   const copyLink = async () => {
@@ -51,6 +58,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, jsonCon
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
       toast.success('Link copied to clipboard!');
+      trackEvent(trackingEnabled, 'copy_link');
     } catch (err) {
       toast.error('Failed to copy link');
     }

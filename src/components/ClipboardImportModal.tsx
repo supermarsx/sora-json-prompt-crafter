@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
+import { trackEvent } from '@/lib/analytics'
+import { useTracking } from '@/hooks/use-tracking'
 import {
   Dialog,
   DialogContent,
@@ -23,6 +25,7 @@ const ClipboardImportModal: React.FC<ClipboardImportModalProps> = ({
   title,
 }) => {
   const [text, setText] = useState('');
+  const [trackingEnabled] = useTracking();
 
   useEffect(() => {
     if (open) {
@@ -32,22 +35,24 @@ const ClipboardImportModal: React.FC<ClipboardImportModalProps> = ({
 
   const handleImport = () => {
     if (!text.trim()) {
-      onOpenChange(false);
-      return;
+      onOpenChange(false)
+      return
     }
+    const type = title.toLowerCase().includes('bulk') ? 'bulk_clipboard' : 'clipboard'
     try {
-      const parsed = JSON.parse(text);
+      const parsed = JSON.parse(text)
       if (Array.isArray(parsed)) {
-        const strings = parsed.map(j => (typeof j === 'string' ? j : JSON.stringify(j)));
-        onImport(strings);
+        const strings = parsed.map(j => (typeof j === 'string' ? j : JSON.stringify(j)))
+        onImport(strings)
       } else {
-        onImport([typeof parsed === 'string' ? parsed : JSON.stringify(parsed)]);
+        onImport([typeof parsed === 'string' ? parsed : JSON.stringify(parsed)])
       }
     } catch {
-      onImport([text]);
+      onImport([text])
     }
-    setText('');
-    onOpenChange(false);
+    trackEvent(trackingEnabled, 'history_import', { type })
+    setText('')
+    onOpenChange(false)
   };
 
   return (

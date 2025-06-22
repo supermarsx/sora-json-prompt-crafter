@@ -15,6 +15,7 @@ import DisclaimerModal from './DisclaimerModal';
 import { useIsSingleColumn } from '@/hooks/use-single-column';
 import { useDarkMode } from '@/hooks/use-dark-mode';
 import { useTracking } from '@/hooks/use-tracking';
+import { trackEvent } from '@/lib/analytics'
 
 export interface SoraOptions {
   prompt: string;
@@ -260,12 +261,22 @@ const Dashboard = () => {
   const [trackingEnabled, setTrackingEnabled] = useTracking();
 
   useEffect(() => {
+    const times = [3, 5, 10, 30, 60]
+    const timers = times.map(t =>
+      setTimeout(() => trackEvent(trackingEnabled, `stay_${t}min`), t * 60 * 1000)
+    )
+    return () => {
+      timers.forEach(clearTimeout)
+    }
+  }, [trackingEnabled])
+
+  useEffect(() => {
     localStorage.setItem('jsonHistory', JSON.stringify(history));
   }, [history]);
 
   useEffect(() => {
     localStorage.setItem('currentJson', jsonString);
-  }, [jsonString]);
+  }, [jsonString, trackingEnabled]);
 
   useEffect(() => {
     const diff = diffChars(prevJsonRef.current, jsonString).filter(p => !p.removed);
@@ -274,6 +285,7 @@ const Dashboard = () => {
     const timer = setTimeout(() => {
       setDiffParts(diff.map(p => ({ ...p, added: false } as Change)));
     }, 2000);
+    trackEvent(trackingEnabled, 'json_changed');
     return () => clearTimeout(timer);
   }, [jsonString]);
 
@@ -515,6 +527,9 @@ const Dashboard = () => {
       };
       setHistory((prev) => [entry, ...prev]);
       toast.success('Sora JSON copied to clipboard!');
+      const opts = options as unknown as Record<string, unknown>
+      const sections = Object.keys(options).filter(key => key.startsWith('use_') && opts[key])
+      trackEvent(trackingEnabled, 'copy_json', { sections: sections.join(',') })
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       toast.error('Failed to copy to clipboard');
@@ -524,10 +539,12 @@ const Dashboard = () => {
   const clearJson = () => {
     setJsonString('{}');
     toast.success('JSON cleared!');
+    trackEvent(trackingEnabled, 'clear_json');
   };
 
   const shareJson = () => {
     setShowShareModal(true);
+    trackEvent(trackingEnabled, 'share_button');
   };
 
   const importJson = (json: string) => {
@@ -536,6 +553,7 @@ const Dashboard = () => {
       setOptions(prev => ({ ...prev, ...obj }));
       setShowImportModal(false);
       toast.success('JSON imported!');
+      trackEvent(trackingEnabled, 'import_button');
     } catch {
       toast.error('Invalid JSON');
     }
@@ -640,11 +658,13 @@ const Dashboard = () => {
       use_duration: false,
     });
     toast.success('Settings reset to defaults!');
+    trackEvent(trackingEnabled, 'reset_button');
   };
 
   const regenerateJson = () => {
     setOptions(prev => ({ ...prev, seed: Math.floor(Math.random() * 10000) }));
     toast.success('JSON regenerated with new seed!');
+    trackEvent(trackingEnabled, 'regenerate_button');
   };
 
   const randomizeJson = () => {
@@ -661,6 +681,7 @@ const Dashboard = () => {
     
     setOptions(prev => ({ ...prev, ...randomOptions }));
     toast.success('Options randomized!');
+    trackEvent(trackingEnabled, 'randomize_button');
   };
 
   const updateOptions = (updates: Partial<SoraOptions>) => {
@@ -693,6 +714,7 @@ const Dashboard = () => {
     try {
       await navigator.clipboard.writeText(json);
       toast.success('Sora JSON copied to clipboard!');
+      trackEvent(trackingEnabled, 'history_copy');
     } catch {
       toast.error('Failed to copy to clipboard');
     }
@@ -705,6 +727,7 @@ const Dashboard = () => {
       document
         .getElementById('generated-json')
         ?.scrollIntoView({ behavior: 'smooth' });
+      trackEvent(trackingEnabled, 'history_edit');
     } catch {
       toast.error('Invalid JSON');
     }
@@ -717,6 +740,7 @@ const Dashboard = () => {
       json: j,
     }));
     setHistory(prev => [...entries, ...prev]);
+    trackEvent(trackingEnabled, 'history_import', { type: 'bulk' });
   };
 
   const scrollToJson = () => {
@@ -741,6 +765,7 @@ const Dashboard = () => {
             <p className="text-muted-foreground select-none">Configure your Sora generation settings and get the perfect JSON prompt for stunning AI-generated content.</p>
             <div className="flex items-center gap-2 mt-2">
               <a
+                onClick={() => trackEvent(trackingEnabled, 'click_sponsor')}
                 className="github-button"
                 href="https://github.com/sponsors/supermarsx"
                 data-icon="octicon-heart"
@@ -751,6 +776,7 @@ const Dashboard = () => {
                 Sponsor
               </a>
               <a
+                onClick={() => trackEvent(trackingEnabled, 'see_github')}
                 className="github-button"
                 href="https://github.com/supermarsx/sora-json-prompt-crafter"
                 data-icon="octicon-mark-github"
@@ -761,6 +787,7 @@ const Dashboard = () => {
                 GitHub
               </a>
               <a
+                onClick={() => trackEvent(trackingEnabled, 'star_github')}
                 className="github-button"
                 href="https://github.com/supermarsx/sora-json-prompt-crafter"
                 data-icon="octicon-star"
@@ -777,6 +804,7 @@ const Dashboard = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-1"
+                  onClick={() => trackEvent(trackingEnabled, 'view_on_lovable')}
                 >
                   <Heart className="w-4 h-4" />
                   View on Lovable
@@ -793,7 +821,10 @@ const Dashboard = () => {
           <Button
             variant="outline"
             size="icon"
-            onClick={() => setDarkMode(!darkMode)}
+            onClick={() => {
+              setDarkMode(!darkMode)
+              trackEvent(trackingEnabled, 'dark_mode_toggle', { enabled: !darkMode })
+            }}
             aria-label="Toggle dark mode"
           >
             {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
