@@ -13,6 +13,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/components/ui/sonner-toast'
 import { isValidOptions } from '@/lib/validateOptions'
 
+
 interface ClipboardImportModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -31,7 +32,11 @@ const ClipboardImportModal: React.FC<ClipboardImportModalProps> = ({
 
   useEffect(() => {
     if (open) {
-      navigator.clipboard.readText().then(setText).catch(() => {});
+      if ('clipboard' in navigator) {
+        navigator.clipboard.readText().then(setText).catch(() => {});
+      } else {
+        toast.error('Clipboard not supported');
+      }
     }
   }, [open]);
 
