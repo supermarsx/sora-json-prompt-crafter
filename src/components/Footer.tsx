@@ -5,6 +5,8 @@ interface FooterProps {
 }
 
 const Footer: React.FC<FooterProps> = ({ onShowDisclaimer }) => {
+  const commit = import.meta.env.VITE_COMMIT_HASH
+  const date = import.meta.env.VITE_COMMIT_DATE
   return (
     <footer className="py-6 text-center text-sm text-muted-foreground">
       <p>
@@ -21,6 +23,7 @@ const Footer: React.FC<FooterProps> = ({ onShowDisclaimer }) => {
           Disclaimer
         </button>
       </p>
+      <p className="mt-2 text-xs">Version {commit} ({date})</p>
       {/* Tracking scripts moved to index.html */}
     </footer>
   );
