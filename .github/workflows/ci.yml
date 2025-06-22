@@ -17,8 +17,20 @@ jobs:
       - run: npm ci
       - run: npm run lint
 
-  test:
+  typecheck:
     needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - run: npx tsc --noEmit
+
+  test:
+    needs: [lint, typecheck]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,7 +42,7 @@ jobs:
       - run: npm test
 
   build:
-    needs: test
+    needs: [test, typecheck]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
