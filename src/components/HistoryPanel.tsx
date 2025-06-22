@@ -36,6 +36,7 @@ import {
 import ClipboardImportModal from './ClipboardImportModal'
 import BulkFileImportModal from './BulkFileImportModal'
 import { trackEvent } from '@/lib/analytics'
+import { formatDateTime } from '@/lib/date'
 import { useTracking } from '@/hooks/use-tracking'
 import { safeGet, safeSet, safeRemove } from '@/lib/storage'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
@@ -117,22 +118,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
     const blob = new Blob([data], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
-    const now = new Date()
-    const datetime = `${now.getFullYear()}${(now.getMonth() + 1)
-      .toString()
-      .padStart(2, '0')}${now
-        .getDate()
-        .toString()
-        .padStart(2, '0')}-${now
-          .getHours()
-          .toString()
-          .padStart(2, '0')}${now
-            .getMinutes()
-            .toString()
-            .padStart(2, '0')}${now
-              .getSeconds()
-              .toString()
-              .padStart(2, '0')}`
+    const datetime = formatDateTime()
     const rand = Math.random().toString(16).slice(2, 8)
     a.href = url
     a.download = `history-${datetime}-${rand}.json`
@@ -147,22 +133,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
     const blob = new Blob([data], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
-    const now = new Date()
-    const datetime = `${now.getFullYear()}${(now.getMonth() + 1)
-      .toString()
-      .padStart(2, '0')}${now
-        .getDate()
-        .toString()
-        .padStart(2, '0')}-${now
-          .getHours()
-          .toString()
-          .padStart(2, '0')}${now
-            .getMinutes()
-            .toString()
-            .padStart(2, '0')}${now
-              .getSeconds()
-              .toString()
-              .padStart(2, '0')}`
+    const datetime = formatDateTime()
     const rand = Math.random().toString(16).slice(2, 8)
     a.href = url
     a.download = `latest-actions-${datetime}-${rand}.json`
