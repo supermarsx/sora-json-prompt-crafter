@@ -1,11 +1,14 @@
 const MEASUREMENT_ID = 'G-RVR9TSBQL7'
 
+let trackingFailures = 0
+let trackingDead = false
+
 export function trackEvent(
   enabled: boolean,
   event: string,
   params?: Record<string, unknown>
 ) {
-  if (!enabled) return
+  if (!enabled || trackingDead) return
 
   try {
     const list = JSON.parse(
@@ -28,7 +31,22 @@ export function trackEvent(
       ) => void
     }
   ).gtag
-  if (typeof gtag === 'function') {
-    gtag('event', event, { send_to: MEASUREMENT_ID, ...params })
+
+  try {
+    if (typeof gtag !== 'function') throw new Error('gtag function missing')
+    gtag('event', 'page_action', {
+      send_to: MEASUREMENT_ID,
+      action: event,
+      ...params,
+    })
+  } catch (e) {
+    trackingFailures++
+    if (trackingFailures <= 5) {
+      throw new Error('Tracking error')
+    }
+    if (!trackingDead) {
+      trackingDead = true
+      throw new Error('Tracking permanently failed')
+    }
   }
 }
