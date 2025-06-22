@@ -13,7 +13,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { ChevronDown, Search } from 'lucide-react';
 
 interface MultiSelectDropdownProps {
-  options: string[];
+  options: readonly string[];
   value: string[];
   onValueChange: (value: string[]) => void;
   placeholder?: string;

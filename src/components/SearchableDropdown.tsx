@@ -13,7 +13,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { ChevronDown, Search } from 'lucide-react';
 
 interface SearchableDropdownProps {
-  options: string[];
+  options: readonly string[];
   value: string;
   onValueChange: (value: string) => void;
   placeholder?: string;
