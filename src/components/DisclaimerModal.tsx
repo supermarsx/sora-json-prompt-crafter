@@ -16,8 +16,13 @@ interface DisclaimerModalProps {
 
 const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ open, onOpenChange }) => {
   const [text, setText] = useState('');
+  const [hasFetched, setHasFetched] = useState(false);
 
   useEffect(() => {
+    if (!open || hasFetched) {
+      return;
+    }
+
     fetch('/disclaimer.txt')
       .then((res) => {
         if (!res.ok) {
@@ -28,8 +33,11 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ open, onOpenChange })
       .then(setText)
       .catch(() => {
         setText('Failed to load disclaimer.');
+      })
+      .finally(() => {
+        setHasFetched(true);
       });
-  }, []);
+  }, [open, hasFetched]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

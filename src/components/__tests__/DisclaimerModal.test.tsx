@@ -48,4 +48,51 @@ describe('DisclaimerModal', () => {
       await screen.findByText('Failed to load disclaimer.')
     ).toBeDefined()
   })
+
+  test('does not fetch when closed', () => {
+    const mockFetch = jest.fn()
+    global.fetch = mockFetch
+
+    render(<DisclaimerModal open={false} onOpenChange={() => {}} />)
+
+    expect(mockFetch).not.toHaveBeenCalled()
+  })
+
+  test('fetches only when opened', async () => {
+    const mockFetch = jest.fn().mockResolvedValue({
+      ok: true,
+      text: () => Promise.resolve('loaded text'),
+    } as Response)
+    global.fetch = mockFetch
+
+    const { rerender } = render(
+      <DisclaimerModal open={false} onOpenChange={() => {}} />
+    )
+
+    expect(mockFetch).not.toHaveBeenCalled()
+
+    rerender(<DisclaimerModal open={true} onOpenChange={() => {}} />)
+
+    expect(mockFetch).toHaveBeenCalledTimes(1)
+    expect(await screen.findByText('loaded text')).toBeDefined()
+  })
+
+  test('does not refetch on reopen', async () => {
+    const mockFetch = jest.fn().mockResolvedValue({
+      ok: true,
+      text: () => Promise.resolve('loaded text'),
+    } as Response)
+    global.fetch = mockFetch
+
+    const { rerender } = render(
+      <DisclaimerModal open={true} onOpenChange={() => {}} />
+    )
+    expect(await screen.findByText('loaded text')).toBeDefined()
+    expect(mockFetch).toHaveBeenCalledTimes(1)
+
+    rerender(<DisclaimerModal open={false} onOpenChange={() => {}} />)
+    rerender(<DisclaimerModal open={true} onOpenChange={() => {}} />)
+
+    expect(mockFetch).toHaveBeenCalledTimes(1)
+  })
 })
