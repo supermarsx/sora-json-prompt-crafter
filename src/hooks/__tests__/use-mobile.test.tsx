@@ -10,10 +10,12 @@ describe('useIsMobile', () => {
   beforeEach(() => {
     add = jest.fn()
     remove = jest.fn()
-    window.matchMedia = jest.fn().mockReturnValue({
-      addEventListener: add,
-      removeEventListener: remove,
-    }) as any
+    window.matchMedia = jest
+      .fn()
+      .mockReturnValue({
+        addEventListener: add,
+        removeEventListener: remove,
+      } as unknown as MediaQueryList)
   })
 
   afterEach(() => {
@@ -46,10 +48,12 @@ describe('useIsSingleColumn', () => {
   beforeEach(() => {
     add = jest.fn()
     remove = jest.fn()
-    window.matchMedia = jest.fn().mockReturnValue({
-      addEventListener: add,
-      removeEventListener: remove,
-    }) as any
+    window.matchMedia = jest
+      .fn()
+      .mockReturnValue({
+        addEventListener: add,
+        removeEventListener: remove,
+      } as unknown as MediaQueryList)
   })
 
   afterEach(() => {
