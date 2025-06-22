@@ -36,6 +36,8 @@ import {
 } from '@/components/ui/dropdown-menu'
 import ClipboardImportModal from './ClipboardImportModal'
 import BulkFileImportModal from './BulkFileImportModal'
+import { trackEvent } from '@/lib/analytics'
+import { useTracking } from '@/hooks/use-tracking'
 
 export interface HistoryEntry {
   id: number
@@ -65,6 +67,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
   onImport,
 }) => {
   const [preview, setPreview] = useState<HistoryEntry | null>(null)
+  const [trackingEnabled] = useTracking()
   const [confirmClear, setConfirmClear] = useState(false)
   const [showClipboard, setShowClipboard] = useState(false)
   const [showBulkClipboard, setShowBulkClipboard] = useState(false)
@@ -78,6 +81,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
     try {
       await navigator.clipboard.writeText(JSON.stringify(history, null, 2))
       toast.success('Copied all history to clipboard!')
+      trackEvent(trackingEnabled, 'history_export', { type: 'clipboard' })
     } catch {
       /* ignore */
     }
@@ -110,6 +114,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
     a.click()
     URL.revokeObjectURL(url)
     toast.success('History downloaded!')
+    trackEvent(trackingEnabled, 'history_export', { type: 'file' })
   }
 
   return (
@@ -131,13 +136,28 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem onSelect={() => setShowClipboard(true)}>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      trackEvent(trackingEnabled, 'history_import_open', { type: 'clipboard' })
+                      setShowClipboard(true)
+                    }}
+                  >
                     Paste from clipboard
                   </DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => setShowBulkClipboard(true)}>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      trackEvent(trackingEnabled, 'history_import_open', { type: 'bulk_clipboard' })
+                      setShowBulkClipboard(true)
+                    }}
+                  >
                     Bulk paste from clipboard
                   </DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => setShowBulkFile(true)}>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      trackEvent(trackingEnabled, 'history_import_open', { type: 'bulk_file' })
+                      setShowBulkFile(true)
+                    }}
+                  >
                     Bulk file import
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -149,10 +169,20 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem onSelect={exportClipboard}>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      trackEvent(trackingEnabled, 'history_export_click', { type: 'clipboard' })
+                      exportClipboard()
+                    }}
+                  >
                     Copy all to clipboard
                   </DropdownMenuItem>
-                  <DropdownMenuItem onSelect={exportFile}>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      trackEvent(trackingEnabled, 'history_export_click', { type: 'file' })
+                      exportFile()
+                    }}
+                  >
                     Download JSON
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -161,7 +191,10 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
             <Button
               variant="destructive"
               size="sm"
-              onClick={() => setConfirmClear(true)}
+              onClick={() => {
+                trackEvent(trackingEnabled, 'history_clear_click')
+                setConfirmClear(true)
+              }}
             >
               Clear History
             </Button>
@@ -209,6 +242,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                       size="sm"
                       variant="outline"
                       onClick={() => {
+                        trackEvent(trackingEnabled, 'history_edit')
                         onEdit(entry.json)
                         setEditedId(entry.id)
                         setTimeout(() => {
@@ -228,6 +262,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                       size="sm"
                       variant="outline"
                       onClick={() => {
+                        trackEvent(trackingEnabled, 'history_copy')
                         onCopy(entry.json)
                         setCopiedId(entry.id)
                         setTimeout(() => {
@@ -246,7 +281,10 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => setPreview(entry)}
+                      onClick={() => {
+                        trackEvent(trackingEnabled, 'history_preview')
+                        setPreview(entry)
+                      }}
                       className="gap-1"
                     >
                       <Eye className="w-4 h-4" /> Preview
@@ -256,6 +294,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                       variant="destructive"
                       onClick={() => {
                         if (confirmDeleteId === entry.id) {
+                          trackEvent(trackingEnabled, 'history_delete_confirm')
                           onDelete(entry.id)
                           setConfirmDeleteId(null)
                         } else {
@@ -295,6 +334,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
+                trackEvent(trackingEnabled, 'history_clear_confirm')
                 onClear()
                 setConfirmClear(false)
               }}
