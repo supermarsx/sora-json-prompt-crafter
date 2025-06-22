@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react'
 import ErrorBoundary from '../ErrorBoundary'
+import { jest } from '@jest/globals'
 
 function ProblemChild({ shouldThrow }: { shouldThrow: boolean }) {
   if (shouldThrow) {
@@ -9,6 +10,15 @@ function ProblemChild({ shouldThrow }: { shouldThrow: boolean }) {
 }
 
 describe('ErrorBoundary', () => {
+  let errorSpy: jest.SpyInstance
+
+  beforeEach(() => {
+    errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    errorSpy.mockRestore()
+  })
   test('shows fallback and resets on Try Again', () => {
     const { rerender } = render(
       <ErrorBoundary>
