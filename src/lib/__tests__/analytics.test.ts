@@ -9,6 +9,17 @@ describe('trackEvent', () => {
     ;({ trackEvent } = await import('../analytics'))
   })
 
+  test('does nothing when analytics disabled via env var', async () => {
+    process.env.VITE_DISABLE_ANALYTICS = 'true'
+    jest.resetModules()
+    ;({ trackEvent } = await import('../analytics'))
+    const dispatchSpy = jest.spyOn(window, 'dispatchEvent')
+    trackEvent(true, 'test')
+    expect(localStorage.getItem('trackingHistory')).toBeNull()
+    expect(dispatchSpy).not.toHaveBeenCalled()
+    delete process.env.VITE_DISABLE_ANALYTICS
+  })
+
   test('does nothing when tracking disabled', () => {
     const dispatchSpy = jest.spyOn(window, 'dispatchEvent')
     trackEvent(false, 'test')

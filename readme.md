@@ -119,6 +119,7 @@ a similar fashion by pointing it to the `dist` folder.
 ## Environment Variables
 
 - **`VITE_MEASUREMENT_ID`** (optional) – Google Analytics measurement ID. Defaults to `G-RVR9TSBQL7` if not set.
+- **`VITE_DISABLE_ANALYTICS`** (optional) – When set to `true`, prevents loading analytics scripts and disables analytics events.
 
 ## Contributing
 

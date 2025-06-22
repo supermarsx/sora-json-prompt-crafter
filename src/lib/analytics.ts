@@ -1,5 +1,5 @@
 import { safeGet, safeSet } from './storage'
-import { MEASUREMENT_ID } from './config'
+import { MEASUREMENT_ID, DISABLE_ANALYTICS } from './config'
 
 let trackingFailures = 0
 let trackingDead = false
@@ -10,7 +10,7 @@ export function trackEvent(
   event: string,
   params?: Record<string, unknown>
 ) {
-  if (!enabled) return
+  if (!enabled || DISABLE_ANALYTICS) return
 
   try {
     const list = (safeGet<{ date: string; action: string }[]>(

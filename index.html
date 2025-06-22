@@ -15,8 +15,9 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@lovable_dev" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-    <script>
+    <script type="module">
       (function () {
+        if (import.meta.env.VITE_DISABLE_ANALYTICS === 'true') return
         try {
           const enabled = localStorage.getItem('trackingEnabled');
           if (enabled === null || enabled === 'true') {
