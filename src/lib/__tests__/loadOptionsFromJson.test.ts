@@ -13,6 +13,8 @@ describe('loadOptionsFromJson', () => {
 
   test('returns null for invalid JSON', () => {
     const bad = '{ invalid json'
+    const spy = jest.spyOn(console, 'error').mockImplementation(() => {})
     expect(loadOptionsFromJson(bad)).toBeNull()
+    spy.mockRestore()
   })
 })

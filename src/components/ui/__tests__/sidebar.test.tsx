@@ -21,9 +21,11 @@ describe('useSidebar hook', () => {
   })
 
   test('throws when used without provider', () => {
+    const spy = jest.spyOn(console, 'error').mockImplementation(() => {})
     expect(() => renderHook(() => useSidebar())).toThrow(
       'useSidebar must be used within a SidebarProvider.'
     )
+    spy.mockRestore()
   })
 
   test('toggleSidebar updates state and cookie on desktop', () => {

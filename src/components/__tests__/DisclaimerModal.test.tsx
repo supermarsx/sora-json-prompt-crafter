@@ -4,12 +4,15 @@ import DisclaimerModal from '../DisclaimerModal'
 
 describe('DisclaimerModal', () => {
   const originalFetch = global.fetch
+  let warnSpy: jest.SpyInstance
   beforeEach(() => {
     jest.restoreAllMocks()
+    warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
   })
 
   afterEach(() => {
     global.fetch = originalFetch
+    warnSpy.mockRestore()
   })
 
   test('renders fetched text on success', async () => {
