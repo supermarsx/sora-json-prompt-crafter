@@ -38,7 +38,8 @@ function Test() {
 describe('useResizeTracker', () => {
   beforeEach(() => {
     ;(trackEvent as jest.Mock).mockClear()
-    ;(global as any).ResizeObserver = MockResizeObserver
+    ;(global as unknown as { ResizeObserver: typeof MockResizeObserver }).ResizeObserver =
+      MockResizeObserver
     jest.useFakeTimers()
     jest.setSystemTime(0)
   })
