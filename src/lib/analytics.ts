@@ -8,7 +8,7 @@ export function trackEvent(
   event: string,
   params?: Record<string, unknown>
 ) {
-  if (!enabled || trackingDead) return
+  if (!enabled) return
 
   try {
     const list = JSON.parse(
@@ -19,8 +19,10 @@ export function trackEvent(
     localStorage.setItem('trackingHistory', JSON.stringify(list))
     window.dispatchEvent(new Event('trackingHistoryUpdate'))
   } catch {
-    /* ignore */
+    console.error('Tracking History: There was an error.')
   }
+
+  if (trackingDead) return
 
   const gtag = (
     window as unknown as {
@@ -33,7 +35,7 @@ export function trackEvent(
   ).gtag
 
   try {
-    if (typeof gtag !== 'function') console.error('gtag function missing')
+    if (typeof gtag !== 'function') console.error('Tracking Analytics: gtag function missing.')
     gtag('event', 'page_action', {
       send_to: MEASUREMENT_ID,
       action: event,
@@ -42,11 +44,11 @@ export function trackEvent(
   } catch (e) {
     trackingFailures++
     if (trackingFailures <= 5) {
-      console.error('Tracking error')
+      console.error('Tracking Analytics: There was an error.')
     }
     if (!trackingDead) {
       trackingDead = true
-      console.error('Tracking permanently failed')
+      console.error('Tracking Analytics: Too many errors, tracking permanently failed.')
     }
   }
 }
