@@ -1,6 +1,5 @@
 import * as React from 'react'
-
-const BREAKPOINT = 1024
+import { SINGLE_COLUMN_BREAKPOINT } from '@/lib/breakpoints'
 
 export function useIsSingleColumn() {
   const [isSingle, setIsSingle] = React.useState(false)
@@ -11,8 +10,8 @@ export function useIsSingleColumn() {
       return
     }
 
-    const mq = window.matchMedia(`(max-width: ${BREAKPOINT - 1}px)`)
-    const handler = () => setIsSingle(window.innerWidth < BREAKPOINT)
+    const mq = window.matchMedia(`(max-width: ${SINGLE_COLUMN_BREAKPOINT - 1}px)`)
+    const handler = () => setIsSingle(window.innerWidth < SINGLE_COLUMN_BREAKPOINT)
     mq.addEventListener('change', handler)
     handler()
     return () => mq.removeEventListener('change', handler)

@@ -1,6 +1,10 @@
 import { renderHook, act } from '@testing-library/react'
 import { useIsMobile } from '../use-mobile'
 import { useIsSingleColumn } from '../use-single-column'
+import {
+  MOBILE_BREAKPOINT,
+  SINGLE_COLUMN_BREAKPOINT,
+} from '@/lib/breakpoints'
 
 describe('useIsMobile', () => {
   const originalMatchMedia = window.matchMedia
@@ -21,11 +25,11 @@ describe('useIsMobile', () => {
   })
 
   test('updates state on change and cleans up', () => {
-    window.innerWidth = 500
+    window.innerWidth = MOBILE_BREAKPOINT - 100
     const { result, unmount } = renderHook(() => useIsMobile())
     expect(result.current).toBe(true)
 
-    window.innerWidth = 800
+    window.innerWidth = MOBILE_BREAKPOINT + 32
     act(() => {
       const handler = add.mock.calls[0][1]
       handler()
@@ -39,7 +43,7 @@ describe('useIsMobile', () => {
 
   test('defaults to false when matchMedia is missing', () => {
     delete (window as unknown as { matchMedia?: typeof window.matchMedia }).matchMedia
-    window.innerWidth = 500
+    window.innerWidth = MOBILE_BREAKPOINT - 100
     const { result } = renderHook(() => useIsMobile())
     expect(result.current).toBe(false)
   })
@@ -64,11 +68,11 @@ describe('useIsSingleColumn', () => {
   })
 
   test('updates state on change and cleans up', () => {
-    window.innerWidth = 900
+    window.innerWidth = SINGLE_COLUMN_BREAKPOINT - 100
     const { result, unmount } = renderHook(() => useIsSingleColumn())
     expect(result.current).toBe(true)
 
-    window.innerWidth = 1100
+    window.innerWidth = SINGLE_COLUMN_BREAKPOINT + 100
     act(() => {
       const handler = add.mock.calls[0][1]
       handler()
@@ -82,7 +86,7 @@ describe('useIsSingleColumn', () => {
 
   test('defaults to false when matchMedia is missing', () => {
     delete (window as unknown as { matchMedia?: typeof window.matchMedia }).matchMedia
-    window.innerWidth = 900
+    window.innerWidth = SINGLE_COLUMN_BREAKPOINT - 100
     const { result } = renderHook(() => useIsSingleColumn())
     expect(result.current).toBe(false)
   })
