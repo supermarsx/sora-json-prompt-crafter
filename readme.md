@@ -13,13 +13,14 @@ cd sora-json-prompt-crafter
 npm install
 npm run dev
 ```
-Then open http://localhost:5173 in your browser.
+Then open http://localhost:8080 in your browser.
 
 ### Running Tests
 
 ```sh
 npm test
 ```
+
 ### Test Instance
 
 A test instance is available at [https://sora-json-prompt-crafter.lovable.app/](https://sora-json-prompt-crafter.lovable.app/).
@@ -174,3 +175,7 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+
+## CI Status
+
+[![CI](https://github.com/supermarsx/sora-json-prompt-crafter/actions/workflows/ci.yml/badge.svg)](https://github.com/supermarsx/sora-json-prompt-crafter/actions/workflows/ci.yml)
