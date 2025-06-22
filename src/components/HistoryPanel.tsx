@@ -116,18 +116,18 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
     const datetime = `${now.getFullYear()}${(now.getMonth() + 1)
       .toString()
       .padStart(2, '0')}${now
-      .getDate()
-      .toString()
-      .padStart(2, '0')}-${now
-      .getHours()
-      .toString()
-      .padStart(2, '0')}${now
-      .getMinutes()
-      .toString()
-      .padStart(2, '0')}${now
-      .getSeconds()
-      .toString()
-      .padStart(2, '0')}`
+        .getDate()
+        .toString()
+        .padStart(2, '0')}-${now
+          .getHours()
+          .toString()
+          .padStart(2, '0')}${now
+            .getMinutes()
+            .toString()
+            .padStart(2, '0')}${now
+              .getSeconds()
+              .toString()
+              .padStart(2, '0')}`
     const rand = Math.random().toString(16).slice(2, 8)
     a.href = url
     a.download = `history-${datetime}-${rand}.json`
@@ -146,18 +146,18 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
     const datetime = `${now.getFullYear()}${(now.getMonth() + 1)
       .toString()
       .padStart(2, '0')}${now
-      .getDate()
-      .toString()
-      .padStart(2, '0')}-${now
-      .getHours()
-      .toString()
-      .padStart(2, '0')}${now
-      .getMinutes()
-      .toString()
-      .padStart(2, '0')}${now
-      .getSeconds()
-      .toString()
-      .padStart(2, '0')}`
+        .getDate()
+        .toString()
+        .padStart(2, '0')}-${now
+          .getHours()
+          .toString()
+          .padStart(2, '0')}${now
+            .getMinutes()
+            .toString()
+            .padStart(2, '0')}${now
+              .getSeconds()
+              .toString()
+              .padStart(2, '0')}`
     const rand = Math.random().toString(16).slice(2, 8)
     a.href = url
     a.download = `latest-actions-${datetime}-${rand}.json`
@@ -211,178 +211,178 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                 This is your clipboard copied prompt history, every copied prompt goes here. You can review them, export them or delete them when you don't need them any longer
               </p>
               <div className="mb-4 flex justify-between items-center gap-2">
-              <div className="flex gap-2">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="sm" className="gap-1">
-                      <ImportIcon className="w-4 h-4" /> Import
-                    </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem
-                    onSelect={() => {
-                      trackEvent(trackingEnabled, 'history_import_open', { type: 'clipboard' })
-                      setShowClipboard(true)
-                    }}
-                  >
-                    Paste from clipboard
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onSelect={() => {
-                      trackEvent(trackingEnabled, 'history_import_open', { type: 'bulk_clipboard' })
-                      setShowBulkClipboard(true)
-                    }}
-                  >
-                    Bulk paste from clipboard
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onSelect={() => {
-                      trackEvent(trackingEnabled, 'history_import_open', { type: 'bulk_file' })
-                      setShowBulkFile(true)
-                    }}
-                  >
-                    Bulk file import
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="gap-1">
-                    <Download className="w-4 h-4" /> Export
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem
-                    onSelect={() => {
-                      trackEvent(trackingEnabled, 'history_export_click', { type: 'clipboard' })
-                      exportClipboard()
-                    }}
-                  >
-                    Copy all to clipboard
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onSelect={() => {
-                      trackEvent(trackingEnabled, 'history_export_click', { type: 'file' })
-                      exportFile()
-                    }}
-                  >
-                    Download JSON
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              </div>
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={() => {
-                  trackEvent(trackingEnabled, 'history_clear_click')
-                  setConfirmClear(true)
-                }}
-              >
-                Clear History
-              </Button>
+                <div className="flex gap-2">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="sm" className="gap-1">
+                        <ImportIcon className="w-4 h-4" /> Import
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem
+                        onSelect={() => {
+                          trackEvent(trackingEnabled, 'history_import_open', { type: 'clipboard' })
+                          setShowClipboard(true)
+                        }}
+                      >
+                        Paste from clipboard
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onSelect={() => {
+                          trackEvent(trackingEnabled, 'history_import_open', { type: 'bulk_clipboard' })
+                          setShowBulkClipboard(true)
+                        }}
+                      >
+                        Bulk paste from clipboard
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onSelect={() => {
+                          trackEvent(trackingEnabled, 'history_import_open', { type: 'bulk_file' })
+                          setShowBulkFile(true)
+                        }}
+                      >
+                        Bulk file import
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="sm" className="gap-1">
+                        <Download className="w-4 h-4" /> Export
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem
+                        onSelect={() => {
+                          trackEvent(trackingEnabled, 'history_export_click', { type: 'clipboard' })
+                          exportClipboard()
+                        }}
+                      >
+                        Copy all to clipboard
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onSelect={() => {
+                          trackEvent(trackingEnabled, 'history_export_click', { type: 'file' })
+                          exportFile()
+                        }}
+                      >
+                        Download JSON
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => {
+                    trackEvent(trackingEnabled, 'history_clear_click')
+                    setConfirmClear(true)
+                  }}
+                >
+                  Clear History
+                </Button>
               </div>
               <ScrollArea className="h-[60vh]">
                 <div className="space-y-4 pb-2">
-              {history.map((entry) => (
-                <div key={entry.id} className="border p-3 rounded-md space-y-2">
-                  <div className="text-xs text-muted-foreground flex justify-between">
-                    <span>{entry.date}</span>
-                  </div>
-                  {(() => {
-                    try {
-                      const obj = JSON.parse(entry.json)
-                      return (
-                        <div className="space-y-1 text-xs text-muted-foreground">
-                          <div className="font-medium break-words">{obj.prompt}</div>
-                        </div>
-                      )
-                    } catch {
-                      return null
-                    }
-                  })()}
-                  <div className="flex flex-wrap gap-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => {
-                        trackEvent(trackingEnabled, 'history_edit')
-                        onEdit(entry.json)
-                        setEditedId(entry.id)
-                        setTimeout(() => {
-                          setEditedId(prev => (prev === entry.id ? null : prev))
-                        }, 1500)
-                      }}
-                      className={`gap-1 ${editedId === entry.id ? 'text-green-600 animate-pulse' : ''}`}
-                    >
-                      {editedId === entry.id ? (
-                        <Check className="w-4 h-4" />
-                      ) : (
-                        <Edit className="w-4 h-4" />
-                      )}{' '}
-                      {editedId === entry.id ? 'Edited' : 'Edit'}
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => {
-                        trackEvent(trackingEnabled, 'history_copy')
-                        onCopy(entry.json)
-                        setCopiedId(entry.id)
-                        setTimeout(() => {
-                          setCopiedId(prev => (prev === entry.id ? null : prev))
-                        }, 1500)
-                      }}
-                      className={`gap-1 ${copiedId === entry.id ? 'text-green-600 animate-pulse' : ''}`}
-                    >
-                      {copiedId === entry.id ? (
-                        <Check className="w-4 h-4" />
-                      ) : (
-                        <Clipboard className="w-4 h-4" />
-                      )}{' '}
-                      {copiedId === entry.id ? 'Copied' : 'Copy'}
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => {
-                        trackEvent(trackingEnabled, 'history_preview')
-                        setPreview(entry)
-                      }}
-                      className="gap-1"
-                    >
-                      <Eye className="w-4 h-4" /> Preview
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      onClick={() => {
-                        if (confirmDeleteId === entry.id) {
-                          trackEvent(trackingEnabled, 'history_delete_confirm')
-                          onDelete(entry.id)
-                          toast.success('Entry deleted!')
-                          setConfirmDeleteId(null)
-                        } else {
-                          setConfirmDeleteId(entry.id)
-                          setTimeout(() => {
-                            setConfirmDeleteId(prev => (prev === entry.id ? null : prev))
-                          }, 1500)
+                  {history.map((entry) => (
+                    <div key={entry.id} className="border p-3 rounded-md space-y-2">
+                      <div className="text-xs text-muted-foreground flex justify-between">
+                        <span>{entry.date}</span>
+                      </div>
+                      {(() => {
+                        try {
+                          const obj = JSON.parse(entry.json)
+                          return (
+                            <div className="space-y-1 text-xs text-muted-foreground">
+                              <div className="font-medium break-words">{obj.prompt}</div>
+                            </div>
+                          )
+                        } catch {
+                          return null
                         }
-                      }}
-                      className={`gap-1 ${confirmDeleteId === entry.id ? 'animate-pulse' : ''}`}
-                    >
-                      <Trash2 className="w-4 h-4" />
-                      {confirmDeleteId === entry.id ? 'Confirm' : 'Delete'}
-                    </Button>
-                  </div>
+                      })()}
+                      <div className="flex flex-wrap gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            trackEvent(trackingEnabled, 'history_edit')
+                            onEdit(entry.json)
+                            setEditedId(entry.id)
+                            setTimeout(() => {
+                              setEditedId(prev => (prev === entry.id ? null : prev))
+                            }, 1500)
+                          }}
+                          className={`gap-1 ${editedId === entry.id ? 'text-green-600 animate-pulse' : ''}`}
+                        >
+                          {editedId === entry.id ? (
+                            <Check className="w-4 h-4" />
+                          ) : (
+                            <Edit className="w-4 h-4" />
+                          )}{' '}
+                          {editedId === entry.id ? 'Edited' : 'Edit'}
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            trackEvent(trackingEnabled, 'history_copy')
+                            onCopy(entry.json)
+                            setCopiedId(entry.id)
+                            setTimeout(() => {
+                              setCopiedId(prev => (prev === entry.id ? null : prev))
+                            }, 1500)
+                          }}
+                          className={`gap-1 ${copiedId === entry.id ? 'text-green-600 animate-pulse' : ''}`}
+                        >
+                          {copiedId === entry.id ? (
+                            <Check className="w-4 h-4" />
+                          ) : (
+                            <Clipboard className="w-4 h-4" />
+                          )}{' '}
+                          {copiedId === entry.id ? 'Copied' : 'Copy'}
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            trackEvent(trackingEnabled, 'history_preview')
+                            setPreview(entry)
+                          }}
+                          className="gap-1"
+                        >
+                          <Eye className="w-4 h-4" /> Preview
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          onClick={() => {
+                            if (confirmDeleteId === entry.id) {
+                              trackEvent(trackingEnabled, 'history_delete_confirm')
+                              onDelete(entry.id)
+                              toast.success('Entry deleted!')
+                              setConfirmDeleteId(null)
+                            } else {
+                              setConfirmDeleteId(entry.id)
+                              setTimeout(() => {
+                                setConfirmDeleteId(prev => (prev === entry.id ? null : prev))
+                              }, 1500)
+                            }
+                          }}
+                          className={`gap-1 ${confirmDeleteId === entry.id ? 'animate-pulse' : ''}`}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          {confirmDeleteId === entry.id ? 'Confirm' : 'Delete'}
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                  {history.length === 0 && (
+                    <p className="text-center text-sm text-muted-foreground">
+                      We're lonely here, please generate some prompts and copy them 🥺
+                    </p>
+                  )}
                 </div>
-              ))}
-              {history.length === 0 && (
-                <p className="text-center text-sm text-muted-foreground">
-                  We're lonely here, please generate some prompts and copy them 🥺
-                </p>
-              )}
-              </div>
               </ScrollArea>
             </TabsContent>
             <TabsContent value="actions">
@@ -483,7 +483,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                 {(() => {
                   try {
                     const obj = JSON.parse(preview.json)
-                    return JSON.stringify({ prompt: obj.prompt }, null, 2)
+                    return JSON.stringify({ prompt: obj }, null, 2)
                   } catch {
                     return preview.json
                   }
