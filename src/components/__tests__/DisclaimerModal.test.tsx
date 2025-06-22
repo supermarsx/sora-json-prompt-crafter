@@ -14,6 +14,7 @@ describe('DisclaimerModal', () => {
 
   test('renders fetched text on success', async () => {
     global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
       text: () => Promise.resolve('loaded text'),
     } as Response)
 
@@ -24,6 +25,19 @@ describe('DisclaimerModal', () => {
 
   test('renders fallback text on fetch failure', async () => {
     global.fetch = jest.fn().mockRejectedValue(new Error('fail'))
+
+    render(<DisclaimerModal open={true} onOpenChange={() => {}} />)
+
+    expect(
+      await screen.findByText('Failed to load disclaimer.')
+    ).toBeDefined()
+  })
+
+  test('renders fallback text when response not ok', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: false,
+      text: () => Promise.resolve('loaded text'),
+    } as Response)
 
     render(<DisclaimerModal open={true} onOpenChange={() => {}} />)
 

@@ -18,7 +18,12 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ open, onOpenChange })
 
   useEffect(() => {
     fetch('/disclaimer.txt')
-      .then((res) => res.text())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Failed to fetch disclaimer');
+        }
+        return res.text();
+      })
       .then(setText)
       .catch(() => {
         setText('Failed to load disclaimer.');
