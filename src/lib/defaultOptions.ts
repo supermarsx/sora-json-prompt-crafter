@@ -1,4 +1,4 @@
-import type { SoraOptions } from '@/components/Dashboard'
+import type { SoraOptions } from '@/lib/soraOptions'
 
 export const DEFAULT_OPTIONS: SoraOptions = {
   prompt: 'A breathtaking cinematic scene of a futuristic city at sunset, flying cars zipping between glass skyscrapers, vibrant colors, ultra-detailed, 8K, masterful lighting, trending on ArtStation',

@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { CollapsibleSection } from '../CollapsibleSection';
-import { SoraOptions } from '../Dashboard';
+import type { SoraOptions } from '@/lib/soraOptions';
 
 interface CoreSettingsSectionProps {
   options: SoraOptions;

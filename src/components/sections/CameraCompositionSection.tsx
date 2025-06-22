@@ -6,7 +6,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { SearchableDropdown } from '../SearchableDropdown';
 import { MultiSelectDropdown } from '../MultiSelectDropdown';
 import { CollapsibleSection } from '../CollapsibleSection';
-import { SoraOptions } from '../Dashboard';
+import type { SoraOptions } from '@/lib/soraOptions';
 
 interface CameraCompositionSectionProps {
   options: SoraOptions;
