@@ -2,7 +2,22 @@ import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { trackEvent } from '@/lib/analytics'
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import {
   Copy,
   Check,
@@ -54,6 +69,8 @@ export const ActionBar: React.FC<ActionBarProps> = ({
 }) => {
   const [minimized, setMinimized] = useState(false);
   const [clearing, setClearing] = useState(false);
+  const [confirmDisable, setConfirmDisable] = useState(false)
+  const [confirmEnable, setConfirmEnable] = useState(false)
 
   if (minimized) {
     return (
@@ -118,10 +135,8 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
-              onToggleTracking()
-              const newStatus = !trackingEnabled
-              toast.success(newStatus ? 'Tracking enabled' : 'Tracking disabled')
-              trackEvent(trackingEnabled, 'toggle_tracking', { enabled: newStatus })
+              if (trackingEnabled) setConfirmDisable(true)
+              else setConfirmEnable(true)
             }}
             className="gap-2"
           >
@@ -166,6 +181,54 @@ export const ActionBar: React.FC<ActionBarProps> = ({
       >
         <ChevronDown className="w-4 h-4" />
       </Button>
+
+      <AlertDialog open={confirmDisable} onOpenChange={setConfirmDisable}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Disable tracking?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will stop sending analytics events.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                onToggleTracking()
+                toast.success('Tracking disabled')
+                trackEvent(trackingEnabled, 'toggle_tracking', { enabled: false })
+                setConfirmDisable(false)
+              }}
+            >
+              Disable
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={confirmEnable} onOpenChange={setConfirmEnable}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Enable tracking?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will resume sending anonymous analytics events.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                onToggleTracking()
+                toast.success('Tracking enabled')
+                trackEvent(true, 'toggle_tracking', { enabled: true })
+                setConfirmEnable(false)
+              }}
+            >
+              Enable
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

@@ -27,6 +27,6 @@ export function trackEvent(
     }
   ).gtag
   if (typeof gtag === 'function') {
-    gtag('event', event, params)
+    gtag('event', event, { send_to: 'G-RVR9TSBQL7', ...params })
   }
 }
