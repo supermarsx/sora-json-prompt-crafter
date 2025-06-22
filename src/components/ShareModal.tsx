@@ -53,6 +53,10 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, jsonCon
   };
 
   const copyLink = async () => {
+    if (!('clipboard' in navigator)) {
+      toast.error('Clipboard not supported');
+      return;
+    }
     try {
       await navigator.clipboard.writeText(window.location.href);
       setCopied(true);

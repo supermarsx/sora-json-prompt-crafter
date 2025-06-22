@@ -98,6 +98,10 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
 
 
   const exportClipboard = async () => {
+    if (!('clipboard' in navigator)) {
+      toast.error('Clipboard not supported')
+      return
+    }
     try {
       await navigator.clipboard.writeText(JSON.stringify(history, null, 2))
       toast.success('Copied all history to clipboard!')

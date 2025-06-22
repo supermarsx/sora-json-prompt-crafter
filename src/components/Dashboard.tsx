@@ -156,6 +156,10 @@ const Dashboard = () => {
   }, [options])
 
   const copyToClipboard = async () => {
+    if (!('clipboard' in navigator)) {
+      toast.error('Clipboard not supported');
+      return;
+    }
     try {
       await navigator.clipboard.writeText(jsonString);
       setCopied(true);
@@ -279,6 +283,10 @@ const Dashboard = () => {
   const clearHistory = () => setHistory([]);
 
   const copyHistoryEntry = async (json: string) => {
+    if (!('clipboard' in navigator)) {
+      toast.error('Clipboard not supported');
+      return;
+    }
     try {
       await navigator.clipboard.writeText(json);
       toast.success('Sora JSON copied to clipboard!');
