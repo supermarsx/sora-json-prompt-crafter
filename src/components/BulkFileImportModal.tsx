@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/sonner-toast';
+import { isValidOptions } from '@/lib/validateOptions'
 
 interface BulkFileImportModalProps {
   open: boolean;
@@ -34,19 +35,21 @@ const BulkFileImportModal: React.FC<BulkFileImportModalProps> = ({
     try {
       const text = await file.text();
       const parsed = JSON.parse(text);
-      const jsons = Array.isArray(parsed)
-        ? parsed.map(j => {
-            if (typeof j === 'string') return j;
-            if (j && typeof j === 'object' && 'json' in j) return j.json as string;
-            return JSON.stringify(j);
-          })
-        : [
-            typeof parsed === 'string'
-              ? parsed
-              : parsed && typeof parsed === 'object' && 'json' in parsed
-                ? (parsed as { json: string }).json
-                : JSON.stringify(parsed),
-          ];
+      const arr = Array.isArray(parsed) ? parsed : [parsed];
+      const jsons: string[] = [];
+      for (const item of arr) {
+        let obj: unknown = item;
+        if (typeof item === 'string') {
+          try { obj = JSON.parse(item); } catch { obj = undefined; }
+        } else if (item && typeof item === 'object' && 'json' in item) {
+          obj = (item as { json: string }).json;
+          try { obj = JSON.parse(String(obj)); } catch {}
+        }
+        if (obj && typeof obj === 'object' && isValidOptions(obj)) {
+          jsons.push(JSON.stringify(obj));
+        }
+      }
+      if (!jsons.length) throw new Error('invalid');
       onImport(jsons);
       toast.success('File imported!');
       trackEvent(trackingEnabled, 'history_import', { type: 'bulk_file' })
