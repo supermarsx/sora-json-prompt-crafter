@@ -247,11 +247,11 @@ const Dashboard = () => {
     setOptions(prev => {
       const newOptions = { ...prev };
       const keys = path.split('.');
-      let current: any = newOptions;
+      let current: Record<string, unknown> = newOptions;
       
       for (let i = 0; i < keys.length - 1; i++) {
-        current[keys[i]] = { ...current[keys[i]] };
-        current = current[keys[i]];
+        current[keys[i]] = { ...(current[keys[i]] as Record<string, unknown>) };
+        current = current[keys[i]] as Record<string, unknown>;
       }
       
       current[keys[keys.length - 1]] = value;
@@ -349,7 +349,7 @@ const Dashboard = () => {
       const flagUpdates: Partial<SoraOptions> = {};
       Object.keys(obj).forEach(key => {
         const flag = enableMap[key as keyof typeof enableMap];
-        if (flag) (flagUpdates as any)[flag] = true;
+        if (flag) flagUpdates[flag as keyof SoraOptions] = true;
         if (key.startsWith('dnd_')) flagUpdates.use_dnd_section = true;
         if (key === 'width' || key === 'height') flagUpdates.use_dimensions = true;
       });
