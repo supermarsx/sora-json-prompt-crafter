@@ -1,6 +1,7 @@
 import BulkFileImportModal from '../BulkFileImportModal'
 import ClipboardImportModal from '../ClipboardImportModal'
 import DisclaimerModal from '../DisclaimerModal'
+import type React from 'react'
 
 import HistoryPanelDefault, { HistoryPanel } from '../HistoryPanel'
 import ImportModalDefault, { ImportModal } from '../ImportModal'
@@ -35,6 +36,9 @@ describe('component export tests', () => {
     ImportModal: [ImportModalDefault, ImportModal],
   }
 
+  const bothEntries: [string, [React.ComponentType, React.ComponentType]][] =
+    Object.entries(both) as [string, [React.ComponentType, React.ComponentType]][]
+
   for (const [name, component] of Object.entries(defaultOnly)) {
     test(`${name} default export is defined`, () => {
       expect(component).toBeDefined()
@@ -47,7 +51,7 @@ describe('component export tests', () => {
     })
   }
 
-  for (const [name, [def, named]] of Object.entries(both) as any) {
+  for (const [name, [def, named]] of bothEntries) {
     test(`${name} default equals named export`, () => {
       expect(def).toBeDefined()
       expect(named).toBeDefined()
