@@ -1,3 +1,4 @@
+
 import { reducer } from '../use-toast'
 
 const baseToast = {
@@ -18,13 +19,13 @@ describe('use-toast reducer', () => {
       { toasts: [baseToast] },
       { type: 'UPDATE_TOAST', toast: { id: '1', title: 'Updated' } }
     )
-    expect(state.toasts[0].title).toBe('Updated')
+    expect(state.toasts[0]?.title).toBe('Updated')
   })
 
   test('DISMISS_TOAST closes toast and REMOVE_TOAST removes it', () => {
     let state = { toasts: [baseToast] }
     state = reducer(state, { type: 'DISMISS_TOAST', toastId: '1' })
-    expect(state.toasts[0].open).toBe(false)
+    expect(state.toasts[0]?.open).toBe(false)
     state = reducer(state, { type: 'REMOVE_TOAST', toastId: '1' })
     expect(state.toasts).toHaveLength(0)
   })

@@ -40,6 +40,21 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
   isEnabled,
   onToggle
 }) => {
+  const handleSafetyFilterChange = (value: string) => {
+    // Map string values to the expected type
+    let safetyFilter: SoraOptions['safety_filter'];
+    if (value.includes('strict')) {
+      safetyFilter = 'strict';
+    } else if (value.includes('moderate')) {
+      safetyFilter = 'moderate';
+    } else if (value.includes('off')) {
+      safetyFilter = 'off';
+    } else {
+      safetyFilter = 'moderate'; // default fallback
+    }
+    updateOptions({ safety_filter: safetyFilter });
+  };
+
   return (
     <CollapsibleSection
       title="Enhancements"
@@ -93,7 +108,7 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
           <SearchableDropdown
             options={safetyFilterOptions}
             value={options.safety_filter || 'default (auto safety level)'}
-            onValueChange={(value) => updateOptions({ safety_filter: value })}
+            onValueChange={handleSafetyFilterChange}
             label="Safety Filter Options"
             disabled={!options.use_safety_filter}
           />
@@ -103,7 +118,7 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
           <Checkbox
             id="keep_typography_details"
             checked={options.keep_typography_details}
-            onCheckedChange={(checked) => updateOptions({ keep_typography_details: !!checked })}
+            onChec kedChange={(checked) => updateOptions({ keep_typography_details: !!checked })}
           />
           <Label htmlFor="keep_typography_details">Keep Typography Details</Label>
         </div>

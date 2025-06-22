@@ -220,11 +220,11 @@ const Dashboard = () => {
     setOptions(prev => {
       const next = { ...prev, ...updates }
       Object.keys(updates).forEach(key => {
-        const value = (updates as Record<string, unknown>)[key]
+        const value = updates[key as keyof SoraOptions]
         if (key.startsWith('use_')) {
           if (
             typeof value === 'boolean' &&
-            value !== (prev as Record<string, unknown>)[key]
+            value !== prev[key as keyof SoraOptions]
           ) {
             trackEvent(trackingEnabled, 'section_toggle', {
               section: key,
@@ -247,7 +247,7 @@ const Dashboard = () => {
     setOptions(prev => {
       const newOptions = { ...prev };
       const keys = path.split('.');
-      let current: Record<string, unknown> = newOptions as Record<string, unknown>;
+      let current: any = newOptions;
       
       for (let i = 0; i < keys.length - 1; i++) {
         current[keys[i]] = { ...current[keys[i]] };
@@ -349,7 +349,7 @@ const Dashboard = () => {
       const flagUpdates: Partial<SoraOptions> = {};
       Object.keys(obj).forEach(key => {
         const flag = enableMap[key as keyof typeof enableMap];
-        if (flag) (flagUpdates as Record<string, unknown>)[flag] = true;
+        if (flag) (flagUpdates as any)[flag] = true;
         if (key.startsWith('dnd_')) flagUpdates.use_dnd_section = true;
         if (key === 'width' || key === 'height') flagUpdates.use_dimensions = true;
       });
