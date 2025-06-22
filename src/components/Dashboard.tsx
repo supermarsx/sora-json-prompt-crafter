@@ -259,11 +259,21 @@ const Dashboard = () => {
       let current: Record<string, unknown> = newOptions;
       
       for (let i = 0; i < keys.length - 1; i++) {
-        current[keys[i]] = { ...(current[keys[i]] as Record<string, unknown>) };
-        current = current[keys[i]] as Record<string, unknown>;
+        const key = keys[i];
+        if (key === '__proto__' || key === 'constructor') {
+          console.warn(`Blocked unsafe property name: ${key}`);
+          return prev; // Return previous state to avoid unsafe modification
+        }
+        current[key] = { ...(current[key] as Record<string, unknown>) };
+        current = current[key] as Record<string, unknown>;
       }
       
-      current[keys[keys.length - 1]] = value;
+      const lastKey = keys[keys.length - 1];
+      if (lastKey === '__proto__' || lastKey === 'constructor') {
+        console.warn(`Blocked unsafe property name: ${lastKey}`);
+        return prev; // Return previous state to avoid unsafe modification
+      }
+      current[lastKey] = value;
       trackEvent(trackingEnabled, 'input_change')
       return newOptions;
     });
