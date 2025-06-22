@@ -66,6 +66,17 @@ npm run dev
 ```
 Then open http://localhost:8080 in your browser.
 
+### Docker
+
+Build and run a containerized version of the app:
+
+```sh
+docker build -t sora-json-prompt-crafter .
+docker run -p 8080:8080 sora-json-prompt-crafter
+```
+
+The application will then be available at http://localhost:8080.
+
 ### Running Tests
 
 ```sh
