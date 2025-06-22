@@ -1,5 +1,22 @@
 import type { SoraOptions } from '@/lib/soraOptions'
 
+function removeProps(
+  obj: Record<string, unknown>,
+  keys: (keyof SoraOptions)[]
+) {
+  keys.forEach(k => {
+    delete obj[k as string]
+  })
+}
+
+function removeIfDisabled(
+  obj: Record<string, unknown>,
+  enabled: boolean,
+  keys: (keyof SoraOptions)[]
+) {
+  if (!enabled) removeProps(obj, keys)
+}
+
 export function generateJson(options: SoraOptions): string {
   const cleanOptions = { ...options }
 
@@ -8,205 +25,169 @@ export function generateJson(options: SoraOptions): string {
       delete (cleanOptions as Record<string, unknown>)[key]
     }
   })
-
-  if (!options.use_core_settings) {
-    delete cleanOptions.seed
-    delete cleanOptions.steps
-    delete cleanOptions.guidance_scale
-    delete cleanOptions.temperature
-    delete cleanOptions.cfg_rescale
-    delete cleanOptions.quality
-  }
+  removeIfDisabled(cleanOptions, options.use_core_settings, [
+    'seed',
+    'steps',
+    'guidance_scale',
+    'temperature',
+    'cfg_rescale',
+    'quality',
+  ])
 
   if (!options.use_dimensions_format) {
-    delete cleanOptions.width
-    delete cleanOptions.height
-    delete cleanOptions.aspect_ratio
-    delete cleanOptions.output_format
-    delete cleanOptions.dynamic_range
-  } else if (!options.use_dimensions) {
-    delete cleanOptions.width
-    delete cleanOptions.height
+    removeProps(cleanOptions, [
+      'width',
+      'height',
+      'aspect_ratio',
+      'output_format',
+      'dynamic_range',
+    ])
+  } else {
+    removeIfDisabled(cleanOptions, options.use_dimensions, ['width', 'height'])
   }
 
-  if (!options.use_style_preset) {
-    delete cleanOptions.style_preset
-  }
-
-  if (!options.use_negative_prompt) {
-    delete cleanOptions.negative_prompt
-  }
+  removeIfDisabled(cleanOptions, options.use_style_preset, ['style_preset'])
+  removeIfDisabled(cleanOptions, options.use_negative_prompt, ['negative_prompt'])
 
   if (!options.use_material) {
-    delete cleanOptions.made_out_of
-    delete cleanOptions.secondary_material
-  } else if (!options.use_secondary_material) {
-    delete cleanOptions.secondary_material
+    removeProps(cleanOptions, ['made_out_of', 'secondary_material'])
+  } else {
+    removeIfDisabled(cleanOptions, options.use_secondary_material, [
+      'secondary_material',
+    ])
   }
 
   if (!options.use_camera_composition) {
-    delete cleanOptions.camera_angle
-    delete cleanOptions.shot_type
-    delete cleanOptions.subject_focus
-    delete cleanOptions.composition_rules
-    delete cleanOptions.camera_type
-    delete cleanOptions.lens_type
+    removeProps(cleanOptions, [
+      'camera_angle',
+      'shot_type',
+      'subject_focus',
+      'composition_rules',
+      'camera_type',
+      'lens_type',
+    ])
   }
 
-  if (!options.use_aperture) {
-    delete cleanOptions.aperture
-  }
-
-  if (!options.use_lens_type) {
-    delete cleanOptions.lens_type
-  }
-
-  if (!options.use_dof) {
-    delete cleanOptions.depth_of_field
-  }
-
-  if (!options.use_blur_style) {
-    delete cleanOptions.blur_style
-  }
-
-  if (!options.use_color_grading) {
-    delete cleanOptions.color_grade
-  }
-
-  if (!options.use_lighting) {
-    delete cleanOptions.lighting
-  }
+  removeIfDisabled(cleanOptions, options.use_aperture, ['aperture'])
+  removeIfDisabled(cleanOptions, options.use_lens_type, ['lens_type'])
+  removeIfDisabled(cleanOptions, options.use_dof, ['depth_of_field'])
+  removeIfDisabled(cleanOptions, options.use_blur_style, ['blur_style'])
+  removeIfDisabled(cleanOptions, options.use_color_grading, ['color_grade'])
+  removeIfDisabled(cleanOptions, options.use_lighting, ['lighting'])
 
   if (!options.use_motion_animation) {
-    delete cleanOptions.duration_seconds
-    delete cleanOptions.fps
-    delete cleanOptions.motion_strength
-    delete cleanOptions.camera_motion
-    delete cleanOptions.motion_direction
-    delete cleanOptions.frame_interpolation
-  } else if (!options.use_duration) {
-    delete cleanOptions.duration_seconds
+    removeProps(cleanOptions, [
+      'duration_seconds',
+      'fps',
+      'motion_strength',
+      'camera_motion',
+      'motion_direction',
+      'frame_interpolation',
+    ])
+  } else {
+    removeIfDisabled(cleanOptions, options.use_duration, ['duration_seconds'])
   }
 
   if (!options.use_enhancement_safety) {
-    delete cleanOptions.prevent_deformities
-    delete cleanOptions.upscale
-    delete cleanOptions.safety_filter
-    delete cleanOptions.keep_typography_details
-    delete cleanOptions.quality_booster
-    delete cleanOptions.enhance_object_reflections
-    delete cleanOptions.keep_key_details
+    removeProps(cleanOptions, [
+      'prevent_deformities',
+      'upscale',
+      'safety_filter',
+      'keep_typography_details',
+      'quality_booster',
+      'enhance_object_reflections',
+      'keep_key_details',
+    ])
   } else {
-    if (!options.use_safety_filter) {
-      delete cleanOptions.safety_filter
-    }
-    if (!options.use_quality_booster) {
-      delete cleanOptions.quality_booster
-    }
+    removeIfDisabled(cleanOptions, options.use_safety_filter, ['safety_filter'])
+    removeIfDisabled(cleanOptions, options.use_quality_booster, ['quality_booster'])
   }
 
   if (!options.use_face_enhancements) {
-    delete cleanOptions.add_same_face
-    delete cleanOptions.dont_change_face
-    delete cleanOptions.subject_gender
-    delete cleanOptions.makeup_style
-    delete cleanOptions.character_mood
+    removeProps(cleanOptions, [
+      'add_same_face',
+      'dont_change_face',
+      'subject_gender',
+      'makeup_style',
+      'character_mood',
+    ])
   } else {
-    if (!options.use_subject_gender) {
-      delete cleanOptions.subject_gender
-    }
-    if (!options.use_makeup_style) {
-      delete cleanOptions.makeup_style
-    }
-    if (!options.use_character_mood) {
-      delete cleanOptions.character_mood
-    }
+    removeIfDisabled(cleanOptions, options.use_subject_gender, ['subject_gender'])
+    removeIfDisabled(cleanOptions, options.use_makeup_style, ['makeup_style'])
+    removeIfDisabled(cleanOptions, options.use_character_mood, ['character_mood'])
   }
 
-  if (!options.use_signature) {
-    delete cleanOptions.signature
-  }
+  removeIfDisabled(cleanOptions, options.use_signature, ['signature'])
 
   if (!options.use_settings_location) {
-    delete cleanOptions.year
-    delete cleanOptions.environment
-    delete cleanOptions.location
-    delete cleanOptions.season
-    delete cleanOptions.atmosphere_mood
+    removeProps(cleanOptions, [
+      'year',
+      'environment',
+      'location',
+      'season',
+      'atmosphere_mood',
+    ])
   } else {
-    if (!options.use_environment) {
-      delete cleanOptions.environment
-    }
-    if (!options.use_location) {
-      delete cleanOptions.location
-    }
+    removeIfDisabled(cleanOptions, options.use_environment, ['environment'])
+    removeIfDisabled(cleanOptions, options.use_location, ['location'])
   }
 
-  if (!options.use_season) {
-    delete cleanOptions.season
-  }
-  if (!options.use_atmosphere_mood) {
-    delete cleanOptions.atmosphere_mood
-  }
-  if (!options.use_subject_mood) {
-    delete cleanOptions.subject_mood
-  }
+  removeIfDisabled(cleanOptions, options.use_season, ['season'])
+  removeIfDisabled(cleanOptions, options.use_atmosphere_mood, ['atmosphere_mood'])
+  removeIfDisabled(cleanOptions, options.use_subject_mood, ['subject_mood'])
+
   if (!options.use_sword_type) {
-    delete cleanOptions.sword_type
-    delete cleanOptions.sword_vibe
+    removeProps(cleanOptions, ['sword_type', 'sword_vibe'])
   }
-  if (!options.use_upscale_factor) {
-    delete cleanOptions.upscale
-  }
+
+  removeIfDisabled(cleanOptions, options.use_upscale_factor, ['upscale'])
 
   if (!options.use_dnd_section) {
-    delete cleanOptions.dnd_character_race
-    delete cleanOptions.dnd_character_class
-    delete cleanOptions.dnd_character_background
-    delete cleanOptions.dnd_character_alignment
-    delete cleanOptions.dnd_monster_type
-    delete cleanOptions.dnd_environment
-    delete cleanOptions.dnd_magic_school
-    delete cleanOptions.dnd_item_type
+    removeProps(cleanOptions, [
+      'dnd_character_race',
+      'dnd_character_class',
+      'dnd_character_background',
+      'dnd_character_alignment',
+      'dnd_monster_type',
+      'dnd_environment',
+      'dnd_magic_school',
+      'dnd_item_type',
+    ])
   } else {
-    if (!options.use_dnd_character_race) {
-      delete cleanOptions.dnd_character_race
-    }
-    if (!options.use_dnd_character_class) {
-      delete cleanOptions.dnd_character_class
-    }
-    if (!options.use_dnd_character_background) {
-      delete cleanOptions.dnd_character_background
-    }
-    if (!options.use_dnd_character_alignment) {
-      delete cleanOptions.dnd_character_alignment
-    }
-    if (!options.use_dnd_monster_type) {
-      delete cleanOptions.dnd_monster_type
-    }
-    if (!options.use_dnd_environment) {
-      delete cleanOptions.dnd_environment
-    }
-    if (!options.use_dnd_magic_school) {
-      delete cleanOptions.dnd_magic_school
-    }
-    if (!options.use_dnd_item_type) {
-      delete cleanOptions.dnd_item_type
-    }
+    removeIfDisabled(cleanOptions, options.use_dnd_character_race, [
+      'dnd_character_race',
+    ])
+    removeIfDisabled(cleanOptions, options.use_dnd_character_class, [
+      'dnd_character_class',
+    ])
+    removeIfDisabled(cleanOptions, options.use_dnd_character_background, [
+      'dnd_character_background',
+    ])
+    removeIfDisabled(cleanOptions, options.use_dnd_character_alignment, [
+      'dnd_character_alignment',
+    ])
+    removeIfDisabled(cleanOptions, options.use_dnd_monster_type, [
+      'dnd_monster_type',
+    ])
+    removeIfDisabled(cleanOptions, options.use_dnd_environment, ['dnd_environment'])
+    removeIfDisabled(cleanOptions, options.use_dnd_magic_school, ['dnd_magic_school'])
+    removeIfDisabled(cleanOptions, options.use_dnd_item_type, ['dnd_item_type'])
   }
 
-  delete (cleanOptions as Record<string, unknown>).use_dimensions
-  delete (cleanOptions as Record<string, unknown>).use_signature
-  delete (cleanOptions as Record<string, unknown>).use_motion_animation
-  delete (cleanOptions as Record<string, unknown>).use_enhancement_safety
-  delete (cleanOptions as Record<string, unknown>).use_settings_location
-  delete (cleanOptions as Record<string, unknown>).use_season
-  delete (cleanOptions as Record<string, unknown>).use_atmosphere_mood
-  delete (cleanOptions as Record<string, unknown>).use_subject_mood
-  delete (cleanOptions as Record<string, unknown>).use_sword_type
-  delete (cleanOptions as Record<string, unknown>).use_style_preset
-  delete (cleanOptions as Record<string, unknown>).use_negative_prompt
-  delete (cleanOptions as Record<string, unknown>).use_camera_composition
+  removeProps(cleanOptions, [
+    'use_dimensions',
+    'use_signature',
+    'use_motion_animation',
+    'use_enhancement_safety',
+    'use_settings_location',
+    'use_season',
+    'use_atmosphere_mood',
+    'use_subject_mood',
+    'use_sword_type',
+    'use_style_preset',
+    'use_negative_prompt',
+    'use_camera_composition',
+  ])
   delete (cleanOptions as { image_count?: number }).image_count
 
   Object.keys(cleanOptions).forEach(k => {
