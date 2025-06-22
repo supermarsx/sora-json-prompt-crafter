@@ -40,8 +40,10 @@ const restoreClipboard = () => {
 
 describe('clipboard fallback', () => {
   const originalMatchMedia = window.matchMedia
+  let warnSpy: jest.SpyInstance
 
   beforeEach(() => {
+    warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
     ;(toast.error as jest.Mock).mockClear()
     ;(toast.success as jest.Mock).mockClear()
     global.fetch = jest.fn().mockResolvedValue({
@@ -55,6 +57,7 @@ describe('clipboard fallback', () => {
 
   afterEach(() => {
     window.matchMedia = originalMatchMedia
+    warnSpy.mockRestore()
   })
 
   test('ShareModal copy shows error', () => {
