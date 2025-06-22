@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -69,6 +70,7 @@ const BulkFileImportModal: React.FC<BulkFileImportModalProps> = ({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Bulk File Import</DialogTitle>
+          <DialogDescription>Select a JSON file to import prompts.</DialogDescription>
         </DialogHeader>
         <Input type="file" accept=".json" onChange={e => setFile(e.target.files?.[0] || null)} />
         <DialogFooter>
