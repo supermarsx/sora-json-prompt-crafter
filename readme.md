@@ -116,6 +116,10 @@ After completing the prompts, Vercel will upload the `dist` folder and provide a
 URL where your application is hosted. You can use any other hosting provider in
 a similar fashion by pointing it to the `dist` folder.
 
+## Environment Variables
+
+- **`VITE_MEASUREMENT_ID`** (optional) – Google Analytics measurement ID. Defaults to `G-RVR9TSBQL7` if not set.
+
 ## Contributing
 
 Pull requests are welcome. Please open an issue first to discuss major changes.
