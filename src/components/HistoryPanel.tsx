@@ -4,6 +4,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
@@ -180,6 +181,9 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>History</DialogTitle>
+            <DialogDescription>
+              Review and manage your saved prompts and recent actions.
+            </DialogDescription>
           </DialogHeader>
           <Tabs value={tab} onValueChange={setTab}>
             <TabsList className="mb-4">
@@ -456,6 +460,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>JSON Preview</DialogTitle>
+            <DialogDescription>Preview the generated JSON output.</DialogDescription>
           </DialogHeader>
           {preview && (
             <ScrollArea className="h-[60vh]">

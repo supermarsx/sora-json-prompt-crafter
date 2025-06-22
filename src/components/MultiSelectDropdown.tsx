@@ -4,7 +4,8 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -74,6 +75,9 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
       <DialogContent className="max-w-md max-h-[80vh]">
         <DialogHeader>
           <DialogTitle>{label}</DialogTitle>
+          <DialogDescription>
+            Search for options and select any that apply.
+          </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
           <div className="relative">
