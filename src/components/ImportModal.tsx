@@ -5,6 +5,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -46,6 +47,9 @@ export const ImportModal: React.FC<ImportModalProps> = ({ isOpen, onClose, onImp
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Import JSON</DialogTitle>
+          <DialogDescription>
+            Paste JSON or choose a file to import your prompt.
+          </DialogDescription>
         </DialogHeader>
         <div className="space-y-2 py-4">
           <Textarea

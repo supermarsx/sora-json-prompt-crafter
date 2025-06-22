@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Facebook, Twitter, Instagram, MessageCircle, Send, Copy, Check } from 'lucide-react';
@@ -73,6 +74,9 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, jsonCon
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Share your JSON prompt</DialogTitle>
+          <DialogDescription>
+            Choose a platform below or copy a direct link.
+          </DialogDescription>
         </DialogHeader>
         <div className="grid grid-cols-2 gap-4 py-4">
           <Button onClick={shareToFacebook} variant="outline" className="gap-2">
