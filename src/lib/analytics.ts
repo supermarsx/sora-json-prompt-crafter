@@ -2,6 +2,7 @@ const MEASUREMENT_ID = 'G-RVR9TSBQL7'
 
 let trackingFailures = 0
 let trackingDead = false
+let gtagMissingLogged = false
 
 export function trackEvent(
   enabled: boolean,
@@ -34,8 +35,15 @@ export function trackEvent(
     }
   ).gtag
 
+  if (typeof gtag !== 'function') {
+    if (!gtagMissingLogged) {
+      console.error('Tracking Analytics: gtag function missing.')
+      gtagMissingLogged = true
+    }
+    return
+  }
+
   try {
-    if (typeof gtag !== 'function') console.error('Tracking Analytics: gtag function missing.')
     gtag('event', 'page_action', {
       send_to: MEASUREMENT_ID,
       action: event,
