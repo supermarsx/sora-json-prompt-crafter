@@ -67,16 +67,22 @@ const Dashboard = () => {
   }>()
 
   useEffect(() => {
-    fetch('https://api.github.com/repos/supermarsx/sora-json-prompt-crafter')
-      .then(res => res.json())
-      .then(data =>
+    const loadStats = async () => {
+      try {
+        const res = await fetch(
+          'https://api.github.com/repos/supermarsx/sora-json-prompt-crafter'
+        )
+        const data = await res.json()
         setGithubStats({
           stars: data.stargazers_count,
           forks: data.forks_count,
           issues: data.open_issues_count,
         })
-      )
-      .catch(() => {})
+      } catch (error) {
+        toast.error('Failed to load GitHub stats')
+      }
+    }
+    void loadStats()
   }, [])
 
   useEffect(() => {
