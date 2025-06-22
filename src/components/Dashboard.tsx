@@ -21,18 +21,26 @@ import { DEFAULT_OPTIONS } from '@/lib/defaultOptions'
 import { generateJson } from '@/lib/generateJson'
 import type { SoraOptions } from '@/lib/soraOptions'
 
-
 const Dashboard = () => {
-  const [options, setOptions] = useState<SoraOptions>(DEFAULT_OPTIONS);
+  const [options, setOptions] = useState<SoraOptions>(() => {
+    try {
+      return DEFAULT_OPTIONS;
+    } catch (error) {
+      console.error('Error initializing options:', error);
+      return DEFAULT_OPTIONS;
+    }
+  });
 
   const [copied, setCopied] = useState(false);
   const [jsonString, setJsonString] = useState(() => {
     try {
-      return localStorage.getItem('currentJson') || '';
-    } catch {
-      return '';
+      return localStorage.getItem('currentJson') || '{}';
+    } catch (error) {
+      console.error('Error reading from localStorage:', error);
+      return '{}';
     }
   });
+
   const [showShareModal, setShowShareModal] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
@@ -40,7 +48,8 @@ const Dashboard = () => {
   const [history, setHistory] = useState<HistoryEntry[]>(() => {
     try {
       return JSON.parse(localStorage.getItem('jsonHistory') || '[]');
-    } catch {
+    } catch (error) {
+      console.error('Error parsing history from localStorage:', error);
       return [];
     }
   });
@@ -81,22 +90,34 @@ const Dashboard = () => {
   }, [trackingEnabled])
 
   useEffect(() => {
-    localStorage.setItem('jsonHistory', JSON.stringify(history));
+    try {
+      localStorage.setItem('jsonHistory', JSON.stringify(history));
+    } catch (error) {
+      console.error('Error saving history to localStorage:', error);
+    }
   }, [history]);
 
   useEffect(() => {
-    localStorage.setItem('currentJson', jsonString);
+    try {
+      localStorage.setItem('currentJson', jsonString);
+    } catch (error) {
+      console.error('Error saving JSON to localStorage:', error);
+    }
   }, [jsonString, trackingEnabled]);
 
   useEffect(() => {
-    const diff = diffChars(prevJsonRef.current, jsonString).filter(p => !p.removed);
-    prevJsonRef.current = jsonString;
-    setDiffParts(diff);
-    const timer = setTimeout(() => {
-      setDiffParts(diff.map(p => ({ ...p, added: false } as Change)));
-    }, 2000);
-    trackEvent(trackingEnabled, 'json_changed');
-    return () => clearTimeout(timer);
+    try {
+      const diff = diffChars(prevJsonRef.current, jsonString).filter(p => !p.removed);
+      prevJsonRef.current = jsonString;
+      setDiffParts(diff);
+      const timer = setTimeout(() => {
+        setDiffParts(diff.map(p => ({ ...p, added: false } as Change)));
+      }, 2000);
+      trackEvent(trackingEnabled, 'json_changed');
+      return () => clearTimeout(timer);
+    } catch (error) {
+      console.error('Error processing diff:', error);
+    }
   }, [jsonString, trackingEnabled]);
 
   useEffect(() => {
@@ -112,9 +133,14 @@ const Dashboard = () => {
   }, [jsonString]);
 
   useEffect(() => {
-    const json = generateJson(options)
-    setJsonString(json)
-    localStorage.setItem('currentJson', json)
+    try {
+      const json = generateJson(options)
+      setJsonString(json)
+      localStorage.setItem('currentJson', json)
+    } catch (error) {
+      console.error('Error generating JSON:', error);
+      setJsonString('{}');
+    }
   }, [options])
 
   const copyToClipboard = async () => {
