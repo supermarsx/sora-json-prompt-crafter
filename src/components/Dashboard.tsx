@@ -21,6 +21,7 @@ import { DEFAULT_OPTIONS } from '@/lib/defaultOptions'
 import { generateJson } from '@/lib/generateJson'
 import type { SoraOptions } from '@/lib/soraOptions'
 import { loadOptionsFromJson } from '@/lib/loadOptionsFromJson'
+import { isValidOptions } from '@/lib/validateOptions'
 
 const Dashboard = () => {
   const [options, setOptions] = useState<SoraOptions>(() => {
@@ -188,13 +189,14 @@ const Dashboard = () => {
 
   const importJson = (json: string) => {
     try {
-      const obj = JSON.parse(json);
-      setOptions(prev => ({ ...prev, ...obj }));
-      setShowImportModal(false);
-      toast.success('JSON imported!');
-      trackEvent(trackingEnabled, 'import_button');
+      const obj = JSON.parse(json)
+      if (!isValidOptions(obj)) throw new Error('invalid')
+      setOptions(prev => ({ ...prev, ...obj }))
+      setShowImportModal(false)
+      toast.success('JSON imported!')
+      trackEvent(trackingEnabled, 'import_button')
     } catch {
-      toast.error('Invalid JSON');
+      toast.error('Invalid JSON')
     }
   };
 
@@ -291,6 +293,7 @@ const Dashboard = () => {
   const editHistoryEntry = (json: string) => {
     try {
       const obj = JSON.parse(json);
+      if (!isValidOptions(obj)) throw new Error('invalid');
       const enableMap: Record<string, keyof SoraOptions> = {
         negative_prompt: 'use_negative_prompt',
         width: 'use_dimensions_format',

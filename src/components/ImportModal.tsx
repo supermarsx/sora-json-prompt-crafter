@@ -9,6 +9,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
+import { toast } from '@/components/ui/sonner-toast';
+import { isValidOptions } from '@/lib/validateOptions';
 
 interface ImportModalProps {
   isOpen: boolean;
@@ -28,10 +30,16 @@ export const ImportModal: React.FC<ImportModalProps> = ({ isOpen, onClose, onImp
   };
 
   const handleImport = () => {
-    onImport(text);
-    setText('');
-    onClose();
-  };
+    try {
+      const obj = JSON.parse(text)
+      if (!isValidOptions(obj)) throw new Error('invalid')
+      onImport(JSON.stringify(obj))
+      setText('')
+      onClose()
+    } catch {
+      toast.error('Invalid JSON')
+    }
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
