@@ -442,6 +442,12 @@ const Dashboard = () => {
         signature: 'use_signature',
       };
 
+      const allFlags = Object.keys(DEFAULT_OPTIONS).filter(k => k.startsWith('use_'));
+      const clearFlags: Partial<SoraOptions> = {};
+      allFlags.forEach(k => {
+        clearFlags[k as keyof SoraOptions] = false;
+      });
+
       const flagUpdates: Partial<SoraOptions> = {};
       Object.keys(obj).forEach(key => {
         const flag = enableMap[key as keyof typeof enableMap];
@@ -450,7 +456,7 @@ const Dashboard = () => {
         if (key === 'width' || key === 'height') flagUpdates.use_dimensions = true;
       });
       setJsonString('{}');
-      setOptions(prev => ({ ...prev, ...obj, ...flagUpdates }));
+      setOptions(prev => ({ ...prev, ...clearFlags, ...obj, ...flagUpdates }));
       document
         .getElementById('generated-json')
         ?.scrollIntoView({ behavior: 'smooth' });
