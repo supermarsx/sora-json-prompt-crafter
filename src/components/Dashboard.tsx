@@ -3,7 +3,7 @@ import { diffChars, Change } from 'diff';
 import { Sun, Moon, Heart, Github, Star, GitFork, Bug } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { toast } from 'sonner';
+import { toast } from '@/components/ui/sonner-toast';
 import { ControlPanel } from './ControlPanel';
 import { ShareModal } from './ShareModal';
 import { ProgressBar } from './ProgressBar';
