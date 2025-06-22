@@ -44,7 +44,7 @@ Example JSON output:
 
 ## Quick Start
 
-To start using the prompt crafterr locally clone and run using the following commands:
+To start using the prompt crafter locally clone and run using the following commands:
 
 ```sh
 git clone https://github.com/supermarsx/sora-json-prompt-crafter
