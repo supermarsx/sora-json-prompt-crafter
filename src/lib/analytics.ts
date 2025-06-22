@@ -1,3 +1,5 @@
+import { safeGet, safeSet } from './storage'
+
 const MEASUREMENT_ID = 'G-RVR9TSBQL7'
 
 let trackingFailures = 0
@@ -12,12 +14,14 @@ export function trackEvent(
   if (!enabled) return
 
   try {
-    const list = JSON.parse(
-      localStorage.getItem('trackingHistory') || '[]'
-    ) as { date: string; action: string }[]
+    const list = (safeGet<{ date: string; action: string }[]>(
+      'trackingHistory',
+      [],
+      true
+    ) as { date: string; action: string }[])
     list.unshift({ date: new Date().toLocaleString(), action: event })
     if (list.length > 100) list.length = 100
-    localStorage.setItem('trackingHistory', JSON.stringify(list))
+    if (!safeSet('trackingHistory', list, true)) throw new Error('fail')
     window.dispatchEvent(new Event('trackingHistoryUpdate'))
   } catch {
     console.error('Tracking History: There was an error.')
