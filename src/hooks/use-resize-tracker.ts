@@ -11,13 +11,18 @@ export function useResizeTracker(
     if (!el || typeof ResizeObserver === 'undefined') return
     let prevWidth = el.offsetWidth
     let prevHeight = el.offsetHeight
+    let lastTracked = 0
     const observer = new ResizeObserver(entries => {
       for (const entry of entries) {
         const { width, height } = entry.contentRect
         if (width !== prevWidth || height !== prevHeight) {
           prevWidth = width
           prevHeight = height
-          trackEvent(trackingEnabled, event)
+          const now = Date.now()
+          if (now - lastTracked > 1000) {
+            lastTracked = now
+            trackEvent(trackingEnabled, event)
+          }
         }
       }
     })
