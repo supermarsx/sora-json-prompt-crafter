@@ -2,6 +2,11 @@
 
 ![20250621_1737_AI's Infernal Escape_simple_compose_01jy9nh238fvabsq6x9kpv6f49](https://github.com/user-attachments/assets/76094d07-48cb-49ef-a342-e3afdd036dcd)
 
+![License](https://img.shields.io/github/license/supermarsx/sora-json-prompt-crafter?style=for-the-badge)
+![Build](https://img.shields.io/github/actions/workflow/status/supermarsx/sora-json-prompt-crafter/ci.yml?style=for-the-badge)
+![Stars](https://img.shields.io/github/stars/supermarsx/sora-json-prompt-crafter?style=for-the-badge)
+![Issues](https://img.shields.io/github/issues/supermarsx/sora-json-prompt-crafter?style=for-the-badge)
+
 
 Sora JSON Prompt Crafter is a web interface for building configuration files for Sora's generative models. Adjust sliders and dropdowns to fine‑tune parameters like style preset, aspect ratio, video duration and more. The app generates a JSON snippet you can copy and use directly with Sora.
 
