@@ -10,6 +10,12 @@ export function safeGet<T = string>(key: string, defaultValue: T | null = null, 
 }
 
 export function safeSet(key: string, value: unknown, stringify = false): boolean {
+  if (!stringify && typeof value !== 'string') {
+    console.warn(
+      `safeSet: value for key "${key}" must be a string when stringify is false`
+    )
+    return false
+  }
   try {
     const data = stringify ? JSON.stringify(value) : (value as string)
     localStorage.setItem(key, data)

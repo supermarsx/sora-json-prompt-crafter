@@ -15,6 +15,12 @@ describe('storage utils', () => {
     expect(warnSpy).toHaveBeenCalled()
   })
 
+  test('safeSet logs warning when value is not string and stringify is false', () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
+    expect(safeSet('k', { a: 1 })).toBe(false)
+    expect(warnSpy).toHaveBeenCalled()
+  })
+
   test('safeRemove logs warning when removeItem fails', () => {
     const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
     jest.spyOn(Storage.prototype, 'removeItem').mockImplementation(() => {
