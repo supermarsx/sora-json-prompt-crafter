@@ -118,7 +118,8 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
           <Checkbox
             id="keep_typography_details"
             checked={options.keep_typography_details}
-            onChec kedChange={(checked) => updateOptions({ keep_typography_details: !!checked })}
+            onCheckedChange={(checked) =>
+              updateOptions({ keep_typography_details: !!checked })}
           />
           <Label htmlFor="keep_typography_details">Keep Typography Details</Label>
         </div>
