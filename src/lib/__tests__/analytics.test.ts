@@ -33,6 +33,9 @@ describe('trackEvent', () => {
     const errorSpy = jest
       .spyOn(console, 'error')
       .mockImplementation(() => {})
+    const warnSpy = jest
+      .spyOn(console, 'warn')
+      .mockImplementation(() => {})
     const gtagMock = jest.fn()
     ;(window as unknown as { gtag?: jest.Mock }).gtag = gtagMock
     jest
@@ -47,6 +50,7 @@ describe('trackEvent', () => {
       'Tracking History: There was an error.'
     )
     expect(gtagMock).toHaveBeenCalled()
+    expect(warnSpy).toHaveBeenCalled()
   })
 
   test('does not call gtag when missing', () => {
