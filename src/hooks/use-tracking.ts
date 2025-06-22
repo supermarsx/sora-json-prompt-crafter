@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react'
+import { safeGet, safeSet } from '@/lib/storage'
 
 export function useTracking() {
   const [enabled, setEnabled] = useState(() => {
-    try {
-      const stored = localStorage.getItem('trackingEnabled')
-      return stored ? JSON.parse(stored) : true
-    } catch {
-      return true
+    const stored = safeGet('trackingEnabled')
+    if (stored !== null) {
+      try {
+        return JSON.parse(stored)
+      } catch {
+        return true
+      }
     }
+    return true
   })
 
   useEffect(() => {
-    try {
-      localStorage.setItem('trackingEnabled', JSON.stringify(enabled))
-    } catch {
-      /* ignore */
-    }
+    safeSet('trackingEnabled', JSON.stringify(enabled))
   }, [enabled])
 
   return [enabled, setEnabled] as const

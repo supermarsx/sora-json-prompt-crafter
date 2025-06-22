@@ -21,11 +21,12 @@ import { DEFAULT_OPTIONS } from '@/lib/defaultOptions'
 import { generateJson } from '@/lib/generateJson'
 import type { SoraOptions } from '@/lib/soraOptions'
 import { loadOptionsFromJson } from '@/lib/loadOptionsFromJson'
+import { safeGet, safeSet } from '@/lib/storage'
 
 const Dashboard = () => {
   const [options, setOptions] = useState<SoraOptions>(() => {
     try {
-      const stored = localStorage.getItem('currentJson')
+      const stored = safeGet('currentJson')
       if (stored) {
         const parsed = loadOptionsFromJson(stored)
         if (parsed) return parsed
@@ -39,26 +40,17 @@ const Dashboard = () => {
 
   const [copied, setCopied] = useState(false);
   const [jsonString, setJsonString] = useState(() => {
-    try {
-      return localStorage.getItem('currentJson') || '{}';
-    } catch (error) {
-      console.error('Error reading from localStorage:', error);
-      return '{}';
-    }
+    const stored = safeGet('currentJson')
+    return stored ?? '{}'
   });
 
   const [showShareModal, setShowShareModal] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
-  const [history, setHistory] = useState<HistoryEntry[]>(() => {
-    try {
-      return JSON.parse(localStorage.getItem('jsonHistory') || '[]');
-    } catch (error) {
-      console.error('Error parsing history from localStorage:', error);
-      return [];
-    }
-  });
+  const [history, setHistory] = useState<HistoryEntry[]>(() =>
+    safeGet<HistoryEntry[]>('jsonHistory', [], true)
+  );
   const jsonContainerRef = React.useRef<HTMLDivElement>(null);
   const prevJsonRef = React.useRef(jsonString);
   const [diffParts, setDiffParts] = useState<Change[] | null>(null);
@@ -96,20 +88,12 @@ const Dashboard = () => {
   }, [trackingEnabled])
 
   useEffect(() => {
-    try {
-      localStorage.setItem('jsonHistory', JSON.stringify(history));
-    } catch (error) {
-      console.error('Error saving history to localStorage:', error);
-    }
-  }, [history]);
+    safeSet('jsonHistory', history, true)
+  }, [history])
 
   useEffect(() => {
-    try {
-      localStorage.setItem('currentJson', jsonString);
-    } catch (error) {
-      console.error('Error saving JSON to localStorage:', error);
-    }
-  }, [jsonString, trackingEnabled]);
+    safeSet('currentJson', jsonString)
+  }, [jsonString, trackingEnabled])
 
   useEffect(() => {
     try {
@@ -142,13 +126,13 @@ const Dashboard = () => {
   useEffect(() => {
     if (firstLoadRef.current) {
       firstLoadRef.current = false
-      const stored = localStorage.getItem('currentJson')
+      const stored = safeGet('currentJson')
       if (stored) return
     }
     try {
       const json = generateJson(options)
       setJsonString(json)
-      localStorage.setItem('currentJson', json)
+      safeSet('currentJson', json)
     } catch (error) {
       console.error('Error generating JSON:', error)
       setJsonString('{}')

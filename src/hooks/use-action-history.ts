@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { safeGet } from '@/lib/storage'
 
 export interface ActionEntry {
   date: string
@@ -7,20 +8,12 @@ export interface ActionEntry {
 
 export function useActionHistory() {
   const [history, setHistory] = useState<ActionEntry[]>(() => {
-    try {
-      return JSON.parse(localStorage.getItem('trackingHistory') || '[]') as ActionEntry[]
-    } catch {
-      return []
-    }
+    return safeGet<ActionEntry[]>('trackingHistory', [], true)
   })
 
   useEffect(() => {
     const handler = () => {
-      try {
-        setHistory(JSON.parse(localStorage.getItem('trackingHistory') || '[]'))
-      } catch {
-        /* ignore */
-      }
+      setHistory(safeGet<ActionEntry[]>('trackingHistory', [], true))
     }
     window.addEventListener('trackingHistoryUpdate', handler)
     return () => window.removeEventListener('trackingHistoryUpdate', handler)
