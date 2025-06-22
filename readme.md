@@ -3,9 +3,9 @@
 ![Banner displaying an infernal scenario and a prompt running away from ghosts](https://github.com/user-attachments/assets/0f19ca8e-acd1-4fa7-aa96-cadf479956fc)
 
 ![License](https://img.shields.io/github/license/supermarsx/sora-json-prompt-crafter?style=for-the-badge)
-![Build](https://img.shields.io/github/actions/workflow/status/supermarsx/sora-json-prompt-crafter/ci.yml?style=for-the-badge)
 ![Commits](https://img.shields.io/github/commit-activity/t/supermarsx/sora-json-prompt-crafter?style=for-the-badge)
 ![Stars](https://img.shields.io/github/stars/supermarsx/sora-json-prompt-crafter?style=for-the-badge)
+![Build](https://img.shields.io/github/actions/workflow/status/supermarsx/sora-json-prompt-crafter/ci.yml?style=for-the-badge)
 ![Issues](https://img.shields.io/github/issues/supermarsx/sora-json-prompt-crafter?style=for-the-badge)
 
 
