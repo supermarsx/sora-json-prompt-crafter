@@ -69,6 +69,7 @@ Then open http://localhost:8080 in your browser.
 ```sh
 npm test
 ```
+You can also run `npm run typecheck` to verify TypeScript types.
 
 ## Screenshots
 
