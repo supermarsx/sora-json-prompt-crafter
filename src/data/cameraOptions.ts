@@ -10,7 +10,8 @@ export const shotTypeOptions = [
   "panoramic", "panorama", "static", "still", "freeze frame", "motion blur",
   "slow motion", "time-lapse", "macro", "cut-in", "cutaway", "insert detail",
   "subjective", "objective", "isometric"
-];
+] as const;
+export type ShotTypeOption = typeof shotTypeOptions[number];
 
 export const cameraAngleOptions = [
   "default", "as is", "not defined", "keep original", "eye-level", "high",
@@ -20,7 +21,8 @@ export const cameraAngleOptions = [
   "behind", "above", "below", "under", "point-of-view", "POV",
   "over-the-shoulder", "mirror", "reflection", "through-glass",
   "through-object", "hidden", "peek", "peeking", "side", "diagonal", "tilted"
-];
+] as const;
+export type CameraAngleOption = typeof cameraAngleOptions[number];
 
 export const compositionRulesOptions = [
   "rule of thirds", "golden ratio", "golden spiral", "diagonal method",
@@ -36,7 +38,8 @@ export const compositionRulesOptions = [
   "tight crop", "open composition", "closed composition", "high horizon",
   "low horizon", "eye-level perspective", "bird's eye perspective",
   "worm's eye perspective"
-];
+] as const;
+export type CompositionRulesOption = typeof compositionRulesOptions[number];
 
 export const cameraTypeOptions = [
   "default (auto/any camera)",
@@ -113,7 +116,8 @@ export const cameraTypeOptions = [
   "DJI Mavic 3 (drone camera)",
   "GoPro HERO12 Black (action camera)",
   "GoPro Max (360 action cam)"
-];
+] as const;
+export type CameraTypeOption = typeof cameraTypeOptions[number];
 
 export const lensTypeOptions = [
   "default",
@@ -153,7 +157,8 @@ export const lensTypeOptions = [
   "defocus 100mm",
   "superzoom 18-200mm",
   "perspective control 24mm"
-];
+] as const;
+export type LensTypeOption = typeof lensTypeOptions[number];
 
 export const apertureOptions = [
   "default (auto aperture)",
@@ -201,7 +206,8 @@ export const apertureOptions = [
   "f/51 (historic large format/technical use)",
   "f/57 (very rare, large format only)",
   "f/64 (famous Ansel Adams, Group f/64, maximum depth)"
-];
+] as const;
+export type ApertureOption = typeof apertureOptions[number];
 
 export const blurStyleOptions = [
   "default",
@@ -265,7 +271,8 @@ export const blurStyleOptions = [
   "neon blur",
   "glitter blur",
   "zoom burst blur"
-];
+] as const;
+export type BlurStyleOption = typeof blurStyleOptions[number];
 
 export const depthOfFieldOptions = [
   "default",
@@ -294,4 +301,5 @@ export const depthOfFieldOptions = [
   "subject in focus",
   "foreground in focus",
   "background in focus"
-];
+] as const;
+export type DepthOfFieldOption = typeof depthOfFieldOptions[number];

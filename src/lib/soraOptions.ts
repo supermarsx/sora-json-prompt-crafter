@@ -1,3 +1,14 @@
+import type {
+  ShotTypeOption,
+  CameraAngleOption,
+  CompositionRulesOption,
+  CameraTypeOption,
+  LensTypeOption,
+  ApertureOption,
+  BlurStyleOption,
+  DepthOfFieldOption,
+} from '@/data/cameraOptions';
+
 export interface SoraOptions {
   prompt: string
   negative_prompt: string
@@ -40,14 +51,14 @@ export interface SoraOptions {
   motion_strength: number
   camera_motion: string
   motion_direction: 'forward' | 'backward' | 'left' | 'right' | 'up' | 'down'
-  camera_angle: string
-  shot_type: string
+  camera_angle: CameraAngleOption
+  shot_type: ShotTypeOption
   subject_focus: 'center' | 'left' | 'right' | 'top' | 'bottom'
-  composition_rules: string[]
+  composition_rules: CompositionRulesOption[]
   lighting: string
   color_grade: string
-  depth_of_field: string
-  lens_type: string
+  depth_of_field: DepthOfFieldOption
+  lens_type: LensTypeOption
   frame_interpolation: 'smooth' | 'realistic' | 'sharp'
   upscale: number
   safety_filter: 'strict' | 'moderate' | 'off'
@@ -55,11 +66,11 @@ export interface SoraOptions {
   environment: string
   use_signature: boolean
   signature?: string
-  blur_style: string
-  aperture: string
+  blur_style: BlurStyleOption
+  aperture: ApertureOption
   use_motion_animation: boolean
   use_enhancement_safety: boolean
-  camera_type: string
+  camera_type: CameraTypeOption
   use_settings_location: boolean
   year: number
   use_season: boolean
