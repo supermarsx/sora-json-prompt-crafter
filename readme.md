@@ -58,23 +58,19 @@ Example JSON output:
 
 Add a screenshot of the app here (e.g. `public/placeholder.svg`).
 
-### Contributing
 
-Pull requests are welcome. Please open an issue first to discuss major changes.
 
-### Disclaimer
 
-The full legal disclaimer displayed in the application is stored in
-`public/disclaimer.txt`. This file is copied to the `dist` directory during the
-build so it can be viewed at `/disclaimer.txt` in production.
+## What technologies are used for this project?
 
-### License
+This project is built with:
 
-This project is licensed under the MIT License.
-
-## Project info
-
-**URL**: https://lovable.dev/projects/385b40c5-6b5e-49fc-9f0a-e6a0f9a36181
+- Vite
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
+- 
 
 ## How can I edit this code?
 
@@ -96,41 +92,18 @@ Follow these steps:
 
 ```sh
 # Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+git clone https://github.com/supermarsx/sora-json-prompt-crafter
 
 # Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+cd sora-json-prompt-crafter
 
 # Step 3: Install the necessary dependencies.
-npm i
+npm install
 
 # Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
 
 ## How can I deploy this project?
 
@@ -179,14 +152,16 @@ After completing the prompts, Vercel will upload the `dist` folder and provide a
 URL where your application is hosted. You can use any other hosting provider in
 a similar fashion by pointing it to the `dist` folder.
 
-## Can I connect a custom domain to my Lovable project?
+### Contributing
 
-Yes, you can!
+Pull requests are welcome. Please open an issue first to discuss major changes.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### Disclaimer
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+The full legal disclaimer displayed in the application is stored in
+`public/disclaimer.txt`. This file is copied to the `dist` directory during the
+build so it can be viewed at `/disclaimer.txt` in production.
 
-## CI Status
+### License
 
-[![CI](https://github.com/supermarsx/sora-json-prompt-crafter/actions/workflows/ci.yml/badge.svg)](https://github.com/supermarsx/sora-json-prompt-crafter/actions/workflows/ci.yml)
+This project is licensed under the MIT License.
