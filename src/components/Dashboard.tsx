@@ -264,7 +264,8 @@ const Dashboard = () => {
           console.warn(`Blocked unsafe property name: ${key}`);
           return prev; // Return previous state to avoid unsafe modification
         }
-        current[key] = { ...(current[key] as Record<string, unknown>) };
+        const val = current[key];
+        current[key] = typeof val === 'object' && val ? { ...val } : {};
         current = current[key] as Record<string, unknown>;
       }
       
