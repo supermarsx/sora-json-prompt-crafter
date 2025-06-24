@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "jest",
+    "coverage": "jest --coverage",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
