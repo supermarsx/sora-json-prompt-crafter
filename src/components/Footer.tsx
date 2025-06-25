@@ -7,10 +7,11 @@ interface FooterProps {
 const Footer: React.FC<FooterProps> = ({ onShowDisclaimer }) => {
   const commit = import.meta.env.VITE_COMMIT_HASH
   const date = import.meta.env.VITE_COMMIT_DATE
+  const year = new Date().getFullYear()
   return (
     <footer className="py-6 text-center text-sm text-muted-foreground">
       <p>
-        Open-Source Software made with ♥ @ 2025 –{' '}
+        Open-Source Software made with ♥ @ {year} –{' '}
         <a
           href="https://github.com/supermarsx/sora-json-prompt-crafter"
           className="underline"
