@@ -66,6 +66,7 @@ cd sora-json-prompt-crafter
 npm install
 npm run dev
 ```
+Copy `.env.example` to `.env` and adjust the variables. `VITE_MEASUREMENT_ID` holds your Google Analytics ID and `VITE_DISABLE_ANALYTICS` disables tracking.
 Then open http://localhost:8080 in your browser.
 
 ### Docker
@@ -146,9 +147,8 @@ a similar fashion by pointing it to the `dist` folder.
 
 Copy `.env.example` to `.env` and adjust values as needed.
 
-- **`VITE_MEASUREMENT_ID`** (optional) – Google Analytics measurement ID. Defaults to `G-RVR9TSBQL7` if not set.
-- **`VITE_DISABLE_ANALYTICS`** (optional) – Set to `true` to disable all analytics tracking.
-
+- **`VITE_MEASUREMENT_ID`** (optional) – Google Analytics measurement ID. Defaults to `G-RVR9TSBQL7` if not set. See `.env.example` for the placeholder.
+- **`VITE_DISABLE_ANALYTICS`** (optional) – Set to `true` to disable all analytics tracking. Example provided in `.env.example`.
 ## Contributing
 
 Pull requests are welcome. Please open an issue first to discuss major changes.
