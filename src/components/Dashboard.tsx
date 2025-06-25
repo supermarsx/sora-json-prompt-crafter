@@ -72,6 +72,9 @@ const Dashboard = () => {
         const res = await fetch(
           'https://api.github.com/repos/supermarsx/sora-json-prompt-crafter'
         )
+        if (!res.ok) {
+          throw new Error('non ok')
+        }
         const data = await res.json()
         setGithubStats({
           stars: data.stargazers_count,
