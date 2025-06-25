@@ -8,6 +8,7 @@ describe('DisclaimerModal', () => {
   beforeEach(() => {
     jest.restoreAllMocks()
     warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
+    localStorage.clear()
   })
 
   afterEach(() => {
@@ -50,7 +51,10 @@ describe('DisclaimerModal', () => {
   })
 
   test('does not fetch when closed', () => {
-    const mockFetch = jest.fn()
+    const mockFetch = jest.fn().mockResolvedValue({
+      ok: true,
+      text: () => Promise.resolve('should not fetch'),
+    } as Response)
     global.fetch = mockFetch
 
     render(<DisclaimerModal open={false} onOpenChange={() => {}} />)
@@ -94,6 +98,27 @@ describe('DisclaimerModal', () => {
     rerender(<DisclaimerModal open={true} onOpenChange={() => {}} />)
 
     expect(mockFetch).toHaveBeenCalledTimes(1)
+  })
+
+  test('uses cached disclaimer text on new mount', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      text: () => Promise.resolve('cached text'),
+    } as Response)
+
+    const { unmount } = render(
+      <DisclaimerModal open={true} onOpenChange={() => {}} />
+    )
+    expect(await screen.findByText('cached text')).toBeDefined()
+    unmount()
+
+    const mockFetch = jest.fn()
+    global.fetch = mockFetch
+
+    render(<DisclaimerModal open={true} onOpenChange={() => {}} />)
+
+    expect(await screen.findByText('cached text')).toBeDefined()
+    expect(mockFetch).not.toHaveBeenCalled()
   })
 
   test('no state update after unmount', async () => {

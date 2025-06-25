@@ -14,13 +14,27 @@ interface DisclaimerModalProps {
 }
 
 
+const STORAGE_KEY = 'disclaimerText'
+
 const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ open, onOpenChange }) => {
-  const [text, setText] = useState('');
-  const [hasFetched, setHasFetched] = useState(false);
+  const [text, setText] = useState('')
+  const [hasFetched, setHasFetched] = useState(false)
+
 
   useEffect(() => {
     if (!open || hasFetched) {
-      return;
+      return
+    }
+
+    try {
+      const cached = localStorage.getItem(STORAGE_KEY)
+      if (cached) {
+        setText(cached)
+        setHasFetched(true)
+        return
+      }
+    } catch {
+      // ignore localStorage errors
     }
 
     const controller = new AbortController();
@@ -46,7 +60,12 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ open, onOpenChange })
       })
       .then((txt) => {
         if (!signal.aborted) {
-          setText(txt);
+          setText(txt)
+          try {
+            localStorage.setItem(STORAGE_KEY, txt)
+          } catch {
+            // ignore localStorage errors
+          }
         }
       })
       .catch((err) => {
