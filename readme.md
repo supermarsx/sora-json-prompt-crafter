@@ -41,6 +41,7 @@ go "my eyes!" when there's bright white lights.
 - Advanced specialized prompting options
 - Artifact and defect correction presets
 - No-fuss tracking toggle
+- Works offline thanks to service worker caching of assets
 
 Example JSON output:
 
