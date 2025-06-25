@@ -18,17 +18,36 @@ jest.mock('@/lib/analytics', () => ({ __esModule: true, trackEvent: jest.fn() })
 jest.mock('@/components/ui/sonner-toast', () => ({ __esModule: true, toast: { success: jest.fn(), error: jest.fn() } }))
 
 describe('Dashboard github stats failure', () => {
+  const originalFetch = global.fetch
+
   beforeEach(() => {
     ;(toast.error as jest.Mock).mockClear()
     localStorage.clear()
-    global.fetch = jest.fn().mockRejectedValue(new Error('fail')) as unknown as typeof fetch
     window.matchMedia = jest.fn().mockReturnValue({
       addEventListener: jest.fn(),
       removeEventListener: jest.fn(),
     }) as unknown as typeof window.matchMedia
   })
 
-  test('shows toast when stats fail to load', async () => {
+  afterEach(() => {
+    global.fetch = originalFetch
+  })
+
+  test('shows toast when stats fetch rejects', async () => {
+    global.fetch = jest
+      .fn()
+      .mockRejectedValue(new Error('fail')) as unknown as typeof fetch
+    render(<Dashboard />)
+    await waitFor(() =>
+      expect(toast.error).toHaveBeenCalledWith('Failed to load GitHub stats')
+    )
+  })
+
+  test('shows toast when stats response is not ok', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: false,
+      json: jest.fn(),
+    } as unknown as Response)
     render(<Dashboard />)
     await waitFor(() =>
       expect(toast.error).toHaveBeenCalledWith('Failed to load GitHub stats')
