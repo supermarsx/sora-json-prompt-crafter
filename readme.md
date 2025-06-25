@@ -56,6 +56,8 @@ Example JSON output:
 
 ## Quick Start
 
+Requires **Node.js 18** or higher.
+
 To start using the prompt crafter locally clone and run using the following commands:
 
 ```sh
