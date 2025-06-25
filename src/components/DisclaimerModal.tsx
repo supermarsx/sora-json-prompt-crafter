@@ -26,7 +26,18 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ open, onOpenChange })
     const controller = new AbortController();
     const { signal } = controller;
 
-    fetch('/disclaimer.txt', { signal })
+    let disclaimerUrl: string | undefined
+    try {
+      disclaimerUrl = new Function(
+        'return import.meta.env.VITE_DISCLAIMER_URL'
+      )() as string | undefined
+    } catch {
+      if (typeof process !== 'undefined') {
+        disclaimerUrl = (process as any).env?.VITE_DISCLAIMER_URL
+      }
+    }
+    const url = disclaimerUrl ?? '/disclaimer.txt'
+    fetch(url, { signal })
       .then((res) => {
         if (!res.ok) {
           throw new Error('Failed to fetch disclaimer');

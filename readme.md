@@ -67,6 +67,7 @@ npm install
 npm run dev
 ```
 Copy `.env.example` to `.env` and adjust the variables. `VITE_MEASUREMENT_ID` holds your Google Analytics ID and `VITE_DISABLE_ANALYTICS` disables tracking.
+`VITE_DISCLAIMER_URL` can be set to load the disclaimer from a different URL.
 Then open http://localhost:8080 in your browser.
 
 ### Docker
@@ -149,6 +150,7 @@ Copy `.env.example` to `.env` and adjust values as needed.
 
 - **`VITE_MEASUREMENT_ID`** (optional) – Google Analytics measurement ID. Defaults to `G-RVR9TSBQL7` if not set. See `.env.example` for the placeholder.
 - **`VITE_DISABLE_ANALYTICS`** (optional) – Set to `true` to disable all analytics tracking. Example provided in `.env.example`.
+- **`VITE_DISCLAIMER_URL`** (optional) – URL for the disclaimer text. Defaults to `/disclaimer.txt`.
 ## Contributing
 
 Pull requests are welcome. Please open an issue first to discuss major changes.
@@ -157,7 +159,8 @@ Pull requests are welcome. Please open an issue first to discuss major changes.
 
 The full legal disclaimer displayed in the application is stored in
 `public/disclaimer.txt`. This file is copied to the `dist` directory during the
-build so it can be viewed at `/disclaimer.txt` in production.
+build so it can be viewed at `/disclaimer.txt` in production. You can change the
+location by setting `VITE_DISCLAIMER_URL`.
 
 ## Tracking/Analytics
 
