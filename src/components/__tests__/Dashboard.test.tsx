@@ -41,10 +41,10 @@ describe('Dashboard github stats failure', () => {
     await waitFor(() =>
       expect(toast.error).toHaveBeenCalledWith('Failed to load GitHub stats')
     )
-  })
+})
 
-  test('shows toast when stats response is not ok', async () => {
-    global.fetch = jest.fn().mockResolvedValue({
+test('shows toast when stats response is not ok', async () => {
+  global.fetch = jest.fn().mockResolvedValue({
       ok: false,
       json: jest.fn(),
     } as unknown as Response)
@@ -52,5 +52,41 @@ describe('Dashboard github stats failure', () => {
     await waitFor(() =>
       expect(toast.error).toHaveBeenCalledWith('Failed to load GitHub stats')
     )
+  })
+})
+
+describe('Dashboard github stats abort', () => {
+  const originalFetch = global.fetch
+  let warnSpy: jest.SpyInstance
+
+  beforeEach(() => {
+    warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {})
+    window.matchMedia = jest.fn().mockReturnValue({
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+    }) as unknown as typeof window.matchMedia
+  })
+
+  afterEach(() => {
+    global.fetch = originalFetch
+    warnSpy.mockRestore()
+  })
+
+  test('aborts fetch on unmount', async () => {
+    let aborted = false
+    global.fetch = jest.fn().mockImplementation((_url, init) => {
+      const signal = (init as RequestInit)?.signal
+      signal?.addEventListener('abort', () => {
+        aborted = true
+      })
+      return new Promise(() => {}) as unknown as Promise<Response>
+    }) as unknown as typeof fetch
+
+    const { unmount } = render(<Dashboard />)
+    unmount()
+
+    expect(aborted).toBe(true)
+    await Promise.resolve()
+    expect(warnSpy).not.toHaveBeenCalled()
   })
 })

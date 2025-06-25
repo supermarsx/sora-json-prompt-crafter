@@ -3,6 +3,7 @@ import { CoreSettingsSection } from '../sections/CoreSettingsSection'
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions'
 
 beforeAll(() => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ;(global as any).ResizeObserver = class {
     observe() {}
     unobserve() {}
