@@ -67,25 +67,35 @@ const Dashboard = () => {
   }>()
 
   useEffect(() => {
+    const controller = new AbortController()
+    const { signal } = controller
     const loadStats = async () => {
       try {
         const res = await fetch(
-          'https://api.github.com/repos/supermarsx/sora-json-prompt-crafter'
+          'https://api.github.com/repos/supermarsx/sora-json-prompt-crafter',
+          { signal }
         )
         if (!res.ok) {
           throw new Error('non ok')
         }
         const data = await res.json()
-        setGithubStats({
-          stars: data.stargazers_count,
-          forks: data.forks_count,
-          issues: data.open_issues_count,
-        })
+        if (!signal.aborted) {
+          setGithubStats({
+            stars: data.stargazers_count,
+            forks: data.forks_count,
+            issues: data.open_issues_count,
+          })
+        }
       } catch (error) {
-        toast.error('Failed to load GitHub stats')
+        if ((error as Error).name !== 'AbortError') {
+          toast.error('Failed to load GitHub stats')
+        }
       }
     }
     void loadStats()
+    return () => {
+      controller.abort()
+    }
   }, [])
 
   useEffect(() => {
