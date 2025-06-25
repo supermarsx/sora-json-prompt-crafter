@@ -47,7 +47,7 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ open, onOpenChange })
       )() as string | undefined
     } catch {
       if (typeof process !== 'undefined') {
-        disclaimerUrl = (process as any).env?.VITE_DISCLAIMER_URL
+        disclaimerUrl = (process as { env?: { VITE_DISCLAIMER_URL?: string } }).env?.VITE_DISCLAIMER_URL
       }
     }
     const url = disclaimerUrl ?? '/disclaimer.txt'
