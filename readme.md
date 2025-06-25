@@ -89,6 +89,13 @@ npm test
 ```
 You can also run `npm run typecheck` to verify TypeScript types.
 
+### Formatting Code
+
+```sh
+npm run format
+```
+Runs Prettier with the project's configuration to automatically format all files.
+
 ## Screenshots
 
 ![Base Screenshot](https://github.com/user-attachments/assets/6d254018-994f-47cf-b4d6-9ea6e6f08c12)
