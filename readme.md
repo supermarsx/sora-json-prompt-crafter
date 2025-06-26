@@ -11,16 +11,14 @@
 ![Build](https://img.shields.io/github/actions/workflow/status/supermarsx/sora-json-prompt-crafter/ci.yml?style=for-the-badge)
 ![Issues](https://img.shields.io/github/issues/supermarsx/sora-json-prompt-crafter?style=for-the-badge)
 
-
 Sora JSON Prompt Crafter is a web interface for building configuration files for Sora's
-generative models. Adjust sliders and dropdowns to fine‑tune parameters like style preset, 
-aspect ratio, video duration and more. The app generates a JSON snippet you can copy and 
-use directly with Sora. The app has a privacy-first approach where everything is kept on your 
-browser, no prompt data is shared or tracked. Dark mode is used as default for those of us that 
+generative models. Adjust sliders and dropdowns to fine‑tune parameters like style preset,
+aspect ratio, video duration and more. The app generates a JSON snippet you can copy and
+use directly with Sora. The app has a privacy-first approach where everything is kept on your
+browser, no prompt data is shared or tracked. Dark mode is used as default for those of us that
 go "my eyes!" when there's bright white lights.
 
 [![Go to Lovable](https://img.shields.io/badge/Demo-at%20%F0%9F%92%96%20Lovable-white?style=for-the-badge&logo=lovable)](https://sora-json-prompt-crafter.lovable.app)
-
 
 ## Features
 
@@ -67,8 +65,8 @@ cd sora-json-prompt-crafter
 npm install
 npm run dev
 ```
-Copy `.env.example` to `.env` and adjust the variables. `VITE_MEASUREMENT_ID` holds your Google Analytics ID and `VITE_DISABLE_ANALYTICS` disables tracking.
-`VITE_DISCLAIMER_URL` can be set to load the disclaimer from a different URL.
+
+Copy `.env.example` to `.env` and adjust the variables. `VITE_MEASUREMENT_ID` holds your Google Analytics ID and `VITE_DISABLE_ANALYTICS` disables tracking. `VITE_DISABLE_STATS` disables the GitHub stats fetch. `VITE_DISCLAIMER_URL` can be set to load the disclaimer from a different URL.
 Then open http://localhost:8080 in your browser.
 
 ### Docker
@@ -87,6 +85,7 @@ The application will then be available at http://localhost:8080.
 ```sh
 npm test
 ```
+
 You can also run `npm run typecheck` to verify TypeScript types.
 
 ### Formatting Code
@@ -94,6 +93,7 @@ You can also run `npm run typecheck` to verify TypeScript types.
 ```sh
 npm run format
 ```
+
 Runs Prettier with the project's configuration to automatically format all files.
 
 ## Screenshots
@@ -115,7 +115,7 @@ This project is built with:
 You can deploy the built application to any static hosting service. Below is a
 typical workflow using [Vercel](https://vercel.com) as an example. If you
 prefer, you can simply open
- [Lovable](https://lovable.dev/projects/385b40c5-6b5e-49fc-9f0a-e6a0f9a36181)
+[Lovable](https://lovable.dev/projects/385b40c5-6b5e-49fc-9f0a-e6a0f9a36181)
 and click **Share → Publish**.
 
 ### Deploy on Lovable
@@ -158,7 +158,9 @@ Copy `.env.example` to `.env` and adjust values as needed.
 
 - **`VITE_MEASUREMENT_ID`** (optional) – Google Analytics measurement ID. Defaults to `G-RVR9TSBQL7` if not set. See `.env.example` for the placeholder.
 - **`VITE_DISABLE_ANALYTICS`** (optional) – Set to `true` to disable all analytics tracking. Example provided in `.env.example`.
+- **`VITE_DISABLE_STATS`** (optional) – Set to `true` to disable fetching GitHub stats. Example provided in `.env.example`.
 - **`VITE_DISCLAIMER_URL`** (optional) – URL for the disclaimer text. Defaults to `/disclaimer.txt`.
+
 ## Contributing
 
 Pull requests are welcome. Please open an issue first to discuss major changes.
@@ -172,9 +174,9 @@ location by setting `VITE_DISCLAIMER_URL`.
 
 ## Tracking/Analytics
 
-Theres only anonymous usage that tracks actions but not data from the users that you 
-can enable or disable from the manage button dropdown. Be aware that disabling tracking 
-disables user side action log too. We ask kindly for you to still allow tracking for 
+Theres only anonymous usage that tracks actions but not data from the users that you
+can enable or disable from the manage button dropdown. Be aware that disabling tracking
+disables user side action log too. We ask kindly for you to still allow tracking for
 statistical and improvement purposes. No prompt data or inputs are ever tracked.
 
 ## License

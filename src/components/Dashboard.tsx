@@ -16,34 +16,35 @@ import { useIsSingleColumn } from '@/hooks/use-single-column';
 import { useDarkMode } from '@/hooks/use-dark-mode';
 import { useTracking } from '@/hooks/use-tracking';
 import { useActionHistory } from '@/hooks/use-action-history';
-import { trackEvent } from '@/lib/analytics'
-import { DEFAULT_OPTIONS } from '@/lib/defaultOptions'
-import { generateJson } from '@/lib/generateJson'
-import type { SoraOptions } from '@/lib/soraOptions'
-import { loadOptionsFromJson } from '@/lib/loadOptionsFromJson'
-import { OPTION_FLAG_MAP } from '@/lib/optionFlagMap'
-import { isValidOptions } from '@/lib/validateOptions'
-import { safeGet, safeSet } from '@/lib/storage'
+import { trackEvent } from '@/lib/analytics';
+import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
+import { generateJson } from '@/lib/generateJson';
+import type { SoraOptions } from '@/lib/soraOptions';
+import { loadOptionsFromJson } from '@/lib/loadOptionsFromJson';
+import { OPTION_FLAG_MAP } from '@/lib/optionFlagMap';
+import { isValidOptions } from '@/lib/validateOptions';
+import { safeGet, safeSet } from '@/lib/storage';
+import { DISABLE_STATS } from '@/lib/config';
 
 const Dashboard = () => {
   const [options, setOptions] = useState<SoraOptions>(() => {
     try {
-      const stored = safeGet('currentJson')
+      const stored = safeGet('currentJson');
       if (stored) {
-        const parsed = loadOptionsFromJson(stored)
-        if (parsed) return parsed
+        const parsed = loadOptionsFromJson(stored);
+        if (parsed) return parsed;
       }
-      return DEFAULT_OPTIONS
+      return DEFAULT_OPTIONS;
     } catch (error) {
-      console.error('Error initializing options:', error)
-      return DEFAULT_OPTIONS
+      console.error('Error initializing options:', error);
+      return DEFAULT_OPTIONS;
     }
-  })
+  });
 
   const [copied, setCopied] = useState(false);
   const [jsonString, setJsonString] = useState(() => {
-    const stored = safeGet('currentJson')
-    return stored ?? '{}'
+    const stored = safeGet('currentJson');
+    return stored ?? '{}';
   });
 
   const [showShareModal, setShowShareModal] = useState(false);
@@ -51,7 +52,7 @@ const Dashboard = () => {
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [history, setHistory] = useState<HistoryEntry[]>(() =>
-    safeGet<HistoryEntry[]>('jsonHistory', [], true)
+    safeGet<HistoryEntry[]>('jsonHistory', [], true),
   );
   const jsonContainerRef = React.useRef<HTMLDivElement>(null);
   const prevJsonRef = React.useRef(jsonString);
@@ -61,68 +62,74 @@ const Dashboard = () => {
   const [trackingEnabled, setTrackingEnabled] = useTracking();
   const actionHistory = useActionHistory();
   const [githubStats, setGithubStats] = useState<{
-    stars: number
-    forks: number
-    issues: number
-  }>()
+    stars: number;
+    forks: number;
+    issues: number;
+  }>();
 
   useEffect(() => {
-    const controller = new AbortController()
-    const { signal } = controller
+    if (DISABLE_STATS) return;
+    const controller = new AbortController();
+    const { signal } = controller;
     const loadStats = async () => {
       try {
         const res = await fetch(
           'https://api.github.com/repos/supermarsx/sora-json-prompt-crafter',
-          { signal }
-        )
+          { signal },
+        );
         if (!res.ok) {
-          throw new Error('non ok')
+          throw new Error('non ok');
         }
-        const data = await res.json()
+        const data = await res.json();
         if (!signal.aborted) {
           setGithubStats({
             stars: data.stargazers_count,
             forks: data.forks_count,
             issues: data.open_issues_count,
-          })
+          });
         }
       } catch (error) {
         if ((error as Error).name !== 'AbortError') {
-          toast.error('Failed to load GitHub stats')
+          toast.error('Failed to load GitHub stats');
         }
       }
-    }
-    void loadStats()
+    };
+    void loadStats();
     return () => {
-      controller.abort()
-    }
-  }, [])
+      controller.abort();
+    };
+  }, []);
 
   useEffect(() => {
-    const times = [3, 5, 10, 30, 60]
-    const timers = times.map(t =>
-      setTimeout(() => trackEvent(trackingEnabled, `stay_${t}min`), t * 60 * 1000)
-    )
+    const times = [3, 5, 10, 30, 60];
+    const timers = times.map((t) =>
+      setTimeout(
+        () => trackEvent(trackingEnabled, `stay_${t}min`),
+        t * 60 * 1000,
+      ),
+    );
     return () => {
-      timers.forEach(clearTimeout)
-    }
-  }, [trackingEnabled])
+      timers.forEach(clearTimeout);
+    };
+  }, [trackingEnabled]);
 
   useEffect(() => {
-    safeSet('jsonHistory', history, true)
-  }, [history])
+    safeSet('jsonHistory', history, true);
+  }, [history]);
 
   useEffect(() => {
-    safeSet('currentJson', jsonString)
-  }, [jsonString, trackingEnabled])
+    safeSet('currentJson', jsonString);
+  }, [jsonString, trackingEnabled]);
 
   useEffect(() => {
     try {
-      const diff = diffChars(prevJsonRef.current, jsonString).filter(p => !p.removed);
+      const diff = diffChars(prevJsonRef.current, jsonString).filter(
+        (p) => !p.removed,
+      );
       prevJsonRef.current = jsonString;
       setDiffParts(diff);
       const timer = setTimeout(() => {
-        setDiffParts(diff.map(p => ({ ...p, added: false } as Change)));
+        setDiffParts(diff.map((p) => ({ ...p, added: false }) as Change));
       }, 2000);
       trackEvent(trackingEnabled, 'json_changed');
       return () => clearTimeout(timer);
@@ -134,7 +141,10 @@ const Dashboard = () => {
   useEffect(() => {
     const container = jsonContainerRef.current;
     if (!container) return;
-    const atBottom = Math.abs(container.scrollHeight - container.scrollTop - container.clientHeight) < 5;
+    const atBottom =
+      Math.abs(
+        container.scrollHeight - container.scrollTop - container.clientHeight,
+      ) < 5;
     const atTop = container.scrollTop === 0;
     if (atBottom) {
       container.scrollTop = container.scrollHeight;
@@ -143,22 +153,22 @@ const Dashboard = () => {
     }
   }, [jsonString]);
 
-  const firstLoadRef = React.useRef(true)
+  const firstLoadRef = React.useRef(true);
   useEffect(() => {
     if (firstLoadRef.current) {
-      firstLoadRef.current = false
-      const stored = safeGet('currentJson')
-      if (stored) return
+      firstLoadRef.current = false;
+      const stored = safeGet('currentJson');
+      if (stored) return;
     }
     try {
-      const json = generateJson(options)
-      setJsonString(json)
-      safeSet('currentJson', json)
+      const json = generateJson(options);
+      setJsonString(json);
+      safeSet('currentJson', json);
     } catch (error) {
-      console.error('Error generating JSON:', error)
-      setJsonString('{}')
+      console.error('Error generating JSON:', error);
+      setJsonString('{}');
     }
-  }, [options])
+  }, [options]);
 
   const copyToClipboard = async () => {
     if (!('clipboard' in navigator)) {
@@ -173,11 +183,15 @@ const Dashboard = () => {
         date: new Date().toLocaleString(),
         json: jsonString,
       };
-      setHistory(prev => [entry, ...prev].slice(0, 100));
+      setHistory((prev) => [entry, ...prev].slice(0, 100));
       toast.success('Sora JSON copied to clipboard!');
-      const opts = options as unknown as Record<string, unknown>
-      const sections = Object.keys(options).filter(key => key.startsWith('use_') && opts[key])
-      trackEvent(trackingEnabled, 'copy_json', { sections: sections.join(',') })
+      const opts = options as unknown as Record<string, unknown>;
+      const sections = Object.keys(options).filter(
+        (key) => key.startsWith('use_') && opts[key],
+      );
+      trackEvent(trackingEnabled, 'copy_json', {
+        sections: sections.join(','),
+      });
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       toast.error('Failed to copy to clipboard');
@@ -197,14 +211,14 @@ const Dashboard = () => {
 
   const importJson = (json: string) => {
     try {
-      const obj = JSON.parse(json)
-      if (!isValidOptions(obj)) throw new Error('invalid')
-      setOptions(prev => ({ ...prev, ...obj }))
-      setShowImportModal(false)
-      toast.success('JSON imported!')
-      trackEvent(trackingEnabled, 'import_button')
+      const obj = JSON.parse(json);
+      if (!isValidOptions(obj)) throw new Error('invalid');
+      setOptions((prev) => ({ ...prev, ...obj }));
+      setShowImportModal(false);
+      toast.success('JSON imported!');
+      trackEvent(trackingEnabled, 'import_button');
     } catch {
-      toast.error('Invalid JSON')
+      toast.error('Invalid JSON');
     }
   };
 
@@ -216,7 +230,10 @@ const Dashboard = () => {
   };
 
   const regenerateJson = () => {
-    setOptions(prev => ({ ...prev, seed: Math.floor(Math.random() * 10000) }));
+    setOptions((prev) => ({
+      ...prev,
+      seed: Math.floor(Math.random() * 10000),
+    }));
     toast.success('JSON regenerated with new seed!');
     trackEvent(trackingEnabled, 'regenerate_button');
   };
@@ -232,17 +249,17 @@ const Dashboard = () => {
       temperature: Math.random() * 0.5 + 0.8,
       motion_strength: Math.random(),
     };
-    
-    setOptions(prev => ({ ...prev, ...randomOptions }));
+
+    setOptions((prev) => ({ ...prev, ...randomOptions }));
     toast.success('Options randomized!');
     trackEvent(trackingEnabled, 'randomize_button');
   };
 
   const updateOptions = (updates: Partial<SoraOptions>) => {
-    setOptions(prev => {
-      const next = { ...prev, ...updates }
-      Object.keys(updates).forEach(key => {
-        const value = updates[key as keyof SoraOptions]
+    setOptions((prev) => {
+      const next = { ...prev, ...updates };
+      Object.keys(updates).forEach((key) => {
+        const value = updates[key as keyof SoraOptions];
         if (key.startsWith('use_')) {
           if (
             typeof value === 'boolean' &&
@@ -251,26 +268,26 @@ const Dashboard = () => {
             trackEvent(trackingEnabled, 'section_toggle', {
               section: key,
               enabled: value,
-            })
+            });
           }
         } else if (key === 'prompt') {
-          trackEvent(trackingEnabled, 'prompt_change')
+          trackEvent(trackingEnabled, 'prompt_change');
         } else if (key === 'negative_prompt') {
-          trackEvent(trackingEnabled, 'negative_prompt_change')
+          trackEvent(trackingEnabled, 'negative_prompt_change');
         } else {
-          trackEvent(trackingEnabled, 'input_change')
+          trackEvent(trackingEnabled, 'input_change');
         }
-      })
-      return next
-    })
+      });
+      return next;
+    });
   };
 
   const updateNestedOptions = (path: string, value: unknown) => {
-    setOptions(prev => {
+    setOptions((prev) => {
       const newOptions = { ...prev };
       const keys = path.split('.');
       let current: Record<string, unknown> = newOptions;
-      
+
       for (let i = 0; i < keys.length - 1; i++) {
         const key = keys[i];
         if (key === '__proto__' || key === 'constructor') {
@@ -281,20 +298,20 @@ const Dashboard = () => {
         current[key] = typeof val === 'object' && val ? { ...val } : {};
         current = current[key] as Record<string, unknown>;
       }
-      
+
       const lastKey = keys[keys.length - 1];
       if (lastKey === '__proto__' || lastKey === 'constructor') {
         console.warn(`Blocked unsafe property name: ${lastKey}`);
         return prev; // Return previous state to avoid unsafe modification
       }
       current[lastKey] = value;
-      trackEvent(trackingEnabled, 'input_change')
+      trackEvent(trackingEnabled, 'input_change');
       return newOptions;
     });
   };
 
   const deleteHistoryEntry = (id: number) => {
-    setHistory(prev => prev.filter(e => e.id !== id));
+    setHistory((prev) => prev.filter((e) => e.id !== id));
   };
 
   const clearHistory = () => setHistory([]);
@@ -319,21 +336,29 @@ const Dashboard = () => {
       if (!isValidOptions(obj)) throw new Error('invalid');
       const enableMap = OPTION_FLAG_MAP;
 
-      const allFlags = Object.keys(DEFAULT_OPTIONS).filter(k => k.startsWith('use_'));
+      const allFlags = Object.keys(DEFAULT_OPTIONS).filter((k) =>
+        k.startsWith('use_'),
+      );
       const clearFlags: Partial<SoraOptions> = {};
-      allFlags.forEach(k => {
+      allFlags.forEach((k) => {
         clearFlags[k as keyof SoraOptions] = false;
       });
 
       const flagUpdates: Partial<SoraOptions> = {};
-      Object.keys(obj).forEach(key => {
+      Object.keys(obj).forEach((key) => {
         const flag = enableMap[key as keyof typeof enableMap];
         if (flag) flagUpdates[flag as keyof SoraOptions] = true;
         if (key.startsWith('dnd_')) flagUpdates.use_dnd_section = true;
-        if (key === 'width' || key === 'height') flagUpdates.use_dimensions = true;
+        if (key === 'width' || key === 'height')
+          flagUpdates.use_dimensions = true;
       });
       setJsonString('{}');
-      setOptions(prev => ({ ...prev, ...clearFlags, ...obj, ...flagUpdates }));
+      setOptions((prev) => ({
+        ...prev,
+        ...clearFlags,
+        ...obj,
+        ...flagUpdates,
+      }));
       document
         .getElementById('generated-json')
         ?.scrollIntoView({ behavior: 'smooth' });
@@ -345,12 +370,12 @@ const Dashboard = () => {
   };
 
   const importHistoryEntries = (jsons: string[]) => {
-    const entries = jsons.map(j => ({
+    const entries = jsons.map((j) => ({
       id: Date.now() + Math.random(),
       date: new Date().toLocaleString(),
       json: j,
     }));
-    setHistory(prev => [...entries, ...prev].slice(0, 100));
+    setHistory((prev) => [...entries, ...prev].slice(0, 100));
     trackEvent(trackingEnabled, 'history_import', { type: 'bulk' });
   };
 
@@ -374,7 +399,10 @@ const Dashboard = () => {
               />
               Sora JSON Prompt Crafter
             </h1>
-            <p className="text-muted-foreground select-none">Configure your Sora generation settings and get the perfect JSON prompt for stunning AI-generated content.</p>
+            <p className="text-muted-foreground select-none">
+              Configure your Sora generation settings and get the perfect JSON
+              prompt for stunning AI-generated content.
+            </p>
             <div className="flex flex-wrap items-center gap-2 mt-2">
               <Button asChild variant="outline" size="sm" className="gap-1">
                 <a
@@ -451,8 +479,8 @@ const Dashboard = () => {
               By using this tool you agree by the{' '}
               <button
                 onClick={() => {
-                  setShowDisclaimer(true)
-                  trackEvent(trackingEnabled, 'open_disclaimer')
+                  setShowDisclaimer(true);
+                  trackEvent(trackingEnabled, 'open_disclaimer');
                 }}
                 className="underline"
               >
@@ -464,15 +492,21 @@ const Dashboard = () => {
             variant="outline"
             size="icon"
             onClick={() => {
-              setDarkMode(!darkMode)
-              trackEvent(trackingEnabled, 'dark_mode_toggle', { enabled: !darkMode })
+              setDarkMode(!darkMode);
+              trackEvent(trackingEnabled, 'dark_mode_toggle', {
+                enabled: !darkMode,
+              });
             }}
             aria-label="Toggle dark mode"
           >
-            {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            {darkMode ? (
+              <Sun className="w-5 h-5" />
+            ) : (
+              <Moon className="w-5 h-5" />
+            )}
           </Button>
         </div>
-        
+
         <div className="grid lg:grid-cols-2 gap-6 flex-1">
           <Card className="flex flex-col">
             <CardHeader className="border-b">
@@ -511,7 +545,9 @@ const Dashboard = () => {
                       ? diffParts.map((part, idx) => (
                           <span
                             key={idx}
-                            className={part.added ? "animate-highlight" : undefined}
+                            className={
+                              part.added ? 'animate-highlight' : undefined
+                            }
                           >
                             {part.value}
                           </span>
@@ -524,7 +560,7 @@ const Dashboard = () => {
           </Card>
         </div>
       </div>
-      
+
       <ActionBar
         onCopy={copyToClipboard}
         onClear={clearJson}
@@ -564,8 +600,8 @@ const Dashboard = () => {
       <DisclaimerModal open={showDisclaimer} onOpenChange={setShowDisclaimer} />
       <Footer
         onShowDisclaimer={() => {
-          setShowDisclaimer(true)
-          trackEvent(trackingEnabled, 'open_disclaimer')
+          setShowDisclaimer(true);
+          trackEvent(trackingEnabled, 'open_disclaimer');
         }}
       />
       <ProgressBar />
