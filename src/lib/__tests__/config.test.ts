@@ -18,18 +18,14 @@ function clearEnv() {
 }
 
 describe('config', () => {
-  let originalFunction: FunctionConstructor;
-
   beforeEach(() => {
     clearEnv();
     jest.resetModules();
-    originalFunction = globalThis.Function;
   });
 
   afterEach(() => {
     clearEnv();
     jest.resetModules();
-    globalThis.Function = originalFunction;
   });
 
   test('reads values from import.meta.env', async () => {
@@ -37,20 +33,6 @@ describe('config', () => {
     metaEnv.VITE_DISABLE_ANALYTICS = 'true';
     metaEnv.VITE_DISABLE_STATS = '1';
     metaEnv.VITE_GTAG_DEBUG = 'true';
-    globalThis.Function = function (this: unknown, code: string) {
-      switch (code) {
-        case 'return import.meta.env.VITE_MEASUREMENT_ID':
-          return () => metaEnv.VITE_MEASUREMENT_ID;
-        case 'return import.meta.env.VITE_DISABLE_ANALYTICS':
-          return () => metaEnv.VITE_DISABLE_ANALYTICS;
-        case 'return import.meta.env.VITE_DISABLE_STATS':
-          return () => metaEnv.VITE_DISABLE_STATS;
-        case 'return import.meta.env.VITE_GTAG_DEBUG':
-          return () => metaEnv.VITE_GTAG_DEBUG;
-        default:
-          return () => undefined;
-      }
-    } as unknown as FunctionConstructor;
 
     const config = await import('../config');
     expect(config.MEASUREMENT_ID).toBe('AAA');
