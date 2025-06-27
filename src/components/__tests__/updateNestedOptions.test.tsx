@@ -59,11 +59,9 @@ jest.mock('@/components/ui/sonner-toast', () => ({
 
 beforeEach(() => {
   localStorage.clear();
-  global.fetch = jest
-    .fn()
-    .mockResolvedValue({
-      json: () => Promise.resolve({}),
-    }) as unknown as typeof fetch;
+  global.fetch = jest.fn().mockResolvedValue({
+    json: () => Promise.resolve({}),
+  }) as unknown as typeof fetch;
   window.matchMedia = jest.fn().mockReturnValue({
     addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
@@ -77,4 +75,28 @@ test('updateNestedOptions handles missing objects', async () => {
     updater('style_preset.category', 'cinematic');
     await Promise.resolve();
   });
+});
+
+test('updateNestedOptions warns and skips __proto__ or constructor keys', async () => {
+  const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+  render(<Dashboard />);
+  const before = localStorage.getItem('currentJson');
+  await act(async () => {
+    updater('__proto__.foo', 'bar');
+    await Promise.resolve();
+  });
+  expect(localStorage.getItem('currentJson')).toBe(before);
+  expect(warnSpy).toHaveBeenCalledWith(
+    'Blocked unsafe property name: __proto__',
+  );
+  warnSpy.mockClear();
+  await act(async () => {
+    updater('constructor.foo', 'bar');
+    await Promise.resolve();
+  });
+  expect(localStorage.getItem('currentJson')).toBe(before);
+  expect(warnSpy).toHaveBeenCalledWith(
+    'Blocked unsafe property name: constructor',
+  );
+  warnSpy.mockRestore();
 });

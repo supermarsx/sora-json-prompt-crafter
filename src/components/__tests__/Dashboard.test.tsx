@@ -1,8 +1,16 @@
-import { render, waitFor } from '@testing-library/react';
+import { render, waitFor, act } from '@testing-library/react';
 import Dashboard from '../Dashboard';
 import { toast } from '@/components/ui/sonner-toast';
+import { trackEvent } from '@/lib/analytics';
 
-jest.mock('../HistoryPanel', () => ({ __esModule: true, default: () => null }));
+let copyFn: ((json: string) => void) | null = null;
+jest.mock('../HistoryPanel', () => ({
+  __esModule: true,
+  default: ({ onCopy }: { onCopy: (json: string) => void }) => {
+    copyFn = onCopy;
+    return null;
+  },
+}));
 jest.mock('../ControlPanel', () => ({
   __esModule: true,
   ControlPanel: () => null,
@@ -119,5 +127,66 @@ describe('Dashboard github stats abort', () => {
     expect(aborted).toBe(true);
     await Promise.resolve();
     expect(warnSpy).not.toHaveBeenCalled();
+  });
+});
+
+describe('Dashboard github stats success', () => {
+  const originalFetch = global.fetch;
+
+  beforeEach(() => {
+    (toast.error as jest.Mock).mockClear();
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: () =>
+        Promise.resolve({
+          stargazers_count: 2,
+          forks_count: 3,
+          open_issues_count: 4,
+        }),
+    }) as unknown as typeof fetch;
+    window.matchMedia = jest.fn().mockReturnValue({
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+    }) as unknown as typeof window.matchMedia;
+  });
+
+  afterEach(() => {
+    global.fetch = originalFetch;
+  });
+
+  test('updates state with fetched stats', async () => {
+    const { findByText } = render(<Dashboard />);
+    expect(await findByText('Star 2')).toBeTruthy();
+    expect(await findByText('Fork 3')).toBeTruthy();
+    expect(await findByText('Issues 4')).toBeTruthy();
+  });
+});
+
+describe('copyHistoryEntry', () => {
+  beforeEach(() => {
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText: jest.fn().mockResolvedValue(undefined) },
+      configurable: true,
+    });
+    (toast.success as jest.Mock).mockClear();
+    (trackEvent as jest.Mock).mockClear();
+    window.matchMedia = jest.fn().mockReturnValue({
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+    }) as unknown as typeof window.matchMedia;
+  });
+
+  test('copies entry to clipboard and tracks event', async () => {
+    render(<Dashboard />);
+    await waitFor(() => expect(copyFn).not.toBeNull());
+    await act(async () => {
+      copyFn?.('{"a":1}');
+      await Promise.resolve();
+    });
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith('{"a":1}');
+    expect(toast.success).toHaveBeenCalledWith(
+      'Sora JSON copied to clipboard!',
+    );
+    expect(trackEvent).toHaveBeenCalledWith(true, 'history_copy');
   });
 });
