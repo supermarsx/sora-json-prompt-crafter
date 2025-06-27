@@ -34,3 +34,15 @@ try {
   }
 }
 export const DISABLE_STATS = disableStats === 'true' || disableStats === '1';
+
+let gtagDebug: string | undefined;
+try {
+  gtagDebug = new Function('return import.meta.env.VITE_GTAG_DEBUG')() as
+    | string
+    | undefined;
+} catch {
+  if (typeof process !== 'undefined') {
+    gtagDebug = process.env.VITE_GTAG_DEBUG;
+  }
+}
+export const GTAG_DEBUG = gtagDebug === 'true' || gtagDebug === '1';

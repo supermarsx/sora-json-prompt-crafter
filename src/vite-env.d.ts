@@ -7,4 +7,5 @@ interface ImportMetaEnv {
   readonly VITE_DISABLE_ANALYTICS?: string;
   readonly VITE_DISABLE_STATS?: string;
   readonly VITE_DISCLAIMER_URL?: string;
+  readonly VITE_GTAG_DEBUG?: string;
 }

@@ -1,5 +1,5 @@
 import { safeGet, safeSet } from './storage';
-import { MEASUREMENT_ID } from './config';
+import { MEASUREMENT_ID, GTAG_DEBUG } from './config';
 
 let trackingFailures = 0;
 let trackingDead = false;
@@ -47,11 +47,16 @@ export function trackEvent(
   }
 
   try {
-    gtag('event', 'page_action', {
+    const eventParams: Record<string, unknown> = {
       send_to: MEASUREMENT_ID,
       action: event,
       ...params,
-    });
+    };
+    if (GTAG_DEBUG) {
+      eventParams.debug_mode = true;
+      console.debug('gtag event', event, params);
+    }
+    gtag('event', 'page_action', eventParams);
   } catch (e) {
     trackingFailures++;
     if (trackingFailures <= 5) {
