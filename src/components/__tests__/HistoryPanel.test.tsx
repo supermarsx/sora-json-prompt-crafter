@@ -3,6 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import HistoryPanel from '../HistoryPanel';
 import { toast } from '@/components/ui/sonner-toast';
 import { trackEvent } from '@/lib/analytics';
+import { formatDateTime } from '@/lib/date';
 
 jest.mock('@/lib/analytics', () => ({
   __esModule: true,
@@ -15,6 +16,11 @@ jest.mock('@/components/ui/sonner-toast', () => ({
     success: jest.fn(),
     error: jest.fn(),
   },
+}));
+
+jest.mock('@/lib/date', () => ({
+  __esModule: true,
+  formatDateTime: jest.fn(() => '20240101-000000'),
 }));
 
 jest.mock('../ClipboardImportModal', () => ({
@@ -81,6 +87,10 @@ beforeEach(() => {
     addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
   }) as unknown as typeof window.matchMedia;
+});
+
+afterEach(() => {
+  jest.restoreAllMocks();
 });
 
 const defaultProps = {
@@ -180,5 +190,94 @@ describe('HistoryPanel', () => {
     const clearActions = screen.getByRole('button', { name: /clear actions/i });
     expect(exportActions.hasAttribute('disabled')).toBe(true);
     expect(clearActions.hasAttribute('disabled')).toBe(true);
+
+  test('downloads history file', async () => {
+    const anchor: Partial<HTMLAnchorElement> & { click: jest.Mock } = {
+      click: jest.fn(),
+    };
+    Object.assign(URL, {
+      createObjectURL: jest.fn(() => 'blob:url'),
+      revokeObjectURL: jest.fn(),
+    });
+    const origCreate = document.createElement;
+    jest.spyOn(document, 'createElement').mockImplementation(function (tag: string) {
+      if (tag === 'a') return anchor as unknown as HTMLElement;
+      return origCreate.call(this, tag);
+    });
+    jest.spyOn(Math, 'random').mockReturnValue(0.1);
+
+    renderPanel();
+    const exportBtn = screen.getByRole('button', { name: /export/i });
+    fireEvent.mouseDown(exportBtn);
+    fireEvent.click(exportBtn);
+    fireEvent.click(await screen.findByText(/download json/i));
+
+    expect(anchor.click).toHaveBeenCalled();
+    expect(anchor.download).toBe('history-20240101-000000-199999.json');
+  });
+
+  test('exports action history to file', () => {
+    const anchor: Partial<HTMLAnchorElement> & { click: jest.Mock } = {
+      click: jest.fn(),
+    };
+    Object.assign(URL, {
+      createObjectURL: jest.fn(() => 'blob:url'),
+      revokeObjectURL: jest.fn(),
+    });
+    const origCreate = document.createElement;
+    jest.spyOn(document, 'createElement').mockImplementation(function (tag: string) {
+      if (tag === 'a') return anchor as unknown as HTMLElement;
+      return origCreate.call(this, tag);
+    });
+    jest.spyOn(Math, 'random').mockReturnValue(0.1);
+
+    renderPanel();
+    const actionsTab = screen.getByRole('tab', { name: /latest actions/i });
+    fireEvent.mouseDown(actionsTab);
+    fireEvent.click(actionsTab);
+    fireEvent.click(screen.getByRole('button', { name: /^export$/i }));
+
+    expect(anchor.click).toHaveBeenCalled();
+    expect(anchor.download).toBe(
+      'latest-actions-20240101-000000-199999.json',
+    );
+  });
+
+  test('deleting an action confirms then removes it', () => {
+    localStorage.setItem(
+      'trackingHistory',
+      JSON.stringify([{ date: 'd', action: 'a' }]),
+    );
+    renderPanel();
+    const actionsTab = screen.getByRole('tab', { name: /latest actions/i });
+    fireEvent.mouseDown(actionsTab);
+    fireEvent.click(actionsTab);
+    const btn = screen
+      .getByText('a')
+      .parentElement!.querySelector('button') as HTMLButtonElement;
+    fireEvent.click(btn);
+    expect(localStorage.getItem('trackingHistory')).toBe(
+      JSON.stringify([{ date: 'd', action: 'a' }]),
+    );
+    fireEvent.click(btn);
+    expect(localStorage.getItem('trackingHistory')).toBe('[]');
+    expect(toast.success).toHaveBeenCalledWith('Action deleted!');
+  });
+
+  test('preview dialog shows json', () => {
+    renderPanel();
+    fireEvent.click(screen.getByRole('button', { name: /preview/i }));
+    expect(screen.getByText(/json preview/i)).toBeTruthy();
+    expect(screen.getByText(/"prompt"/i)).toBeTruthy();
+  });
+
+  test('clearing history asks for confirmation', () => {
+    const onClear = jest.fn();
+    renderPanel({ onClear });
+    fireEvent.click(screen.getByRole('button', { name: /clear history/i }));
+    expect(screen.getByText(/clear history\?/i)).toBeTruthy();
+    expect(onClear).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: /^clear$/i }));
+    expect(onClear).toHaveBeenCalled();
   });
 });
