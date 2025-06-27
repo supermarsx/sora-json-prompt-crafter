@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -15,30 +14,69 @@ interface EnhancementsSectionProps {
 }
 
 const safetyFilterOptions = [
-  "default (auto safety level)", "not defined", "strict (max filtering, safest)",
-  "high (safe for work, minimal risk)", "moderate (balanced, most non-explicit allowed)",
-  "low (mild filter, mild suggestive OK)", "off (no filtering, everything allowed)"
+  'default (auto safety level)',
+  'not defined',
+  'strict (max filtering, safest)',
+  'high (safe for work, minimal risk)',
+  'moderate (balanced, most non-explicit allowed)',
+  'low (mild filter, mild suggestive OK)',
+  'off (no filtering, everything allowed)',
 ];
 
 const qualityBoosterOptions = [
-  "default (standard quality)", "not defined", "high resolution", "2K", "4K", "8K",
-  "ultra HD", "super-resolution", "clear", "good lighting", "excellent lighting",
-  "perfect lighting", "detailed", "very detailed", "extremely detailed",
-  "hyper-detailed", "high definition", "sharp focus", "razor sharp focus",
-  "intricate", "finely textured", "complex details", "beautiful", "stunning",
-  "gorgeous", "masterpiece", "art station quality", "deviantart quality",
-  "best quality", "highest quality", "realistic", "ultra-realistic",
-  "photo-realistic", "realistic+++", "CGI-quality", "studio lighting",
-  "professional photography", "award-winning", "flawless", "immaculate",
-  "pristine", "complementary colors", "color harmony", "cinematic quality",
-  "dynamic composition", "exquisite rendering"
+  'default (standard quality)',
+  'not defined',
+  'high resolution',
+  '2K',
+  '4K',
+  '8K',
+  'ultra HD',
+  'super-resolution',
+  'clear',
+  'good lighting',
+  'excellent lighting',
+  'perfect lighting',
+  'detailed',
+  'very detailed',
+  'extremely detailed',
+  'hyper-detailed',
+  'high definition',
+  'sharp focus',
+  'razor sharp focus',
+  'intricate',
+  'finely textured',
+  'complex details',
+  'beautiful',
+  'stunning',
+  'gorgeous',
+  'masterpiece',
+  'art station quality',
+  'deviantart quality',
+  'best quality',
+  'highest quality',
+  'realistic',
+  'ultra-realistic',
+  'photo-realistic',
+  'realistic+++',
+  'CGI-quality',
+  'studio lighting',
+  'professional photography',
+  'award-winning',
+  'flawless',
+  'immaculate',
+  'pristine',
+  'complementary colors',
+  'color harmony',
+  'cinematic quality',
+  'dynamic composition',
+  'exquisite rendering',
 ];
 
 export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
   options,
   updateOptions,
   isEnabled,
-  onToggle
+  onToggle,
 }) => {
   const handleSafetyFilterChange = (value: string) => {
     // Map string values to the expected type
@@ -67,7 +105,9 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
           <Checkbox
             id="prevent_deformities"
             checked={options.prevent_deformities}
-            onCheckedChange={(checked) => updateOptions({ prevent_deformities: !!checked })}
+            onCheckedChange={(checked) =>
+              updateOptions({ prevent_deformities: !!checked })
+            }
           />
           <Label htmlFor="prevent_deformities">Prevent Deformities</Label>
         </div>
@@ -76,7 +116,9 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
           <Checkbox
             id="use_upscale_factor"
             checked={options.use_upscale_factor}
-            onCheckedChange={(checked) => updateOptions({ use_upscale_factor: !!checked })}
+            onCheckedChange={(checked) =>
+              updateOptions({ use_upscale_factor: !!checked })
+            }
           />
           <Label htmlFor="use_upscale_factor">Use Upscale Factor</Label>
         </div>
@@ -98,7 +140,9 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
           <Checkbox
             id="use_safety_filter"
             checked={options.use_safety_filter}
-            onCheckedChange={(checked) => updateOptions({ use_safety_filter: !!checked })}
+            onCheckedChange={(checked) =>
+              updateOptions({ use_safety_filter: !!checked })
+            }
           />
           <Label htmlFor="use_safety_filter">Use Safety Filter</Label>
         </div>
@@ -119,16 +163,21 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
             id="keep_typography_details"
             checked={options.keep_typography_details}
             onCheckedChange={(checked) =>
-              updateOptions({ keep_typography_details: !!checked })}
+              updateOptions({ keep_typography_details: !!checked })
+            }
           />
-          <Label htmlFor="keep_typography_details">Keep Typography Details</Label>
+          <Label htmlFor="keep_typography_details">
+            Keep Typography Details
+          </Label>
         </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox
             id="use_quality_booster"
             checked={options.use_quality_booster}
-            onCheckedChange={(checked) => updateOptions({ use_quality_booster: !!checked })}
+            onCheckedChange={(checked) =>
+              updateOptions({ use_quality_booster: !!checked })
+            }
           />
           <Label htmlFor="use_quality_booster">Use Quality Booster</Label>
         </div>
@@ -148,16 +197,22 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
           <Checkbox
             id="enhance_object_reflections"
             checked={options.enhance_object_reflections}
-            onCheckedChange={(checked) => updateOptions({ enhance_object_reflections: !!checked })}
+            onCheckedChange={(checked) =>
+              updateOptions({ enhance_object_reflections: !!checked })
+            }
           />
-          <Label htmlFor="enhance_object_reflections">Enhance Object Reflections</Label>
+          <Label htmlFor="enhance_object_reflections">
+            Enhance Object Reflections
+          </Label>
         </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox
             id="keep_key_details"
             checked={options.keep_key_details}
-            onCheckedChange={(checked) => updateOptions({ keep_key_details: !!checked })}
+            onCheckedChange={(checked) =>
+              updateOptions({ keep_key_details: !!checked })
+            }
           />
           <Label htmlFor="keep_key_details">Keep Key Details</Label>
         </div>

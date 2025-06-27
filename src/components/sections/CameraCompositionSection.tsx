@@ -1,7 +1,12 @@
-
 import React from 'react';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { SearchableDropdown } from '../SearchableDropdown';
 import { MultiSelectDropdown } from '../MultiSelectDropdown';
@@ -25,13 +30,9 @@ interface CameraCompositionSectionProps {
   onToggle: (enabled: boolean) => void;
 }
 
-
-export const CameraCompositionSection: React.FC<CameraCompositionSectionProps> = ({
-  options,
-  updateOptions,
-  isEnabled,
-  onToggle
-}) => {
+export const CameraCompositionSection: React.FC<
+  CameraCompositionSectionProps
+> = ({ options, updateOptions, isEnabled, onToggle }) => {
   const handleCompositionRulesChange = (selectedRules: string[]) => {
     updateOptions({ composition_rules: selectedRules });
   };
@@ -58,7 +59,9 @@ export const CameraCompositionSection: React.FC<CameraCompositionSectionProps> =
           <Checkbox
             id="use_lens_type"
             checked={options.use_lens_type}
-            onCheckedChange={(checked) => updateOptions({ use_lens_type: !!checked })}
+            onCheckedChange={(checked) =>
+              updateOptions({ use_lens_type: !!checked })
+            }
           />
           <Label htmlFor="use_lens_type">Use Lens Type</Label>
         </div>
@@ -88,7 +91,9 @@ export const CameraCompositionSection: React.FC<CameraCompositionSectionProps> =
           <Checkbox
             id="use_camera_angle"
             checked={options.use_camera_angle}
-            onCheckedChange={(checked) => updateOptions({ use_camera_angle: !!checked })}
+            onCheckedChange={(checked) =>
+              updateOptions({ use_camera_angle: !!checked })
+            }
           />
           <Label htmlFor="use_camera_angle">Use Camera Angle</Label>
         </div>
@@ -108,9 +113,9 @@ export const CameraCompositionSection: React.FC<CameraCompositionSectionProps> =
           <Label htmlFor="subject_focus">Subject Focus</Label>
           <Select
             value={options.subject_focus}
-            onValueChange={(value: 'center' | 'left' | 'right' | 'top' | 'bottom') => 
-              updateOptions({ subject_focus: value })
-            }
+            onValueChange={(
+              value: 'center' | 'left' | 'right' | 'top' | 'bottom',
+            ) => updateOptions({ subject_focus: value })}
           >
             <SelectTrigger>
               <SelectValue />
@@ -140,7 +145,9 @@ export const CameraCompositionSection: React.FC<CameraCompositionSectionProps> =
           <Checkbox
             id="use_aperture"
             checked={options.use_aperture}
-            onCheckedChange={(checked) => updateOptions({ use_aperture: !!checked })}
+            onCheckedChange={(checked) =>
+              updateOptions({ use_aperture: !!checked })
+            }
           />
           <Label htmlFor="use_aperture">Use Aperture</Label>
         </div>
@@ -180,7 +187,9 @@ export const CameraCompositionSection: React.FC<CameraCompositionSectionProps> =
           <Checkbox
             id="use_blur_style"
             checked={options.use_blur_style}
-            onCheckedChange={(checked) => updateOptions({ use_blur_style: !!checked })}
+            onCheckedChange={(checked) =>
+              updateOptions({ use_blur_style: !!checked })
+            }
           />
           <Label htmlFor="use_blur_style">Use Blur Style</Label>
         </div>

@@ -13,25 +13,26 @@ interface DisclaimerModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
+const STORAGE_KEY = 'disclaimerText';
 
-const STORAGE_KEY = 'disclaimerText'
-
-const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ open, onOpenChange }) => {
-  const [text, setText] = useState('')
-  const [hasFetched, setHasFetched] = useState(false)
-
+const DisclaimerModal: React.FC<DisclaimerModalProps> = ({
+  open,
+  onOpenChange,
+}) => {
+  const [text, setText] = useState('');
+  const [hasFetched, setHasFetched] = useState(false);
 
   useEffect(() => {
     if (!open || hasFetched) {
-      return
+      return;
     }
 
     try {
-      const cached = localStorage.getItem(STORAGE_KEY)
+      const cached = localStorage.getItem(STORAGE_KEY);
       if (cached) {
-        setText(cached)
-        setHasFetched(true)
-        return
+        setText(cached);
+        setHasFetched(true);
+        return;
       }
     } catch {
       // ignore localStorage errors
@@ -40,17 +41,18 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ open, onOpenChange })
     const controller = new AbortController();
     const { signal } = controller;
 
-    let disclaimerUrl: string | undefined
+    let disclaimerUrl: string | undefined;
     try {
       disclaimerUrl = new Function(
-        'return import.meta.env.VITE_DISCLAIMER_URL'
-      )() as string | undefined
+        'return import.meta.env.VITE_DISCLAIMER_URL',
+      )() as string | undefined;
     } catch {
       if (typeof process !== 'undefined') {
-        disclaimerUrl = (process as { env?: { VITE_DISCLAIMER_URL?: string } }).env?.VITE_DISCLAIMER_URL
+        disclaimerUrl = (process as { env?: { VITE_DISCLAIMER_URL?: string } })
+          .env?.VITE_DISCLAIMER_URL;
       }
     }
-    const url = disclaimerUrl ?? '/disclaimer.txt'
+    const url = disclaimerUrl ?? '/disclaimer.txt';
     fetch(url, { signal })
       .then((res) => {
         if (!res.ok) {
@@ -60,9 +62,9 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ open, onOpenChange })
       })
       .then((txt) => {
         if (!signal.aborted) {
-          setText(txt)
+          setText(txt);
           try {
-            localStorage.setItem(STORAGE_KEY, txt)
+            localStorage.setItem(STORAGE_KEY, txt);
           } catch {
             // ignore localStorage errors
           }
@@ -88,8 +90,12 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({ open, onOpenChange })
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Intellectual Property &amp; Software Disclaimer</DialogTitle>
-          <DialogDescription>The text below explains important legal information.</DialogDescription>
+          <DialogTitle>
+            Intellectual Property &amp; Software Disclaimer
+          </DialogTitle>
+          <DialogDescription>
+            The text below explains important legal information.
+          </DialogDescription>
         </DialogHeader>
         <ScrollArea className="h-[60vh] px-1">
           <p className="whitespace-pre-wrap text-sm">{text}</p>

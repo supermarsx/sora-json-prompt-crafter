@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -19,7 +18,7 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
   isOptional = false,
   isEnabled = true,
   onToggle,
-  defaultOpen = true
+  defaultOpen = true,
 }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
 
@@ -49,11 +48,17 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
           }}
           className="p-1"
         >
-          {isOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+          {isOpen ? (
+            <ChevronDown className="w-4 h-4" />
+          ) : (
+            <ChevronRight className="w-4 h-4" />
+          )}
         </Button>
       </div>
       {isOpen && (
-        <div className={`p-4 space-y-4 ${!isEnabled && isOptional ? 'opacity-50 pointer-events-none' : ''}`}>
+        <div
+          className={`p-4 space-y-4 ${!isEnabled && isOptional ? 'opacity-50 pointer-events-none' : ''}`}
+        >
           {children}
         </div>
       )}

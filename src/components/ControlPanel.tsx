@@ -1,4 +1,3 @@
-
 import React from 'react';
 import type { SoraOptions } from '@/lib/soraOptions';
 import { PromptSection } from './sections/PromptSection';
@@ -35,73 +34,67 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({
         updateOptions={updateOptions}
         trackingEnabled={trackingEnabled}
       />
-      
-      <CoreSettingsSection 
-        options={options} 
+
+      <CoreSettingsSection
+        options={options}
         updateOptions={updateOptions}
         isEnabled={options.use_core_settings}
         onToggle={(enabled) => updateOptions({ use_core_settings: enabled })}
       />
-      
-      <DimensionsFormatSection 
-        options={options} 
+
+      <DimensionsFormatSection
+        options={options}
         updateOptions={updateOptions}
         isEnabled={options.use_dimensions_format}
-        onToggle={(enabled) => updateOptions({ use_dimensions_format: enabled })}
+        onToggle={(enabled) =>
+          updateOptions({ use_dimensions_format: enabled })
+        }
       />
-      
+
       <StyleSection
         options={options}
         updateNestedOptions={updateNestedOptions}
         updateOptions={updateOptions}
       />
-      
+
       <CameraCompositionSection
         options={options}
         updateOptions={updateOptions}
         isEnabled={options.use_camera_composition}
-        onToggle={(enabled) => updateOptions({ use_camera_composition: enabled })}
+        onToggle={(enabled) =>
+          updateOptions({ use_camera_composition: enabled })
+        }
       />
-      
-      <VideoMotionSection 
-        options={options} 
+
+      <VideoMotionSection
+        options={options}
         updateOptions={updateOptions}
         isEnabled={options.use_motion_animation}
         onToggle={(enabled) => updateOptions({ use_motion_animation: enabled })}
       />
-      
-      <MaterialSection
-        options={options}
-        updateOptions={updateOptions}
-      />
 
-      <LightingSection
-        options={options}
-        updateOptions={updateOptions}
-      />
+      <MaterialSection options={options} updateOptions={updateOptions} />
 
-      <ColorGradingSection
-        options={options}
-        updateOptions={updateOptions}
-      />
+      <LightingSection options={options} updateOptions={updateOptions} />
+
+      <ColorGradingSection options={options} updateOptions={updateOptions} />
 
       <SettingsLocationSection
         options={options}
         updateOptions={updateOptions}
       />
-      
-      <FaceSection 
-        options={options} 
-        updateOptions={updateOptions}
-      />
-      
-      <EnhancementsSection 
-        options={options} 
+
+      <FaceSection options={options} updateOptions={updateOptions} />
+
+      <EnhancementsSection
+        options={options}
         updateOptions={updateOptions}
         isEnabled={options.use_enhancement_safety}
-        onToggle={(enabled) => updateOptions({ use_enhancement_safety: enabled })}
+        onToggle={(enabled) =>
+          updateOptions({ use_enhancement_safety: enabled })
+        }
       />
-      
+
       <DnDSection
         options={options}
         updateOptions={updateOptions}

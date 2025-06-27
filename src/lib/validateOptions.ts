@@ -1,6 +1,6 @@
-import { z } from 'zod'
-import { DEFAULT_OPTIONS } from './defaultOptions'
-import type { SoraOptions } from './soraOptions'
+import { z } from 'zod';
+import { DEFAULT_OPTIONS } from './defaultOptions';
+import type { SoraOptions } from './soraOptions';
 
 const extraShape = {
   signature: z.string(),
@@ -26,37 +26,37 @@ const extraShape = {
   dnd_environment: z.string(),
   dnd_magic_school: z.string(),
   dnd_item_type: z.string(),
-} as const
+} as const;
 
 function schemaFor(value: unknown): z.ZodTypeAny {
-  if (typeof value === 'string') return z.string()
-  if (typeof value === 'number') return z.number()
-  if (typeof value === 'boolean') return z.boolean()
-  if (Array.isArray(value)) return z.array(z.any())
-  if (value === null) return z.null()
-  if (typeof value === 'object') return z.record(z.any())
-  return z.any()
+  if (typeof value === 'string') return z.string();
+  if (typeof value === 'number') return z.number();
+  if (typeof value === 'boolean') return z.boolean();
+  if (Array.isArray(value)) return z.array(z.any());
+  if (value === null) return z.null();
+  if (typeof value === 'object') return z.record(z.any());
+  return z.any();
 }
 
-const shape: Record<string, z.ZodTypeAny> = {}
+const shape: Record<string, z.ZodTypeAny> = {};
 for (const [key, value] of Object.entries(DEFAULT_OPTIONS)) {
   if (key === 'seed') {
-    shape[key] = z.union([z.number(), z.null()])
+    shape[key] = z.union([z.number(), z.null()]);
   } else if (key === 'style_preset') {
-    shape[key] = z.object({ category: z.string(), style: z.string() })
+    shape[key] = z.object({ category: z.string(), style: z.string() });
   } else if (key === 'composition_rules') {
-    shape[key] = z.array(z.string())
+    shape[key] = z.array(z.string());
   } else {
-    shape[key] = schemaFor(value)
+    shape[key] = schemaFor(value);
   }
 }
 Object.entries(extraShape).forEach(([k, s]) => {
-  shape[k] = s
-})
+  shape[k] = s;
+});
 
-export const partialOptionsSchema = z.object(shape).partial().strict()
-export type PartialSoraOptions = z.infer<typeof partialOptionsSchema>
+export const partialOptionsSchema = z.object(shape).partial().strict();
+export type PartialSoraOptions = z.infer<typeof partialOptionsSchema>;
 
 export function isValidOptions(obj: unknown): obj is Partial<SoraOptions> {
-  return partialOptionsSchema.safeParse(obj).success
+  return partialOptionsSchema.safeParse(obj).success;
 }
