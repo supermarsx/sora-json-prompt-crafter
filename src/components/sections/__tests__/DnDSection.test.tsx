@@ -43,6 +43,8 @@ describe('DnDSection', () => {
     );
     fireEvent.click(screen.getByRole('button', { name: /human/i }));
     fireEvent.click(screen.getByRole('button', { name: /tortle/i }));
-    expect(updateOptions).toHaveBeenCalledWith({ dnd_character_race: 'tortle' });
+    expect(updateOptions).toHaveBeenCalledWith({
+      dnd_character_race: 'tortle',
+    });
   });
 });
