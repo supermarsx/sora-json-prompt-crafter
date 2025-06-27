@@ -85,4 +85,72 @@ describe('generateJson', () => {
     expect(obj.motion_direction).toBeDefined();
     expect(obj.frame_interpolation).toBeDefined();
   });
+
+  test('includes dnd fields when section and flags enabled', () => {
+    const opts = {
+      ...DEFAULT_OPTIONS,
+      use_dnd_section: true,
+      use_dnd_character_race: true,
+      dnd_character_race: 'elf',
+      use_dnd_character_class: true,
+      dnd_character_class: 'wizard',
+      use_dnd_character_background: true,
+      dnd_character_background: 'noble',
+      use_dnd_character_alignment: true,
+      dnd_character_alignment: 'chaotic good',
+      use_dnd_monster_type: true,
+      dnd_monster_type: 'dragon',
+      use_dnd_environment: true,
+      dnd_environment: 'dungeon',
+      use_dnd_magic_school: true,
+      dnd_magic_school: 'evocation',
+      use_dnd_item_type: true,
+      dnd_item_type: 'sword',
+    };
+    const obj = parse(generateJson(opts));
+    expect(obj.dnd_character_race).toBeDefined();
+    expect(obj.dnd_character_class).toBeDefined();
+    expect(obj.dnd_character_background).toBeDefined();
+    expect(obj.dnd_character_alignment).toBeDefined();
+    expect(obj.dnd_monster_type).toBeDefined();
+    expect(obj.dnd_environment).toBeDefined();
+    expect(obj.dnd_magic_school).toBeDefined();
+    expect(obj.dnd_item_type).toBeDefined();
+  });
+
+  test('removes location related fields when settings location disabled', () => {
+    const opts = {
+      ...DEFAULT_OPTIONS,
+      use_settings_location: false,
+      environment: 'desert',
+      use_environment: true,
+      location: 'cave',
+      use_location: true,
+      use_season: true,
+      season: 'summer',
+      use_atmosphere_mood: true,
+      atmosphere_mood: 'gloomy',
+    };
+    const obj = parse(generateJson(opts));
+    expect(obj.environment).toBeUndefined();
+    expect(obj.location).toBeUndefined();
+    expect(obj.season).toBeUndefined();
+    expect(obj.atmosphere_mood).toBeUndefined();
+    expect(obj.year).toBeUndefined();
+  });
+
+  test('handles sword type with dnd section enabled', () => {
+    const opts = {
+      ...DEFAULT_OPTIONS,
+      use_sword_type: true,
+      sword_type: 'longsword',
+      sword_vibe: 'ancient',
+      use_dnd_section: true,
+      use_dnd_character_race: true,
+      dnd_character_race: 'human',
+    };
+    const obj = parse(generateJson(opts));
+    expect(obj.sword_type).toBeDefined();
+    expect(obj.dnd_character_race).toBeDefined();
+  });
 });

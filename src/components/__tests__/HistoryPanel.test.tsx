@@ -190,6 +190,7 @@ describe('HistoryPanel', () => {
     const clearActions = screen.getByRole('button', { name: /clear actions/i });
     expect(exportActions.hasAttribute('disabled')).toBe(true);
     expect(clearActions.hasAttribute('disabled')).toBe(true);
+  });
 
   test('downloads history file', async () => {
     const anchor: Partial<HTMLAnchorElement> & { click: jest.Mock } = {
@@ -200,7 +201,9 @@ describe('HistoryPanel', () => {
       revokeObjectURL: jest.fn(),
     });
     const origCreate = document.createElement;
-    jest.spyOn(document, 'createElement').mockImplementation(function (tag: string) {
+    jest.spyOn(document, 'createElement').mockImplementation(function (
+      tag: string,
+    ) {
       if (tag === 'a') return anchor as unknown as HTMLElement;
       return origCreate.call(this, tag);
     });
@@ -225,7 +228,9 @@ describe('HistoryPanel', () => {
       revokeObjectURL: jest.fn(),
     });
     const origCreate = document.createElement;
-    jest.spyOn(document, 'createElement').mockImplementation(function (tag: string) {
+    jest.spyOn(document, 'createElement').mockImplementation(function (
+      tag: string,
+    ) {
       if (tag === 'a') return anchor as unknown as HTMLElement;
       return origCreate.call(this, tag);
     });
@@ -238,9 +243,7 @@ describe('HistoryPanel', () => {
     fireEvent.click(screen.getByRole('button', { name: /^export$/i }));
 
     expect(anchor.click).toHaveBeenCalled();
-    expect(anchor.download).toBe(
-      'latest-actions-20240101-000000-199999.json',
-    );
+    expect(anchor.download).toBe('latest-actions-20240101-000000-199999.json');
   });
 
   test('deleting an action confirms then removes it', () => {
