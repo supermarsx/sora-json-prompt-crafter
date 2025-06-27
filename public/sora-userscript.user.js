@@ -15,6 +15,7 @@
     window.opener.postMessage({ type: 'SORA_USERSCRIPT_READY' }, '*');
   }
 
+
   const waitForTextarea = (callback) => {
     const ta = document.querySelector('textarea');
     if (ta) return callback(ta);
