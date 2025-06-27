@@ -5,6 +5,11 @@ import { OPTION_FLAG_MAP } from './optionFlagMap';
 export function loadOptionsFromJson(json: string): SoraOptions | null {
   try {
     const obj = JSON.parse(json);
+    if (Array.isArray(obj.composition_rules)) {
+      obj.composition_rules = obj.composition_rules.map((r: string) =>
+        r.replace(/_/g, ' '),
+      );
+    }
     const enableMap = OPTION_FLAG_MAP;
 
     const flagUpdates: Partial<SoraOptions> = {};
