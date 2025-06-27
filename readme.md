@@ -66,7 +66,7 @@ npm install
 npm run dev
 ```
 
-Copy `.env.example` to `.env` and adjust the variables. `VITE_MEASUREMENT_ID` holds your Google Analytics ID and `VITE_DISABLE_ANALYTICS` disables tracking. `VITE_DISABLE_STATS` disables the GitHub stats fetch. `VITE_DISCLAIMER_URL` can be set to load the disclaimer from a different URL.
+Copy `.env.example` to `.env` and adjust the variables. `VITE_MEASUREMENT_ID` holds your Google Analytics ID and `VITE_DISABLE_ANALYTICS` disables tracking. `VITE_DISABLE_STATS` disables the GitHub stats fetch. `VITE_DISCLAIMER_URL` can be set to load the disclaimer from a different URL. Set `VITE_GTAG_DEBUG` to `true` to enable GA debug mode.
 Then open http://localhost:8080 in your browser.
 
 ### Docker
@@ -160,6 +160,7 @@ Copy `.env.example` to `.env` and adjust values as needed.
 - **`VITE_DISABLE_ANALYTICS`** (optional) – Set to `true` to disable all analytics tracking. Example provided in `.env.example`.
 - **`VITE_DISABLE_STATS`** (optional) – Set to `true` to disable fetching GitHub stats. Example provided in `.env.example`.
 - **`VITE_DISCLAIMER_URL`** (optional) – URL for the disclaimer text. Defaults to `/disclaimer.txt`.
+- **`VITE_GTAG_DEBUG`** (optional) – Set to `true` to enable Google Analytics debug mode.
 
 ## Contributing
 

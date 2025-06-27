@@ -78,4 +78,21 @@ describe('trackEvent', () => {
     );
     expect(errorSpy).toHaveBeenCalledTimes(2);
   });
+
+  test('passes debug_mode when GTAG_DEBUG enabled', async () => {
+    process.env.VITE_GTAG_DEBUG = 'true';
+    jest.resetModules();
+    ({ trackEvent } = await import('../analytics'));
+
+    const gtagMock = jest.fn();
+    (window as unknown as { gtag?: jest.Mock }).gtag = gtagMock;
+    trackEvent(true, 'foo');
+
+    expect(gtagMock).toHaveBeenCalledWith(
+      'event',
+      'page_action',
+      expect.objectContaining({ debug_mode: true }),
+    );
+    delete process.env.VITE_GTAG_DEBUG;
+  });
 });
