@@ -10,10 +10,7 @@
   "camera_angle": "worm's eye",
   "shot_type": "as is",
   "subject_focus": "top",
-  "composition_rules": [
-    "rule_of_thirds",
-    "leading_lines"
-  ],
+  "composition_rules": ["rule_of_thirds", "leading_lines"],
   "lighting": "golden hour",
   "depth_of_field": "sharp foreground, blurred background",
   "upscale": 2,

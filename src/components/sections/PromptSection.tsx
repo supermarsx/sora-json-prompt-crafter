@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -12,11 +11,15 @@ interface PromptSectionProps {
   trackingEnabled: boolean;
 }
 
-export const PromptSection: React.FC<PromptSectionProps> = ({ options, updateOptions, trackingEnabled }) => {
-  const promptRef = React.useRef<HTMLTextAreaElement>(null)
-  const negativeRef = React.useRef<HTMLTextAreaElement>(null)
-  useResizeTracker(promptRef, trackingEnabled, 'prompt_resize')
-  useResizeTracker(negativeRef, trackingEnabled, 'negative_prompt_resize')
+export const PromptSection: React.FC<PromptSectionProps> = ({
+  options,
+  updateOptions,
+  trackingEnabled,
+}) => {
+  const promptRef = React.useRef<HTMLTextAreaElement>(null);
+  const negativeRef = React.useRef<HTMLTextAreaElement>(null);
+  useResizeTracker(promptRef, trackingEnabled, 'prompt_resize');
+  useResizeTracker(negativeRef, trackingEnabled, 'negative_prompt_resize');
   return (
     <div className="space-y-4">
       <div>

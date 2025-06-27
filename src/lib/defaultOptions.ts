@@ -1,8 +1,10 @@
-import type { SoraOptions } from '@/lib/soraOptions'
+import type { SoraOptions } from '@/lib/soraOptions';
 
 export const DEFAULT_OPTIONS: SoraOptions = {
-  prompt: 'A breathtaking cinematic scene of a futuristic city at sunset, flying cars zipping between glass skyscrapers, vibrant colors, ultra-detailed, 8K, masterful lighting, trending on ArtStation',
-  negative_prompt: 'blurry, low-res, dark, extra limbs, cropped, watermark, text, signature, logo',
+  prompt:
+    'A breathtaking cinematic scene of a futuristic city at sunset, flying cars zipping between glass skyscrapers, vibrant colors, ultra-detailed, 8K, masterful lighting, trending on ArtStation',
+  negative_prompt:
+    'blurry, low-res, dark, extra limbs, cropped, watermark, text, signature, logo',
   use_negative_prompt: true,
   seed: 1337,
   steps: 30,
@@ -14,7 +16,7 @@ export const DEFAULT_OPTIONS: SoraOptions = {
   cfg_rescale: 0.7,
   style_preset: {
     category: 'Photography & Cinematic',
-    style: 'cinematic'
+    style: 'cinematic',
   },
   use_style_preset: false,
   quality: 'high',
@@ -95,4 +97,4 @@ export const DEFAULT_OPTIONS: SoraOptions = {
   extended_motion_strength: false,
   extended_fps: false,
   use_duration: false,
-}
+};

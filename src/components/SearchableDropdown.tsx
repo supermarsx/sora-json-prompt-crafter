@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo, useEffect } from 'react';
 import {
   Dialog,
@@ -26,9 +25,9 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
   options,
   value,
   onValueChange,
-  placeholder = "Select option...",
-  label = "Options",
-  disabled = false
+  placeholder = 'Select option...',
+  label = 'Options',
+  disabled = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -40,23 +39,33 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
   }, [disabled]);
 
   const sortedOptions = useMemo(() => {
-    const priorityOptions = ['default', 'as is', 'not defined', 'keep original'];
-    const regularOptions = options.filter(opt => !priorityOptions.includes(opt)).sort();
-    const presentPriorityOptions = priorityOptions.filter(opt => options.includes(opt));
+    const priorityOptions = [
+      'default',
+      'as is',
+      'not defined',
+      'keep original',
+    ];
+    const regularOptions = options
+      .filter((opt) => !priorityOptions.includes(opt))
+      .sort();
+    const presentPriorityOptions = priorityOptions.filter((opt) =>
+      options.includes(opt),
+    );
     return [...presentPriorityOptions, ...regularOptions];
   }, [options]);
 
   const filteredOptions = useMemo(() => {
     if (!searchQuery) return sortedOptions;
-    return sortedOptions.filter(option =>
-      option.toLowerCase().includes(searchQuery.toLowerCase())
+    return sortedOptions.filter((option) =>
+      option.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   }, [sortedOptions, searchQuery]);
 
   const formatLabel = (option: string) => {
-    return option.split(' ').map(word => 
-      word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ');
+    return option
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
   };
 
   const handleSelect = (option: string) => {
@@ -73,7 +82,9 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
           className="w-full justify-between"
           disabled={disabled}
         >
-          <span className="truncate">{value ? formatLabel(value) : placeholder}</span>
+          <span className="truncate">
+            {value ? formatLabel(value) : placeholder}
+          </span>
           <ChevronDown className="w-4 h-4 ml-2 flex-shrink-0" />
         </Button>
       </DialogTrigger>
@@ -100,7 +111,7 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
               {filteredOptions.map((option) => (
                 <Button
                   key={option}
-                  variant={value === option ? "default" : "ghost"}
+                  variant={value === option ? 'default' : 'ghost'}
                   className="w-full justify-start text-left h-auto py-2 px-3"
                   onClick={() => handleSelect(option)}
                   disabled={disabled}

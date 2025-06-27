@@ -1,8 +1,13 @@
-
 import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { CollapsibleSection } from '../CollapsibleSection';
 import type { SoraOptions } from '@/lib/soraOptions';
@@ -14,12 +19,9 @@ interface DimensionsFormatSectionProps {
   onToggle: (enabled: boolean) => void;
 }
 
-export const DimensionsFormatSection: React.FC<DimensionsFormatSectionProps> = ({
-  options,
-  updateOptions,
-  isEnabled,
-  onToggle
-}) => {
+export const DimensionsFormatSection: React.FC<
+  DimensionsFormatSectionProps
+> = ({ options, updateOptions, isEnabled, onToggle }) => {
   const qualityOptions = [
     'maximum',
     'ultra',
@@ -36,13 +38,14 @@ export const DimensionsFormatSection: React.FC<DimensionsFormatSectionProps> = (
     'bad',
     'poor',
     'unacceptable',
-    'defective'
+    'defective',
   ];
 
   const formatLabel = (value: string) => {
-    return value.split(' ').map(word => 
-      word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ');
+    return value
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
   };
 
   return (
@@ -57,7 +60,7 @@ export const DimensionsFormatSection: React.FC<DimensionsFormatSectionProps> = (
           <Label htmlFor="aspect_ratio">Aspect Ratio</Label>
           <Select
             value={options.aspect_ratio}
-            onValueChange={(value: '16:9' | '21:9' | '4:3' | '1:1' | '9:16') => 
+            onValueChange={(value: '16:9' | '21:9' | '4:3' | '1:1' | '9:16') =>
               updateOptions({ aspect_ratio: value })
             }
           >
@@ -78,7 +81,9 @@ export const DimensionsFormatSection: React.FC<DimensionsFormatSectionProps> = (
           <Label htmlFor="quality">Quality</Label>
           <Select
             value={options.quality}
-            onValueChange={(value) => updateOptions({ quality: value as SoraOptions['quality'] })}
+            onValueChange={(value) =>
+              updateOptions({ quality: value as SoraOptions['quality'] })
+            }
           >
             <SelectTrigger>
               <SelectValue />
@@ -97,7 +102,9 @@ export const DimensionsFormatSection: React.FC<DimensionsFormatSectionProps> = (
           <Checkbox
             id="use_dimensions"
             checked={options.use_dimensions}
-            onCheckedChange={(checked) => updateOptions({ use_dimensions: !!checked })}
+            onCheckedChange={(checked) =>
+              updateOptions({ use_dimensions: !!checked })
+            }
           />
           <Label htmlFor="use_dimensions">Use Custom Dimensions</Label>
         </div>
@@ -109,7 +116,9 @@ export const DimensionsFormatSection: React.FC<DimensionsFormatSectionProps> = (
               id="width"
               type="number"
               value={options.width || 1024}
-              onChange={(e) => updateOptions({ width: parseInt(e.target.value) })}
+              onChange={(e) =>
+                updateOptions({ width: parseInt(e.target.value) })
+              }
               disabled={!options.use_dimensions}
             />
           </div>
@@ -119,7 +128,9 @@ export const DimensionsFormatSection: React.FC<DimensionsFormatSectionProps> = (
               id="height"
               type="number"
               value={options.height || 576}
-              onChange={(e) => updateOptions({ height: parseInt(e.target.value) })}
+              onChange={(e) =>
+                updateOptions({ height: parseInt(e.target.value) })
+              }
               disabled={!options.use_dimensions}
             />
           </div>
@@ -129,7 +140,7 @@ export const DimensionsFormatSection: React.FC<DimensionsFormatSectionProps> = (
           <Label htmlFor="output_format">Output Format</Label>
           <Select
             value={options.output_format}
-            onValueChange={(value: 'png' | 'jpg' | 'webp') => 
+            onValueChange={(value: 'png' | 'jpg' | 'webp') =>
               updateOptions({ output_format: value })
             }
           >
@@ -148,7 +159,7 @@ export const DimensionsFormatSection: React.FC<DimensionsFormatSectionProps> = (
           <Label htmlFor="dynamic_range">Dynamic Range</Label>
           <Select
             value={options.dynamic_range}
-            onValueChange={(value: 'SDR' | 'HDR') => 
+            onValueChange={(value: 'SDR' | 'HDR') =>
               updateOptions({ dynamic_range: value })
             }
           >

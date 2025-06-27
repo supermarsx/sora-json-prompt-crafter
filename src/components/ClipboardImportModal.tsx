@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react'
-import { trackEvent } from '@/lib/analytics'
-import { useTracking } from '@/hooks/use-tracking'
+import React, { useState, useEffect } from 'react';
+import { trackEvent } from '@/lib/analytics';
+import { useTracking } from '@/hooks/use-tracking';
 import {
   Dialog,
   DialogContent,
@@ -11,9 +11,8 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { toast } from '@/components/ui/sonner-toast'
-import { isValidOptions } from '@/lib/validateOptions'
-
+import { toast } from '@/components/ui/sonner-toast';
+import { isValidOptions } from '@/lib/validateOptions';
 
 interface ClipboardImportModalProps {
   open: boolean;
@@ -48,40 +47,46 @@ const ClipboardImportModal: React.FC<ClipboardImportModalProps> = ({
 
   const handleImport = () => {
     if (!text.trim()) {
-      onOpenChange(false)
-      return
+      onOpenChange(false);
+      return;
     }
-    const type = title.toLowerCase().includes('bulk') ? 'bulk_clipboard' : 'clipboard'
+    const type = title.toLowerCase().includes('bulk')
+      ? 'bulk_clipboard'
+      : 'clipboard';
     try {
-      const parsed = JSON.parse(text)
-      const arr = Array.isArray(parsed) ? parsed : [parsed]
-      const strings: string[] = []
+      const parsed = JSON.parse(text);
+      const arr = Array.isArray(parsed) ? parsed : [parsed];
+      const strings: string[] = [];
       for (const item of arr) {
-        let obj: unknown = item
+        let obj: unknown = item;
         if (typeof item === 'string') {
-          try { obj = JSON.parse(item) } catch { obj = undefined }
-        } else if (item && typeof item === 'object' && 'json' in item) {
-          obj = (item as { json: string }).json
           try {
-            obj = JSON.parse(String(obj))
+            obj = JSON.parse(item);
+          } catch {
+            obj = undefined;
+          }
+        } else if (item && typeof item === 'object' && 'json' in item) {
+          obj = (item as { json: string }).json;
+          try {
+            obj = JSON.parse(String(obj));
           } catch {
             /* ignore parse errors */
           }
         }
         if (obj && typeof obj === 'object' && isValidOptions(obj)) {
-          strings.push(JSON.stringify(obj))
+          strings.push(JSON.stringify(obj));
         }
       }
-      if (!strings.length) throw new Error('invalid')
-      onImport(strings)
+      if (!strings.length) throw new Error('invalid');
+      onImport(strings);
     } catch {
-      toast.error('Invalid JSON')
-      onOpenChange(false)
-      return
+      toast.error('Invalid JSON');
+      onOpenChange(false);
+      return;
     }
-    trackEvent(trackingEnabled, 'history_import', { type })
-    setText('')
-    onOpenChange(false)
+    trackEvent(trackingEnabled, 'history_import', { type });
+    setText('');
+    onOpenChange(false);
   };
 
   return (
@@ -93,7 +98,7 @@ const ClipboardImportModal: React.FC<ClipboardImportModalProps> = ({
         </DialogHeader>
         <Textarea
           value={text}
-          onChange={e => setText(e.target.value)}
+          onChange={(e) => setText(e.target.value)}
           placeholder="Paste JSON here"
           className="my-4"
         />

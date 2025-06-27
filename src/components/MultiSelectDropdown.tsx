@@ -26,43 +26,53 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   value,
   onValueChange,
   placeholder = 'Select options...',
-  label = 'Options'
+  label = 'Options',
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   const sortedOptions = useMemo(() => {
-    const priorityOptions = ['default', 'as is', 'not defined', 'keep original'];
-    const regularOptions = options.filter(opt => !priorityOptions.includes(opt)).sort();
-    const presentPriorityOptions = priorityOptions.filter(opt => options.includes(opt));
+    const priorityOptions = [
+      'default',
+      'as is',
+      'not defined',
+      'keep original',
+    ];
+    const regularOptions = options
+      .filter((opt) => !priorityOptions.includes(opt))
+      .sort();
+    const presentPriorityOptions = priorityOptions.filter((opt) =>
+      options.includes(opt),
+    );
     return [...presentPriorityOptions, ...regularOptions];
   }, [options]);
 
   const filteredOptions = useMemo(() => {
     if (!searchQuery) return sortedOptions;
-    return sortedOptions.filter(option =>
-      option.toLowerCase().includes(searchQuery.toLowerCase())
+    return sortedOptions.filter((option) =>
+      option.toLowerCase().includes(searchQuery.toLowerCase()),
     );
   }, [sortedOptions, searchQuery]);
 
   const formatLabel = (option: string) => {
     return option
       .split(' ')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
   };
 
   const toggleOption = (option: string) => {
     let newValues: string[];
     if (value.includes(option)) {
-      newValues = value.filter(v => v !== option);
+      newValues = value.filter((v) => v !== option);
     } else {
       newValues = [...value, option];
     }
     onValueChange(newValues);
   };
 
-  const displayValue = value.length > 0 ? value.map(formatLabel).join(', ') : placeholder;
+  const displayValue =
+    value.length > 0 ? value.map(formatLabel).join(', ') : placeholder;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -91,7 +101,7 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
           </div>
           <ScrollArea className="h-[300px]">
             <div className="space-y-2">
-              {filteredOptions.map(option => (
+              {filteredOptions.map((option) => (
                 <div key={option} className="flex items-center space-x-2 p-1">
                   <Checkbox
                     id={option}

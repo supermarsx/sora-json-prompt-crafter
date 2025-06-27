@@ -1,7 +1,6 @@
-
-import React, { useState } from 'react'
-import { trackEvent } from '@/lib/analytics'
-import { useTracking } from '@/hooks/use-tracking'
+import React, { useState } from 'react';
+import { trackEvent } from '@/lib/analytics';
+import { useTracking } from '@/hooks/use-tracking';
 import {
   Dialog,
   DialogContent,
@@ -10,7 +9,15 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Facebook, Twitter, Instagram, MessageCircle, Send, Copy, Check } from 'lucide-react';
+import {
+  Facebook,
+  Twitter,
+  Instagram,
+  MessageCircle,
+  Send,
+  Copy,
+  Check,
+} from 'lucide-react';
 import { toast } from '@/components/ui/sonner-toast';
 
 interface ShareModalProps {
@@ -19,7 +26,11 @@ interface ShareModalProps {
   jsonContent: string;
 }
 
-export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, jsonContent }) => {
+export const ShareModal: React.FC<ShareModalProps> = ({
+  isOpen,
+  onClose,
+  jsonContent,
+}) => {
   const [copied, setCopied] = useState(false);
   const [trackingEnabled] = useTracking();
   const shareToFacebook = () => {
@@ -30,7 +41,9 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, jsonCon
   };
 
   const shareToTwitter = () => {
-    const text = encodeURIComponent('Check out my Sora prompt configuration! #SoraAI #AIGeneration');
+    const text = encodeURIComponent(
+      'Check out my Sora prompt configuration! #SoraAI #AIGeneration',
+    );
     const url = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(window.location.href)}`;
     window.open(url, '_blank', 'width=600,height=400');
     toast.success('Shared to Twitter!');
@@ -38,7 +51,9 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, jsonCon
   };
 
   const shareToWhatsApp = () => {
-    const text = encodeURIComponent(`Check out my Sora prompt configuration!\n\n${jsonContent}`);
+    const text = encodeURIComponent(
+      `Check out my Sora prompt configuration!\n\n${jsonContent}`,
+    );
     const url = `https://wa.me/?text=${text}`;
     window.open(url, '_blank');
     toast.success('Shared to WhatsApp!');
@@ -46,7 +61,9 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, jsonCon
   };
 
   const shareToTelegram = () => {
-    const text = encodeURIComponent(`Check out my Sora prompt configuration!\n\n${jsonContent}`);
+    const text = encodeURIComponent(
+      `Check out my Sora prompt configuration!\n\n${jsonContent}`,
+    );
     const url = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${text}`;
     window.open(url, '_blank');
     toast.success('Shared to Telegram!');

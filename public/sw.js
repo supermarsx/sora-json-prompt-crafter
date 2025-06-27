@@ -7,19 +7,19 @@ const staticAssets = [
   '/favicon.svg',
   '/web-app-manifest-192x192.png',
   '/web-app-manifest-512x512.png',
-  '/site.webmanifest'
+  '/site.webmanifest',
 ];
 
-self.addEventListener('install', event => {
+self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(cacheName).then(cache => cache.addAll(staticAssets))
+    caches.open(cacheName).then((cache) => cache.addAll(staticAssets)),
   );
 });
 
-self.addEventListener('fetch', event => {
+self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then(response => {
+    caches.match(event.request).then((response) => {
       return response || fetch(event.request);
-    })
+    }),
   );
 });

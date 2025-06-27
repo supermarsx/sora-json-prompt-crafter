@@ -1,30 +1,30 @@
-import type { SoraOptions } from '@/lib/soraOptions'
+import type { SoraOptions } from '@/lib/soraOptions';
 
 function removeProps(
   obj: Record<string, unknown>,
-  keys: (keyof SoraOptions)[]
+  keys: (keyof SoraOptions)[],
 ) {
-  keys.forEach(k => {
-    delete obj[k as string]
-  })
+  keys.forEach((k) => {
+    delete obj[k as string];
+  });
 }
 
 function removeIfDisabled(
   obj: Record<string, unknown>,
   enabled: boolean,
-  keys: (keyof SoraOptions)[]
+  keys: (keyof SoraOptions)[],
 ) {
-  if (!enabled) removeProps(obj, keys)
+  if (!enabled) removeProps(obj, keys);
 }
 
 export function generateJson(options: SoraOptions): string {
-  const cleanOptions = { ...options }
+  const cleanOptions = { ...options };
 
-  Object.keys(cleanOptions).forEach(key => {
+  Object.keys(cleanOptions).forEach((key) => {
     if (key.startsWith('use_') || key.startsWith('extended_')) {
-      delete (cleanOptions as Record<string, unknown>)[key]
+      delete (cleanOptions as Record<string, unknown>)[key];
     }
-  })
+  });
   removeIfDisabled(cleanOptions, options.use_core_settings, [
     'seed',
     'steps',
@@ -32,7 +32,7 @@ export function generateJson(options: SoraOptions): string {
     'temperature',
     'cfg_rescale',
     'quality',
-  ])
+  ]);
 
   if (!options.use_dimensions_format) {
     removeProps(cleanOptions, [
@@ -41,20 +41,22 @@ export function generateJson(options: SoraOptions): string {
       'aspect_ratio',
       'output_format',
       'dynamic_range',
-    ])
+    ]);
   } else {
-    removeIfDisabled(cleanOptions, options.use_dimensions, ['width', 'height'])
+    removeIfDisabled(cleanOptions, options.use_dimensions, ['width', 'height']);
   }
 
-  removeIfDisabled(cleanOptions, options.use_style_preset, ['style_preset'])
-  removeIfDisabled(cleanOptions, options.use_negative_prompt, ['negative_prompt'])
+  removeIfDisabled(cleanOptions, options.use_style_preset, ['style_preset']);
+  removeIfDisabled(cleanOptions, options.use_negative_prompt, [
+    'negative_prompt',
+  ]);
 
   if (!options.use_material) {
-    removeProps(cleanOptions, ['made_out_of', 'secondary_material'])
+    removeProps(cleanOptions, ['made_out_of', 'secondary_material']);
   } else {
     removeIfDisabled(cleanOptions, options.use_secondary_material, [
       'secondary_material',
-    ])
+    ]);
   }
 
   if (!options.use_camera_composition) {
@@ -65,15 +67,15 @@ export function generateJson(options: SoraOptions): string {
       'composition_rules',
       'camera_type',
       'lens_type',
-    ])
+    ]);
   }
 
-  removeIfDisabled(cleanOptions, options.use_aperture, ['aperture'])
-  removeIfDisabled(cleanOptions, options.use_lens_type, ['lens_type'])
-  removeIfDisabled(cleanOptions, options.use_dof, ['depth_of_field'])
-  removeIfDisabled(cleanOptions, options.use_blur_style, ['blur_style'])
-  removeIfDisabled(cleanOptions, options.use_color_grading, ['color_grade'])
-  removeIfDisabled(cleanOptions, options.use_lighting, ['lighting'])
+  removeIfDisabled(cleanOptions, options.use_aperture, ['aperture']);
+  removeIfDisabled(cleanOptions, options.use_lens_type, ['lens_type']);
+  removeIfDisabled(cleanOptions, options.use_dof, ['depth_of_field']);
+  removeIfDisabled(cleanOptions, options.use_blur_style, ['blur_style']);
+  removeIfDisabled(cleanOptions, options.use_color_grading, ['color_grade']);
+  removeIfDisabled(cleanOptions, options.use_lighting, ['lighting']);
 
   if (!options.use_motion_animation) {
     removeProps(cleanOptions, [
@@ -83,9 +85,9 @@ export function generateJson(options: SoraOptions): string {
       'camera_motion',
       'motion_direction',
       'frame_interpolation',
-    ])
+    ]);
   } else {
-    removeIfDisabled(cleanOptions, options.use_duration, ['duration_seconds'])
+    removeIfDisabled(cleanOptions, options.use_duration, ['duration_seconds']);
   }
 
   if (!options.use_enhancement_safety) {
@@ -97,10 +99,14 @@ export function generateJson(options: SoraOptions): string {
       'quality_booster',
       'enhance_object_reflections',
       'keep_key_details',
-    ])
+    ]);
   } else {
-    removeIfDisabled(cleanOptions, options.use_safety_filter, ['safety_filter'])
-    removeIfDisabled(cleanOptions, options.use_quality_booster, ['quality_booster'])
+    removeIfDisabled(cleanOptions, options.use_safety_filter, [
+      'safety_filter',
+    ]);
+    removeIfDisabled(cleanOptions, options.use_quality_booster, [
+      'quality_booster',
+    ]);
   }
 
   if (!options.use_face_enhancements) {
@@ -110,14 +116,18 @@ export function generateJson(options: SoraOptions): string {
       'subject_gender',
       'makeup_style',
       'character_mood',
-    ])
+    ]);
   } else {
-    removeIfDisabled(cleanOptions, options.use_subject_gender, ['subject_gender'])
-    removeIfDisabled(cleanOptions, options.use_makeup_style, ['makeup_style'])
-    removeIfDisabled(cleanOptions, options.use_character_mood, ['character_mood'])
+    removeIfDisabled(cleanOptions, options.use_subject_gender, [
+      'subject_gender',
+    ]);
+    removeIfDisabled(cleanOptions, options.use_makeup_style, ['makeup_style']);
+    removeIfDisabled(cleanOptions, options.use_character_mood, [
+      'character_mood',
+    ]);
   }
 
-  removeIfDisabled(cleanOptions, options.use_signature, ['signature'])
+  removeIfDisabled(cleanOptions, options.use_signature, ['signature']);
 
   if (!options.use_settings_location) {
     removeProps(cleanOptions, [
@@ -126,21 +136,23 @@ export function generateJson(options: SoraOptions): string {
       'location',
       'season',
       'atmosphere_mood',
-    ])
+    ]);
   } else {
-    removeIfDisabled(cleanOptions, options.use_environment, ['environment'])
-    removeIfDisabled(cleanOptions, options.use_location, ['location'])
+    removeIfDisabled(cleanOptions, options.use_environment, ['environment']);
+    removeIfDisabled(cleanOptions, options.use_location, ['location']);
   }
 
-  removeIfDisabled(cleanOptions, options.use_season, ['season'])
-  removeIfDisabled(cleanOptions, options.use_atmosphere_mood, ['atmosphere_mood'])
-  removeIfDisabled(cleanOptions, options.use_subject_mood, ['subject_mood'])
+  removeIfDisabled(cleanOptions, options.use_season, ['season']);
+  removeIfDisabled(cleanOptions, options.use_atmosphere_mood, [
+    'atmosphere_mood',
+  ]);
+  removeIfDisabled(cleanOptions, options.use_subject_mood, ['subject_mood']);
 
   if (!options.use_sword_type) {
-    removeProps(cleanOptions, ['sword_type', 'sword_vibe'])
+    removeProps(cleanOptions, ['sword_type', 'sword_vibe']);
   }
 
-  removeIfDisabled(cleanOptions, options.use_upscale_factor, ['upscale'])
+  removeIfDisabled(cleanOptions, options.use_upscale_factor, ['upscale']);
 
   if (!options.use_dnd_section) {
     removeProps(cleanOptions, [
@@ -152,26 +164,32 @@ export function generateJson(options: SoraOptions): string {
       'dnd_environment',
       'dnd_magic_school',
       'dnd_item_type',
-    ])
+    ]);
   } else {
     removeIfDisabled(cleanOptions, options.use_dnd_character_race, [
       'dnd_character_race',
-    ])
+    ]);
     removeIfDisabled(cleanOptions, options.use_dnd_character_class, [
       'dnd_character_class',
-    ])
+    ]);
     removeIfDisabled(cleanOptions, options.use_dnd_character_background, [
       'dnd_character_background',
-    ])
+    ]);
     removeIfDisabled(cleanOptions, options.use_dnd_character_alignment, [
       'dnd_character_alignment',
-    ])
+    ]);
     removeIfDisabled(cleanOptions, options.use_dnd_monster_type, [
       'dnd_monster_type',
-    ])
-    removeIfDisabled(cleanOptions, options.use_dnd_environment, ['dnd_environment'])
-    removeIfDisabled(cleanOptions, options.use_dnd_magic_school, ['dnd_magic_school'])
-    removeIfDisabled(cleanOptions, options.use_dnd_item_type, ['dnd_item_type'])
+    ]);
+    removeIfDisabled(cleanOptions, options.use_dnd_environment, [
+      'dnd_environment',
+    ]);
+    removeIfDisabled(cleanOptions, options.use_dnd_magic_school, [
+      'dnd_magic_school',
+    ]);
+    removeIfDisabled(cleanOptions, options.use_dnd_item_type, [
+      'dnd_item_type',
+    ]);
   }
 
   removeProps(cleanOptions, [
@@ -187,14 +205,14 @@ export function generateJson(options: SoraOptions): string {
     'use_style_preset',
     'use_negative_prompt',
     'use_camera_composition',
-  ])
-  delete (cleanOptions as { image_count?: number }).image_count
+  ]);
+  delete (cleanOptions as { image_count?: number }).image_count;
 
-  Object.keys(cleanOptions).forEach(k => {
+  Object.keys(cleanOptions).forEach((k) => {
     if ((cleanOptions as Record<string, unknown>)[k] === false) {
-      delete (cleanOptions as Record<string, unknown>)[k]
+      delete (cleanOptions as Record<string, unknown>)[k];
     }
-  })
+  });
 
-  return JSON.stringify(cleanOptions, null, 2)
+  return JSON.stringify(cleanOptions, null, 2);
 }

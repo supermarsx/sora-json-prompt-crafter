@@ -1,8 +1,13 @@
-import React, { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { toast } from '@/components/ui/sonner-toast'
-import { trackEvent } from '@/lib/analytics'
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
+import React, { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { toast } from '@/components/ui/sonner-toast';
+import { trackEvent } from '@/lib/analytics';
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from '@/components/ui/dropdown-menu';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,7 +17,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
+} from '@/components/ui/alert-dialog';
 import {
   Copy,
   Check,
@@ -72,8 +77,8 @@ export const ActionBar: React.FC<ActionBarProps> = ({
       <div className="fixed bottom-4 right-4 z-50">
         <Button
           onClick={() => {
-            setMinimized(false)
-            trackEvent(trackingEnabled, 'restore_actions')
+            setMinimized(false);
+            trackEvent(trackingEnabled, 'restore_actions');
           }}
           variant="default"
           size="sm"
@@ -131,9 +136,9 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           <DropdownMenuItem
             onSelect={() => {
               if (trackingEnabled) {
-                setConfirmDisableTracking(true)
+                setConfirmDisableTracking(true);
               } else {
-                setConfirmEnableTracking(true)
+                setConfirmEnableTracking(true);
               }
             }}
             className="gap-2"
@@ -157,8 +162,8 @@ export const ActionBar: React.FC<ActionBarProps> = ({
       {showJumpToJson && (
         <Button
           onClick={() => {
-            onJumpToJson?.()
-            trackEvent(trackingEnabled, 'jump_to_json')
+            onJumpToJson?.();
+            trackEvent(trackingEnabled, 'jump_to_json');
           }}
           variant="outline"
           size="sm"
@@ -170,8 +175,8 @@ export const ActionBar: React.FC<ActionBarProps> = ({
       )}
       <Button
         onClick={() => {
-          setMinimized(true)
-          trackEvent(trackingEnabled, 'minimize_actions')
+          setMinimized(true);
+          trackEvent(trackingEnabled, 'minimize_actions');
         }}
         variant="ghost"
         size="icon"
@@ -180,7 +185,10 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         <ChevronDown className="w-4 h-4" />
       </Button>
 
-      <AlertDialog open={confirmDisableTracking} onOpenChange={setConfirmDisableTracking}>
+      <AlertDialog
+        open={confirmDisableTracking}
+        onOpenChange={setConfirmDisableTracking}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Disable tracking?</AlertDialogTitle>
@@ -192,11 +200,11 @@ export const ActionBar: React.FC<ActionBarProps> = ({
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
-                onToggleTracking()
-                toast.success('Tracking disabled')
-                trackEvent(true, 'disable_tracking_confirm')
-                trackEvent(true, 'toggle_tracking', { enabled: false })
-                setConfirmDisableTracking(false)
+                onToggleTracking();
+                toast.success('Tracking disabled');
+                trackEvent(true, 'disable_tracking_confirm');
+                trackEvent(true, 'toggle_tracking', { enabled: false });
+                setConfirmDisableTracking(false);
               }}
             >
               Disable
@@ -205,7 +213,10 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         </AlertDialogContent>
       </AlertDialog>
 
-      <AlertDialog open={confirmEnableTracking} onOpenChange={setConfirmEnableTracking}>
+      <AlertDialog
+        open={confirmEnableTracking}
+        onOpenChange={setConfirmEnableTracking}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Enable tracking?</AlertDialogTitle>
@@ -217,11 +228,11 @@ export const ActionBar: React.FC<ActionBarProps> = ({
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
-                onToggleTracking()
-                toast.success('Tracking enabled')
-                trackEvent(true, 'enable_tracking_confirm')
-                trackEvent(true, 'toggle_tracking', { enabled: true })
-                setConfirmEnableTracking(false)
+                onToggleTracking();
+                toast.success('Tracking enabled');
+                trackEvent(true, 'enable_tracking_confirm');
+                trackEvent(true, 'toggle_tracking', { enabled: true });
+                setConfirmEnableTracking(false);
               }}
             >
               Enable

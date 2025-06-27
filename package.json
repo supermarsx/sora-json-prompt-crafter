@@ -14,6 +14,9 @@
     "typecheck": "tsc --noEmit",
     "format": "prettier --write ."
   },
+  "overrides": {
+    "test-exclude": "^7.0.1"
+  },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-accordion": "^1.2.0",

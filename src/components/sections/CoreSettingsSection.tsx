@@ -1,9 +1,14 @@
-
 import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { CollapsibleSection } from '../CollapsibleSection';
 import type { SoraOptions } from '@/lib/soraOptions';
 
@@ -15,9 +20,22 @@ interface CoreSettingsSectionProps {
 }
 
 const qualityOptions = [
-  'maximum', 'ultra', 'excellent', 'high', 'good', 'standard',
-  'draft', 'medium', 'moderate', 'minimum', 'low',
-  'below standard', 'bad', 'poor', 'unacceptable', 'defective'
+  'maximum',
+  'ultra',
+  'excellent',
+  'high',
+  'good',
+  'standard',
+  'draft',
+  'medium',
+  'moderate',
+  'minimum',
+  'low',
+  'below standard',
+  'bad',
+  'poor',
+  'unacceptable',
+  'defective',
 ];
 
 export const CoreSettingsSection: React.FC<CoreSettingsSectionProps> = ({
@@ -40,14 +58,23 @@ export const CoreSettingsSection: React.FC<CoreSettingsSectionProps> = ({
             id="seed"
             type="number"
             value={options.seed || ''}
-            onChange={(e) => updateOptions({ seed: e.target.value ? parseInt(e.target.value) : null })}
+            onChange={(e) =>
+              updateOptions({
+                seed: e.target.value ? parseInt(e.target.value) : null,
+              })
+            }
             placeholder="Random seed (leave empty for random)"
           />
         </div>
-        
+
         <div>
           <Label htmlFor="quality">Quality</Label>
-          <Select value={options.quality} onValueChange={(value) => updateOptions({ quality: value as SoraOptions['quality'] })}>
+          <Select
+            value={options.quality}
+            onValueChange={(value) =>
+              updateOptions({ quality: value as SoraOptions['quality'] })
+            }
+          >
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
@@ -60,7 +87,7 @@ export const CoreSettingsSection: React.FC<CoreSettingsSectionProps> = ({
             </SelectContent>
           </Select>
         </div>
-        
+
         <div>
           <Label>Steps: {options.steps}</Label>
           <Slider
@@ -72,19 +99,21 @@ export const CoreSettingsSection: React.FC<CoreSettingsSectionProps> = ({
             className="mt-2"
           />
         </div>
-        
+
         <div>
           <Label>Guidance Scale: {options.guidance_scale}</Label>
           <Slider
             value={[options.guidance_scale]}
-            onValueChange={([value]) => updateOptions({ guidance_scale: value })}
+            onValueChange={([value]) =>
+              updateOptions({ guidance_scale: value })
+            }
             min={1}
             max={20}
             step={0.1}
             className="mt-2"
           />
         </div>
-        
+
         <div>
           <Label>Temperature: {options.temperature}</Label>
           <Slider
@@ -96,7 +125,7 @@ export const CoreSettingsSection: React.FC<CoreSettingsSectionProps> = ({
             className="mt-2"
           />
         </div>
-        
+
         <div>
           <Label>CFG Rescale: {options.cfg_rescale}</Label>
           <Slider

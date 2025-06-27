@@ -1,4 +1,4 @@
-import type { SoraOptions } from './soraOptions'
+import type { SoraOptions } from './soraOptions';
 
 export const OPTION_FLAG_MAP: Record<string, keyof SoraOptions> = {
   negative_prompt: 'use_negative_prompt',
@@ -65,4 +65,4 @@ export const OPTION_FLAG_MAP: Record<string, keyof SoraOptions> = {
   cfg_rescale: 'use_core_settings',
   quality: 'use_core_settings',
   signature: 'use_signature',
-}
+};

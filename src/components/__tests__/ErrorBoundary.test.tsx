@@ -1,43 +1,43 @@
-import { render, screen, fireEvent } from '@testing-library/react'
-import ErrorBoundary from '../ErrorBoundary'
-import { jest } from '@jest/globals'
+import { render, screen, fireEvent } from '@testing-library/react';
+import ErrorBoundary from '../ErrorBoundary';
+import { jest } from '@jest/globals';
 
 function ProblemChild({ shouldThrow }: { shouldThrow: boolean }) {
   if (shouldThrow) {
-    throw new Error('boom')
+    throw new Error('boom');
   }
-  return <div>child content</div>
+  return <div>child content</div>;
 }
 
 describe('ErrorBoundary', () => {
-  let errorSpy: jest.SpyInstance
+  let errorSpy: jest.SpyInstance;
 
   beforeEach(() => {
-    errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
-  })
+    errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+  });
 
   afterEach(() => {
-    errorSpy.mockRestore()
-  })
+    errorSpy.mockRestore();
+  });
   test('shows fallback and resets on Try Again', () => {
     const { rerender } = render(
       <ErrorBoundary>
         <ProblemChild shouldThrow={true} />
-      </ErrorBoundary>
-    )
+      </ErrorBoundary>,
+    );
 
-    expect(screen.getByText(/something went wrong/i)).toBeTruthy()
+    expect(screen.getByText(/something went wrong/i)).toBeTruthy();
 
     rerender(
       <ErrorBoundary>
         <ProblemChild shouldThrow={false} />
-      </ErrorBoundary>
-    )
+      </ErrorBoundary>,
+    );
 
-    const button = screen.getByRole('button', { name: /try again/i })
-    fireEvent.click(button)
+    const button = screen.getByRole('button', { name: /try again/i });
+    fireEvent.click(button);
 
-    expect(screen.queryByText(/something went wrong/i)).toBeNull()
-    expect(screen.getByText('child content')).toBeTruthy()
-  })
-})
+    expect(screen.queryByText(/something went wrong/i)).toBeNull();
+    expect(screen.getByText('child content')).toBeTruthy();
+  });
+});

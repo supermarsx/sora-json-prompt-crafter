@@ -1,8 +1,7 @@
+import { lazy, Suspense } from 'react';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
-import { lazy, Suspense } from "react";
-import ErrorBoundary from "@/components/ErrorBoundary";
-
-const Dashboard = lazy(() => import("@/components/Dashboard"));
+const Dashboard = lazy(() => import('@/components/Dashboard'));
 
 const Index = () => {
   return (

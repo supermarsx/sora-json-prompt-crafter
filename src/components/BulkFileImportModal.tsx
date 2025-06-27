@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
-import { trackEvent } from '@/lib/analytics'
-import { useTracking } from '@/hooks/use-tracking'
+import React, { useState } from 'react';
+import { trackEvent } from '@/lib/analytics';
+import { useTracking } from '@/hooks/use-tracking';
 import {
   Dialog,
   DialogContent,
@@ -12,7 +12,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/sonner-toast';
-import { isValidOptions } from '@/lib/validateOptions'
+import { isValidOptions } from '@/lib/validateOptions';
 
 interface BulkFileImportModalProps {
   open: boolean;
@@ -41,7 +41,11 @@ const BulkFileImportModal: React.FC<BulkFileImportModalProps> = ({
       for (const item of arr) {
         let obj: unknown = item;
         if (typeof item === 'string') {
-          try { obj = JSON.parse(item); } catch { obj = undefined; }
+          try {
+            obj = JSON.parse(item);
+          } catch {
+            obj = undefined;
+          }
         } else if (item && typeof item === 'object' && 'json' in item) {
           obj = (item as { json: string }).json;
           try {
@@ -57,7 +61,7 @@ const BulkFileImportModal: React.FC<BulkFileImportModalProps> = ({
       if (!jsons.length) throw new Error('invalid');
       onImport(jsons);
       toast.success('File imported!');
-      trackEvent(trackingEnabled, 'history_import', { type: 'bulk_file' })
+      trackEvent(trackingEnabled, 'history_import', { type: 'bulk_file' });
       setFile(null);
       onOpenChange(false);
     } catch {
@@ -70,9 +74,15 @@ const BulkFileImportModal: React.FC<BulkFileImportModalProps> = ({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Bulk File Import</DialogTitle>
-          <DialogDescription>Select a JSON file to import prompts.</DialogDescription>
+          <DialogDescription>
+            Select a JSON file to import prompts.
+          </DialogDescription>
         </DialogHeader>
-        <Input type="file" accept=".json" onChange={e => setFile(e.target.files?.[0] || null)} />
+        <Input
+          type="file"
+          accept=".json"
+          onChange={(e) => setFile(e.target.files?.[0] || null)}
+        />
         <DialogFooter>
           <Button variant="secondary" onClick={() => onOpenChange(false)}>
             Cancel
