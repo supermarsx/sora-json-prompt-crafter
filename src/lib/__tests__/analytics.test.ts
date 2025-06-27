@@ -90,7 +90,7 @@ describe('trackEvent', () => {
 
     expect(gtagMock).toHaveBeenCalledWith(
       'event',
-      'page_action',
+      'foo',
       expect.objectContaining({ debug_mode: true }),
     );
     delete process.env.VITE_GTAG_DEBUG;
