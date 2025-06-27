@@ -25,6 +25,7 @@ import { useIsSingleColumn } from '@/hooks/use-single-column';
 import { useDarkMode } from '@/hooks/use-dark-mode';
 import { useTracking } from '@/hooks/use-tracking';
 import { useSoraTools } from '@/hooks/use-sora-tools';
+import { useSoraUserscript } from '@/hooks/use-sora-userscript';
 import { useActionHistory } from '@/hooks/use-action-history';
 import { trackEvent } from '@/lib/analytics';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
@@ -71,6 +72,7 @@ const Dashboard = () => {
   const [darkMode, setDarkMode] = useDarkMode();
   const [trackingEnabled, setTrackingEnabled] = useTracking();
   const [soraToolsEnabled, setSoraToolsEnabled] = useSoraTools();
+  const [userscriptInstalled, setUserscriptInstalled] = useSoraUserscript();
   const actionHistory = useActionHistory();
   const [githubStats, setGithubStats] = useState<{
     stars: number;
@@ -497,12 +499,13 @@ const Dashboard = () => {
                   View on Lovable
                 </a>
               </Button>
-              {soraToolsEnabled && (
+              {soraToolsEnabled && !userscriptInstalled && (
                 <Button asChild variant="outline" size="sm" className="gap-1">
                   <a
-                    href="/sora-userscript.user.js"
-                    download
+                    href="https://github.com/supermarsx/sora-json-prompt-crafter/raw/refs/heads/main/public/sora-userscript.user.js"
                     className="flex items-center gap-1"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     onClick={() =>
                       trackEvent(trackingEnabled, 'install_userscript')
                     }
@@ -604,6 +607,7 @@ const Dashboard = () => {
         onClear={clearJson}
         onShare={shareJson}
         onSendToSora={sendToSora}
+        userscriptInstalled={userscriptInstalled}
         onImport={() => setShowImportModal(true)}
         onHistory={() => setShowHistory(true)}
         onReset={resetJson}

@@ -42,6 +42,7 @@ interface ActionBarProps {
   onClear: () => void;
   onShare: () => void;
   onSendToSora: () => void;
+  userscriptInstalled: boolean;
   onImport: () => void;
   onHistory: () => void;
   onReset: () => void;
@@ -61,6 +62,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   onClear,
   onShare,
   onSendToSora,
+  userscriptInstalled,
   onImport,
   onHistory,
   onReset,
@@ -100,7 +102,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
 
   return (
     <div className="fixed bottom-4 right-4 z-50 bg-card border rounded-md shadow-lg p-3 flex flex-wrap items-center gap-2">
-      {soraToolsEnabled && (
+      {soraToolsEnabled && userscriptInstalled && (
         <Button
           onClick={onSendToSora}
           variant="outline"
