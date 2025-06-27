@@ -56,7 +56,7 @@ export function trackEvent(
       eventParams.debug_mode = true;
       console.debug('gtag event', event, params);
     }
-    gtag('event', 'page_action', eventParams);
+    gtag('event', event, eventParams);
   } catch (e) {
     trackingFailures++;
     if (trackingFailures <= 5) {
