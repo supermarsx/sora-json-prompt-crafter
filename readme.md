@@ -9,6 +9,7 @@
 ![Watchers](https://img.shields.io/github/watchers/supermarsx/sora-json-prompt-crafter?style=for-the-badge)
 
 ![Build](https://img.shields.io/github/actions/workflow/status/supermarsx/sora-json-prompt-crafter/ci.yml?style=for-the-badge)
+![Coverage](./coverage.svg)
 ![Issues](https://img.shields.io/github/issues/supermarsx/sora-json-prompt-crafter?style=for-the-badge)
 
 Sora JSON Prompt Crafter is a web interface for building configuration files for Sora's
