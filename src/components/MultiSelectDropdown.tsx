@@ -38,14 +38,14 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
       'not defined',
       'keep original',
     ];
-    const regularOptions = options
-      .filter((opt) => !priorityOptions.includes(opt))
-      .sort();
-    const presentPriorityOptions = priorityOptions.filter((opt) =>
-      options.includes(opt),
-    );
-    return [...presentPriorityOptions, ...regularOptions];
-  }, [options]);
+    const baseSorted = [
+      ...priorityOptions.filter((opt) => options.includes(opt)),
+      ...options.filter((opt) => !priorityOptions.includes(opt)).sort(),
+    ];
+    const selectedOptions = baseSorted.filter((opt) => value.includes(opt));
+    const unselectedOptions = baseSorted.filter((opt) => !value.includes(opt));
+    return [...selectedOptions, ...unselectedOptions];
+  }, [options, value]);
 
   const filteredOptions = useMemo(() => {
     if (!searchQuery) return sortedOptions;

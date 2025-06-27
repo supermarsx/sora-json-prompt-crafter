@@ -72,4 +72,18 @@ describe('MultiSelectDropdown', () => {
     fireEvent.click(secondCheck);
     expect(handleChange).toHaveBeenLastCalledWith([]);
   });
+
+  test('selected options appear first in the list', () => {
+    render(
+      <MultiSelectDropdown
+        options={options}
+        value={['bar']}
+        onValueChange={() => {}}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button'));
+    const checkboxes = screen.getAllByRole('checkbox');
+    expect((checkboxes[0] as HTMLElement).id).toBe('bar');
+  });
 });
