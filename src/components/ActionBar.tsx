@@ -30,6 +30,7 @@ import {
   Eye,
   EyeOff,
   Trash2,
+  Send,
   Cog,
   ChevronDown,
   ChevronUp,
@@ -40,12 +41,15 @@ interface ActionBarProps {
   onCopy: () => void;
   onClear: () => void;
   onShare: () => void;
+  onSendToSora: () => void;
   onImport: () => void;
   onHistory: () => void;
   onReset: () => void;
   onRegenerate: () => void;
   onRandomize: () => void;
   trackingEnabled: boolean;
+  soraToolsEnabled: boolean;
+  onToggleSoraTools: () => void;
   onToggleTracking: () => void;
   copied: boolean;
   showJumpToJson?: boolean;
@@ -56,12 +60,15 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   onCopy,
   onClear,
   onShare,
+  onSendToSora,
   onImport,
   onHistory,
   onReset,
   onRegenerate,
   onRandomize,
   trackingEnabled,
+  soraToolsEnabled,
+  onToggleSoraTools,
   onToggleTracking,
   copied,
   showJumpToJson,
@@ -93,6 +100,17 @@ export const ActionBar: React.FC<ActionBarProps> = ({
 
   return (
     <div className="fixed bottom-4 right-4 z-50 bg-card border rounded-md shadow-lg p-3 flex flex-wrap items-center gap-2">
+      {soraToolsEnabled && (
+        <Button
+          onClick={onSendToSora}
+          variant="outline"
+          size="sm"
+          className="gap-2"
+        >
+          <Send className="w-4 h-4" />
+          Send to Sora
+        </Button>
+      )}
       <Button onClick={onCopy} variant="outline" size="sm" className="gap-2">
         {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
         Copy
@@ -150,6 +168,17 @@ export const ActionBar: React.FC<ActionBarProps> = ({
             ) : (
               <>
                 <Eye className="w-4 h-4" /> Enable Tracking
+              </>
+            )}
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={onToggleSoraTools} className="gap-2">
+            {soraToolsEnabled ? (
+              <>
+                <EyeOff className="w-4 h-4" /> Hide Sora Buttons
+              </>
+            ) : (
+              <>
+                <Eye className="w-4 h-4" /> Show Sora Buttons
               </>
             )}
           </DropdownMenuItem>
