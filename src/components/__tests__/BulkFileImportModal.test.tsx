@@ -89,4 +89,22 @@ describe('BulkFileImportModal', () => {
     );
     expect(onImport).not.toHaveBeenCalled();
   });
+
+  test('shows error toast when no file selected', () => {
+    const onImport = jest.fn();
+    const onOpenChange = jest.fn();
+
+    render(
+      <BulkFileImportModal
+        open={true}
+        onOpenChange={onOpenChange}
+        onImport={onImport}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: /import/i }));
+
+    expect(toast.error).toHaveBeenCalledWith('Please select a file');
+    expect(onImport).not.toHaveBeenCalled();
+  });
 });
