@@ -1,6 +1,7 @@
 import { renderHook, act } from '@testing-library/react';
 import { SidebarProvider } from '../sidebar';
 import { useSidebar } from '../use-sidebar';
+import { SIDEBAR_KEYBOARD_SHORTCUT } from '../sidebar-constants';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 jest.mock('@/hooks/use-mobile', () => ({
@@ -52,5 +53,21 @@ describe('useSidebar hook', () => {
     expect(result.current.openMobile).toBe(true);
     expect(result.current.open).toBe(true);
     expect(document.cookie).not.toContain('sidebar:state=');
+  });
+
+  test('sidebar toggles on keyboard shortcut', () => {
+    const { result } = renderHook(() => useSidebar(), { wrapper });
+    expect(result.current.open).toBe(true);
+
+    act(() => {
+      window.dispatchEvent(
+        new KeyboardEvent('keydown', {
+          key: SIDEBAR_KEYBOARD_SHORTCUT,
+          ctrlKey: true,
+        }),
+      );
+    });
+
+    expect(result.current.open).toBe(false);
   });
 });
