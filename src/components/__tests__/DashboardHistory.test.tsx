@@ -87,12 +87,10 @@ describe('Dashboard history limit', () => {
     global.fetch = jest
       .fn()
       .mockResolvedValue({ json: () => Promise.resolve({}) });
-    window.matchMedia = jest
-      .fn()
-      .mockReturnValue({
-        addEventListener: jest.fn(),
-        removeEventListener: jest.fn(),
-      }) as unknown as typeof window.matchMedia;
+    window.matchMedia = jest.fn().mockReturnValue({
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+    }) as unknown as typeof window.matchMedia;
   });
 
   test('caps history at 100 entries', async () => {
