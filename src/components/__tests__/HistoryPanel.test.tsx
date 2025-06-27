@@ -190,6 +190,7 @@ describe('HistoryPanel', () => {
     const clearActions = screen.getByRole('button', { name: /clear actions/i });
     expect(exportActions.hasAttribute('disabled')).toBe(true);
     expect(clearActions.hasAttribute('disabled')).toBe(true);
+  });
 
   test('downloads history file', async () => {
     const anchor: Partial<HTMLAnchorElement> & { click: jest.Mock } = {
