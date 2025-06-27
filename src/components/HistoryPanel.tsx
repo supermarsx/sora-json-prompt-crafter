@@ -85,6 +85,8 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
   const [confirmDeleteActionIdx, setConfirmDeleteActionIdx] = useState<
     number | null
   >(null);
+  const noHistory = history.length === 0;
+  const noActions = actionHistory.length === 0;
 
   useEffect(() => {
     if (open) {
@@ -240,7 +242,12 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                   </DropdownMenu>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="sm" className="gap-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="gap-1"
+                        disabled={noHistory}
+                      >
                         <Download className="w-4 h-4" /> Export
                       </Button>
                     </DropdownMenuTrigger>
@@ -275,6 +282,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                     trackEvent(trackingEnabled, 'history_clear_click');
                     setConfirmClear(true);
                   }}
+                  disabled={noHistory}
                 >
                   Clear History
                 </Button>
@@ -409,6 +417,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                     variant="outline"
                     className="gap-1"
                     onClick={exportActions}
+                    disabled={noActions}
                   >
                     <Download className="w-4 h-4" /> Export
                   </Button>
@@ -416,6 +425,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                     size="sm"
                     variant="destructive"
                     onClick={requestClearActions}
+                    disabled={noActions}
                   >
                     Clear actions
                   </Button>

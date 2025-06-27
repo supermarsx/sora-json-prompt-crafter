@@ -175,6 +175,22 @@ describe('HistoryPanel', () => {
     ).not.toBeNull();
   });
 
+  test('disables buttons when lists are empty', () => {
+    renderPanel({ history: [], actionHistory: [] });
+    const exportBtn = screen.getByRole('button', { name: /export/i });
+    const clearHistory = screen.getByRole('button', { name: /clear history/i });
+    expect(exportBtn.hasAttribute('disabled')).toBe(true);
+    expect(clearHistory.hasAttribute('disabled')).toBe(true);
+
+    const actionsTab = screen.getByRole('tab', { name: /latest actions/i });
+    fireEvent.mouseDown(actionsTab);
+    fireEvent.click(actionsTab);
+
+    const exportActions = screen.getByRole('button', { name: /export/i });
+    const clearActions = screen.getByRole('button', { name: /clear actions/i });
+    expect(exportActions.hasAttribute('disabled')).toBe(true);
+    expect(clearActions.hasAttribute('disabled')).toBe(true);
+
   test('downloads history file', async () => {
     const anchor: Partial<HTMLAnchorElement> & { click: jest.Mock } = {
       click: jest.fn(),
