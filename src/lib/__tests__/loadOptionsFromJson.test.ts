@@ -17,4 +17,10 @@ describe('loadOptionsFromJson', () => {
     expect(loadOptionsFromJson(bad)).toBeNull();
     spy.mockRestore();
   });
+
+  test('normalizes composition_rules from snake_case', () => {
+    const json = JSON.stringify({ composition_rules: ['rule_of_thirds'] });
+    const result = loadOptionsFromJson(json);
+    expect(result!.composition_rules).toEqual(['rule of thirds']);
+  });
 });
