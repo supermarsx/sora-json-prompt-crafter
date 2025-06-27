@@ -40,6 +40,7 @@ go "my eyes!" when there's bright white lights.
 - Advanced specialized prompting options
 - Artifact and defect correction presets
 - No-fuss tracking toggle
+- Optional Sora integration via userscript for one-click "Send to Sora"
 - Works offline thanks to service worker caching of assets
 
 Example JSON output:

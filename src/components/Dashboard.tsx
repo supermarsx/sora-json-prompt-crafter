@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { diffChars, Change } from 'diff';
-import { Sun, Moon, Heart, Github, Star, GitFork, Bug } from 'lucide-react';
+import {
+  Sun,
+  Moon,
+  Heart,
+  Github,
+  Star,
+  GitFork,
+  Bug,
+  Download,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from '@/components/ui/sonner-toast';
@@ -15,6 +24,7 @@ import DisclaimerModal from './DisclaimerModal';
 import { useIsSingleColumn } from '@/hooks/use-single-column';
 import { useDarkMode } from '@/hooks/use-dark-mode';
 import { useTracking } from '@/hooks/use-tracking';
+import { useSoraTools } from '@/hooks/use-sora-tools';
 import { useActionHistory } from '@/hooks/use-action-history';
 import { trackEvent } from '@/lib/analytics';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
@@ -60,6 +70,7 @@ const Dashboard = () => {
   const isSingleColumn = useIsSingleColumn();
   const [darkMode, setDarkMode] = useDarkMode();
   const [trackingEnabled, setTrackingEnabled] = useTracking();
+  const [soraToolsEnabled, setSoraToolsEnabled] = useSoraTools();
   const actionHistory = useActionHistory();
   const [githubStats, setGithubStats] = useState<{
     stars: number;
@@ -207,6 +218,18 @@ const Dashboard = () => {
   const shareJson = () => {
     setShowShareModal(true);
     trackEvent(trackingEnabled, 'share_button');
+  };
+
+  const sendToSora = () => {
+    const win = window.open('https://sora.chatgpt.com', '_blank');
+    if (!win) return;
+    setTimeout(() => {
+      win.postMessage(
+        { type: 'INSERT_SORA_JSON', json: JSON.parse(jsonString) },
+        '*',
+      );
+    }, 1000);
+    trackEvent(trackingEnabled, 'send_to_sora');
   };
 
   const importJson = (json: string) => {
@@ -474,6 +497,21 @@ const Dashboard = () => {
                   View on Lovable
                 </a>
               </Button>
+              {soraToolsEnabled && (
+                <Button asChild variant="outline" size="sm" className="gap-1">
+                  <a
+                    href="/sora-userscript.user.js"
+                    download
+                    className="flex items-center gap-1"
+                    onClick={() =>
+                      trackEvent(trackingEnabled, 'install_userscript')
+                    }
+                  >
+                    <Download className="w-4 h-4" />
+                    Install Userscript
+                  </a>
+                </Button>
+              )}
             </div>
             <p className="text-xs mt-2 text-muted-foreground">
               By using this tool you agree by the{' '}
@@ -565,12 +603,15 @@ const Dashboard = () => {
         onCopy={copyToClipboard}
         onClear={clearJson}
         onShare={shareJson}
+        onSendToSora={sendToSora}
         onImport={() => setShowImportModal(true)}
         onHistory={() => setShowHistory(true)}
         onReset={resetJson}
         onRegenerate={regenerateJson}
         onRandomize={randomizeJson}
         trackingEnabled={trackingEnabled}
+        soraToolsEnabled={soraToolsEnabled}
+        onToggleSoraTools={() => setSoraToolsEnabled(!soraToolsEnabled)}
         onToggleTracking={() => setTrackingEnabled(!trackingEnabled)}
         copied={copied}
         showJumpToJson={isSingleColumn}
