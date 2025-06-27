@@ -83,11 +83,15 @@ function createProps(
     onCopy: jest.fn(),
     onClear: jest.fn(),
     onShare: jest.fn(),
+    onSendToSora: jest.fn(),
+    userscriptInstalled: true,
     onImport: jest.fn(),
     onHistory: jest.fn(),
     onReset: jest.fn(),
     onRegenerate: jest.fn(),
     onRandomize: jest.fn(),
+    soraToolsEnabled: true,
+    onToggleSoraTools: jest.fn(),
     onToggleTracking: jest.fn(),
     copied: false,
     trackingEnabled: true,
@@ -161,6 +165,24 @@ describe('ActionBar', () => {
     fireEvent.click(btn);
     expect(onJumpToJson).toHaveBeenCalled();
     expect(trackEvent).toHaveBeenCalledWith(true, 'jump_to_json');
+  });
+
+  test('Send to Sora button appears and calls handler', () => {
+    const onSend = jest.fn();
+    const props = createProps({
+      onSendToSora: onSend,
+      soraToolsEnabled: true,
+      userscriptInstalled: true,
+    });
+    render(<ActionBar {...props} />);
+    fireEvent.click(screen.getByRole('button', { name: /send to sora/i }));
+    expect(onSend).toHaveBeenCalled();
+  });
+
+  test('Send to Sora button hidden when script missing', () => {
+    const props = createProps({ userscriptInstalled: false });
+    render(<ActionBar {...props} />);
+    expect(screen.queryByRole('button', { name: /send to sora/i })).toBeNull();
   });
 
   test('Minimize hides and restore shows bar again', () => {
