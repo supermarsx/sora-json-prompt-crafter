@@ -32,6 +32,8 @@
   };
 
   notifyReady();
+  setTimeout(notifyReady, 1000);
+  setTimeout(notifyReady, 3000);
 
   const waitForTextarea = (callback) => {
     const ta = document.querySelector('textarea');
