@@ -12,6 +12,9 @@
   const VERSION = '1.1';
   const DEBUG = true;
   console.log(`[Sora Injector] Loaded v${VERSION}`);
+  if (DEBUG) {
+    console.debug(`[Sora Injector] Hostname: ${window.location.hostname}`);
+  }
 
   const isCrafter = Boolean(
     document.querySelector('meta[name="sora-json-prompt-crafter"]'),
@@ -23,7 +26,9 @@
 
   if (!isCrafter && !isSora) {
     if (DEBUG) {
-      console.debug('[Sora Injector] Not a Sora or Crafter page, exiting');
+      console.debug(
+        `[Sora Injector] Not a Sora or Crafter page on host ${window.location.hostname}, exiting`,
+      );
     }
     return;
   }
@@ -127,6 +132,9 @@
     }
     const ta = document.querySelector('textarea');
     if (ta) return callback(ta);
+    if (DEBUG) {
+      console.debug('[Sora Injector] Waiting for textarea');
+    }
     setTimeout(() => waitForTextarea(callback), 300);
   };
 
@@ -138,7 +146,9 @@
         event.data?.type === 'INSERT_SORA_JSON'
       ) {
         if (DEBUG) {
-          console.debug('[Sora Injector] Received JSON payload');
+          console.debug(
+            `[Sora Injector] Received JSON payload from ${event.origin}`,
+          );
         }
         waitForTextarea((ta) => {
           ta.value = JSON.stringify(event.data.json, null, 2);
