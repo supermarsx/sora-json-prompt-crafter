@@ -9,7 +9,7 @@
 // ==/UserScript==
 
 (() => {
-  const VERSION = '1.2';
+  const VERSION = '1.3';
   const DEBUG = true;
   console.log(`[Sora Injector] Loaded v${VERSION}`);
   if (DEBUG) {
@@ -164,8 +164,22 @@
           );
         }
         waitForTextarea((ta) => {
-          ta.value = JSON.stringify(event.data.json, null, 2);
+          const jsonStr = JSON.stringify(event.data.json, null, 2);
+          ta.value = jsonStr;
           ta.dispatchEvent(new Event('input', { bubbles: true }));
+          const enforceOnFocus = () => {
+            if (ta.value.trim() === '') {
+              ta.value = jsonStr;
+              ta.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+          };
+          const cancelEnforce = () => {
+            ta.removeEventListener('focus', enforceOnFocus);
+            ta.removeEventListener('input', cancelEnforce);
+          };
+          ta.addEventListener('focus', enforceOnFocus);
+          ta.addEventListener('input', cancelEnforce);
+          setTimeout(cancelEnforce, 5000);
           if (DEBUG) {
             console.debug('[Sora Injector] Textarea filled');
           }
