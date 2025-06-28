@@ -22,8 +22,9 @@
   const isSora =
     Boolean(
       document.querySelector('meta[property="og:title"][content="Sora"]'),
-    ) || window.location.hostname === 'sora.chatgpt.com'
-    || window.location.hostname === 'chatgpt.com';
+    ) ||
+    window.location.hostname === 'sora.chatgpt.com' ||
+    window.location.hostname === 'chatgpt.com';
 
   if (!isCrafter && !isSora) {
     if (DEBUG) {
@@ -125,18 +126,29 @@
    * @param callback - Function to run once the textarea is available.
    */
   const waitForTextarea = (callback) => {
-    if (document.readyState !== 'complete') {
-      window.addEventListener('load', () => waitForTextarea(callback), {
-        once: true,
-      });
-      return;
+    const attempt = () => {
+      const ta = document.querySelector('textarea');
+      if (ta) {
+        if (DEBUG) {
+          console.debug('[Sora Injector] Textarea found');
+        }
+        callback(ta);
+      } else {
+        if (DEBUG) {
+          console.debug('[Sora Injector] Textarea not found, retrying');
+        }
+        setTimeout(attempt, 300);
+      }
+    };
+
+    if (
+      document.readyState === 'complete' ||
+      document.readyState === 'interactive'
+    ) {
+      attempt();
+    } else {
+      window.addEventListener('DOMContentLoaded', attempt, { once: true });
     }
-    const ta = document.querySelector('textarea');
-    if (ta) return callback(ta);
-    if (DEBUG) {
-      console.debug('[Sora Injector] Waiting for textarea');
-    }
-    setTimeout(() => waitForTextarea(callback), 300);
   };
 
   window.addEventListener(
