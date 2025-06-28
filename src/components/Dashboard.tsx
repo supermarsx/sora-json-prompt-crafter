@@ -26,6 +26,8 @@ import { useIsSingleColumn } from '@/hooks/use-single-column';
 import { useDarkMode } from '@/hooks/use-dark-mode';
 import { useTracking } from '@/hooks/use-tracking';
 import { useSoraTools } from '@/hooks/use-sora-tools';
+import { useHeaderButtons } from '@/hooks/use-header-buttons';
+import { useLogo } from '@/hooks/use-logo';
 import { useSoraUserscript } from '@/hooks/use-sora-userscript';
 import { useActionHistory } from '@/hooks/use-action-history';
 import { trackEvent } from '@/lib/analytics';
@@ -73,6 +75,8 @@ const Dashboard = () => {
   const [darkMode, setDarkMode] = useDarkMode();
   const [trackingEnabled, setTrackingEnabled] = useTracking();
   const [soraToolsEnabled, setSoraToolsEnabled] = useSoraTools();
+  const [headerButtonsEnabled, setHeaderButtonsEnabled] = useHeaderButtons();
+  const [logoEnabled, setLogoEnabled] = useLogo();
   const [userscriptInstalled, userscriptVersion] = useSoraUserscript();
   const actionHistory = useActionHistory();
   const [githubStats, setGithubStats] = useState<{
@@ -438,122 +442,133 @@ const Dashboard = () => {
         <div className="mb-8 flex items-start justify-between">
           <div>
             <h1 className="text-4xl font-bold mb-2 flex items-center gap-3 select-none">
-              <img
-                src="/web-app-manifest-512x512.png"
-                alt=""
-                role="presentation"
-                className="w-10 h-10 animate-rainbow dark:animate-rainbow-dark"
-              />
+              {logoEnabled && (
+                <img
+                  src="/web-app-manifest-512x512.png"
+                  alt=""
+                  role="presentation"
+                  className="w-10 h-10 animate-rainbow dark:animate-rainbow-dark"
+                />
+              )}
               Sora JSON Prompt Crafter
             </h1>
             <p className="text-muted-foreground select-none">
               Configure your Sora generation settings and get the perfect JSON
               prompt for stunning AI-generated content.
             </p>
-            <div className="flex flex-wrap items-center gap-2 mt-2">
-              <Button asChild variant="outline" size="sm" className="gap-1">
-                <a
-                  href="https://github.com/sponsors/supermarsx"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1"
-                  onClick={() => trackEvent(trackingEnabled, 'click_sponsor')}
-                >
-                  <Heart className="w-4 h-4" /> Sponsor
-                </a>
-              </Button>
-              <Button asChild variant="outline" size="sm" className="gap-1">
-                <a
-                  href="https://github.com/supermarsx/sora-json-prompt-crafter"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1"
-                  onClick={() => trackEvent(trackingEnabled, 'see_github')}
-                >
-                  <Github className="w-4 h-4" /> GitHub
-                </a>
-              </Button>
-              <Button asChild variant="outline" size="sm" className="gap-1">
-                <a
-                  href="https://github.com/supermarsx/sora-json-prompt-crafter"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1"
-                  onClick={() => trackEvent(trackingEnabled, 'star_github')}
-                >
-                  <Star className="w-4 h-4" />
-                  Star{githubStats?.stars ? ` ${githubStats.stars}` : ''}
-                </a>
-              </Button>
-              <Button asChild variant="outline" size="sm" className="gap-1">
-                <a
-                  href="https://github.com/supermarsx/sora-json-prompt-crafter/fork"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1"
-                  onClick={() => trackEvent(trackingEnabled, 'fork_github')}
-                >
-                  <GitFork className="w-4 h-4" />
-                  Fork{githubStats?.forks ? ` ${githubStats.forks}` : ''}
-                </a>
-              </Button>
-              <Button asChild variant="outline" size="sm" className="gap-1">
-                <a
-                  href="https://github.com/supermarsx/sora-json-prompt-crafter/issues/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1"
-                  onClick={() => trackEvent(trackingEnabled, 'open_issues')}
-                >
-                  <Bug className="w-4 h-4" />
-                  Issues{githubStats?.issues ? ` ${githubStats.issues}` : ''}
-                </a>
-              </Button>
-              <Button asChild variant="outline" size="sm" className="gap-1">
-                <a
-                  href="https://lovable.dev/projects/385b40c5-6b5e-49fc-9f0a-e6a0f9a36181"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1"
-                  onClick={() => trackEvent(trackingEnabled, 'view_on_lovable')}
-                >
-                  <Heart className="w-4 h-4" />
-                  View on Lovable
-                </a>
-              </Button>
-              {soraToolsEnabled && !userscriptInstalled && (
+            {headerButtonsEnabled && (
+              <div className="flex flex-wrap items-center gap-2 mt-2">
                 <Button asChild variant="outline" size="sm" className="gap-1">
                   <a
-                    href="/sora-userscript.user.js"
-                    className="flex items-center gap-1"
+                    href="https://github.com/sponsors/supermarsx"
+                    target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() =>
-                      trackEvent(trackingEnabled, 'install_userscript')
-                    }
+                    className="flex items-center gap-1"
+                    onClick={() => trackEvent(trackingEnabled, 'click_sponsor')}
                   >
-                    <Download className="w-4 h-4" />
-                    Install Userscript
+                    <Heart className="w-4 h-4" /> Sponsor
                   </a>
                 </Button>
-              )}
-              {soraToolsEnabled &&
-                userscriptInstalled &&
-                userscriptVersion !== USERSCRIPT_VERSION && (
+                <Button asChild variant="outline" size="sm" className="gap-1">
+                  <a
+                    href="https://github.com/supermarsx/sora-json-prompt-crafter"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1"
+                    onClick={() => trackEvent(trackingEnabled, 'see_github')}
+                  >
+                    <Github className="w-4 h-4" /> GitHub
+                  </a>
+                </Button>
+                <Button asChild variant="outline" size="sm" className="gap-1">
+                  <a
+                    href="https://github.com/supermarsx/sora-json-prompt-crafter"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1"
+                    onClick={() => trackEvent(trackingEnabled, 'star_github')}
+                  >
+                    <Star className="w-4 h-4" />
+                    Star{githubStats?.stars ? ` ${githubStats.stars}` : ''}
+                  </a>
+                </Button>
+                <Button asChild variant="outline" size="sm" className="gap-1">
+                  <a
+                    href="https://github.com/supermarsx/sora-json-prompt-crafter/fork"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1"
+                    onClick={() => trackEvent(trackingEnabled, 'fork_github')}
+                  >
+                    <GitFork className="w-4 h-4" />
+                    Fork{githubStats?.forks ? ` ${githubStats.forks}` : ''}
+                  </a>
+                </Button>
+                <Button asChild variant="outline" size="sm" className="gap-1">
+                  <a
+                    href="https://github.com/supermarsx/sora-json-prompt-crafter/issues/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1"
+                    onClick={() => trackEvent(trackingEnabled, 'open_issues')}
+                  >
+                    <Bug className="w-4 h-4" />
+                    Issues{githubStats?.issues ? ` ${githubStats.issues}` : ''}
+                  </a>
+                </Button>
+                <Button asChild variant="outline" size="sm" className="gap-1">
+                  <a
+                    href="https://lovable.dev/projects/385b40c5-6b5e-49fc-9f0a-e6a0f9a36181"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1"
+                    onClick={() =>
+                      trackEvent(trackingEnabled, 'view_on_lovable')
+                    }
+                  >
+                    <Heart className="w-4 h-4" />
+                    View on Lovable
+                  </a>
+                </Button>
+                {soraToolsEnabled && !userscriptInstalled && (
                   <Button asChild variant="outline" size="sm" className="gap-1">
                     <a
                       href="/sora-userscript.user.js"
                       className="flex items-center gap-1"
                       rel="noopener noreferrer"
                       onClick={() =>
-                        trackEvent(trackingEnabled, 'update_userscript')
+                        trackEvent(trackingEnabled, 'install_userscript')
                       }
                     >
-                      <RefreshCw className="w-4 h-4" />
-                      Update Userscript
+                      <Download className="w-4 h-4" />
+                      Install Userscript
                     </a>
                   </Button>
                 )}
-            </div>
+                {soraToolsEnabled &&
+                  userscriptInstalled &&
+                  userscriptVersion !== USERSCRIPT_VERSION && (
+                    <Button
+                      asChild
+                      variant="outline"
+                      size="sm"
+                      className="gap-1"
+                    >
+                      <a
+                        href="/sora-userscript.user.js"
+                        className="flex items-center gap-1"
+                        rel="noopener noreferrer"
+                        onClick={() =>
+                          trackEvent(trackingEnabled, 'update_userscript')
+                        }
+                      >
+                        <RefreshCw className="w-4 h-4" />
+                        Update Userscript
+                      </a>
+                    </Button>
+                  )}
+              </div>
+            )}
             <p className="text-xs mt-2 text-muted-foreground">
               By using this tool you agree by the{' '}
               <button
@@ -622,15 +637,15 @@ const Dashboard = () => {
                   <code>
                     {diffParts
                       ? diffParts.map((part, idx) => (
-                        <span
-                          key={idx}
-                          className={
-                            part.added ? 'animate-highlight' : undefined
-                          }
-                        >
-                          {part.value}
-                        </span>
-                      ))
+                          <span
+                            key={idx}
+                            className={
+                              part.added ? 'animate-highlight' : undefined
+                            }
+                          >
+                            {part.value}
+                          </span>
+                        ))
                       : jsonString}
                   </code>
                 </pre>
@@ -655,6 +670,12 @@ const Dashboard = () => {
         soraToolsEnabled={soraToolsEnabled}
         onToggleSoraTools={() => setSoraToolsEnabled(!soraToolsEnabled)}
         onToggleTracking={() => setTrackingEnabled(!trackingEnabled)}
+        headerButtonsEnabled={headerButtonsEnabled}
+        onToggleHeaderButtons={() =>
+          setHeaderButtonsEnabled(!headerButtonsEnabled)
+        }
+        logoEnabled={logoEnabled}
+        onToggleLogo={() => setLogoEnabled(!logoEnabled)}
         copied={copied}
         showJumpToJson={isSingleColumn}
         onJumpToJson={scrollToJson}

@@ -52,6 +52,10 @@ interface ActionBarProps {
   soraToolsEnabled: boolean;
   onToggleSoraTools: () => void;
   onToggleTracking: () => void;
+  headerButtonsEnabled: boolean;
+  onToggleHeaderButtons: () => void;
+  logoEnabled: boolean;
+  onToggleLogo: () => void;
   copied: boolean;
   showJumpToJson?: boolean;
   onJumpToJson?: () => void;
@@ -72,6 +76,10 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   soraToolsEnabled,
   onToggleSoraTools,
   onToggleTracking,
+  headerButtonsEnabled,
+  onToggleHeaderButtons,
+  logoEnabled,
+  onToggleLogo,
   copied,
   showJumpToJson,
   onJumpToJson,
@@ -176,11 +184,49 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           <DropdownMenuItem onSelect={onToggleSoraTools} className="gap-2">
             {soraToolsEnabled ? (
               <>
-                <EyeOff className="w-4 h-4" /> Hide Sora Buttons
+                <EyeOff className="w-4 h-4" /> Hide Sora Integration
               </>
             ) : (
               <>
-                <Eye className="w-4 h-4" /> Show Sora Buttons
+                <Eye className="w-4 h-4" /> Show Sora Integration
+              </>
+            )}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => {
+              onToggleHeaderButtons();
+              trackEvent(trackingEnabled, 'toggle_header_buttons', {
+                enabled: !headerButtonsEnabled,
+              });
+            }}
+            className="gap-2"
+          >
+            {headerButtonsEnabled ? (
+              <>
+                <EyeOff className="w-4 h-4" /> Hide Header Buttons
+              </>
+            ) : (
+              <>
+                <Eye className="w-4 h-4" /> Show Header Buttons
+              </>
+            )}
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => {
+              onToggleLogo();
+              trackEvent(trackingEnabled, 'toggle_logo', {
+                enabled: !logoEnabled,
+              });
+            }}
+            className="gap-2"
+          >
+            {logoEnabled ? (
+              <>
+                <EyeOff className="w-4 h-4" /> Hide Logo
+              </>
+            ) : (
+              <>
+                <Eye className="w-4 h-4" /> Show Logo
               </>
             )}
           </DropdownMenuItem>
