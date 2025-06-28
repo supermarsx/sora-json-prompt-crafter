@@ -245,19 +245,17 @@ const Dashboard = () => {
       const interval = setInterval(() => {
         win.postMessage(payload, '*');
       }, 250);
-      const handler = (event: MessageEvent) => {
+      const ackHandler = (event: MessageEvent) => {
         if (
           event.source === win &&
           event.data?.type === 'INSERT_SORA_JSON_ACK'
         ) {
           clearInterval(interval);
-          window.removeEventListener('message', handler);
+          window.removeEventListener('message', ackHandler);
         }
       };
-      window.addEventListener('message', handler);
+      window.addEventListener('message', ackHandler);
     };
-    // The load event doesn't reliably fire for cross-origin windows, so
-    // start sending the payload after a short delay instead.
     setTimeout(start, 500);
     trackEvent(trackingEnabled, 'send_to_sora');
   };
