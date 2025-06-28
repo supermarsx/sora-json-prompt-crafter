@@ -256,7 +256,7 @@ const Dashboard = () => {
       };
       window.addEventListener('message', ackHandler);
     };
-    setTimeout(start, 3500);
+    setTimeout(start, 500);
     trackEvent(trackingEnabled, 'send_to_sora');
   };
 
