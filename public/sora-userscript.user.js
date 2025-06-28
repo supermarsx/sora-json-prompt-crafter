@@ -4,6 +4,7 @@
 // @version      1.0
 // @description  Inject JSON prompt from external tab into Sora textarea
 // @match        https://sora.chatgpt.com/*
+// @match        https://sora-json-prompt-crafter.lovable.app/*
 // @grant        none
 // @run-at       document-end
 // ==/UserScript==
@@ -13,6 +14,8 @@
 
   if (window.opener) {
     window.opener.postMessage({ type: 'SORA_USERSCRIPT_READY' }, '*');
+  } else if (window.location.host.endsWith('lovable.app')) {
+    window.postMessage({ type: 'SORA_USERSCRIPT_READY' }, '*');
   }
 
 
