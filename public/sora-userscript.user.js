@@ -13,13 +13,16 @@
   const VERSION = '1.0';
   console.log(`[Sora Injector] Loaded v${VERSION}`);
 
+  const isCrafter = document.querySelector(
+    'meta[name="sora-json-prompt-crafter"]',
+  );
+  const isSora = document.querySelector(
+    'meta[property="og:title"][content="Sora"]',
+  );
   let readyInterval;
 
   const notifyReady = () => {
     try {
-      const isCrafter = document.querySelector(
-        'meta[name="sora-json-prompt-crafter"]',
-      );
       if (isCrafter) {
         if (typeof window.soraUserscriptReady === 'function') {
           window.soraUserscriptReady(VERSION);
@@ -42,7 +45,9 @@
 
   const startNotify = () => {
     notifyReady();
-    readyInterval = setInterval(notifyReady, 250);
+    if (!isSora) {
+      readyInterval = setInterval(notifyReady, 250);
+    }
   };
 
   const stopNotify = () => {
@@ -57,7 +62,7 @@
   window.addEventListener(
     'message',
     (event) => {
-      if (event.data?.type === 'SORA_USERSCRIPT_ACK') {
+      if (!isSora && event.data?.type === 'SORA_USERSCRIPT_ACK') {
         stopNotify();
       }
     },
