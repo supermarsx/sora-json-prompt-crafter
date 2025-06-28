@@ -97,6 +97,37 @@
     }
   };
 
+  /**
+   * Wait for the first textarea element on the page and invoke a callback.
+   *
+   * @param callback - Function to run once the textarea is available.
+   */
+  const waitForTextarea = (callback) => {
+    const attempt = () => {
+      const ta = document.querySelector('textarea');
+      if (ta) {
+        if (DEBUG) {
+          console.debug('[Sora Injector] Textarea found');
+        }
+        callback(ta);
+      } else {
+        if (DEBUG) {
+          console.debug('[Sora Injector] Textarea not found, retrying');
+        }
+        setTimeout(attempt, 300);
+      }
+    };
+
+    if (
+      document.readyState === 'complete' ||
+      document.readyState === 'interactive'
+    ) {
+      attempt();
+    } else {
+      window.addEventListener('DOMContentLoaded', attempt, { once: true });
+    }
+  };
+
   startNotify();
 
   // Restore any stored JSON in case the page cleared it
@@ -129,37 +160,6 @@
     },
     false,
   );
-
-  /**
-   * Wait for the first textarea element on the page and invoke a callback.
-   *
-   * @param callback - Function to run once the textarea is available.
-   */
-  const waitForTextarea = (callback) => {
-    const attempt = () => {
-      const ta = document.querySelector('textarea');
-      if (ta) {
-        if (DEBUG) {
-          console.debug('[Sora Injector] Textarea found');
-        }
-        callback(ta);
-      } else {
-        if (DEBUG) {
-          console.debug('[Sora Injector] Textarea not found, retrying');
-        }
-        setTimeout(attempt, 300);
-      }
-    };
-
-    if (
-      document.readyState === 'complete' ||
-      document.readyState === 'interactive'
-    ) {
-      attempt();
-    } else {
-      window.addEventListener('DOMContentLoaded', attempt, { once: true });
-    }
-  };
 
   window.addEventListener(
     'message',
