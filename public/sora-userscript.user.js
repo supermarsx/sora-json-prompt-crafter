@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         JSON Prompt Crafter Integration Sora Integration
 // @namespace    supermarsx
-// @version      1.2
+// @version      1.3
 // @description  Inject JSON prompt from external tab into Sora textarea
 // @match *://*/*
 // @grant        none
@@ -11,6 +11,7 @@
 (() => {
   const VERSION = '1.3';
   const DEBUG = true;
+  const SESSION_KEY = 'sora_json_payload';
   console.log(`[Sora Injector] Loaded v${VERSION}`);
   if (DEBUG) {
     console.debug(`[Sora Injector] Hostname: ${window.location.hostname}`);
@@ -98,6 +99,15 @@
 
   startNotify();
 
+  // Restore any stored JSON in case the page cleared it
+  waitForTextarea((ta) => {
+    const stored = sessionStorage.getItem(SESSION_KEY);
+    if (stored && ta.value.trim() === '') {
+      ta.value = stored;
+      ta.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  });
+
   window.addEventListener(
     'message',
     (event) => {
@@ -165,17 +175,24 @@
         }
         waitForTextarea((ta) => {
           const jsonStr = JSON.stringify(event.data.json, null, 2);
+          try {
+            sessionStorage.setItem(SESSION_KEY, jsonStr);
+          } catch {}
           ta.value = jsonStr;
           ta.dispatchEvent(new Event('input', { bubbles: true }));
           const enforceOnFocus = () => {
             if (ta.value.trim() === '') {
-              ta.value = jsonStr;
+              const stored = sessionStorage.getItem(SESSION_KEY) || jsonStr;
+              ta.value = stored;
               ta.dispatchEvent(new Event('input', { bubbles: true }));
             }
           };
           const cancelEnforce = () => {
             ta.removeEventListener('focus', enforceOnFocus);
             ta.removeEventListener('input', cancelEnforce);
+            try {
+              sessionStorage.removeItem(SESSION_KEY);
+            } catch {}
           };
           ta.addEventListener('focus', enforceOnFocus);
           ta.addEventListener('input', cancelEnforce);
