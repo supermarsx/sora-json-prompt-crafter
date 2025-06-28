@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         JSON Prompt Crafter Integration Sora Integration
 // @namespace    supermarsx
-// @version      1.1
+// @version      1.2
 // @description  Inject JSON prompt from external tab into Sora textarea
 // @match *://*/*
 // @grant        none
@@ -9,7 +9,7 @@
 // ==/UserScript==
 
 (() => {
-  const VERSION = '1.1';
+  const VERSION = '1.2';
   const DEBUG = true;
   console.log(`[Sora Injector] Loaded v${VERSION}`);
   if (DEBUG) {
@@ -127,7 +127,7 @@
    */
   const waitForTextarea = (callback) => {
     const attempt = () => {
-      const ta = document.querySelector('textarea');
+      const ta = document.querySelector('#prompt-textarea, textarea');
       if (ta) {
         if (DEBUG) {
           console.debug('[Sora Injector] Textarea found');

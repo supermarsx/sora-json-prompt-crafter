@@ -256,7 +256,9 @@ const Dashboard = () => {
       };
       window.addEventListener('message', handler);
     };
-    win.addEventListener('load', start, { once: true });
+    // The load event doesn't reliably fire for cross-origin windows, so
+    // start sending the payload after a short delay instead.
+    setTimeout(start, 500);
     trackEvent(trackingEnabled, 'send_to_sora');
   };
 
