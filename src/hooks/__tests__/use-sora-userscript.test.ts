@@ -25,4 +25,17 @@ describe('useSoraUserscript', () => {
     expect(result.current[0]).toBe(true);
     expect(localStorage.getItem('soraUserscriptInstalled')).toBe('true');
   });
+
+  test('updates state on storage event', () => {
+    const { result } = renderHook(() => useSoraUserscript());
+    act(() => {
+      window.dispatchEvent(
+        new StorageEvent('storage', {
+          key: 'soraUserscriptInstalled',
+          newValue: 'true',
+        })
+      );
+    });
+    expect(result.current[0]).toBe(true);
+  });
 });
