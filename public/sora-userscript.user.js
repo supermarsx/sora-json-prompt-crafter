@@ -3,8 +3,7 @@
 // @namespace    supermarsx
 // @version      1.0
 // @description  Inject JSON prompt from external tab into Sora textarea
-// @match        https://sora.chatgpt.com/*
-// @match        https://sora-json-prompt-crafter.lovable.app/*
+// @match        *
 // @grant        none
 // @run-at       document-end
 // ==/UserScript==
