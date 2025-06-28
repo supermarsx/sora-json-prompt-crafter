@@ -22,6 +22,16 @@
       name="twitter:image"
       content="https://lovable.dev/opengraph-image-p98pqg.png"
     />
+    <script>
+      try {
+        const val = localStorage.getItem('darkMode');
+        if (val === null || val === 'true') {
+          document.documentElement.classList.add('dark');
+        }
+      } catch {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
     <script type="module">
       (() => {
         try {
