@@ -5,7 +5,7 @@
 // @description  Inject JSON prompt from external tab into Sora textarea
 // @match *://*/*
 // @grant        none
-// @run-at       document-end
+// @run-at       document-start
 // ==/UserScript==
 
 (() => {
