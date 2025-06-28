@@ -9,8 +9,9 @@
 // @run-at       document-end
 // ==/UserScript==
 
-(function () {
-  console.log('[Sora Injector] Loaded');
+(() => {
+  const VERSION = '1.0';
+  console.log(`[Sora Injector] Loaded v${VERSION}`);
 
   let readyInterval;
 
@@ -21,12 +22,18 @@
       );
       if (isCrafter) {
         if (typeof window.soraUserscriptReady === 'function') {
-          window.soraUserscriptReady();
+          window.soraUserscriptReady(VERSION);
         } else {
-          window.postMessage({ type: 'SORA_USERSCRIPT_READY' }, '*');
+          window.postMessage(
+            { type: 'SORA_USERSCRIPT_READY', version: VERSION },
+            '*',
+          );
         }
       } else if (window.opener) {
-        window.opener.postMessage({ type: 'SORA_USERSCRIPT_READY' }, '*');
+        window.opener.postMessage(
+          { type: 'SORA_USERSCRIPT_READY', version: VERSION },
+          '*',
+        );
       }
     } catch (e) {
       console.warn('[Sora Injector] Failed to notify readiness', e);
@@ -58,6 +65,12 @@
   );
 
   const waitForTextarea = (callback) => {
+    if (document.readyState !== 'complete') {
+      window.addEventListener('load', () => waitForTextarea(callback), {
+        once: true,
+      });
+      return;
+    }
     const ta = document.querySelector('textarea');
     if (ta) return callback(ta);
     setTimeout(() => waitForTextarea(callback), 300);

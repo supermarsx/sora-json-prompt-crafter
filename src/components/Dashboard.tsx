@@ -9,6 +9,7 @@ import {
   GitFork,
   Bug,
   Download,
+  RefreshCw,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -35,7 +36,7 @@ import { loadOptionsFromJson } from '@/lib/loadOptionsFromJson';
 import { OPTION_FLAG_MAP } from '@/lib/optionFlagMap';
 import { isValidOptions } from '@/lib/validateOptions';
 import { safeGet, safeSet } from '@/lib/storage';
-import { DISABLE_STATS } from '@/lib/config';
+import { DISABLE_STATS, USERSCRIPT_VERSION } from '@/lib/config';
 
 const Dashboard = () => {
   const [options, setOptions] = useState<SoraOptions>(() => {
@@ -72,7 +73,7 @@ const Dashboard = () => {
   const [darkMode, setDarkMode] = useDarkMode();
   const [trackingEnabled, setTrackingEnabled] = useTracking();
   const [soraToolsEnabled, setSoraToolsEnabled] = useSoraTools();
-  const [userscriptInstalled, setUserscriptInstalled] = useSoraUserscript();
+  const [userscriptInstalled, userscriptVersion] = useSoraUserscript();
   const actionHistory = useActionHistory();
   const [githubStats, setGithubStats] = useState<{
     stars: number;
@@ -236,16 +237,22 @@ const Dashboard = () => {
     const win = window.open('https://sora.chatgpt.com', '_blank');
     if (!win) return;
     const payload = { type: 'INSERT_SORA_JSON', json: JSON.parse(jsonString) };
-    const interval = setInterval(() => {
-      win.postMessage(payload, '*');
-    }, 250);
-    const handler = (event: MessageEvent) => {
-      if (event.source === win && event.data?.type === 'INSERT_SORA_JSON_ACK') {
-        clearInterval(interval);
-        window.removeEventListener('message', handler);
-      }
+    const start = () => {
+      const interval = setInterval(() => {
+        win.postMessage(payload, '*');
+      }, 250);
+      const handler = (event: MessageEvent) => {
+        if (
+          event.source === win &&
+          event.data?.type === 'INSERT_SORA_JSON_ACK'
+        ) {
+          clearInterval(interval);
+          window.removeEventListener('message', handler);
+        }
+      };
+      window.addEventListener('message', handler);
     };
-    window.addEventListener('message', handler);
+    win.addEventListener('load', start, { once: true });
     trackEvent(trackingEnabled, 'send_to_sora');
   };
 
@@ -530,6 +537,24 @@ const Dashboard = () => {
                   </a>
                 </Button>
               )}
+              {soraToolsEnabled &&
+                userscriptInstalled &&
+                userscriptVersion !== USERSCRIPT_VERSION && (
+                  <Button asChild variant="outline" size="sm" className="gap-1">
+                    <a
+                      href="https://github.com/supermarsx/sora-json-prompt-crafter/raw/refs/heads/main/public/sora-userscript.user.js"
+                      className="flex items-center gap-1"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() =>
+                        trackEvent(trackingEnabled, 'update_userscript')
+                      }
+                    >
+                      <RefreshCw className="w-4 h-4" />
+                      Update Userscript
+                    </a>
+                  </Button>
+                )}
             </div>
             <p className="text-xs mt-2 text-muted-foreground">
               By using this tool you agree by the{' '}
