@@ -524,7 +524,7 @@ const Dashboard = () => {
               {soraToolsEnabled && !userscriptInstalled && (
                 <Button asChild variant="outline" size="sm" className="gap-1">
                   <a
-                    href="https://github.com/supermarsx/sora-json-prompt-crafter/raw/refs/heads/main/public/sora-userscript.user.js"
+                    href="/sora-userscript.user.js"
                     className="flex items-center gap-1"
                     rel="noopener noreferrer"
                     onClick={() =>
@@ -541,7 +541,7 @@ const Dashboard = () => {
                 userscriptVersion !== USERSCRIPT_VERSION && (
                   <Button asChild variant="outline" size="sm" className="gap-1">
                     <a
-                      href="https://github.com/supermarsx/sora-json-prompt-crafter/raw/refs/heads/main/public/sora-userscript.user.js"
+                      href="/sora-userscript.user.js"
                       className="flex items-center gap-1"
                       rel="noopener noreferrer"
                       onClick={() =>

@@ -1,15 +1,15 @@
 // ==UserScript==
 // @name         JSON Prompt Crafter Integration Sora Integration
 // @namespace    supermarsx
-// @version      1.0
+// @version      1.1
 // @description  Inject JSON prompt from external tab into Sora textarea
-// @match        *
+// @match *://*/*
 // @grant        none
 // @run-at       document-end
 // ==/UserScript==
 
 (() => {
-  const VERSION = '1.0';
+  const VERSION = '1.1';
   console.log(`[Sora Injector] Loaded v${VERSION}`);
 
   const isCrafter = document.querySelector(
