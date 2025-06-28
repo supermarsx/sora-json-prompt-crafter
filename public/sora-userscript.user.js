@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Auto-inject JSON Prompt into Sora
+// @name         JSON Prompt Crafter Integration Sora Integration
 // @namespace    supermarsx
 // @version      1.0
 // @description  Inject JSON prompt from external tab into Sora textarea
