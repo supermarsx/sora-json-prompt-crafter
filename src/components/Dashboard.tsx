@@ -526,7 +526,6 @@ const Dashboard = () => {
                   <a
                     href="https://github.com/supermarsx/sora-json-prompt-crafter/raw/refs/heads/main/public/sora-userscript.user.js"
                     className="flex items-center gap-1"
-                    target="_blank"
                     rel="noopener noreferrer"
                     onClick={() =>
                       trackEvent(trackingEnabled, 'install_userscript')
@@ -544,7 +543,6 @@ const Dashboard = () => {
                     <a
                       href="https://github.com/supermarsx/sora-json-prompt-crafter/raw/refs/heads/main/public/sora-userscript.user.js"
                       className="flex items-center gap-1"
-                      target="_blank"
                       rel="noopener noreferrer"
                       onClick={() =>
                         trackEvent(trackingEnabled, 'update_userscript')
@@ -624,15 +622,15 @@ const Dashboard = () => {
                   <code>
                     {diffParts
                       ? diffParts.map((part, idx) => (
-                          <span
-                            key={idx}
-                            className={
-                              part.added ? 'animate-highlight' : undefined
-                            }
-                          >
-                            {part.value}
-                          </span>
-                        ))
+                        <span
+                          key={idx}
+                          className={
+                            part.added ? 'animate-highlight' : undefined
+                          }
+                        >
+                          {part.value}
+                        </span>
+                      ))
                       : jsonString}
                   </code>
                 </pre>
