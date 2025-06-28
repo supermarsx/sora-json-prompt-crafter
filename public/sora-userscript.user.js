@@ -10,6 +10,7 @@
 
 (() => {
   const VERSION = '1.1';
+  const DEBUG = true;
   console.log(`[Sora Injector] Loaded v${VERSION}`);
 
   const isCrafter = document.querySelector(
@@ -18,9 +19,23 @@
   const isSora = document.querySelector(
     'meta[property="og:title"][content="Sora"]',
   );
+
+  if (!isCrafter && !isSora) {
+    if (DEBUG) {
+      console.debug('[Sora Injector] Not a Sora or Crafter page, exiting');
+    }
+    return;
+  }
   let readyInterval;
 
+  /**
+   * Notify the app or opener window that the userscript is active.
+   * Sends the detected version in the message payload.
+   */
   const notifyReady = () => {
+    if (DEBUG) {
+      console.debug('[Sora Injector] notifyReady');
+    }
     try {
       if (isCrafter) {
         if (typeof window.soraUserscriptReady === 'function') {
@@ -37,19 +52,36 @@
           '*',
         );
       }
+      if (DEBUG) {
+        const target = isCrafter ? window : window.opener;
+        target?.postMessage({ type: 'SORA_DEBUG_PING' }, '*');
+        console.debug('[Sora Injector] Debug ping sent');
+      }
     } catch (e) {
       console.warn('[Sora Injector] Failed to notify readiness', e);
     }
   };
 
+  /**
+   * Begin sending readiness notifications until an acknowledgement is received.
+   */
   const startNotify = () => {
+    if (DEBUG) {
+      console.debug('[Sora Injector] startNotify');
+    }
     notifyReady();
     if (!isSora) {
       readyInterval = setInterval(notifyReady, 250);
     }
   };
 
+  /**
+   * Stop the readiness notification interval.
+   */
   const stopNotify = () => {
+    if (DEBUG) {
+      console.debug('[Sora Injector] stopNotify');
+    }
     if (readyInterval) {
       clearInterval(readyInterval);
       readyInterval = undefined;
@@ -62,12 +94,29 @@
     'message',
     (event) => {
       if (!isSora && event.data?.type === 'SORA_USERSCRIPT_ACK') {
+        if (DEBUG) {
+          console.debug('[Sora Injector] ACK received');
+        }
         stopNotify();
+      } else if (event.data?.type === 'SORA_DEBUG_PING') {
+        if (DEBUG) {
+          console.debug('[Sora Injector] Debug ping received');
+        }
+        event.source?.postMessage({ type: 'SORA_DEBUG_PONG' }, '*');
+      } else if (event.data?.type === 'SORA_DEBUG_PONG') {
+        if (DEBUG) {
+          console.debug('[Sora Injector] Debug pong received');
+        }
       }
     },
     false,
   );
 
+  /**
+   * Wait for the first textarea element on the page and invoke a callback.
+   *
+   * @param callback - Function to run once the textarea is available.
+   */
   const waitForTextarea = (callback) => {
     if (document.readyState !== 'complete') {
       window.addEventListener('load', () => waitForTextarea(callback), {
@@ -87,12 +136,19 @@
         event.origin !== window.origin &&
         event.data?.type === 'INSERT_SORA_JSON'
       ) {
-        console.log('[Sora Injector] Received JSON payload');
+        if (DEBUG) {
+          console.debug('[Sora Injector] Received JSON payload');
+        }
         waitForTextarea((ta) => {
           ta.value = JSON.stringify(event.data.json, null, 2);
           ta.dispatchEvent(new Event('input', { bubbles: true }));
-          console.log('[Sora Injector] Textarea filled.');
+          if (DEBUG) {
+            console.debug('[Sora Injector] Textarea filled');
+          }
           event.source?.postMessage({ type: 'INSERT_SORA_JSON_ACK' }, '*');
+          if (DEBUG) {
+            console.debug('[Sora Injector] JSON ACK sent');
+          }
         });
       }
     },
