@@ -35,6 +35,14 @@ describe('useSoraUserscript', () => {
     expect(localStorage.getItem('soraUserscriptInstalled')).toBe('true');
   });
 
+  test('updates state via global callback', () => {
+    const { result } = renderHook(() => useSoraUserscript());
+    act(() => {
+      window.soraUserscriptReady!();
+    });
+    expect(result.current[0]).toBe(true);
+  });
+
   test('falls back to cookie when localStorage fails', () => {
     jest.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
       throw new Error('fail');

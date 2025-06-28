@@ -18,13 +18,11 @@
         'meta[name="sora-json-prompt-crafter"]',
       );
       if (isCrafter) {
-        try {
-          localStorage.setItem('soraUserscriptInstalled', 'true');
-        } catch {
-          document.cookie =
-            'soraUserscriptInstalled=true; path=/; max-age=31536000';
+        if (typeof window.soraUserscriptReady === 'function') {
+          window.soraUserscriptReady();
+        } else {
+          window.postMessage({ type: 'SORA_USERSCRIPT_READY' }, '*');
         }
-        window.postMessage({ type: 'SORA_USERSCRIPT_READY' }, '*');
       } else if (window.opener) {
         window.opener.postMessage({ type: 'SORA_USERSCRIPT_READY' }, '*');
       }

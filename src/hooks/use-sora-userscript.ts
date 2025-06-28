@@ -35,6 +35,13 @@ export function useSoraUserscript() {
   }, [installed]);
 
   useEffect(() => {
+    window.soraUserscriptReady = () => setInstalled(true);
+    return () => {
+      delete window.soraUserscriptReady;
+    };
+  }, []);
+
+  useEffect(() => {
     const handler = (event: MessageEvent) => {
       if (event.data?.type === 'SORA_USERSCRIPT_READY') {
         setInstalled(true);
@@ -46,10 +53,7 @@ export function useSoraUserscript() {
 
   useEffect(() => {
     const onStorage = (event: StorageEvent) => {
-      if (
-        event.key === 'soraUserscriptInstalled' &&
-        event.newValue === 'true'
-      ) {
+      if (event.key === USERSCRIPT_COOKIE_NAME && event.newValue === 'true') {
         setInstalled(true);
       }
     };
