@@ -13,12 +13,13 @@
   const DEBUG = true;
   console.log(`[Sora Injector] Loaded v${VERSION}`);
 
-  const isCrafter = document.querySelector(
-    'meta[name="sora-json-prompt-crafter"]',
+  const isCrafter = Boolean(
+    document.querySelector('meta[name="sora-json-prompt-crafter"]'),
   );
-  const isSora = document.querySelector(
-    'meta[property="og:title"][content="Sora"]',
-  );
+  const isSora =
+    Boolean(
+      document.querySelector('meta[property="og:title"][content="Sora"]'),
+    ) || window.location.hostname === 'sora.chatgpt.com';
 
   if (!isCrafter && !isSora) {
     if (DEBUG) {
