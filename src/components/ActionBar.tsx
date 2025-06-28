@@ -181,7 +181,10 @@ export const ActionBar: React.FC<ActionBarProps> = ({
               </>
             )}
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={onToggleSoraTools} className="gap-2">
+          <DropdownMenuItem
+            onSelect={onToggleSoraTools}
+            className="gap-2 hidden"
+          >
             {soraToolsEnabled ? (
               <>
                 <EyeOff className="w-4 h-4" /> Hide Sora Integration

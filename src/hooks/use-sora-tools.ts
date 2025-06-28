@@ -8,10 +8,10 @@ export function useSoraTools() {
       try {
         return JSON.parse(stored);
       } catch {
-        return true;
+        return false;
       }
     }
-    return true;
+    return false;
   });
 
   useEffect(() => {
