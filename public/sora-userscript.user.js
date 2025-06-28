@@ -19,7 +19,8 @@
   const isSora =
     Boolean(
       document.querySelector('meta[property="og:title"][content="Sora"]'),
-    ) || window.location.hostname === 'sora.chatgpt.com';
+    ) || window.location.hostname === 'sora.chatgpt.com'
+    || window.location.hostname === 'chatgpt.com';
 
   if (!isCrafter && !isSora) {
     if (DEBUG) {
