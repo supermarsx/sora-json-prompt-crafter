@@ -11,5 +11,5 @@ interface ImportMetaEnv {
 }
 
 interface Window {
-  soraUserscriptReady?: () => void;
+  soraUserscriptReady?: (version?: string) => void;
 }
