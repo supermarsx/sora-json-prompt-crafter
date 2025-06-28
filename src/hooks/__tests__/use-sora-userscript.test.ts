@@ -23,24 +23,29 @@ describe('useSoraUserscript', () => {
   });
 
   test('updates state on message event', () => {
+    const postSpy = jest.spyOn(window, 'postMessage');
     const { result } = renderHook(() => useSoraUserscript());
     act(() => {
       window.dispatchEvent(
         new MessageEvent('message', {
           data: { type: 'SORA_USERSCRIPT_READY' },
+          source: window,
         }),
       );
     });
     expect(result.current[0]).toBe(true);
     expect(localStorage.getItem('soraUserscriptInstalled')).toBe('true');
+    expect(postSpy).toHaveBeenCalledWith({ type: 'SORA_USERSCRIPT_ACK' }, '*');
   });
 
   test('updates state via global callback', () => {
+    const postSpy = jest.spyOn(window, 'postMessage');
     const { result } = renderHook(() => useSoraUserscript());
     act(() => {
       window.soraUserscriptReady!();
     });
     expect(result.current[0]).toBe(true);
+    expect(postSpy).toHaveBeenCalledWith({ type: 'SORA_USERSCRIPT_ACK' }, '*');
   });
 
   test('falls back to cookie when localStorage fails', () => {

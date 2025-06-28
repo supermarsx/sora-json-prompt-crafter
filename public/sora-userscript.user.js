@@ -12,6 +12,8 @@
 (function () {
   console.log('[Sora Injector] Loaded');
 
+  let readyInterval;
+
   const notifyReady = () => {
     try {
       const isCrafter = document.querySelector(
@@ -31,9 +33,29 @@
     }
   };
 
-  notifyReady();
-  setTimeout(notifyReady, 1000);
-  setTimeout(notifyReady, 3000);
+  const startNotify = () => {
+    notifyReady();
+    readyInterval = setInterval(notifyReady, 250);
+  };
+
+  const stopNotify = () => {
+    if (readyInterval) {
+      clearInterval(readyInterval);
+      readyInterval = undefined;
+    }
+  };
+
+  startNotify();
+
+  window.addEventListener(
+    'message',
+    (event) => {
+      if (event.data?.type === 'SORA_USERSCRIPT_ACK') {
+        stopNotify();
+      }
+    },
+    false,
+  );
 
   const waitForTextarea = (callback) => {
     const ta = document.querySelector('textarea');
@@ -53,6 +75,7 @@
           ta.value = JSON.stringify(event.data.json, null, 2);
           ta.dispatchEvent(new Event('input', { bubbles: true }));
           console.log('[Sora Injector] Textarea filled.');
+          event.source?.postMessage({ type: 'INSERT_SORA_JSON_ACK' }, '*');
         });
       }
     },
