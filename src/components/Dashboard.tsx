@@ -86,19 +86,29 @@ const Dashboard = () => {
     const { signal } = controller;
     const loadStats = async () => {
       try {
-        const res = await fetch(
+        const repoRes = await fetch(
           'https://api.github.com/repos/supermarsx/sora-json-prompt-crafter',
           { signal },
         );
-        if (!res.ok) {
+        if (!repoRes.ok) {
           throw new Error('non ok');
         }
-        const data = await res.json();
+        const repoData = await repoRes.json();
+
+        const issuesRes = await fetch(
+          'https://api.github.com/search/issues?q=repo:supermarsx/sora-json-prompt-crafter+type:issue+state:open',
+          { signal },
+        );
+        if (!issuesRes.ok) {
+          throw new Error('non ok');
+        }
+        const issuesData = await issuesRes.json();
+
         if (!signal.aborted) {
           setGithubStats({
-            stars: data.stargazers_count,
-            forks: data.forks_count,
-            issues: data.open_issues_count,
+            stars: repoData.stargazers_count,
+            forks: repoData.forks_count,
+            issues: issuesData.total_count,
           });
         }
       } catch (error) {

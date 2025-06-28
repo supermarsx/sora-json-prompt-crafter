@@ -135,15 +135,23 @@ describe('Dashboard github stats success', () => {
 
   beforeEach(() => {
     (toast.error as jest.Mock).mockClear();
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: true,
-      json: () =>
-        Promise.resolve({
-          stargazers_count: 2,
-          forks_count: 3,
-          open_issues_count: 4,
-        }),
-    }) as unknown as typeof fetch;
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            stargazers_count: 2,
+            forks_count: 3,
+          }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            total_count: 4,
+          }),
+      }) as unknown as typeof fetch;
     window.matchMedia = jest.fn().mockReturnValue({
       addEventListener: jest.fn(),
       removeEventListener: jest.fn(),
