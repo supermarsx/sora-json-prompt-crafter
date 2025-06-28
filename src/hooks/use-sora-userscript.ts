@@ -1,9 +1,21 @@
 import { useEffect, useState } from 'react';
 import { safeGet, safeSet } from '@/lib/storage';
 
+const USERSCRIPT_COOKIE_NAME = 'soraUserscriptInstalled';
+const USERSCRIPT_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
+
+function getCookie(name: string) {
+  const match = document.cookie.match(
+    new RegExp(
+      '(?:^|; )' + name.replace(/([.$?*|{}()[]\\\/\+^])/g, '\\$1') + '=([^;]*)',
+    ),
+  );
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
 export function useSoraUserscript() {
   const [installed, setInstalled] = useState(() => {
-    const stored = safeGet('soraUserscriptInstalled');
+    const stored = safeGet(USERSCRIPT_COOKIE_NAME);
     if (stored !== null) {
       try {
         return JSON.parse(stored);
@@ -11,12 +23,23 @@ export function useSoraUserscript() {
         return false;
       }
     }
-    return false;
+    const cookie = getCookie(USERSCRIPT_COOKIE_NAME);
+    return cookie === 'true';
   });
 
   useEffect(() => {
-    safeSet('soraUserscriptInstalled', JSON.stringify(installed));
+    const ok = safeSet(USERSCRIPT_COOKIE_NAME, JSON.stringify(installed));
+    if (!ok) {
+      document.cookie = `${USERSCRIPT_COOKIE_NAME}=${installed}; path=/; max-age=${USERSCRIPT_COOKIE_MAX_AGE}`;
+    }
   }, [installed]);
+
+  useEffect(() => {
+    window.soraUserscriptReady = () => setInstalled(true);
+    return () => {
+      delete window.soraUserscriptReady;
+    };
+  }, []);
 
   useEffect(() => {
     const handler = (event: MessageEvent) => {
@@ -30,10 +53,7 @@ export function useSoraUserscript() {
 
   useEffect(() => {
     const onStorage = (event: StorageEvent) => {
-      if (
-        event.key === 'soraUserscriptInstalled' &&
-        event.newValue === 'true'
-      ) {
+      if (event.key === USERSCRIPT_COOKIE_NAME && event.newValue === 'true') {
         setInstalled(true);
       }
     };

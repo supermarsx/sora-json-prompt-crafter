@@ -9,3 +9,7 @@ interface ImportMetaEnv {
   readonly VITE_DISCLAIMER_URL?: string;
   readonly VITE_GTAG_DEBUG?: string;
 }
+
+interface Window {
+  soraUserscriptReady?: () => void;
+}
