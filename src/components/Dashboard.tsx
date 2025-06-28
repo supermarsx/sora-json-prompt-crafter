@@ -245,17 +245,27 @@ const Dashboard = () => {
       const interval = setInterval(() => {
         win.postMessage(payload, '*');
       }, 250);
-      const handler = (event: MessageEvent) => {
+      const ackHandler = (event: MessageEvent) => {
         if (
           event.source === win &&
           event.data?.type === 'INSERT_SORA_JSON_ACK'
         ) {
           clearInterval(interval);
-          window.removeEventListener('message', handler);
+          window.removeEventListener('message', ackHandler);
         }
       };
-      window.addEventListener('message', handler);
+      window.addEventListener('message', ackHandler);
     };
+
+    const readyHandler = (event: MessageEvent) => {
+      if (event.source === win && event.data?.type === 'SORA_USERSCRIPT_READY') {
+        win.postMessage({ type: 'SORA_USERSCRIPT_ACK' }, '*');
+        start();
+        window.removeEventListener('message', readyHandler);
+      }
+    };
+
+    window.addEventListener('message', readyHandler);
     win.addEventListener('load', start, { once: true });
     trackEvent(trackingEnabled, 'send_to_sora');
   };
