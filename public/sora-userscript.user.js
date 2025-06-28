@@ -127,7 +127,9 @@
    */
   const waitForTextarea = (callback) => {
     const attempt = () => {
-      const ta = document.querySelector('textarea');
+      const ta = document.querySelector(
+        'textarea, [data-testid="prompt-textarea"], [contenteditable="true"][role="textbox"]',
+      );
       if (ta) {
         if (DEBUG) {
           console.debug('[Sora Injector] Textarea found');
