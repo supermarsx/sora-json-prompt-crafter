@@ -28,5 +28,18 @@ export function useSoraUserscript() {
     return () => window.removeEventListener('message', handler);
   }, []);
 
+  useEffect(() => {
+    const onStorage = (event: StorageEvent) => {
+      if (
+        event.key === 'soraUserscriptInstalled' &&
+        event.newValue === 'true'
+      ) {
+        setInstalled(true);
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+
   return [installed, setInstalled] as const;
 }

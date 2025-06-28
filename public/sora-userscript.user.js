@@ -12,11 +12,23 @@
 (function () {
   console.log('[Sora Injector] Loaded');
 
-  if (window.opener) {
-    window.opener.postMessage({ type: 'SORA_USERSCRIPT_READY' }, '*');
-  } else if (window.location.host.endsWith('lovable.app')) {
-    window.postMessage({ type: 'SORA_USERSCRIPT_READY' }, '*');
-  }
+  const notifyReady = () => {
+    try {
+      const isCrafter = document.querySelector(
+        'meta[name="sora-json-prompt-crafter"]'
+      );
+      if (isCrafter) {
+        localStorage.setItem('soraUserscriptInstalled', 'true');
+        window.postMessage({ type: 'SORA_USERSCRIPT_READY' }, '*');
+      } else if (window.opener) {
+        window.opener.postMessage({ type: 'SORA_USERSCRIPT_READY' }, '*');
+      }
+    } catch (e) {
+      console.warn('[Sora Injector] Failed to notify readiness', e);
+    }
+  };
+
+  notifyReady();
 
 
   const waitForTextarea = (callback) => {
