@@ -256,7 +256,7 @@ const Dashboard = () => {
       };
       window.addEventListener('message', ackHandler);
     };
-    setTimeout(start, 500);
+    setTimeout(start, 3500);
     trackEvent(trackingEnabled, 'send_to_sora');
   };
 
@@ -637,15 +637,15 @@ const Dashboard = () => {
                   <code>
                     {diffParts
                       ? diffParts.map((part, idx) => (
-                          <span
-                            key={idx}
-                            className={
-                              part.added ? 'animate-highlight' : undefined
-                            }
-                          >
-                            {part.value}
-                          </span>
-                        ))
+                        <span
+                          key={idx}
+                          className={
+                            part.added ? 'animate-highlight' : undefined
+                          }
+                        >
+                          {part.value}
+                        </span>
+                      ))
                       : jsonString}
                   </code>
                 </pre>
