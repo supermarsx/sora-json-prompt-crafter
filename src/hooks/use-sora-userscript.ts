@@ -35,7 +35,10 @@ export function useSoraUserscript() {
   }, [installed]);
 
   useEffect(() => {
-    window.soraUserscriptReady = () => setInstalled(true);
+    window.soraUserscriptReady = () => {
+      setInstalled(true);
+      window.postMessage({ type: 'SORA_USERSCRIPT_ACK' }, '*');
+    };
     return () => {
       delete window.soraUserscriptReady;
     };
@@ -45,6 +48,10 @@ export function useSoraUserscript() {
     const handler = (event: MessageEvent) => {
       if (event.data?.type === 'SORA_USERSCRIPT_READY') {
         setInstalled(true);
+        (event.source as Window | null)?.postMessage(
+          { type: 'SORA_USERSCRIPT_ACK' },
+          '*',
+        );
       }
     };
     window.addEventListener('message', handler);

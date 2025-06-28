@@ -235,12 +235,17 @@ const Dashboard = () => {
   const sendToSora = () => {
     const win = window.open('https://sora.chatgpt.com', '_blank');
     if (!win) return;
-    setTimeout(() => {
-      win.postMessage(
-        { type: 'INSERT_SORA_JSON', json: JSON.parse(jsonString) },
-        '*',
-      );
-    }, 1000);
+    const payload = { type: 'INSERT_SORA_JSON', json: JSON.parse(jsonString) };
+    const interval = setInterval(() => {
+      win.postMessage(payload, '*');
+    }, 250);
+    const handler = (event: MessageEvent) => {
+      if (event.source === win && event.data?.type === 'INSERT_SORA_JSON_ACK') {
+        clearInterval(interval);
+        window.removeEventListener('message', handler);
+      }
+    };
+    window.addEventListener('message', handler);
     trackEvent(trackingEnabled, 'send_to_sora');
   };
 
