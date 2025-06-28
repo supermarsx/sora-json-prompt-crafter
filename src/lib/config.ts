@@ -25,4 +25,4 @@ export const DISABLE_STATS = disableStats === 'true' || disableStats === '1';
 const gtagDebug = getEnvVar('VITE_GTAG_DEBUG');
 export const GTAG_DEBUG = gtagDebug === 'true' || gtagDebug === '1';
 
-export const USERSCRIPT_VERSION = '1.0';
+export const USERSCRIPT_VERSION = '1.2';

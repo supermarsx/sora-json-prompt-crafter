@@ -256,17 +256,7 @@ const Dashboard = () => {
       };
       window.addEventListener('message', ackHandler);
     };
-
-    const readyHandler = (event: MessageEvent) => {
-      if (event.source === win && event.data?.type === 'SORA_USERSCRIPT_READY') {
-        win.postMessage({ type: 'SORA_USERSCRIPT_ACK' }, '*');
-        start();
-        window.removeEventListener('message', readyHandler);
-      }
-    };
-
-    window.addEventListener('message', readyHandler);
-    win.addEventListener('load', start, { once: true });
+    setTimeout(start, 500);
     trackEvent(trackingEnabled, 'send_to_sora');
   };
 
