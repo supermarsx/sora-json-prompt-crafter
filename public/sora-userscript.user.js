@@ -15,10 +15,15 @@
   const notifyReady = () => {
     try {
       const isCrafter = document.querySelector(
-        'meta[name="sora-json-prompt-crafter"]'
+        'meta[name="sora-json-prompt-crafter"]',
       );
       if (isCrafter) {
-        localStorage.setItem('soraUserscriptInstalled', 'true');
+        try {
+          localStorage.setItem('soraUserscriptInstalled', 'true');
+        } catch {
+          document.cookie =
+            'soraUserscriptInstalled=true; path=/; max-age=31536000';
+        }
         window.postMessage({ type: 'SORA_USERSCRIPT_READY' }, '*');
       } else if (window.opener) {
         window.opener.postMessage({ type: 'SORA_USERSCRIPT_READY' }, '*');
@@ -29,7 +34,6 @@
   };
 
   notifyReady();
-
 
   const waitForTextarea = (callback) => {
     const ta = document.querySelector('textarea');
