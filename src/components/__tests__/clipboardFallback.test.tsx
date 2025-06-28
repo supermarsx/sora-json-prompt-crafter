@@ -46,14 +46,23 @@ describe('clipboard fallback', () => {
     warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
     (toast.error as jest.Mock).mockClear();
     (toast.success as jest.Mock).mockClear();
-    global.fetch = jest.fn().mockResolvedValue({
-      json: () =>
-        Promise.resolve({
-          stargazers_count: 0,
-          forks_count: 0,
-          open_issues_count: 0,
-        }),
-    }) as unknown as typeof fetch;
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            stargazers_count: 0,
+            forks_count: 0,
+          }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            total_count: 0,
+          }),
+      }) as unknown as typeof fetch;
     window.matchMedia = jest.fn().mockReturnValue({
       addEventListener: jest.fn(),
       removeEventListener: jest.fn(),
