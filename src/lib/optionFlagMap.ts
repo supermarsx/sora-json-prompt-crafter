@@ -14,6 +14,7 @@ export const OPTION_FLAG_MAP: Record<string, keyof SoraOptions> = {
   color_grade: 'use_color_grading',
   environment: 'use_environment',
   location: 'use_location',
+  time_of_year: 'use_time_of_year',
   year: 'use_settings_location',
   season: 'use_season',
   atmosphere_mood: 'use_atmosphere_mood',

@@ -38,4 +38,27 @@ describe('SettingsLocationSection', () => {
     dropdown = within(envSection).getByRole('button');
     expect(dropdown.hasAttribute('disabled')).toBe(true);
   });
+
+  test('time_of_year input updates and disables correctly', () => {
+    const updateOptions = jest.fn();
+    const enabled = {
+      ...DEFAULT_OPTIONS,
+      use_settings_location: true,
+      use_time_of_year: true,
+      time_of_year: 'spring',
+    };
+    const { rerender } = render(
+      <SettingsLocationSection options={enabled} updateOptions={updateOptions} />,
+    );
+    const input = screen.getByLabelText(/^time of year$/i);
+    fireEvent.change(input, { target: { value: 'winter' } });
+    expect(updateOptions).toHaveBeenCalledWith({ time_of_year: 'winter' });
+
+    const disabled = { ...enabled, use_time_of_year: false };
+    rerender(
+      <SettingsLocationSection options={disabled} updateOptions={updateOptions} />,
+    );
+    const disabledInput = screen.getByLabelText(/^time of year$/i);
+    expect(disabledInput.hasAttribute('disabled')).toBe(true);
+  });
 });

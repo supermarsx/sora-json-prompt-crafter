@@ -91,6 +91,7 @@ export interface SoraOptions {
   use_color_grading: boolean;
   use_environment: boolean;
   use_time_of_year: boolean;
+  time_of_year?: string;
   use_character_mood: boolean;
   character_mood?: string;
   use_sword_details: boolean;

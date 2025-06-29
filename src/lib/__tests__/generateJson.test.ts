@@ -130,13 +130,27 @@ describe('generateJson', () => {
       season: 'summer',
       use_atmosphere_mood: true,
       atmosphere_mood: 'gloomy',
+      use_time_of_year: true,
+      time_of_year: 'holidays',
     };
     const obj = parse(generateJson(opts));
     expect(obj.environment).toBeUndefined();
     expect(obj.location).toBeUndefined();
+    expect(obj.time_of_year).toBeUndefined();
     expect(obj.season).toBeUndefined();
     expect(obj.atmosphere_mood).toBeUndefined();
     expect(obj.year).toBeUndefined();
+  });
+
+  test('includes time_of_year when enabled', () => {
+    const opts = {
+      ...DEFAULT_OPTIONS,
+      use_settings_location: true,
+      use_time_of_year: true,
+      time_of_year: 'spring festival',
+    };
+    const obj = parse(generateJson(opts));
+    expect(obj.time_of_year).toBe('spring festival');
   });
 
   test('handles sword type with dnd section enabled', () => {
