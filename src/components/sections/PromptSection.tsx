@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -16,6 +17,7 @@ export const PromptSection: React.FC<PromptSectionProps> = ({
   updateOptions,
   trackingEnabled,
 }) => {
+  const { t } = useTranslation();
   const promptRef = React.useRef<HTMLTextAreaElement>(null);
   const negativeRef = React.useRef<HTMLTextAreaElement>(null);
   useResizeTracker(promptRef, trackingEnabled, 'prompt_resize');
@@ -24,13 +26,13 @@ export const PromptSection: React.FC<PromptSectionProps> = ({
     <div className="space-y-4">
       <div>
         <Label htmlFor="prompt" className="text-base font-semibold mb-2 block">
-          Prompt
+          {t('prompt')}
         </Label>
         <Textarea
           id="prompt"
           value={options.prompt}
           onChange={(e) => updateOptions({ prompt: e.target.value })}
-          placeholder="Describe what you want to generate..."
+          placeholder={t('promptPlaceholder')}
           className="min-h-[100px] resize-y"
           ref={promptRef}
         />
@@ -46,14 +48,14 @@ export const PromptSection: React.FC<PromptSectionProps> = ({
             }
           />
           <Label htmlFor="negative_prompt" className="text-base font-semibold">
-            Negative Prompt
+            {t('negativePrompt')}
           </Label>
         </div>
         <Textarea
           id="negative_prompt"
           value={options.negative_prompt}
           onChange={(e) => updateOptions({ negative_prompt: e.target.value })}
-          placeholder="Describe what you want to avoid..."
+          placeholder={t('negativePromptPlaceholder')}
           className="min-h-[80px] resize-y"
           disabled={!options.use_negative_prompt}
           ref={negativeRef}

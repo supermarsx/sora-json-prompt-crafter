@@ -39,8 +39,12 @@ import { OPTION_FLAG_MAP } from '@/lib/optionFlagMap';
 import { isValidOptions } from '@/lib/validateOptions';
 import { safeGet, safeSet } from '@/lib/storage';
 import { DISABLE_STATS, USERSCRIPT_VERSION } from '@/lib/config';
+import { useTranslation } from 'react-i18next';
+import { useLocale } from '@/hooks/use-locale';
 
 const Dashboard = () => {
+  const { t } = useTranslation();
+  useLocale();
   const [options, setOptions] = useState<SoraOptions>(() => {
     try {
       const stored = safeGet('currentJson');
@@ -527,7 +531,7 @@ const Dashboard = () => {
                     }
                   >
                     <Heart className="w-4 h-4" />
-                    View on Lovable
+                    {t('viewOnLovable')}
                   </a>
                 </Button>
                 {soraToolsEnabled && !userscriptInstalled && (
@@ -541,7 +545,7 @@ const Dashboard = () => {
                       }
                     >
                       <Download className="w-4 h-4" />
-                      Install Userscript
+                      {t('installUserscript')}
                     </a>
                   </Button>
                 )}
@@ -563,7 +567,7 @@ const Dashboard = () => {
                         }
                       >
                         <RefreshCw className="w-4 h-4" />
-                        Update Userscript
+                        {t('updateUserscript')}
                       </a>
                     </Button>
                   )}
@@ -578,7 +582,7 @@ const Dashboard = () => {
                 }}
                 className="underline"
               >
-                full disclaimer
+                {t('fullDisclaimer')}
               </button>
             </p>
           </div>
@@ -606,7 +610,7 @@ const Dashboard = () => {
             <CardHeader className="border-b">
               <CardTitle className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                Generation Settings
+                {t('generationSettings')}
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 p-0 overflow-hidden">
@@ -628,7 +632,7 @@ const Dashboard = () => {
             <CardHeader className="border-b">
               <CardTitle className="flex items-center gap-2">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                Generated JSON Prompt
+                {t('generatedJsonPrompt')}
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 p-0 overflow-hidden">
@@ -637,15 +641,15 @@ const Dashboard = () => {
                   <code>
                     {diffParts
                       ? diffParts.map((part, idx) => (
-                        <span
-                          key={idx}
-                          className={
-                            part.added ? 'animate-highlight' : undefined
-                          }
-                        >
-                          {part.value}
-                        </span>
-                      ))
+                          <span
+                            key={idx}
+                            className={
+                              part.added ? 'animate-highlight' : undefined
+                            }
+                          >
+                            {part.value}
+                          </span>
+                        ))
                       : jsonString}
                   </code>
                 </pre>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
@@ -44,16 +45,17 @@ export const CoreSettingsSection: React.FC<CoreSettingsSectionProps> = ({
   isEnabled,
   onToggle,
 }) => {
+  const { t } = useTranslation();
   return (
     <CollapsibleSection
-      title="Core Settings"
+      title={t('coreSettings')}
       isOptional={true}
       isEnabled={isEnabled}
       onToggle={onToggle}
     >
       <div className="grid grid-cols-1 gap-4">
         <div>
-          <Label htmlFor="seed">Seed</Label>
+          <Label htmlFor="seed">{t('seed')}</Label>
           <Input
             id="seed"
             type="number"
@@ -63,12 +65,12 @@ export const CoreSettingsSection: React.FC<CoreSettingsSectionProps> = ({
                 seed: e.target.value ? parseInt(e.target.value) : null,
               })
             }
-            placeholder="Random seed (leave empty for random)"
+            placeholder={t('randomSeedPlaceholder')}
           />
         </div>
 
         <div>
-          <Label htmlFor="quality">Quality</Label>
+          <Label htmlFor="quality">{t('quality')}</Label>
           <Select
             value={options.quality}
             onValueChange={(value) =>
@@ -89,7 +91,7 @@ export const CoreSettingsSection: React.FC<CoreSettingsSectionProps> = ({
         </div>
 
         <div>
-          <Label>Steps: {options.steps}</Label>
+          <Label>{t('stepsLabel', { count: options.steps })}</Label>
           <Slider
             value={[options.steps]}
             onValueChange={([value]) => updateOptions({ steps: value })}
@@ -101,7 +103,9 @@ export const CoreSettingsSection: React.FC<CoreSettingsSectionProps> = ({
         </div>
 
         <div>
-          <Label>Guidance Scale: {options.guidance_scale}</Label>
+          <Label>
+            {t('guidanceScaleLabel', { value: options.guidance_scale })}
+          </Label>
           <Slider
             value={[options.guidance_scale]}
             onValueChange={([value]) =>
@@ -115,7 +119,7 @@ export const CoreSettingsSection: React.FC<CoreSettingsSectionProps> = ({
         </div>
 
         <div>
-          <Label>Temperature: {options.temperature}</Label>
+          <Label>{t('temperatureLabel', { value: options.temperature })}</Label>
           <Slider
             value={[options.temperature]}
             onValueChange={([value]) => updateOptions({ temperature: value })}
@@ -127,7 +131,7 @@ export const CoreSettingsSection: React.FC<CoreSettingsSectionProps> = ({
         </div>
 
         <div>
-          <Label>CFG Rescale: {options.cfg_rescale}</Label>
+          <Label>{t('cfgRescaleLabel', { value: options.cfg_rescale })}</Label>
           <Slider
             value={[options.cfg_rescale]}
             onValueChange={([value]) => updateOptions({ cfg_rescale: value })}

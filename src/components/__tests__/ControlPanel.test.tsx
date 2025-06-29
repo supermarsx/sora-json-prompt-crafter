@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, within } from '@testing-library/react';
+import '@/i18n';
 import { ControlPanel } from '../ControlPanel';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 
