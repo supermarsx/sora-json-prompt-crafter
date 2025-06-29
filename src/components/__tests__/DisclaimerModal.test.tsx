@@ -117,6 +117,28 @@ describe('DisclaimerModal', () => {
     expect(mockFetch).not.toHaveBeenCalled();
   });
 
+  test('loads disclaimer from cache when offline', async () => {
+    const matchMock = jest.fn().mockResolvedValue({
+      text: () => Promise.resolve('cache text'),
+    } as Response);
+    (global as unknown as { caches: CacheStorage }).caches = {
+      match: matchMock,
+    } as unknown as CacheStorage;
+
+    const fetchMock = jest
+      .fn()
+      .mockRejectedValue(new Error('network unavailable'));
+    global.fetch = fetchMock;
+
+    render(<DisclaimerModal open={true} onOpenChange={() => {}} />);
+
+    expect(await screen.findByText('cache text')).toBeDefined();
+    expect(matchMock).toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
+
+    delete (global as unknown as { caches?: CacheStorage }).caches;
+  });
+
   test('no state update after unmount', async () => {
     let aborted = false;
     global.fetch = jest.fn().mockImplementation((_url, init) => {

@@ -53,33 +53,55 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({
       }
     }
     const url = disclaimerUrl ?? '/disclaimer.txt';
-    fetch(url, { signal })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error('Failed to fetch disclaimer');
-        }
-        return res.text();
-      })
-      .then((txt) => {
-        if (!signal.aborted) {
-          setText(txt);
-          try {
-            localStorage.setItem(STORAGE_KEY, txt);
-          } catch {
-            // ignore localStorage errors
+
+    (async () => {
+      try {
+        const cachedResponse = await caches.match(url);
+        if (cachedResponse) {
+          const txt = await cachedResponse.text();
+          if (!signal.aborted) {
+            setText(txt);
+            try {
+              localStorage.setItem(STORAGE_KEY, txt);
+            } catch {
+              // ignore localStorage errors
+            }
+            setHasFetched(true);
+            return;
           }
         }
-      })
-      .catch((err) => {
-        if (err.name !== 'AbortError') {
-          setText('Failed to load disclaimer.');
-        }
-      })
-      .finally(() => {
-        if (!signal.aborted) {
-          setHasFetched(true);
-        }
-      });
+      } catch {
+        // ignore cache errors
+      }
+
+      fetch(url, { signal })
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('Failed to fetch disclaimer');
+          }
+          return res.text();
+        })
+        .then((txt) => {
+          if (!signal.aborted) {
+            setText(txt);
+            try {
+              localStorage.setItem(STORAGE_KEY, txt);
+            } catch {
+              // ignore localStorage errors
+            }
+          }
+        })
+        .catch((err) => {
+          if (err.name !== 'AbortError') {
+            setText('Failed to load disclaimer.');
+          }
+        })
+        .finally(() => {
+          if (!signal.aborted) {
+            setHasFetched(true);
+          }
+        });
+    })();
 
     return () => {
       controller.abort();
