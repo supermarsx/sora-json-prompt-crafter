@@ -5,6 +5,7 @@ const staticAssets = [
   '/favicon.ico',
   '/favicon.png',
   '/favicon.svg',
+  '/disclaimer.txt',
   '/web-app-manifest-192x192.png',
   '/web-app-manifest-512x512.png',
   '/site.webmanifest',
