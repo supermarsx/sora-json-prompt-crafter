@@ -91,6 +91,20 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (DISABLE_STATS) return;
+    const cached = safeGet<{ stars: number; forks: number; issues: number }>(
+      'githubStats',
+      null,
+      true,
+    );
+    const cachedTs = safeGet<number>('githubStatsTimestamp', 0, true);
+    if (
+      cached &&
+      typeof cachedTs === 'number' &&
+      Date.now() - cachedTs < 3600000
+    ) {
+      setGithubStats(cached);
+      return;
+    }
     const controller = new AbortController();
     const { signal } = controller;
     const loadStats = async () => {
@@ -114,11 +128,14 @@ const Dashboard = () => {
         const issuesData = await issuesRes.json();
 
         if (!signal.aborted) {
-          setGithubStats({
+          const data = {
             stars: repoData.stargazers_count,
             forks: repoData.forks_count,
             issues: issuesData.total_count,
-          });
+          };
+          setGithubStats(data);
+          safeSet('githubStats', data, true);
+          safeSet('githubStatsTimestamp', Date.now(), true);
         }
       } catch (error) {
         if ((error as Error).name !== 'AbortError') {
