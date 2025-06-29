@@ -14,26 +14,49 @@ beforeAll(() => {
 describe('MaterialSection', () => {
   test('checkbox toggle updates option', () => {
     const updateOptions = jest.fn();
-    const options = { ...DEFAULT_OPTIONS, use_material: true, use_secondary_material: false };
+    const options = {
+      ...DEFAULT_OPTIONS,
+      use_material: true,
+      use_secondary_material: false,
+    };
     render(<MaterialSection options={options} updateOptions={updateOptions} />);
     fireEvent.click(screen.getByLabelText(/use secondary material/i));
-    expect(updateOptions).toHaveBeenCalledWith({ use_secondary_material: true });
+    expect(updateOptions).toHaveBeenCalledWith({
+      use_secondary_material: true,
+    });
   });
 
   test('secondary material dropdown updates value and disabled when flag off', () => {
     const updateOptions = jest.fn();
-    const enabledOptions = { ...DEFAULT_OPTIONS, use_material: true, use_secondary_material: true, secondary_material: 'default' };
+    const enabledOptions = {
+      ...DEFAULT_OPTIONS,
+      use_material: true,
+      use_secondary_material: true,
+      secondary_material: 'default',
+    };
     const { rerender } = render(
-      <MaterialSection options={enabledOptions} updateOptions={updateOptions} />,
+      <MaterialSection
+        options={enabledOptions}
+        updateOptions={updateOptions}
+      />,
     );
-    const section = screen.getByText('Secondary Material').parentElement as HTMLElement;
+    const section = screen.getByText('Secondary Material')
+      .parentElement as HTMLElement;
     let dropdown = within(section).getByRole('button');
     fireEvent.click(dropdown);
     fireEvent.click(screen.getByRole('button', { name: /^wood$/i }));
     expect(updateOptions).toHaveBeenCalledWith({ secondary_material: 'wood' });
 
-    const disabledOptions = { ...enabledOptions, use_secondary_material: false };
-    rerender(<MaterialSection options={disabledOptions} updateOptions={updateOptions} />);
+    const disabledOptions = {
+      ...enabledOptions,
+      use_secondary_material: false,
+    };
+    rerender(
+      <MaterialSection
+        options={disabledOptions}
+        updateOptions={updateOptions}
+      />,
+    );
     dropdown = within(section).getByRole('button');
     expect(dropdown.hasAttribute('disabled')).toBe(true);
   });
