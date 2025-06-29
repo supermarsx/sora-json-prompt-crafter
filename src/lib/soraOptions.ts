@@ -7,7 +7,7 @@ import type {
   ApertureOption,
   BlurStyleOption,
   DepthOfFieldOption,
-} from '@/data/cameraOptions';
+} from '@/data/cameraPresets';
 
 export interface SoraOptions {
   prompt: string;

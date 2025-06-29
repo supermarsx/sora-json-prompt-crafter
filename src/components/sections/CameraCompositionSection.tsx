@@ -21,7 +21,7 @@ import {
   apertureOptions,
   blurStyleOptions,
   depthOfFieldOptions,
-} from '@/data/cameraOptions';
+} from '@/data/cameraPresets';
 
 interface CameraCompositionSectionProps {
   options: SoraOptions;
