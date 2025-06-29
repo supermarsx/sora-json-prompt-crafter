@@ -29,7 +29,11 @@ describe('EnhancementsSection', () => {
 
   test('safety filter dropdown updates value and disabled when flag off', () => {
     const updateOptions = jest.fn();
-    const enabledOptions = { ...DEFAULT_OPTIONS, use_safety_filter: true, safety_filter: 'moderate' };
+    const enabledOptions = {
+      ...DEFAULT_OPTIONS,
+      use_safety_filter: true,
+      safety_filter: 'moderate',
+    };
     const { rerender } = render(
       <EnhancementsSection
         options={enabledOptions}
@@ -38,7 +42,8 @@ describe('EnhancementsSection', () => {
         onToggle={() => {}}
       />,
     );
-    let section = screen.getByText('Safety Filter').parentElement as HTMLElement;
+    let section = screen.getByText('Safety Filter')
+      .parentElement as HTMLElement;
     let dropdown = within(section).getByRole('button');
     fireEvent.click(dropdown);
     fireEvent.click(screen.getByRole('button', { name: /^strict/i }));

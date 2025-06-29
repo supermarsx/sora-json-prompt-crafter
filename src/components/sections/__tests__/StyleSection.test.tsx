@@ -26,6 +26,9 @@ describe('StyleSection', () => {
     const comboboxes = screen.getAllByRole('combobox');
     fireEvent.click(comboboxes[1]);
     fireEvent.click(screen.getByRole('option', { name: /film still/i }));
-    expect(updateNestedOptions).toHaveBeenCalledWith('style_preset.style', 'film still');
+    expect(updateNestedOptions).toHaveBeenCalledWith(
+      'style_preset.style',
+      'film still',
+    );
   });
 });
