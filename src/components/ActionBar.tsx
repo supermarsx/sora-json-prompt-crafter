@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocale } from '@/hooks/use-locale';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/sonner-toast';
 import { trackEvent } from '@/lib/analytics';
@@ -84,6 +86,8 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   showJumpToJson,
   onJumpToJson,
 }) => {
+  const { t } = useTranslation();
+  const [locale, setLocale] = useLocale();
   const [minimized, setMinimized] = useState(false);
   const [clearing, setClearing] = useState(false);
   const [confirmDisableTracking, setConfirmDisableTracking] = useState(false);
@@ -101,7 +105,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           size="sm"
           className="gap-1"
         >
-          Actions
+          {t('actions')}
           <ChevronUp className="w-4 h-4" />
         </Button>
       </div>
@@ -118,12 +122,12 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           className="gap-2"
         >
           <Send className="w-4 h-4" />
-          Send to Sora
+          {t('sendToSora')}
         </Button>
       )}
       <Button onClick={onCopy} variant="outline" size="sm" className="gap-2">
         {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-        Copy
+        {t('copy')}
       </Button>
       <Button
         onClick={() => {
@@ -136,30 +140,30 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         className="gap-2"
       >
         <Trash2 className={`w-4 h-4 ${clearing ? 'animate-spin' : ''}`} />
-        Clear
+        {t('clear')}
       </Button>
       <Button onClick={onShare} variant="outline" size="sm" className="gap-2">
         <Share className="w-4 h-4" />
-        Share
+        {t('share')}
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="sm" className="gap-2">
-            <Cog className="w-4 h-4" /> Manage
+            <Cog className="w-4 h-4" /> {t('manage')}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuItem onSelect={onImport} className="gap-2">
-            <Import className="w-4 h-4" /> Import
+            <Import className="w-4 h-4" /> {t('import')}
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={onReset} className="gap-2">
-            <RotateCcw className="w-4 h-4" /> Reset
+            <RotateCcw className="w-4 h-4" /> {t('reset')}
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={onRegenerate} className="gap-2">
-            <RefreshCw className="w-4 h-4" /> Regenerate
+            <RefreshCw className="w-4 h-4" /> {t('regenerate')}
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={onRandomize} className="gap-2">
-            <Shuffle className="w-4 h-4" /> Randomize
+            <Shuffle className="w-4 h-4" /> {t('randomize')}
           </DropdownMenuItem>
           <DropdownMenuItem
             onSelect={() => {
@@ -173,11 +177,11 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           >
             {trackingEnabled ? (
               <>
-                <EyeOff className="w-4 h-4" /> Disable Tracking
+                <EyeOff className="w-4 h-4" /> {t('disableTracking')}
               </>
             ) : (
               <>
-                <Eye className="w-4 h-4" /> Enable Tracking
+                <Eye className="w-4 h-4" /> {t('enableTracking')}
               </>
             )}
           </DropdownMenuItem>
@@ -206,11 +210,11 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           >
             {headerButtonsEnabled ? (
               <>
-                <EyeOff className="w-4 h-4" /> Hide Header Buttons
+                <EyeOff className="w-4 h-4" /> {t('hideHeaderButtons')}
               </>
             ) : (
               <>
-                <Eye className="w-4 h-4" /> Show Header Buttons
+                <Eye className="w-4 h-4" /> {t('showHeaderButtons')}
               </>
             )}
           </DropdownMenuItem>
@@ -225,19 +229,25 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           >
             {logoEnabled ? (
               <>
-                <EyeOff className="w-4 h-4" /> Hide Logo
+                <EyeOff className="w-4 h-4" /> {t('hideLogo')}
               </>
             ) : (
               <>
-                <Eye className="w-4 h-4" /> Show Logo
+                <Eye className="w-4 h-4" /> {t('showLogo')}
               </>
             )}
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('en')}>
+            English
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('es')}>
+            Español
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <Button onClick={onHistory} variant="outline" size="sm" className="gap-2">
         <History className="w-4 h-4" />
-        History
+        {t('history')}
       </Button>
       {showJumpToJson && (
         <Button
@@ -250,7 +260,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           className="gap-2"
         >
           <MoveDown className="w-4 h-4" />
-          Jump to JSON
+          {t('jumpToJson')}
         </Button>
       )}
       <Button

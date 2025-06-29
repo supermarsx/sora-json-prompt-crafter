@@ -40,8 +40,8 @@ go "my eyes!" when there's bright white lights.
 - Advanced specialized prompting options
 - Artifact and defect correction presets
 - No-fuss tracking toggle
+- English and Spanish language support
 - Works offline thanks to service worker caching of assets
-
 
 Example JSON output:
 

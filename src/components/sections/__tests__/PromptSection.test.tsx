@@ -1,4 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import '@/i18n';
 import { PromptSection } from '../PromptSection';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 

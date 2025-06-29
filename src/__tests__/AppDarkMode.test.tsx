@@ -13,6 +13,7 @@ jest.mock('../components/Dashboard', () => ({
 
 import App from '../App';
 import { safeGet } from '@/lib/storage';
+import '../i18n';
 
 jest.mock('@/lib/storage', () => ({
   __esModule: true,
