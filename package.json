@@ -12,7 +12,8 @@
     "test": "jest",
     "coverage": "jest --coverage && node scripts/generateCoverageBadge.js",
     "typecheck": "tsc --noEmit",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "accessibility": "node scripts/accessibilityCheck.js"
   },
   "overrides": {
     "test-exclude": "^7.0.1"
