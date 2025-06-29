@@ -39,4 +39,36 @@ describe('useSoraUserscript', () => {
     expect(result.current[1]).toBe('1.0');
     expect(postSpy).toHaveBeenCalledWith({ type: 'SORA_USERSCRIPT_ACK' }, '*');
   });
+
+  test('responds to debug ping with pong', () => {
+    const postSpy = jest.spyOn(window, 'postMessage');
+    renderHook(() => useSoraUserscript());
+
+    act(() => {
+      window.dispatchEvent(
+        new MessageEvent('message', {
+          data: { type: 'SORA_DEBUG_PING' },
+          source: window,
+        }),
+      );
+    });
+
+    expect(postSpy).toHaveBeenCalledWith({ type: 'SORA_DEBUG_PONG' }, '*');
+  });
+
+  test('logs when debug pong received', () => {
+    const debugSpy = jest.spyOn(console, 'debug').mockImplementation(() => {});
+    renderHook(() => useSoraUserscript());
+
+    act(() => {
+      window.dispatchEvent(
+        new MessageEvent('message', {
+          data: { type: 'SORA_DEBUG_PONG' },
+          source: window,
+        }),
+      );
+    });
+
+    expect(debugSpy).toHaveBeenCalledWith('[Sora Loader] Debug pong received');
+  });
 });
