@@ -134,6 +134,7 @@ export function generateJson(options: SoraOptions): string {
       'year',
       'environment',
       'location',
+      'time_of_year',
       'season',
       'atmosphere_mood',
     ]);
@@ -143,6 +144,7 @@ export function generateJson(options: SoraOptions): string {
   }
 
   removeIfDisabled(cleanOptions, options.use_season, ['season']);
+  removeIfDisabled(cleanOptions, options.use_time_of_year, ['time_of_year']);
   removeIfDisabled(cleanOptions, options.use_atmosphere_mood, [
     'atmosphere_mood',
   ]);

@@ -49,6 +49,7 @@ export const DEFAULT_OPTIONS: SoraOptions = {
   camera_type: 'default (auto/any camera)',
   use_settings_location: false,
   year: new Date().getFullYear(),
+  time_of_year: 'default (any time of year)',
   use_season: false,
   use_atmosphere_mood: false,
   use_subject_mood: false,

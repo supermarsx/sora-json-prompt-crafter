@@ -15,6 +15,7 @@ const extraShape = {
   makeup_style: z.string(),
   quality_booster: z.string(),
   black_and_white_preset: z.string(),
+  time_of_year: z.string(),
   location: z.string(),
   special_effects: z.array(z.string()),
   lut_preset: z.string(),

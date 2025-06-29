@@ -586,6 +586,27 @@ export const SettingsLocationSection: React.FC<
 
         <div className="flex items-center space-x-2">
           <Checkbox
+            id="use_time_of_year"
+            checked={options.use_time_of_year}
+            onCheckedChange={(checked) =>
+              updateOptions({ use_time_of_year: !!checked })
+            }
+          />
+          <Label htmlFor="use_time_of_year">Use Time of Year</Label>
+        </div>
+
+        <div>
+          <Label htmlFor="time_of_year">Time of Year</Label>
+          <Input
+            id="time_of_year"
+            value={options.time_of_year}
+            onChange={(e) => updateOptions({ time_of_year: e.target.value })}
+            disabled={!options.use_time_of_year}
+          />
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <Checkbox
             id="use_atmosphere_mood"
             checked={options.use_atmosphere_mood}
             onCheckedChange={(checked) =>
