@@ -47,7 +47,8 @@ describe('CameraCompositionSection', () => {
         onToggle={() => {}}
       />,
     );
-    let lensSection = screen.getByText('Lens Type').parentElement as HTMLElement;
+    let lensSection = screen.getByText('Lens Type')
+      .parentElement as HTMLElement;
     let dropdown = within(lensSection).getByRole('button');
     fireEvent.click(dropdown);
     fireEvent.click(screen.getByRole('button', { name: /wide 24mm/i }));

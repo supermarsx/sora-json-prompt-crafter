@@ -27,7 +27,9 @@ describe('VideoMotionSection', () => {
     fireEvent.click(checkbox);
     expect(updateOptions).toHaveBeenCalledWith({ use_duration: true });
 
-    const input = screen.getByLabelText(/duration \(seconds\)/i) as HTMLInputElement;
+    const input = screen.getByLabelText(
+      /duration \(seconds\)/i,
+    ) as HTMLInputElement;
     expect(input.hasAttribute('disabled')).toBe(true);
 
     const enabledOptions = { ...options, use_duration: true };
