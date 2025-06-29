@@ -1,11 +1,12 @@
+let presetLoaderModule: typeof import('../presetLoader');
 let importCustomPresets: typeof import('../presetLoader').importCustomPresets;
 let loadCustomPresetsFromUrl: typeof import('../presetLoader').loadCustomPresetsFromUrl;
 
 beforeEach(async () => {
+  jest.restoreAllMocks();
   jest.resetModules();
-  ({ importCustomPresets, loadCustomPresetsFromUrl } = await import(
-    '../presetLoader'
-  ));
+  presetLoaderModule = await import('../presetLoader');
+  ({ importCustomPresets, loadCustomPresetsFromUrl } = presetLoaderModule);
 });
 
 describe('importCustomPresets', () => {
@@ -61,6 +62,31 @@ describe('loadCustomPresetsFromUrl', () => {
       .fn()
       .mockRejectedValue(new Error('network')) as unknown as typeof fetch;
 
+    const spy = jest.spyOn(presetLoaderModule, 'importCustomPresets');
+
     await expect(loadCustomPresetsFromUrl('bad')).rejects.toThrow('network');
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  test('rejects when response json fails', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      json: jest.fn().mockRejectedValue(new Error('invalid')),
+    }) as unknown as typeof fetch;
+
+    const spy = jest.spyOn(presetLoaderModule, 'importCustomPresets');
+
+    await expect(loadCustomPresetsFromUrl('oops')).rejects.toThrow('invalid');
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  test('rejects when parsed JSON is invalid', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      json: jest.fn().mockResolvedValue('not json'),
+    }) as unknown as typeof fetch;
+
+    const spy = jest.spyOn(presetLoaderModule, 'importCustomPresets');
+
+    await expect(loadCustomPresetsFromUrl('oops')).rejects.toThrow();
+    expect(spy).not.toHaveBeenCalled();
   });
 });
