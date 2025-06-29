@@ -164,6 +164,15 @@ Copy `.env.example` to `.env` and adjust values as needed.
 - **`VITE_DISCLAIMER_URL`** (optional) – URL for the disclaimer text. Defaults to `/disclaimer.txt`.
 - **`VITE_GTAG_DEBUG`** (optional) – Set to `true` to enable Google Analytics debug mode.
 
+## Custom Presets
+
+Preset lists live under `src/data/`. You can add your own files there or merge
+presets at runtime. Use `importCustomPresets` from `src/lib/presetLoader` to load
+a JSON object (or URL via `loadCustomPresetsFromUrl`). The JSON can include
+`stylePresets`, `cameraPresets`, `locationPresets` and `dndPresets` keys
+matching the built‑in structures. Imported values are merged with existing
+presets so they become available in the UI.
+
 ## Contributing
 
 Pull requests are welcome. Please open an issue first to discuss major changes.
