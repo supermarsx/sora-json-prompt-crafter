@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { diffChars, Change } from 'diff';
 import {
   Sun,
   Moon,
@@ -22,6 +21,7 @@ import HistoryPanel, { HistoryEntry } from './HistoryPanel';
 import ImportModal from './ImportModal';
 import Footer from './Footer';
 import DisclaimerModal from './DisclaimerModal';
+import GeneratedJson from './GeneratedJson';
 import { useIsSingleColumn } from '@/hooks/use-single-column';
 import { useDarkMode } from '@/hooks/use-dark-mode';
 import { useTracking } from '@/hooks/use-tracking';
@@ -39,7 +39,9 @@ import { loadOptionsFromJson } from '@/lib/loadOptionsFromJson';
 import { OPTION_FLAG_MAP } from '@/lib/optionFlagMap';
 import { isValidOptions } from '@/lib/validateOptions';
 import { safeGet, safeSet } from '@/lib/storage';
-import { DISABLE_STATS, USERSCRIPT_VERSION } from '@/lib/config';
+import { USERSCRIPT_VERSION } from '@/lib/config';
+import { useGithubStats } from '@/hooks/use-github-stats';
+import { useClipboard } from '@/hooks/use-clipboard';
 import { useTranslation } from 'react-i18next';
 import { useLocale } from '@/hooks/use-locale';
 
@@ -73,9 +75,6 @@ const Dashboard = () => {
   const [history, setHistory] = useState<HistoryEntry[]>(() =>
     safeGet<HistoryEntry[]>('jsonHistory', [], true),
   );
-  const jsonContainerRef = React.useRef<HTMLDivElement>(null);
-  const prevJsonRef = React.useRef(jsonString);
-  const [diffParts, setDiffParts] = useState<Change[] | null>(null);
   const isSingleColumn = useIsSingleColumn();
   const [darkMode, setDarkMode] = useDarkMode();
   const [trackingEnabled, setTrackingEnabled] = useTracking();
@@ -85,71 +84,9 @@ const Dashboard = () => {
   const [actionLabelsEnabled, setActionLabelsEnabled] = useActionLabels();
   const [userscriptInstalled, userscriptVersion] = useSoraUserscript();
   const actionHistory = useActionHistory();
-  const [githubStats, setGithubStats] = useState<{
-    stars: number;
-    forks: number;
-    issues: number;
-  }>();
+  const githubStats = useGithubStats();
+  const { copy } = useClipboard();
 
-  useEffect(() => {
-    if (DISABLE_STATS) return;
-    const cached = safeGet<{ stars: number; forks: number; issues: number }>(
-      'githubStats',
-      null,
-      true,
-    );
-    const cachedTs = safeGet<number>('githubStatsTimestamp', 0, true);
-    if (
-      cached &&
-      typeof cachedTs === 'number' &&
-      Date.now() - cachedTs < 3600000
-    ) {
-      setGithubStats(cached);
-      return;
-    }
-    const controller = new AbortController();
-    const { signal } = controller;
-    const loadStats = async () => {
-      try {
-        const repoRes = await fetch(
-          'https://api.github.com/repos/supermarsx/sora-json-prompt-crafter',
-          { signal },
-        );
-        if (!repoRes.ok) {
-          throw new Error('non ok');
-        }
-        const repoData = await repoRes.json();
-
-        const issuesRes = await fetch(
-          'https://api.github.com/search/issues?q=repo:supermarsx/sora-json-prompt-crafter+type:issue+state:open',
-          { signal },
-        );
-        if (!issuesRes.ok) {
-          throw new Error('non ok');
-        }
-        const issuesData = await issuesRes.json();
-
-        if (!signal.aborted) {
-          const data = {
-            stars: repoData.stargazers_count,
-            forks: repoData.forks_count,
-            issues: issuesData.total_count,
-          };
-          setGithubStats(data);
-          safeSet('githubStats', data, true);
-          safeSet('githubStatsTimestamp', Date.now(), true);
-        }
-      } catch (error) {
-        if ((error as Error).name !== 'AbortError') {
-          toast.error('Failed to load GitHub stats');
-        }
-      }
-    };
-    void loadStats();
-    return () => {
-      controller.abort();
-    };
-  }, []);
 
   useEffect(() => {
     const times = [3, 5, 10, 30, 60];
@@ -172,37 +109,6 @@ const Dashboard = () => {
     safeSet('currentJson', jsonString);
   }, [jsonString, trackingEnabled]);
 
-  useEffect(() => {
-    try {
-      const diff = diffChars(prevJsonRef.current, jsonString).filter(
-        (p) => !p.removed,
-      );
-      prevJsonRef.current = jsonString;
-      setDiffParts(diff);
-      const timer = setTimeout(() => {
-        setDiffParts(diff.map((p) => ({ ...p, added: false }) as Change));
-      }, 2000);
-      trackEvent(trackingEnabled, 'json_changed');
-      return () => clearTimeout(timer);
-    } catch (error) {
-      console.error('Error processing diff:', error);
-    }
-  }, [jsonString, trackingEnabled]);
-
-  useEffect(() => {
-    const container = jsonContainerRef.current;
-    if (!container) return;
-    const atBottom =
-      Math.abs(
-        container.scrollHeight - container.scrollTop - container.clientHeight,
-      ) < 5;
-    const atTop = container.scrollTop === 0;
-    if (atBottom) {
-      container.scrollTop = container.scrollHeight;
-    } else if (atTop) {
-      container.scrollTop = 0;
-    }
-  }, [jsonString]);
 
   const firstLoadRef = React.useRef(true);
   useEffect(() => {
@@ -222,12 +128,8 @@ const Dashboard = () => {
   }, [options]);
 
   const copyToClipboard = async () => {
-    if (!('clipboard' in navigator)) {
-      toast.error('Clipboard not supported');
-      return;
-    }
-    try {
-      await navigator.clipboard.writeText(jsonString);
+    const success = await copy(jsonString, 'Sora JSON copied to clipboard!');
+    if (success) {
       setCopied(true);
       const entry: HistoryEntry = {
         id: Date.now(),
@@ -235,7 +137,6 @@ const Dashboard = () => {
         json: jsonString,
       };
       setHistory((prev) => [entry, ...prev].slice(0, 100));
-      toast.success('Sora JSON copied to clipboard!');
       const opts = options as unknown as Record<string, unknown>;
       const sections = Object.keys(options).filter(
         (key) => key.startsWith('use_') && opts[key],
@@ -244,8 +145,6 @@ const Dashboard = () => {
         sections: sections.join(','),
       });
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      toast.error('Failed to copy to clipboard');
     }
   };
 
@@ -391,16 +290,9 @@ const Dashboard = () => {
   const clearHistory = () => setHistory([]);
 
   const copyHistoryEntry = async (json: string) => {
-    if (!('clipboard' in navigator)) {
-      toast.error('Clipboard not supported');
-      return;
-    }
-    try {
-      await navigator.clipboard.writeText(json);
-      toast.success('Sora JSON copied to clipboard!');
+    const success = await copy(json, 'Sora JSON copied to clipboard!');
+    if (success) {
       trackEvent(trackingEnabled, 'history_copy');
-    } catch {
-      toast.error('Failed to copy to clipboard');
     }
   };
 
@@ -655,24 +547,7 @@ const Dashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 p-0 overflow-hidden">
-              <div className="h-full overflow-y-auto" ref={jsonContainerRef}>
-                <pre className="p-6 text-sm font-mono whitespace-pre-wrap break-words leading-relaxed">
-                  <code>
-                    {diffParts
-                      ? diffParts.map((part, idx) => (
-                          <span
-                            key={idx}
-                            className={
-                              part.added ? 'animate-highlight' : undefined
-                            }
-                          >
-                            {part.value}
-                          </span>
-                        ))
-                      : jsonString}
-                  </code>
-                </pre>
-              </div>
+              <GeneratedJson json={jsonString} trackingEnabled={trackingEnabled} />
             </CardContent>
           </Card>
         </div>
