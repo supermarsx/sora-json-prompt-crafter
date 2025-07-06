@@ -4,6 +4,7 @@ import { useLocale } from '@/hooks/use-locale';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/components/ui/sonner-toast';
 import { trackEvent } from '@/lib/analytics';
+import { cn } from '@/lib/utils';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -58,6 +59,8 @@ interface ActionBarProps {
   onToggleHeaderButtons: () => void;
   logoEnabled: boolean;
   onToggleLogo: () => void;
+  actionLabelsEnabled: boolean;
+  onToggleActionLabels: () => void;
   copied: boolean;
   showJumpToJson?: boolean;
   onJumpToJson?: () => void;
@@ -82,6 +85,8 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   onToggleHeaderButtons,
   logoEnabled,
   onToggleLogo,
+  actionLabelsEnabled,
+  onToggleActionLabels,
   copied,
   showJumpToJson,
   onJumpToJson,
@@ -119,15 +124,20 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           onClick={onSendToSora}
           variant="outline"
           size="sm"
-          className="gap-2"
+          className={cn({ 'gap-2': actionLabelsEnabled })}
         >
           <Send className="w-4 h-4" />
-          {t('sendToSora')}
+          {actionLabelsEnabled && t('sendToSora')}
         </Button>
       )}
-      <Button onClick={onCopy} variant="outline" size="sm" className="gap-2">
+      <Button
+        onClick={onCopy}
+        variant="outline"
+        size="sm"
+        className={cn({ 'gap-2': actionLabelsEnabled })}
+      >
         {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-        {t('copy')}
+        {actionLabelsEnabled && t('copy')}
       </Button>
       <Button
         onClick={() => {
@@ -137,19 +147,28 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         }}
         variant="outline"
         size="sm"
-        className="gap-2"
+        className={cn({ 'gap-2': actionLabelsEnabled })}
       >
         <Trash2 className={`w-4 h-4 ${clearing ? 'animate-spin' : ''}`} />
-        {t('clear')}
+        {actionLabelsEnabled && t('clear')}
       </Button>
-      <Button onClick={onShare} variant="outline" size="sm" className="gap-2">
+      <Button
+        onClick={onShare}
+        variant="outline"
+        size="sm"
+        className={cn({ 'gap-2': actionLabelsEnabled })}
+      >
         <Share className="w-4 h-4" />
-        {t('share')}
+        {actionLabelsEnabled && t('share')}
       </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm" className="gap-2">
-            <Cog className="w-4 h-4" /> {t('manage')}
+          <Button
+            variant="outline"
+            size="sm"
+            className={cn({ 'gap-2': actionLabelsEnabled })}
+          >
+            <Cog className="w-4 h-4" /> {actionLabelsEnabled && t('manage')}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
@@ -237,6 +256,38 @@ export const ActionBar: React.FC<ActionBarProps> = ({
               </>
             )}
           </DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => {
+              onToggleActionLabels();
+              trackEvent(trackingEnabled, 'toggle_action_labels', {
+                enabled: !actionLabelsEnabled,
+              });
+            }}
+            className="gap-2"
+          >
+            {actionLabelsEnabled ? (
+              <>
+                <EyeOff className="w-4 h-4" /> {t('hideLabels')}
+              </>
+            ) : (
+              <>
+                <Eye className="w-4 h-4" /> {t('showLabels')}
+              </>
+            )}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="outline"
+            size="sm"
+            className={cn({ 'gap-2': actionLabelsEnabled })}
+          >
+            {t('language')}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
           <DropdownMenuItem onSelect={() => setLocale('en')}>
             English
           </DropdownMenuItem>
@@ -245,9 +296,14 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <Button onClick={onHistory} variant="outline" size="sm" className="gap-2">
+      <Button
+        onClick={onHistory}
+        variant="outline"
+        size="sm"
+        className={cn({ 'gap-2': actionLabelsEnabled })}
+      >
         <History className="w-4 h-4" />
-        {t('history')}
+        {actionLabelsEnabled && t('history')}
       </Button>
       {showJumpToJson && (
         <Button
@@ -257,10 +313,10 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           }}
           variant="outline"
           size="sm"
-          className="gap-2"
+          className={cn({ 'gap-2': actionLabelsEnabled })}
         >
           <MoveDown className="w-4 h-4" />
-          {t('jumpToJson')}
+          {actionLabelsEnabled && t('jumpToJson')}
         </Button>
       )}
       <Button
