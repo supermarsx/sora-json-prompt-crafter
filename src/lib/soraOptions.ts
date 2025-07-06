@@ -8,6 +8,15 @@ import type {
   BlurStyleOption,
   DepthOfFieldOption,
 } from '@/data/cameraPresets';
+import type { LightingOption } from '@/data/lightingOptions';
+import type { ColorGradingOption } from '@/data/colorGradingOptions';
+import type { MaterialOption } from '@/data/materialOptions';
+import type {
+  SubjectGenderOption,
+  MakeupStyleOption,
+  CharacterMoodOption,
+} from '@/data/faceOptions';
+import type { QualityBoosterOption } from '@/data/enhancementOptions';
 
 export interface SoraOptions {
   prompt: string;
@@ -55,14 +64,14 @@ export interface SoraOptions {
   shot_type: ShotTypeOption;
   subject_focus: 'center' | 'left' | 'right' | 'top' | 'bottom';
   composition_rules: CompositionRulesOption[];
-  lighting: string;
-  color_grade: string;
+  lighting: LightingOption;
+  color_grade: ColorGradingOption;
   depth_of_field: DepthOfFieldOption;
   lens_type: LensTypeOption;
   frame_interpolation: 'smooth' | 'realistic' | 'sharp';
   upscale: number;
   safety_filter: 'strict' | 'moderate' | 'off';
-  made_out_of: string;
+  made_out_of: MaterialOption;
   environment: string;
   use_signature: boolean;
   signature?: string;
@@ -87,13 +96,13 @@ export interface SoraOptions {
   use_lighting: boolean;
   use_material: boolean;
   use_secondary_material: boolean;
-  secondary_material?: string;
+  secondary_material?: MaterialOption;
   use_color_grading: boolean;
   use_environment: boolean;
   use_time_of_year: boolean;
   time_of_year?: string;
   use_character_mood: boolean;
-  character_mood?: string;
+  character_mood?: CharacterMoodOption;
   use_sword_details: boolean;
   prevent_deformities: boolean;
   use_upscale_factor: boolean;
@@ -103,11 +112,11 @@ export interface SoraOptions {
   add_same_face: boolean;
   dont_change_face: boolean;
   use_subject_gender: boolean;
-  subject_gender?: string;
+  subject_gender?: SubjectGenderOption;
   use_makeup_style: boolean;
-  makeup_style?: string;
+  makeup_style?: MakeupStyleOption;
   use_quality_booster: boolean;
-  quality_booster?: string;
+  quality_booster?: QualityBoosterOption;
   enhance_object_reflections: boolean;
   keep_key_details: boolean;
   use_black_and_white: boolean;
