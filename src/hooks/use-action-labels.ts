@@ -1,22 +1,6 @@
-import { useEffect, useState } from 'react';
-import { safeGet, safeSet } from '@/lib/storage';
+import { useLocalStorageState } from './use-local-storage-state';
+import { ACTION_LABELS_ENABLED } from '@/lib/storage-keys';
 
 export function useActionLabels() {
-  const [enabled, setEnabled] = useState(() => {
-    const stored = safeGet('actionLabelsEnabled');
-    if (stored !== null) {
-      try {
-        return JSON.parse(stored);
-      } catch {
-        return true;
-      }
-    }
-    return true;
-  });
-
-  useEffect(() => {
-    safeSet('actionLabelsEnabled', JSON.stringify(enabled));
-  }, [enabled]);
-
-  return [enabled, setEnabled] as const;
+  return useLocalStorageState(ACTION_LABELS_ENABLED, true);
 }

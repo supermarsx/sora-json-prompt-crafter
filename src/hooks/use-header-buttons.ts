@@ -1,22 +1,6 @@
-import { useEffect, useState } from 'react';
-import { safeGet, safeSet } from '@/lib/storage';
+import { useLocalStorageState } from './use-local-storage-state';
+import { HEADER_BUTTONS_ENABLED } from '@/lib/storage-keys';
 
 export function useHeaderButtons() {
-  const [enabled, setEnabled] = useState(() => {
-    const stored = safeGet('headerButtonsEnabled');
-    if (stored !== null) {
-      try {
-        return JSON.parse(stored);
-      } catch {
-        return true;
-      }
-    }
-    return true;
-  });
-
-  useEffect(() => {
-    safeSet('headerButtonsEnabled', JSON.stringify(enabled));
-  }, [enabled]);
-
-  return [enabled, setEnabled] as const;
+  return useLocalStorageState(HEADER_BUTTONS_ENABLED, true);
 }
