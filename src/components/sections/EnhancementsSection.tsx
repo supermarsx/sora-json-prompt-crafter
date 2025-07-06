@@ -6,71 +6,16 @@ import { CollapsibleSection } from '../CollapsibleSection';
 import { Slider } from '@/components/ui/slider';
 import type { SoraOptions } from '@/lib/soraOptions';
 
+import {
+  safetyFilterOptions,
+  qualityBoosterOptions,
+} from '@/data/enhancementOptions';
 interface EnhancementsSectionProps {
   options: SoraOptions;
   updateOptions: (updates: Partial<SoraOptions>) => void;
   isEnabled: boolean;
   onToggle: (enabled: boolean) => void;
 }
-
-const safetyFilterOptions = [
-  'default (auto safety level)',
-  'not defined',
-  'strict (max filtering, safest)',
-  'high (safe for work, minimal risk)',
-  'moderate (balanced, most non-explicit allowed)',
-  'low (mild filter, mild suggestive OK)',
-  'off (no filtering, everything allowed)',
-];
-
-const qualityBoosterOptions = [
-  'default (standard quality)',
-  'not defined',
-  'high resolution',
-  '2K',
-  '4K',
-  '8K',
-  'ultra HD',
-  'super-resolution',
-  'clear',
-  'good lighting',
-  'excellent lighting',
-  'perfect lighting',
-  'detailed',
-  'very detailed',
-  'extremely detailed',
-  'hyper-detailed',
-  'high definition',
-  'sharp focus',
-  'razor sharp focus',
-  'intricate',
-  'finely textured',
-  'complex details',
-  'beautiful',
-  'stunning',
-  'gorgeous',
-  'masterpiece',
-  'art station quality',
-  'deviantart quality',
-  'best quality',
-  'highest quality',
-  'realistic',
-  'ultra-realistic',
-  'photo-realistic',
-  'realistic+++',
-  'CGI-quality',
-  'studio lighting',
-  'professional photography',
-  'award-winning',
-  'flawless',
-  'immaculate',
-  'pristine',
-  'complementary colors',
-  'color harmony',
-  'cinematic quality',
-  'dynamic composition',
-  'exquisite rendering',
-];
 
 export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
   options,
