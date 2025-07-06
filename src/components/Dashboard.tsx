@@ -28,6 +28,7 @@ import { useTracking } from '@/hooks/use-tracking';
 import { useSoraTools } from '@/hooks/use-sora-tools';
 import { useHeaderButtons } from '@/hooks/use-header-buttons';
 import { useLogo } from '@/hooks/use-logo';
+import { useActionLabels } from '@/hooks/use-action-labels';
 import { useSoraUserscript } from '@/hooks/use-sora-userscript';
 import { useActionHistory } from '@/hooks/use-action-history';
 import { trackEvent } from '@/lib/analytics';
@@ -81,6 +82,7 @@ const Dashboard = () => {
   const [soraToolsEnabled, setSoraToolsEnabled] = useSoraTools();
   const [headerButtonsEnabled, setHeaderButtonsEnabled] = useHeaderButtons();
   const [logoEnabled, setLogoEnabled] = useLogo();
+  const [actionLabelsEnabled, setActionLabelsEnabled] = useActionLabels();
   const [userscriptInstalled, userscriptVersion] = useSoraUserscript();
   const actionHistory = useActionHistory();
   const [githubStats, setGithubStats] = useState<{
@@ -697,6 +699,10 @@ const Dashboard = () => {
         }
         logoEnabled={logoEnabled}
         onToggleLogo={() => setLogoEnabled(!logoEnabled)}
+        actionLabelsEnabled={actionLabelsEnabled}
+        onToggleActionLabels={() =>
+          setActionLabelsEnabled(!actionLabelsEnabled)
+        }
         copied={copied}
         showJumpToJson={isSingleColumn}
         onJumpToJson={scrollToJson}

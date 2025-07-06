@@ -34,5 +34,8 @@
   "prompt": "Prompt",
   "promptPlaceholder": "Describe lo que quieres generar...",
   "negativePrompt": "Prompt Negativo",
-  "negativePromptPlaceholder": "Describe lo que quieres evitar..."
+  "negativePromptPlaceholder": "Describe lo que quieres evitar...",
+  "showLabels": "Mostrar Etiquetas",
+  "hideLabels": "Ocultar Etiquetas",
+  "language": "Idioma"
 }

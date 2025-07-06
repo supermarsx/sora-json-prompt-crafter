@@ -97,6 +97,8 @@ function createProps(
     onToggleHeaderButtons: jest.fn(),
     logoEnabled: true,
     onToggleLogo: jest.fn(),
+    actionLabelsEnabled: true,
+    onToggleActionLabels: jest.fn(),
     copied: false,
     trackingEnabled: true,
     ...overrides,
