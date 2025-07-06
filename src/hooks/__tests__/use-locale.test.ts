@@ -2,6 +2,7 @@ import { renderHook, act } from '@testing-library/react';
 import { useLocale } from '../use-locale';
 import i18n from '@/i18n';
 import * as storage from '@/lib/storage';
+import { LOCALE } from '@/lib/storage-keys';
 
 jest.mock('@/i18n', () => ({
   __esModule: true,
@@ -23,7 +24,7 @@ describe('useLocale', () => {
     (storage.safeGet as jest.Mock).mockReturnValue('es');
     const { result } = renderHook(() => useLocale());
     expect(result.current[0]).toBe('es');
-    expect(storage.safeGet).toHaveBeenCalledWith('locale');
+    expect(storage.safeGet).toHaveBeenCalledWith(LOCALE, 'en', false);
   });
 
   test('updates locale and persists value', () => {
@@ -35,7 +36,7 @@ describe('useLocale', () => {
     });
 
     expect(i18n.changeLanguage).toHaveBeenLastCalledWith('fr');
-    expect(storage.safeSet).toHaveBeenLastCalledWith('locale', 'fr');
+    expect(storage.safeSet).toHaveBeenLastCalledWith(LOCALE, 'fr');
     expect(result.current[0]).toBe('fr');
   });
 });

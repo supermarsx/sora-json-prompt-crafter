@@ -1,22 +1,6 @@
-import { useEffect, useState } from 'react';
-import { safeGet, safeSet } from '@/lib/storage';
+import { useLocalStorageState } from './use-local-storage-state';
+import { SORA_TOOLS_ENABLED } from '@/lib/storage-keys';
 
 export function useSoraTools() {
-  const [enabled, setEnabled] = useState(() => {
-    const stored = safeGet('soraToolsEnabled');
-    if (stored !== null) {
-      try {
-        return JSON.parse(stored);
-      } catch {
-        return false;
-      }
-    }
-    return false;
-  });
-
-  useEffect(() => {
-    safeSet('soraToolsEnabled', JSON.stringify(enabled));
-  }, [enabled]);
-
-  return [enabled, setEnabled] as const;
+  return useLocalStorageState(SORA_TOOLS_ENABLED, false);
 }
