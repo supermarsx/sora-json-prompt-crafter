@@ -12,7 +12,7 @@
 ![Coverage](./coverage.svg)
 ![Issues](https://img.shields.io/github/issues/supermarsx/sora-json-prompt-crafter?style=for-the-badge)
 
-Sora JSON Prompt Crafter is a web interface for building configuration files for Sora's
+Sora JSON Prompt Crafter is a web interface for building specially crafted prompts for Sora's
 generative models. Adjust sliders and dropdowns to fine‑tune parameters like style preset,
 aspect ratio, video duration and more. The app generates a JSON snippet you can copy and
 use directly with Sora. The app has a privacy-first approach where everything is kept on your
@@ -40,7 +40,7 @@ go "my eyes!" when there's bright white lights.
 - Advanced specialized prompting options
 - Artifact and defect correction presets
 - No-fuss tracking toggle
-- English and Spanish language support
+- Internationalization support
 - Works offline thanks to service worker caching of assets
 
 Example JSON output:
