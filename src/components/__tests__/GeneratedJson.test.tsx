@@ -48,9 +48,9 @@ describe('GeneratedJson', () => {
 
     expect(trackEvent).toHaveBeenCalledWith(true, 'json_changed');
     expect(div.scrollTop).toBe(202);
-    expect(
-      div.querySelectorAll('span.animate-highlight').length,
-    ).toBeGreaterThan(0);
+    const added = div.querySelectorAll('span.animate-highlight');
+    expect(added.length).toBeGreaterThan(0);
+    expect(added[0].textContent).toBe(',"b":2');
 
     act(() => {
       jest.advanceTimersByTime(2000);

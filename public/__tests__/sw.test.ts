@@ -58,7 +58,9 @@ describe('service worker', () => {
       { url: '/assets/style.css' },
     ];
     await import('../sw.js');
-    const installEvent: { waitUntil: (p: Promise<unknown>) => Promise<unknown> } = {
+    const installEvent: {
+      waitUntil: (p: Promise<unknown>) => Promise<unknown>;
+    } = {
       waitUntil: (p: Promise<unknown>) => p,
     };
     await listeners.install(installEvent);
