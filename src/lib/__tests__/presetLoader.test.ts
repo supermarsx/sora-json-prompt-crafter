@@ -64,7 +64,9 @@ describe('loadCustomPresetsFromUrl', () => {
 
     const spy = jest.spyOn(presetLoaderModule, 'importCustomPresets');
 
-    await expect(loadCustomPresetsFromUrl('bad')).rejects.toThrow('network');
+    await expect(loadCustomPresetsFromUrl('bad')).rejects.toThrow(
+      'Failed to load custom presets: Error: network',
+    );
     expect(spy).not.toHaveBeenCalled();
   });
 
@@ -75,7 +77,9 @@ describe('loadCustomPresetsFromUrl', () => {
 
     const spy = jest.spyOn(presetLoaderModule, 'importCustomPresets');
 
-    await expect(loadCustomPresetsFromUrl('oops')).rejects.toThrow('invalid');
+    await expect(loadCustomPresetsFromUrl('oops')).rejects.toThrow(
+      'Failed to load custom presets: Error: invalid',
+    );
     expect(spy).not.toHaveBeenCalled();
   });
 
@@ -86,7 +90,9 @@ describe('loadCustomPresetsFromUrl', () => {
 
     const spy = jest.spyOn(presetLoaderModule, 'importCustomPresets');
 
-    await expect(loadCustomPresetsFromUrl('oops')).rejects.toThrow();
+    await expect(loadCustomPresetsFromUrl('oops')).rejects.toThrow(
+      'Failed to load custom presets:',
+    );
     expect(spy).not.toHaveBeenCalled();
   });
 });
