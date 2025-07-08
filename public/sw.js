@@ -1,4 +1,5 @@
 const cacheName = 'sora-prompt-cache-v2';
+// Basic app shell files that are always cached
 const staticAssets = [
   '/',
   '/index.html',
@@ -16,9 +17,15 @@ const staticAssets = [
   '/sora-userscript.user.js',
 ];
 
+// `self.__WB_MANIFEST` will be replaced at build time by VitePWA with an array
+// of precache entries containing the hashed asset filenames produced during the
+// build. In dev this will be an empty array.
+const buildAssets = (self.__WB_MANIFEST || []).map((entry) => entry.url);
+
 self.addEventListener('install', (event) => {
+  const assetsToCache = [...staticAssets, ...buildAssets];
   event.waitUntil(
-    caches.open(cacheName).then((cache) => cache.addAll(staticAssets)),
+    caches.open(cacheName).then((cache) => cache.addAll(assetsToCache)),
   );
   self.skipWaiting();
 });
@@ -29,7 +36,7 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
+    caches.match(event.request, { ignoreSearch: true }).then((response) => {
       return response || fetch(event.request);
     }),
   );
