@@ -96,7 +96,11 @@ export function importCustomPresets(data: string | CustomPresetData): void {
 }
 
 export async function loadCustomPresetsFromUrl(url: string) {
-  const res = await fetch(url);
-  const json = await res.json();
-  importCustomPresets(json);
+  try {
+    const res = await fetch(url);
+    const json = await res.json();
+    importCustomPresets(json);
+  } catch (err) {
+    throw new Error('Failed to load custom presets: ' + err);
+  }
 }
