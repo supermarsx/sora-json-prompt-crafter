@@ -1,0 +1,70 @@
+import { jest } from '@jest/globals';
+
+const USERSCRIPT_PATH = '../public/sora-userscript.user.js';
+
+describe('sora-userscript', () => {
+  const originalPostMessage = window.postMessage;
+  let mockPostMessage: jest.Mock;
+
+  beforeEach(() => {
+    jest.resetModules();
+    jest.useFakeTimers();
+    document.body.innerHTML = '';
+    document.head.innerHTML = '';
+    mockPostMessage = jest.fn();
+    Object.defineProperty(window, 'postMessage', {
+      value: mockPostMessage,
+      writable: true,
+    });
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+    Object.defineProperty(window, 'postMessage', {
+      value: originalPostMessage,
+      writable: true,
+    });
+    Object.defineProperty(window, 'opener', { value: null, writable: true });
+  });
+
+  test('notifyReady posts readiness and debug ping', async () => {
+    document.head.innerHTML = '<meta name="sora-json-prompt-crafter" />';
+
+    await import(USERSCRIPT_PATH);
+
+    expect(mockPostMessage).toHaveBeenCalledWith(
+      { type: 'SORA_USERSCRIPT_READY', version: expect.any(String) },
+      '*',
+    );
+    expect(mockPostMessage).toHaveBeenCalledWith(
+      { type: 'SORA_DEBUG_PING' },
+      '*',
+    );
+  });
+
+  test('fills textarea on INSERT_SORA_JSON and acknowledges', async () => {
+    document.head.innerHTML = '<meta property="og:title" content="Sora">';
+    const opener = { postMessage: jest.fn() } as unknown as WindowProxy;
+    Object.defineProperty(window, 'opener', { value: opener, writable: true });
+
+    const textarea = document.createElement('textarea');
+    document.body.appendChild(textarea);
+
+    await import(USERSCRIPT_PATH);
+
+    const source = { postMessage: jest.fn() } as MessageEventSource;
+    window.dispatchEvent(
+      new MessageEvent('message', {
+        data: { type: 'INSERT_SORA_JSON', json: { foo: 'bar' } },
+        origin: 'https://crafter.local',
+        source,
+      }),
+    );
+
+    expect(textarea.value).toBe(JSON.stringify({ foo: 'bar' }, null, 2));
+    expect(source.postMessage).toHaveBeenCalledWith(
+      { type: 'INSERT_SORA_JSON_ACK' },
+      '*',
+    );
+  });
+});
