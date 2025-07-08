@@ -87,7 +87,6 @@ const Dashboard = () => {
   const githubStats = useGithubStats();
   const { copy } = useClipboard();
 
-
   useEffect(() => {
     const times = [3, 5, 10, 30, 60];
     const timers = times.map((t) =>
@@ -108,7 +107,6 @@ const Dashboard = () => {
   useEffect(() => {
     safeSet('currentJson', jsonString);
   }, [jsonString, trackingEnabled]);
-
 
   const firstLoadRef = React.useRef(true);
   useEffect(() => {
@@ -164,15 +162,20 @@ const Dashboard = () => {
     if (!win) return;
     const payload = { type: 'INSERT_SORA_JSON', json: JSON.parse(jsonString) };
     const start = () => {
-      const interval = setInterval(() => {
+      const intervalId = setInterval(() => {
         win.postMessage(payload, '*');
       }, 250);
+      const timeoutId = setTimeout(() => {
+        clearInterval(intervalId);
+        window.removeEventListener('message', ackHandler);
+      }, 10000);
       const ackHandler = (event: MessageEvent) => {
         if (
           event.source === win &&
           event.data?.type === 'INSERT_SORA_JSON_ACK'
         ) {
-          clearInterval(interval);
+          clearInterval(intervalId);
+          clearTimeout(timeoutId);
           window.removeEventListener('message', ackHandler);
         }
       };
@@ -547,7 +550,10 @@ const Dashboard = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="flex-1 p-0 overflow-hidden">
-              <GeneratedJson json={jsonString} trackingEnabled={trackingEnabled} />
+              <GeneratedJson
+                json={jsonString}
+                trackingEnabled={trackingEnabled}
+              />
             </CardContent>
           </Card>
         </div>
