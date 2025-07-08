@@ -18,7 +18,10 @@ describe('useGithubStats', () => {
   });
 
   test('uses cache when fresh', () => {
-    localStorage.setItem('githubStats', JSON.stringify({ stars: 1, forks: 2, issues: 3 }));
+    localStorage.setItem(
+      'githubStats',
+      JSON.stringify({ stars: 1, forks: 2, issues: 3 }),
+    );
     localStorage.setItem('githubStatsTimestamp', JSON.stringify(Date.now()));
     const fetchMock = jest.fn();
     global.fetch = fetchMock as unknown as typeof fetch;
@@ -28,7 +31,10 @@ describe('useGithubStats', () => {
   });
 
   test('fetches stats when cache expired', async () => {
-    localStorage.setItem('githubStatsTimestamp', JSON.stringify(Date.now() - 7200000));
+    localStorage.setItem(
+      'githubStatsTimestamp',
+      JSON.stringify(Date.now() - 7200000),
+    );
     global.fetch = jest
       .fn()
       .mockResolvedValueOnce({
@@ -40,12 +46,18 @@ describe('useGithubStats', () => {
         json: () => Promise.resolve({ total_count: 6 }),
       }) as unknown as typeof fetch;
     const { result } = renderHook(() => useGithubStats());
-    await waitFor(() => expect(result.current).toEqual({ stars: 4, forks: 5, issues: 6 }));
+    await waitFor(() =>
+      expect(result.current).toEqual({ stars: 4, forks: 5, issues: 6 }),
+    );
   });
 
   test('shows toast on fetch error', async () => {
-    global.fetch = jest.fn().mockRejectedValue(new Error('fail')) as unknown as typeof fetch;
+    global.fetch = jest
+      .fn()
+      .mockRejectedValue(new Error('fail')) as unknown as typeof fetch;
     renderHook(() => useGithubStats());
-    await waitFor(() => expect(toast.error).toHaveBeenCalledWith('Failed to load GitHub stats'));
+    await waitFor(() =>
+      expect(toast.error).toHaveBeenCalledWith('Failed to load GitHub stats'),
+    );
   });
 });

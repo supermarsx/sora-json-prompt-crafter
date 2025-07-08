@@ -16,7 +16,11 @@ export function useGithubStats() {
     if (DISABLE_STATS) return;
     const cached = safeGet<GithubStats>('githubStats', null, true);
     const cachedTs = safeGet<number>('githubStatsTimestamp', 0, true);
-    if (cached && typeof cachedTs === 'number' && Date.now() - cachedTs < 3600000) {
+    if (
+      cached &&
+      typeof cachedTs === 'number' &&
+      Date.now() - cachedTs < 3600000
+    ) {
       setStats(cached);
       return;
     }

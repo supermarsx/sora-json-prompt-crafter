@@ -27,7 +27,9 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
     const container = containerRef.current;
     if (!container) return;
     const atBottom =
-      Math.abs(container.scrollHeight - container.scrollTop - container.clientHeight) < 5;
+      Math.abs(
+        container.scrollHeight - container.scrollTop - container.clientHeight,
+      ) < 5;
     const atTop = container.scrollTop === 0;
     if (atBottom) {
       container.scrollTop = container.scrollHeight;
@@ -42,7 +44,10 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
         <code>
           {diffParts
             ? diffParts.map((part, idx) => (
-                <span key={idx} className={part.added ? 'animate-highlight' : undefined}>
+                <span
+                  key={idx}
+                  className={part.added ? 'animate-highlight' : undefined}
+                >
                   {part.value}
                 </span>
               ))

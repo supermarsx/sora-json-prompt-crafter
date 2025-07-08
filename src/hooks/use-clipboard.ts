@@ -2,7 +2,11 @@ import { toast } from '@/components/ui/sonner-toast';
 
 export function useClipboard() {
   const copy = async (text: string, success?: string) => {
-    if (!('clipboard' in navigator)) {
+    if (
+      !('clipboard' in navigator) ||
+      typeof navigator.clipboard !== 'object' ||
+      typeof navigator.clipboard.writeText !== 'function'
+    ) {
       toast.error('Clipboard not supported');
       return false;
     }
