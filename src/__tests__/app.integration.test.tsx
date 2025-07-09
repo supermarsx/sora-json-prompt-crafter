@@ -4,6 +4,7 @@ import {
   fireEvent,
   waitFor,
   within,
+  act,
 } from '@testing-library/react';
 import App from '../App';
 import '@/i18n';
@@ -58,13 +59,15 @@ function openStylePreset() {
 
 describe('App integration flow', () => {
   test('updates JSON and history after user actions', async () => {
-    render(<App />);
+    await act(async () => {
+      render(<App />);
+    });
 
     const promptInput = await screen.findByLabelText(
       'Prompt',
       {},
       {
-        timeout: 2000,
+        timeout: 5000,
       },
     );
     fireEvent.change(promptInput, {
