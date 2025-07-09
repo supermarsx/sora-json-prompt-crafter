@@ -57,16 +57,17 @@ function openStylePreset() {
 }
 
 describe('App integration flow', () => {
-  test(
-    'updates JSON and history after user actions',
-    async () => {
-      render(<App />);
+  test('updates JSON and history after user actions', async () => {
+    render(<App />);
 
     const promptInput = await screen.findByLabelText(
       /^prompt$/i,
       {},
       {
-        timeout: 2000,
+        // Loading the lazily imported Dashboard component can
+        // take a bit longer on slower CI machines. Allow extra
+        // time for the input to appear to avoid flaky failures.
+        timeout: 5000,
       },
     );
     fireEvent.change(promptInput, {
@@ -93,7 +94,5 @@ describe('App integration flow', () => {
 
     const dialog = await screen.findByRole('dialog');
     expect(within(dialog).getByText('Integration test prompt')).toBeTruthy();
-    },
-    10000,
-  );
+  }, 10000);
 });
