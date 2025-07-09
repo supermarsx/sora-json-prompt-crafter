@@ -167,4 +167,84 @@ describe('generateJson', () => {
     expect(obj.sword_type).toBeDefined();
     expect(obj.dnd_character_race).toBeDefined();
   });
+
+  test('removes signature when disabled and keeps when enabled', () => {
+    const disabled = parse(
+      generateJson({ ...DEFAULT_OPTIONS, use_signature: false }),
+    );
+    expect(disabled.signature).toBeUndefined();
+
+    const enabled = parse(
+      generateJson({
+        ...DEFAULT_OPTIONS,
+        use_signature: true,
+        signature: 'my signature',
+      }),
+    );
+    expect(enabled.signature).toBe('my signature');
+  });
+
+  test('handles face enhancement fields based on flags', () => {
+    const disabled = parse(
+      generateJson({
+        ...DEFAULT_OPTIONS,
+        use_face_enhancements: false,
+        use_subject_gender: true,
+        subject_gender: 'female',
+        use_makeup_style: true,
+        makeup_style: 'natural',
+        use_character_mood: true,
+        character_mood: 'happy',
+        add_same_face: true,
+        dont_change_face: true,
+      }),
+    );
+    expect(disabled.subject_gender).toBeUndefined();
+    expect(disabled.makeup_style).toBeUndefined();
+    expect(disabled.character_mood).toBeUndefined();
+    expect(disabled.add_same_face).toBeUndefined();
+    expect(disabled.dont_change_face).toBeUndefined();
+
+    const enabled = parse(
+      generateJson({
+        ...DEFAULT_OPTIONS,
+        use_face_enhancements: true,
+        use_subject_gender: true,
+        subject_gender: 'female',
+        use_makeup_style: true,
+        makeup_style: 'natural',
+        use_character_mood: true,
+        character_mood: 'happy',
+        add_same_face: true,
+        dont_change_face: true,
+      }),
+    );
+    expect(enabled.subject_gender).toBe('female');
+    expect(enabled.makeup_style).toBe('natural');
+    expect(enabled.character_mood).toBe('happy');
+    expect(enabled.add_same_face).toBe(true);
+    expect(enabled.dont_change_face).toBe(true);
+  });
+
+  test('keeps upscale when enabled and removes when disabled', () => {
+    const disabled = parse(
+      generateJson({
+        ...DEFAULT_OPTIONS,
+        use_enhancement_safety: true,
+        use_upscale_factor: false,
+        upscale: 2,
+      }),
+    );
+    expect(disabled.upscale).toBeUndefined();
+
+    const enabled = parse(
+      generateJson({
+        ...DEFAULT_OPTIONS,
+        use_enhancement_safety: true,
+        use_upscale_factor: true,
+        upscale: 2,
+      }),
+    );
+    expect(enabled.upscale).toBe(2);
+  });
 });
