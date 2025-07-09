@@ -274,6 +274,15 @@ describe('HistoryPanel', () => {
     expect(screen.getByText(/"prompt"/i)).toBeTruthy();
   });
 
+  test('preview dialog shows raw string for invalid json', () => {
+    const history = [{ id: 2, date: 'd', json: 'invalid json' }];
+    renderPanel({ history });
+    fireEvent.click(screen.getByRole('button', { name: /preview/i }));
+    expect(screen.getByText(/json preview/i)).toBeTruthy();
+    expect(screen.getByText('invalid json')).toBeTruthy();
+    expect(screen.queryByText(/"prompt"/i)).toBeNull();
+  });
+
   test('clearing history asks for confirmation', () => {
     const onClear = jest.fn();
     renderPanel({ onClear });
