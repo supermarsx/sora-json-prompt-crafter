@@ -40,6 +40,8 @@ describe('service worker', () => {
       skipWaiting: jest.fn(),
       clients: { claim: jest.fn() },
     };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (global as any).clients = (global as any).self.clients;
   });
 
   afterEach(() => {
@@ -49,6 +51,8 @@ describe('service worker', () => {
     delete (global as any).caches;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     delete (global as any).fetch;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    delete (global as any).clients;
   });
 
   test('caches static and build assets on install', async () => {
@@ -115,5 +119,18 @@ describe('service worker', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect((global as any).fetch).toHaveBeenCalledWith(event.request);
     expect(result).toBe(networkResponse);
+  });
+
+  test('claims clients on activate', async () => {
+    await import('../sw.js');
+    const activationPromise = Promise.resolve();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (global as any).self.clients.claim.mockReturnValueOnce(activationPromise);
+    const waitUntil = jest.fn();
+    const activateEvent = { waitUntil };
+    await listeners.activate(activateEvent);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect((global as any).self.clients.claim).toHaveBeenCalled();
+    expect(waitUntil).toHaveBeenCalledWith(activationPromise);
   });
 });
