@@ -63,7 +63,7 @@ describe('App integration flow', () => {
       render(<App />);
 
     const promptInput = await screen.findByLabelText(
-      'Prompt',
+      /^prompt$/i,
       {},
       {
         timeout: 2000,
