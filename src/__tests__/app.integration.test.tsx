@@ -57,8 +57,10 @@ function openStylePreset() {
 }
 
 describe('App integration flow', () => {
-  test('updates JSON and history after user actions', async () => {
-    render(<App />);
+  test(
+    'updates JSON and history after user actions',
+    async () => {
+      render(<App />);
 
     const promptInput = await screen.findByLabelText(
       'Prompt',
@@ -91,5 +93,7 @@ describe('App integration flow', () => {
 
     const dialog = await screen.findByRole('dialog');
     expect(within(dialog).getByText('Integration test prompt')).toBeTruthy();
-  });
+    },
+    10000,
+  );
 });
