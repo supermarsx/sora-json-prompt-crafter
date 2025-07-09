@@ -14,8 +14,18 @@ jest.mock('@/hooks/use-tracking', () => ({
 }));
 
 describe('ProgressBar', () => {
+  let addSpy: jest.SpyInstance;
+  let removeSpy: jest.SpyInstance;
+
   beforeEach(() => {
     (trackEvent as jest.Mock).mockClear();
+    addSpy = jest.spyOn(window, 'addEventListener');
+    removeSpy = jest.spyOn(window, 'removeEventListener');
+  });
+
+  afterEach(() => {
+    addSpy.mockRestore();
+    removeSpy.mockRestore();
   });
 
   function setMetrics(scrollHeight: number, innerHeight: number) {
@@ -60,5 +70,15 @@ describe('ProgressBar', () => {
     scrollTo(500);
     expect(getBar().style.width).toBe('100%');
     expect(trackEvent).toHaveBeenCalledTimes(1);
+  });
+
+  test('removes scroll listener on unmount', () => {
+    const { unmount } = render(<ProgressBar />);
+    const handler = addSpy.mock.calls.find(
+      ([event]) => event === 'scroll',
+    )?.[1];
+    expect(handler).toBeInstanceOf(Function);
+    unmount();
+    expect(removeSpy).toHaveBeenCalledWith('scroll', handler);
   });
 });
