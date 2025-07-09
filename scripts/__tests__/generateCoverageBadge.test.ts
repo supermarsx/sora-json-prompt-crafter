@@ -41,12 +41,14 @@ describe('generateCoverageBadge', () => {
       throw new Error('no file');
     });
     const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-    const exitSpy = jest
-      .spyOn(process, 'exit')
-      .mockImplementation(((code?: number) => {
-        throw new Error(`exit:${code}`);
-      }) as never);
-    await expect(import('../generateCoverageBadge.js')).rejects.toThrow('exit:1');
+    const exitSpy = jest.spyOn(process, 'exit').mockImplementation(((
+      code?: number,
+    ) => {
+      throw new Error(`exit:${code}`);
+    }) as never);
+    await expect(import('../generateCoverageBadge.js')).rejects.toThrow(
+      'exit:1',
+    );
     expect(errorSpy).toHaveBeenCalledWith(
       'Coverage file not found:',
       'coverage/clover.xml',
@@ -59,12 +61,14 @@ describe('generateCoverageBadge', () => {
   test('exits with code 1 when coverage xml cannot be parsed', async () => {
     readFileSyncMock.mockReturnValueOnce('<coverage></coverage>');
     const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-    const exitSpy = jest
-      .spyOn(process, 'exit')
-      .mockImplementation(((code?: number) => {
-        throw new Error(`exit:${code}`);
-      }) as never);
-    await expect(import('../generateCoverageBadge.js')).rejects.toThrow('exit:1');
+    const exitSpy = jest.spyOn(process, 'exit').mockImplementation(((
+      code?: number,
+    ) => {
+      throw new Error(`exit:${code}`);
+    }) as never);
+    await expect(import('../generateCoverageBadge.js')).rejects.toThrow(
+      'exit:1',
+    );
     expect(errorSpy).toHaveBeenCalledWith('Unable to parse coverage metrics');
     expect(exitSpy).toHaveBeenCalledWith(1);
     errorSpy.mockRestore();

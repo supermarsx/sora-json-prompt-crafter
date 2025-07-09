@@ -57,11 +57,11 @@ describe('accessibilityCheck', () => {
       throw new Error('no file');
     });
     const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-    const exitSpy = jest
-      .spyOn(process, 'exit')
-      .mockImplementation(((code?: number) => {
-        throw new Error(`exit:${code}`);
-      }) as never);
+    const exitSpy = jest.spyOn(process, 'exit').mockImplementation(((
+      code?: number,
+    ) => {
+      throw new Error(`exit:${code}`);
+    }) as never);
     await expect(import('../accessibilityCheck.js')).rejects.toThrow('exit:1');
     expect(errorSpy).toHaveBeenCalledWith(
       'Build output not found:',
