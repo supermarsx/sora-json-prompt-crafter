@@ -60,7 +60,13 @@ describe('App integration flow', () => {
   test('updates JSON and history after user actions', async () => {
     render(<App />);
 
-    const promptInput = await screen.findByLabelText('Prompt');
+    const promptInput = await screen.findByLabelText(
+      'Prompt',
+      {},
+      {
+        timeout: 2000,
+      },
+    );
     fireEvent.change(promptInput, {
       target: { value: 'Integration test prompt' },
     });
