@@ -49,4 +49,19 @@ describe('loadOptionsFromJson', () => {
     expect(result.use_dnd_section).toBe(true);
     expect(result.dnd_character_race).toBe('elf');
   });
+
+  test('enables flags for signature, gender, and makeup', () => {
+    const json = JSON.stringify({
+      signature: 'Jane Doe',
+      subject_gender: 'female',
+      makeup_style: 'gothic',
+    });
+    const result = loadOptionsFromJson(json)!;
+    expect(result.use_signature).toBe(true);
+    expect(result.signature).toBe('Jane Doe');
+    expect(result.use_subject_gender).toBe(true);
+    expect(result.subject_gender).toBe('female');
+    expect(result.use_makeup_style).toBe(true);
+    expect(result.makeup_style).toBe('gothic');
+  });
 });
