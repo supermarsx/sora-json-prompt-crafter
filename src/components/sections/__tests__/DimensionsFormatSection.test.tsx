@@ -47,4 +47,29 @@ describe('DimensionsFormatSection', () => {
     fireEvent.click(screen.getByRole('option', { name: /ultra/i }));
     expect(updateOptions).toHaveBeenCalledWith({ quality: 'ultra' });
   });
+
+  test('output format and dynamic range selections update', () => {
+    const updateOptions = jest.fn();
+    render(
+      <DimensionsFormatSection
+        options={{
+          ...DEFAULT_OPTIONS,
+          use_dimensions_format: true,
+          output_format: 'png',
+          dynamic_range: 'SDR',
+        }}
+        updateOptions={updateOptions}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+    const comboboxes = screen.getAllByRole('combobox');
+    fireEvent.click(comboboxes[2]);
+    fireEvent.click(screen.getByRole('option', { name: /jpg/i }));
+    expect(updateOptions).toHaveBeenCalledWith({ output_format: 'jpg' });
+
+    fireEvent.click(comboboxes[3]);
+    fireEvent.click(screen.getByRole('option', { name: /hdr/i }));
+    expect(updateOptions).toHaveBeenCalledWith({ dynamic_range: 'HDR' });
+  });
 });

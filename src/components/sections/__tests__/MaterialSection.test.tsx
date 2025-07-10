@@ -60,4 +60,25 @@ describe('MaterialSection', () => {
     dropdown = within(section).getByRole('button');
     expect(dropdown.hasAttribute('disabled')).toBe(true);
   });
+
+  test('made out of dropdown updates value', () => {
+    const updateOptions = jest.fn();
+    render(
+      <MaterialSection
+        options={{
+          ...DEFAULT_OPTIONS,
+          use_material: true,
+          made_out_of: 'default',
+        }}
+        updateOptions={updateOptions}
+      />,
+    );
+
+    const section = screen.getByText('Made Out Of')
+      .parentElement as HTMLElement;
+    const dropdown = within(section).getByRole('button');
+    fireEvent.click(dropdown);
+    fireEvent.click(screen.getByRole('button', { name: /^wood$/i }));
+    expect(updateOptions).toHaveBeenCalledWith({ made_out_of: 'wood' });
+  });
 });
