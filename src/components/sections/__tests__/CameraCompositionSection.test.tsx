@@ -67,4 +67,96 @@ describe('CameraCompositionSection', () => {
     dropdown = within(lensSection).getByRole('button');
     expect(dropdown.hasAttribute('disabled')).toBe(true);
   });
+
+  test('handleCompositionRulesChange updates composition rules', async () => {
+    const updateOptions = jest.fn();
+    const options = {
+      ...DEFAULT_OPTIONS,
+      use_camera_composition: true,
+      composition_rules: [],
+    };
+
+    render(
+      <CameraCompositionSection
+        options={options}
+        updateOptions={updateOptions}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+
+    fireEvent.click(
+      screen.getByRole('button', { name: /select composition rules/i }),
+    );
+    const firstCheck = await screen.findByLabelText(/rule of thirds/i);
+    fireEvent.click(firstCheck);
+    expect(updateOptions).toHaveBeenCalledWith({
+      composition_rules: ['rule of thirds'],
+    });
+  });
+
+  test('toggling checkboxes enables dependent dropdowns', () => {
+    const updateOptions = jest.fn();
+    const options = {
+      ...DEFAULT_OPTIONS,
+      use_camera_composition: true,
+      use_lens_type: false,
+      use_camera_angle: false,
+    };
+
+    const { rerender } = render(
+      <CameraCompositionSection
+        options={options}
+        updateOptions={updateOptions}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+
+    let lensDropdown = within(
+      screen.getByText('Lens Type').parentElement as HTMLElement,
+    ).getByRole('button');
+    let angleDropdown = within(
+      screen.getByText('Camera Angle').parentElement as HTMLElement,
+    ).getByRole('button');
+
+    expect(lensDropdown.hasAttribute('disabled')).toBe(true);
+    expect(angleDropdown.hasAttribute('disabled')).toBe(true);
+
+    fireEvent.click(screen.getByLabelText(/use lens type/i));
+    expect(updateOptions).toHaveBeenCalledWith({ use_lens_type: true });
+
+    const lensEnabled = { ...options, use_lens_type: true };
+    rerender(
+      <CameraCompositionSection
+        options={lensEnabled}
+        updateOptions={updateOptions}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+
+    lensDropdown = within(
+      screen.getByText('Lens Type').parentElement as HTMLElement,
+    ).getByRole('button');
+    expect(lensDropdown.hasAttribute('disabled')).toBe(false);
+
+    fireEvent.click(screen.getByLabelText(/use camera angle/i));
+    expect(updateOptions).toHaveBeenCalledWith({ use_camera_angle: true });
+
+    const bothEnabled = { ...lensEnabled, use_camera_angle: true };
+    rerender(
+      <CameraCompositionSection
+        options={bothEnabled}
+        updateOptions={updateOptions}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+
+    angleDropdown = within(
+      screen.getByText('Camera Angle').parentElement as HTMLElement,
+    ).getByRole('button');
+    expect(angleDropdown.hasAttribute('disabled')).toBe(false);
+  });
 });
