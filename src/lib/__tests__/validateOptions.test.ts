@@ -26,7 +26,9 @@ describe('isValidOptions', () => {
     expect(isValidOptions({ unknown: 1 })).toBe(false);
     expect(isValidOptions({ special_effects: 'glow' })).toBe(false);
     expect(
-      isValidOptions({ style_preset: { category: 1 as unknown as string, style: 'bar' } })
+      isValidOptions({
+        style_preset: { category: 1 as unknown as string, style: 'bar' },
+      }),
     ).toBe(false);
   });
 });
