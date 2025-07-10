@@ -56,6 +56,9 @@ describe('BulkFileImportModal', () => {
     await waitFor(() =>
       expect(onImport).toHaveBeenCalledWith(['{"prompt":"test"}']),
     );
+    expect(trackEvent).toHaveBeenCalledWith(true, 'history_import', {
+      type: 'bulk_file',
+    });
     expect(toast.success).toHaveBeenCalledWith('File imported!');
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
@@ -88,6 +91,7 @@ describe('BulkFileImportModal', () => {
       expect(toast.error).toHaveBeenCalledWith('Failed to import file'),
     );
     expect(onImport).not.toHaveBeenCalled();
+    expect(trackEvent).not.toHaveBeenCalled();
   });
 
   test('shows error toast when no file selected', () => {
