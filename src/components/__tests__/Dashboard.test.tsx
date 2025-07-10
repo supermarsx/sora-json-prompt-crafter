@@ -1,9 +1,20 @@
-import { render, waitFor, act } from '@testing-library/react';
+import React from 'react';
+import {
+  render,
+  waitFor,
+  act,
+  screen,
+  fireEvent,
+} from '@testing-library/react';
 import Dashboard from '../Dashboard';
 import { toast } from '@/components/ui/sonner-toast';
 import { trackEvent } from '@/lib/analytics';
+import type { SoraOptions } from '@/lib/soraOptions';
 
 let copyFn: ((json: string) => void) | null = null;
+let updateFn: ((opts: Partial<SoraOptions>) => void) | null = null;
+const mockUseDarkMode = jest.fn(() => [false, jest.fn()] as const);
+let sendFn: (() => void) | null = null;
 jest.mock('../HistoryPanel', () => ({
   __esModule: true,
   default: ({ onCopy }: { onCopy: (json: string) => void }) => {
@@ -13,7 +24,14 @@ jest.mock('../HistoryPanel', () => ({
 }));
 jest.mock('../ControlPanel', () => ({
   __esModule: true,
-  ControlPanel: () => null,
+  ControlPanel: ({
+    updateOptions,
+  }: {
+    updateOptions: (opts: Partial<SoraOptions>) => void;
+  }) => {
+    updateFn = updateOptions;
+    return null;
+  },
 }));
 jest.mock('../ShareModal', () => ({
   __esModule: true,
@@ -30,6 +48,17 @@ jest.mock('../ProgressBar', () => ({
   ProgressBar: () => null,
   default: () => null,
 }));
+jest.mock('../ActionBar', () => {
+  const actual = jest.requireActual('../ActionBar');
+  return {
+    __esModule: true,
+    ...actual,
+    ActionBar: (props: Record<string, unknown>) => {
+      sendFn = props.onSendToSora;
+      return actual.ActionBar(props);
+    },
+  };
+});
 
 jest.mock('@/hooks/use-single-column', () => ({
   __esModule: true,
@@ -37,7 +66,7 @@ jest.mock('@/hooks/use-single-column', () => ({
 }));
 jest.mock('@/hooks/use-dark-mode', () => ({
   __esModule: true,
-  useDarkMode: jest.fn(() => [false, jest.fn()] as const),
+  useDarkMode: (...args: unknown[]) => mockUseDarkMode(...args),
 }));
 jest.mock('@/hooks/use-tracking', () => ({
   __esModule: true,
@@ -46,6 +75,10 @@ jest.mock('@/hooks/use-tracking', () => ({
 jest.mock('@/hooks/use-action-history', () => ({
   __esModule: true,
   useActionHistory: jest.fn(() => []),
+}));
+jest.mock('@/hooks/use-sora-userscript', () => ({
+  __esModule: true,
+  useSoraUserscript: jest.fn(() => [true, '1.0'] as const),
 }));
 jest.mock('@/lib/analytics', () => ({
   __esModule: true,
@@ -196,5 +229,110 @@ describe('copyHistoryEntry', () => {
       'Sora JSON copied to clipboard!',
     );
     expect(trackEvent).toHaveBeenCalledWith(true, 'history_copy');
+  });
+});
+
+describe('Dashboard interactions', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    updateFn = null;
+    sendFn = null;
+    Object.defineProperty(navigator, 'clipboard', {
+      value: { writeText: jest.fn().mockResolvedValue(undefined) },
+      configurable: true,
+    });
+    mockUseDarkMode.mockImplementation(() => [false, jest.fn()] as const);
+    window.matchMedia = jest.fn().mockReturnValue({
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+    }) as unknown as typeof window.matchMedia;
+  });
+
+  test('option change updates json and copy stores history', async () => {
+    render(<Dashboard />);
+    await waitFor(() => expect(updateFn).not.toBeNull());
+
+    act(() => {
+      updateFn?.({ prompt: 'foo' });
+    });
+
+    await waitFor(() => {
+      const json = JSON.parse(localStorage.getItem('currentJson') || '{}');
+      expect(json.prompt).toBe('foo');
+    });
+
+    const copyButton = screen.getByRole('button', { name: /copy/i });
+    await act(async () => {
+      fireEvent.click(copyButton);
+      await Promise.resolve();
+    });
+
+    await waitFor(() => {
+      const history = JSON.parse(localStorage.getItem('jsonHistory') || '[]');
+      expect(history).toHaveLength(1);
+      expect(history[0].json).toContain('foo');
+    });
+  });
+
+  test('dark mode toggle switches icon and sendToSora ACK stops interval', () => {
+    jest.useFakeTimers();
+    mockUseDarkMode.mockImplementation(() => {
+      const [dark, setDark] = React.useState(false);
+      return [dark, setDark] as const;
+    });
+    localStorage.setItem('soraToolsEnabled', 'true');
+    const postMessage = jest.fn();
+    const win = { postMessage } as unknown as Window;
+    const openSpy = jest.spyOn(window, 'open').mockReturnValue(win);
+    const addListenerSpy = jest.spyOn(window, 'addEventListener');
+    const removeListenerSpy = jest.spyOn(window, 'removeEventListener');
+
+    render(<Dashboard />);
+
+    const toggle = screen.getByLabelText('Toggle dark mode');
+    const icon = toggle.querySelector('svg') as SVGSVGElement | null;
+    expect(icon?.classList.contains('lucide-moon')).toBe(true);
+    act(() => {
+      fireEvent.click(toggle);
+    });
+    const iconAfter = toggle.querySelector('svg') as SVGSVGElement | null;
+    expect(iconAfter?.classList.contains('lucide-sun')).toBe(true);
+
+    const sendButton = screen.getByRole('button', { name: /send to sora/i });
+    act(() => {
+      fireEvent.click(sendButton);
+    });
+
+    act(() => {
+      jest.advanceTimersByTime(500);
+    });
+
+    const handler = addListenerSpy.mock.calls.find(
+      (c) => c[0] === 'message',
+    )?.[1];
+
+    act(() => {
+      jest.advanceTimersByTime(250);
+    });
+
+    const callsBefore = postMessage.mock.calls.length;
+
+    act(() => {
+      (handler as EventListener)?.({
+        source: win,
+        data: { type: 'INSERT_SORA_JSON_ACK' },
+      } as MessageEvent);
+    });
+
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
+
+    expect(postMessage.mock.calls.length).toBe(callsBefore);
+    expect(removeListenerSpy).toHaveBeenCalledWith('message', handler);
+
+    openSpy.mockRestore();
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
   });
 });
