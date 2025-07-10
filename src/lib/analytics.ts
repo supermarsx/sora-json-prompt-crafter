@@ -62,7 +62,7 @@ export function trackEvent(
     if (trackingFailures <= 5) {
       console.error('Tracking Analytics: There was an error.');
     }
-    if (!trackingDead) {
+    if (trackingFailures > 5 && !trackingDead) {
       trackingDead = true;
       console.error(
         'Tracking Analytics: Too many errors, tracking permanently failed.',
