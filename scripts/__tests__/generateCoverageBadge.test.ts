@@ -1,7 +1,6 @@
 import { jest } from '@jest/globals';
 
-const sampleXml = `<?xml version="1.0"?><coverage><project><metrics statements="20" coveredstatements="17"/></project></coverage>`;
-const readFileSyncMock = jest.fn(() => sampleXml);
+const readFileSyncMock = jest.fn();
 const writeFileSyncMock = jest.fn();
 
 jest.mock('fs', () => ({
@@ -22,19 +21,30 @@ beforeEach(() => {
 });
 
 describe('generateCoverageBadge', () => {
-  test('creates badge with correct percent and color', async () => {
-    await import('../generateCoverageBadge.js');
-    expect(makeBadgeMock).toHaveBeenCalledWith({
-      label: 'coverage',
-      message: '85%',
-      color: 'green',
-      style: 'for-the-badge',
-    });
-    expect(writeFileSyncMock).toHaveBeenCalledWith(
-      'coverage.svg',
-      '<svg>badge</svg>',
-    );
-  });
+  const cases = [
+    { pct: '95', statements: 20, covered: 19, color: 'brightgreen' },
+    { pct: '85', statements: 20, covered: 17, color: 'green' },
+    { pct: '65', statements: 20, covered: 13, color: 'yellow' },
+  ];
+
+  test.each(cases)(
+    'creates badge for $pct%',
+    async ({ pct, statements, covered, color }) => {
+      const xml = `<?xml version="1.0"?><coverage><project><metrics statements="${statements}" coveredstatements="${covered}"/></project></coverage>`;
+      readFileSyncMock.mockReturnValueOnce(xml);
+      await import('../generateCoverageBadge.js');
+      expect(makeBadgeMock).toHaveBeenCalledWith({
+        label: 'coverage',
+        message: `${pct}%`,
+        color,
+        style: 'for-the-badge',
+      });
+      expect(writeFileSyncMock).toHaveBeenCalledWith(
+        'coverage.svg',
+        '<svg>badge</svg>',
+      );
+    },
+  );
 
   test('exits with code 1 when coverage file is missing', async () => {
     readFileSyncMock.mockImplementationOnce(() => {
