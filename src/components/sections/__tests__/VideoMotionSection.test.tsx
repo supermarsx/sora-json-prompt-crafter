@@ -44,4 +44,70 @@ describe('VideoMotionSection', () => {
     const enabledInput = screen.getByLabelText(/duration \(seconds\)/i);
     expect(enabledInput.hasAttribute('disabled')).toBe(false);
   });
+
+  test('extended fps toggle adjusts max value', () => {
+    const updateOptions = jest.fn();
+    const options = { ...DEFAULT_OPTIONS, extended_fps: false };
+    const { rerender } = render(
+      <VideoMotionSection
+        options={options}
+        updateOptions={updateOptions}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+
+    let fpsInput = screen.getByLabelText(/^fps$/i) as HTMLInputElement;
+    expect(fpsInput.getAttribute('max')).toBe('60');
+
+    fireEvent.click(screen.getByLabelText(/extended fps/i));
+    expect(updateOptions).toHaveBeenCalledWith({ extended_fps: true });
+
+    const enabledOptions = { ...options, extended_fps: true };
+    rerender(
+      <VideoMotionSection
+        options={enabledOptions}
+        updateOptions={updateOptions}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+
+    fpsInput = screen.getByLabelText(/^fps$/i) as HTMLInputElement;
+    expect(fpsInput.getAttribute('max')).toBe('240');
+  });
+
+  test('extended motion strength toggle adjusts slider max', () => {
+    const updateOptions = jest.fn();
+    const options = { ...DEFAULT_OPTIONS, extended_motion_strength: false };
+    const { rerender } = render(
+      <VideoMotionSection
+        options={options}
+        updateOptions={updateOptions}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+
+    let slider = screen.getByRole('slider');
+    expect(slider.getAttribute('aria-valuemax')).toBe('1');
+
+    fireEvent.click(screen.getByLabelText(/extended motion strength/i));
+    expect(updateOptions).toHaveBeenCalledWith({
+      extended_motion_strength: true,
+    });
+
+    const enabledOptions = { ...options, extended_motion_strength: true };
+    rerender(
+      <VideoMotionSection
+        options={enabledOptions}
+        updateOptions={updateOptions}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+
+    slider = screen.getByRole('slider');
+    expect(slider.getAttribute('aria-valuemax')).toBe('10');
+  });
 });
