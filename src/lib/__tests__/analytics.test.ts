@@ -66,17 +66,19 @@ describe('trackEvent', () => {
     });
     (window as unknown as { gtag?: jest.Mock }).gtag = gtagMock;
 
-    trackEvent(true, 'a1');
-    trackEvent(true, 'a2');
+    for (let i = 0; i < 7; i++) {
+      trackEvent(true, `a${i}`);
+    }
 
-    expect(gtagMock).toHaveBeenCalledTimes(1);
-    expect(errorSpy).toHaveBeenCalledWith(
-      'Tracking Analytics: There was an error.',
-    );
+    expect(gtagMock).toHaveBeenCalledTimes(6);
+    expect(
+      errorSpy.mock.calls.filter(
+        (c) => c[0] === 'Tracking Analytics: There was an error.',
+      ).length,
+    ).toBe(5);
     expect(errorSpy).toHaveBeenCalledWith(
       'Tracking Analytics: Too many errors, tracking permanently failed.',
     );
-    expect(errorSpy).toHaveBeenCalledTimes(2);
   });
 
   test('passes debug_mode when GTAG_DEBUG enabled', async () => {
@@ -94,5 +96,42 @@ describe('trackEvent', () => {
       expect.objectContaining({ debug_mode: true }),
     );
     delete process.env.VITE_GTAG_DEBUG;
+  });
+
+  test('truncates history at 100 items', () => {
+    const items = Array.from({ length: 110 }, (_, i) => ({
+      date: new Date(i).toISOString(),
+      action: `a${i}`,
+    }));
+    localStorage.setItem('trackingHistory', JSON.stringify(items));
+    (
+      window as unknown as {
+        gtag?: jest.Mock;
+      }
+    ).gtag = jest.fn();
+
+    trackEvent(true, 'event');
+
+    const stored = JSON.parse(localStorage.getItem('trackingHistory') || '[]');
+    expect(stored.length).toBe(100);
+    expect(stored[0].action).toBe('event');
+  });
+
+  test('logs only five errors then disables gtag', () => {
+    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const gtagMock = jest.fn(() => {
+      throw new Error('fail');
+    });
+    (window as unknown as { gtag?: jest.Mock }).gtag = gtagMock;
+
+    for (let i = 0; i < 10; i++) {
+      trackEvent(true, `a${i}`);
+    }
+
+    const errCount = errorSpy.mock.calls.filter(
+      (c) => c[0] === 'Tracking Analytics: There was an error.',
+    ).length;
+    expect(errCount).toBe(5);
+    expect(gtagMock.mock.calls.length).toBe(6);
   });
 });
