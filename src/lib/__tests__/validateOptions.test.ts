@@ -22,6 +22,17 @@ describe('isValidOptions', () => {
     expect(result).toBe(true);
   });
 
+  test('accepts composition_rules arrays and style_preset objects', () => {
+    expect(isValidOptions({ composition_rules: ['rule of thirds'] })).toBe(true);
+    expect(
+      isValidOptions({ style_preset: { category: 'foo', style: 'bar' } }),
+    ).toBe(true);
+  });
+
+  test('accepts null for optional fields', () => {
+    expect(isValidOptions({ seed: null })).toBe(true);
+  });
+
   test('rejects invalid keys or incorrect value types', () => {
     expect(isValidOptions({ unknown: 1 })).toBe(false);
     expect(isValidOptions({ special_effects: 'glow' })).toBe(false);
@@ -30,5 +41,12 @@ describe('isValidOptions', () => {
         style_preset: { category: 1 as unknown as string, style: 'bar' },
       }),
     ).toBe(false);
+  });
+
+  test('rejects invalid types for specific fields', () => {
+    expect(isValidOptions({ composition_rules: {} as unknown as string[] })).toBe(
+      false,
+    );
+    expect(isValidOptions({ seed: '123' as unknown as number })).toBe(false);
   });
 });
