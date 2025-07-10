@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, within } from '@testing-library/react';
 import { VideoMotionSection } from '../VideoMotionSection';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 
@@ -109,5 +109,35 @@ describe('VideoMotionSection', () => {
 
     slider = screen.getByRole('slider');
     expect(slider.getAttribute('aria-valuemax')).toBe('10');
+  });
+
+  test('dropdown selections trigger updateOptions', () => {
+    const updateOptions = jest.fn();
+    render(
+      <VideoMotionSection
+        options={DEFAULT_OPTIONS}
+        updateOptions={updateOptions}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+
+    const cameraMotionSection = screen.getByText('Camera Motion').parentElement as HTMLElement;
+    const cameraDropdown = within(cameraMotionSection).getByRole('combobox');
+    fireEvent.click(cameraDropdown);
+    fireEvent.click(screen.getByRole('option', { name: /pan left/i }));
+    expect(updateOptions).toHaveBeenCalledWith({ camera_motion: 'pan_left' });
+
+    const directionSection = screen.getByText('Motion Direction').parentElement as HTMLElement;
+    const directionDropdown = within(directionSection).getByRole('combobox');
+    fireEvent.click(directionDropdown);
+    fireEvent.click(screen.getByRole('option', { name: /backward/i }));
+    expect(updateOptions).toHaveBeenCalledWith({ motion_direction: 'backward' });
+
+    const interpolationSection = screen.getByText('Frame Interpolation').parentElement as HTMLElement;
+    const interpolationDropdown = within(interpolationSection).getByRole('combobox');
+    fireEvent.click(interpolationDropdown);
+    fireEvent.click(screen.getByRole('option', { name: /realistic/i }));
+    expect(updateOptions).toHaveBeenCalledWith({ frame_interpolation: 'realistic' });
   });
 });
