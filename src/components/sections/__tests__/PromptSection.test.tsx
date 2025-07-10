@@ -29,4 +29,34 @@ describe('PromptSection', () => {
       negative_prompt: 'new negative',
     });
   });
+
+  test('negative prompt toggle enables textarea', () => {
+    const updateOptions = jest.fn();
+    const options = { ...DEFAULT_OPTIONS, use_negative_prompt: false };
+    const { rerender } = render(
+      <PromptSection
+        options={options}
+        updateOptions={updateOptions}
+        trackingEnabled={false}
+      />,
+    );
+
+    const textarea = screen.getByLabelText(/^negative prompt$/i);
+    expect(textarea.hasAttribute('disabled')).toBe(true);
+
+    const checkbox = screen.getByRole('checkbox');
+    fireEvent.click(checkbox);
+    expect(updateOptions).toHaveBeenCalledWith({ use_negative_prompt: true });
+
+    rerender(
+      <PromptSection
+        options={{ ...options, use_negative_prompt: true }}
+        updateOptions={updateOptions}
+        trackingEnabled={false}
+      />,
+    );
+    expect(
+      screen.getByLabelText(/^negative prompt$/i).hasAttribute('disabled'),
+    ).toBe(false);
+  });
 });

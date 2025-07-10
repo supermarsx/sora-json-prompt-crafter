@@ -31,4 +31,26 @@ describe('StyleSection', () => {
       'film still',
     );
   });
+
+  test('changing style category updates nested options', () => {
+    const updateNestedOptions = jest.fn();
+    const updateOptions = jest.fn();
+    const options = { ...DEFAULT_OPTIONS, use_style_preset: true };
+    render(
+      <StyleSection
+        options={options}
+        updateNestedOptions={updateNestedOptions}
+        updateOptions={updateOptions}
+      />,
+    );
+    const categoryDropdown = screen.getAllByRole('combobox')[0];
+    fireEvent.click(categoryDropdown);
+    fireEvent.click(
+      screen.getByRole('option', { name: /modern digital & illustration/i }),
+    );
+    expect(updateNestedOptions).toHaveBeenCalledWith(
+      'style_preset.category',
+      'Modern Digital & Illustration',
+    );
+  });
 });
