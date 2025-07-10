@@ -14,10 +14,12 @@ describe('importCustomPresets', () => {
     const { stylePresets } = await import('../../data/stylePresets');
     const cam = await import('../../data/cameraPresets');
     const loc = await import('../../data/locationPresets');
+    const dnd = await import('../../data/dndPresets');
 
     const origStyleLen = stylePresets['Classic Art & Painting'].length;
     const origShotLen = cam.shotTypeOptions.length;
     const origEnvLen = loc.environmentOptions.length;
+    const origRaceLen = dnd.characterRaceOptions.length;
 
     importCustomPresets({
       stylePresets: {
@@ -26,6 +28,7 @@ describe('importCustomPresets', () => {
       },
       cameraPresets: { shotTypeOptions: ['wide', 'unique shot'] },
       locationPresets: { environmentOptions: ['forest', 'space'] },
+      dndPresets: { characterRaceOptions: ['human', 'merfolk'] },
     });
 
     expect(stylePresets['Classic Art & Painting']).toContain('new style');
@@ -39,6 +42,9 @@ describe('importCustomPresets', () => {
 
     expect(loc.environmentOptions).toContain('space');
     expect(loc.environmentOptions).toHaveLength(origEnvLen + 1);
+
+    expect(dnd.characterRaceOptions).toContain('merfolk');
+    expect(dnd.characterRaceOptions).toHaveLength(origRaceLen + 1);
   });
 });
 
@@ -48,10 +54,9 @@ describe('loadCustomPresetsFromUrl', () => {
     global.fetch = jest.fn().mockResolvedValue({
       json: jest.fn().mockResolvedValue(data),
     }) as unknown as typeof fetch;
-
     const { stylePresets } = await import('../../data/stylePresets');
 
-    await loadCustomPresetsFromUrl('http://example.com');
+    await presetLoaderModule.loadCustomPresetsFromUrl('http://example.com');
 
     expect(fetch).toHaveBeenCalledWith('http://example.com');
     expect(stylePresets.Foo).toEqual(['bar']);
