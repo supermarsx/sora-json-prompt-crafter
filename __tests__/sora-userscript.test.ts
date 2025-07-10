@@ -67,4 +67,41 @@ describe('sora-userscript', () => {
       '*',
     );
   });
+
+  test('logs and exits on unrelated pages', async () => {
+    const debugSpy = jest.spyOn(console, 'debug').mockImplementation(() => {});
+
+    await import(USERSCRIPT_PATH);
+
+    expect(debugSpy).toHaveBeenCalledWith(
+      `[Sora Injector] Not a Sora or Crafter page on host ${window.location.hostname}, exiting`,
+    );
+    debugSpy.mockRestore();
+  });
+
+  test('reapplies JSON on focus if cleared', async () => {
+    document.head.innerHTML = '<meta property="og:title" content="Sora">';
+
+    const textarea = document.createElement('textarea');
+    document.body.appendChild(textarea);
+
+    await import(USERSCRIPT_PATH);
+
+    const source = { postMessage: jest.fn() } as MessageEventSource;
+    window.dispatchEvent(
+      new MessageEvent('message', {
+        data: { type: 'INSERT_SORA_JSON', json: { foo: 'bar' } },
+        origin: 'https://crafter.local',
+        source,
+      }),
+    );
+
+    expect(textarea.value).toBe(JSON.stringify({ foo: 'bar' }, null, 2));
+
+    textarea.value = '';
+    textarea.dispatchEvent(new Event('focus'));
+    textarea.dispatchEvent(new Event('blur'));
+
+    expect(textarea.value).toBe(JSON.stringify({ foo: 'bar' }, null, 2));
+  });
 });
