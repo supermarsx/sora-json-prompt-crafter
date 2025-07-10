@@ -46,6 +46,52 @@ describe('importCustomPresets', () => {
     expect(dnd.characterRaceOptions).toContain('merfolk');
     expect(dnd.characterRaceOptions).toHaveLength(origRaceLen + 1);
   });
+
+  test('deduplicates multiple location preset lists', async () => {
+    const loc = await import('../../data/locationPresets');
+
+    const origEnvLen = loc.environmentOptions.length;
+    const origLocLen = loc.locationOptions.length;
+    const origSeasonLen = loc.seasonOptions.length;
+    const origMoodLen = loc.atmosphereMoodOptions.length;
+
+    importCustomPresets({
+      locationPresets: {
+        environmentOptions: ['forest', 'floating castle'],
+        locationOptions: ['Berlin, Germany', 'El Dorado'],
+        seasonOptions: ['spring', 'eternal summer'],
+        atmosphereMoodOptions: ['moody', 'ecstatic'],
+      },
+    });
+
+    expect(loc.environmentOptions).toContain('floating castle');
+    expect(loc.environmentOptions).toHaveLength(origEnvLen + 1);
+    expect(loc.locationOptions).toContain('El Dorado');
+    expect(loc.locationOptions).toHaveLength(origLocLen + 1);
+    expect(loc.seasonOptions).toContain('eternal summer');
+    expect(loc.seasonOptions).toHaveLength(origSeasonLen + 1);
+    expect(loc.atmosphereMoodOptions).toContain('ecstatic');
+    expect(loc.atmosphereMoodOptions).toHaveLength(origMoodLen + 1);
+  });
+
+  test('merges dnd presets arrays without duplicates', async () => {
+    const dnd = await import('../../data/dndPresets');
+
+    const origClassLen = dnd.characterClassOptions.length;
+    const origMonsterLen = dnd.monsterTypeOptions.length;
+
+    importCustomPresets({
+      dndPresets: {
+        characterClassOptions: ['fighter', 'time mage'],
+        monsterTypeOptions: ['dragon', 'sand worm'],
+      },
+    });
+
+    expect(dnd.characterClassOptions).toContain('time mage');
+    expect(dnd.characterClassOptions).toHaveLength(origClassLen + 1);
+    expect(dnd.monsterTypeOptions).toContain('sand worm');
+    expect(dnd.monsterTypeOptions).toHaveLength(origMonsterLen + 1);
+  });
 });
 
 describe('loadCustomPresetsFromUrl', () => {
