@@ -97,6 +97,7 @@ To merge a Pull Request, the following must be true:
 - ✅ **Linting passes**: Code meets style guidelines via ESLint (`npm run lint`) and formatting via Prettier (`npm run format`). This repository uses a consistent style (including Tailwind-specific linting); PRs should not introduce new linter warnings.
 - ✅ **Prettier enforced**: The `pr` command automatically runs `npm run format`, so all files, including `agents.md`, must already be prettified.
 - ✅ **Tests pass**: All unit tests and any integration tests must pass (`npm test`). If new features are added, corresponding tests should be included. Aim for meaningful coverage, especially for critical logic in `lib/`.
+- ✅ **Coverage badge updated**: After modifying tests, run `npm run coverage` to refresh `coverage.svg`.
 - ✅ **No debug leftovers**: Remove any `console.log`, `debugger`, or commented-out code used during development. The codebase should be clean of dev-only artifacts when submitted for review.
 - ✅ **Conventional commits**: Follow semantic commit message conventions (e.g., prefix with `feat:`, `fix:`, `docs:`, etc. as appropriate). This not only helps maintain clear project history but also may feed into release notes if using automation.
 - ✅ **Documentation updated**: If the change is user-facing or alters the workflow, update relevant docs. This could mean adjusting the README (for a new feature or option) or this guide (for architectural changes or new “agent” modules).
