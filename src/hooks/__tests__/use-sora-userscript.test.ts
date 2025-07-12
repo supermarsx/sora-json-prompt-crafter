@@ -71,4 +71,23 @@ describe('useSoraUserscript', () => {
 
     expect(debugSpy).toHaveBeenCalledWith('[Sora Loader] Debug pong received');
   });
+
+  test('resets when READY never arrives', () => {
+    jest.useFakeTimers();
+    const debugSpy = jest.spyOn(console, 'debug').mockImplementation(() => {});
+    const { result } = renderHook(() => useSoraUserscript(true));
+
+    act(() => {
+      jest.advanceTimersByTime(3000);
+    });
+
+    expect(result.current[0]).toBe(false);
+    expect(result.current[1]).toBeNull();
+    expect(debugSpy).toHaveBeenCalledWith(
+      '[Sora Loader] No response, resetting state',
+    );
+
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
+  });
 });
