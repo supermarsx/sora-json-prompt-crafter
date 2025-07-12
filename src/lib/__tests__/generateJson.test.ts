@@ -247,4 +247,60 @@ describe('generateJson', () => {
     );
     expect(enabled.upscale).toBe(2);
   });
+
+  test('keeps quality_booster when enabled and removes when disabled', () => {
+    const disabled = parse(
+      generateJson({
+        ...DEFAULT_OPTIONS,
+        use_enhancement_safety: true,
+        use_quality_booster: false,
+        quality_booster: 'high resolution',
+      }),
+    );
+    expect(disabled.quality_booster).toBeUndefined();
+
+    const enabled = parse(
+      generateJson({
+        ...DEFAULT_OPTIONS,
+        use_enhancement_safety: true,
+        use_quality_booster: true,
+        quality_booster: 'high resolution',
+      }),
+    );
+    expect(enabled.quality_booster).toBeDefined();
+  });
+
+  test('handles enhancement safety detail flags', () => {
+    const disabled = parse(
+      generateJson({
+        ...DEFAULT_OPTIONS,
+        use_enhancement_safety: true,
+        keep_typography_details: false,
+        keep_key_details: false,
+        enhance_object_reflections: false,
+        use_safety_filter: false,
+        safety_filter: 'default (auto safety level)',
+      }),
+    );
+    expect(disabled.keep_typography_details).toBeUndefined();
+    expect(disabled.keep_key_details).toBeUndefined();
+    expect(disabled.enhance_object_reflections).toBeUndefined();
+    expect(disabled.safety_filter).toBeUndefined();
+
+    const enabled = parse(
+      generateJson({
+        ...DEFAULT_OPTIONS,
+        use_enhancement_safety: true,
+        keep_typography_details: true,
+        keep_key_details: true,
+        enhance_object_reflections: true,
+        use_safety_filter: true,
+        safety_filter: 'default (auto safety level)',
+      }),
+    );
+    expect(enabled.keep_typography_details).toBe(true);
+    expect(enabled.keep_key_details).toBe(true);
+    expect(enabled.enhance_object_reflections).toBe(true);
+    expect(enabled.safety_filter).toBeDefined();
+  });
 });
