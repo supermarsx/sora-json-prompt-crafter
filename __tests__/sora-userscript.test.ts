@@ -19,7 +19,9 @@ describe('sora-userscript', () => {
   });
 
   afterEach(() => {
+    jest.clearAllTimers();
     jest.useRealTimers();
+    jest.restoreAllMocks();
     Object.defineProperty(window, 'postMessage', {
       value: originalPostMessage,
       writable: true,
@@ -103,5 +105,53 @@ describe('sora-userscript', () => {
     textarea.dispatchEvent(new Event('blur'));
 
     expect(textarea.value).toBe(JSON.stringify({ foo: 'bar' }, null, 2));
+  });
+
+  test('stops notify interval on ACK from opener', async () => {
+    document.head.innerHTML = '<meta name="sora-json-prompt-crafter" />';
+    const opener = { postMessage: jest.fn() } as unknown as WindowProxy;
+    Object.defineProperty(window, 'opener', { value: opener, writable: true });
+    const clearSpy = jest.spyOn(global, 'clearInterval');
+
+    await import(USERSCRIPT_PATH);
+
+    expect(mockPostMessage).toHaveBeenCalledTimes(2);
+
+    jest.advanceTimersByTime(250);
+    expect(mockPostMessage).toHaveBeenCalledTimes(4);
+
+    window.dispatchEvent(
+      new MessageEvent('message', {
+        data: { type: 'SORA_USERSCRIPT_ACK' },
+        origin: 'https://sora.local',
+        source: opener,
+      }),
+    );
+
+    expect(clearSpy).toHaveBeenCalled();
+
+    jest.advanceTimersByTime(250);
+    expect(mockPostMessage).toHaveBeenCalledTimes(4);
+
+    clearSpy.mockRestore();
+  });
+
+  test('logs debug pong message', async () => {
+    document.head.innerHTML = '<meta name="sora-json-prompt-crafter" />';
+    const debugSpy = jest.spyOn(console, 'debug').mockImplementation(() => {});
+
+    await import(USERSCRIPT_PATH);
+    debugSpy.mockClear();
+
+    window.dispatchEvent(
+      new MessageEvent('message', {
+        data: { type: 'SORA_DEBUG_PONG' },
+        origin: 'https://crafter.local',
+      }),
+    );
+
+    expect(debugSpy).toHaveBeenCalledWith(
+      '[Sora Injector] Debug pong received',
+    );
   });
 });
