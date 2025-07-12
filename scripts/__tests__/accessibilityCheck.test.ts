@@ -52,6 +52,20 @@ describe('accessibilityCheck', () => {
     logSpy.mockRestore();
   });
 
+  test('logs success when no violations are found', async () => {
+    process.exitCode = 0;
+    runMock.mockImplementationOnce((doc, opts, cb) => {
+      cb(null, { violations: [] });
+    });
+    const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+    await import('../accessibilityCheck.js');
+    await new Promise((r) => process.nextTick(r));
+    expect(runMock).toHaveBeenCalled();
+    expect(logSpy).toHaveBeenCalledWith('No accessibility violations found.');
+    expect(process.exitCode).toBe(0);
+    logSpy.mockRestore();
+  });
+
   test('exits with code 1 when HTML file cannot be read', async () => {
     readFileSyncMock.mockImplementationOnce(() => {
       throw new Error('no file');
