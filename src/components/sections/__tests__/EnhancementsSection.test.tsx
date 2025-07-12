@@ -62,4 +62,26 @@ describe('EnhancementsSection', () => {
     dropdown = within(section).getByRole('button');
     expect(dropdown.hasAttribute('disabled')).toBe(true);
   });
+
+  test('other checkbox toggles update options', () => {
+    const updateOptions = jest.fn();
+    render(
+      <EnhancementsSection
+        options={DEFAULT_OPTIONS}
+        updateOptions={updateOptions}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+
+    const toggles = [
+      { label: /prevent deformities/i, flag: 'prevent_deformities' },
+      { label: /keep key details/i, flag: 'keep_key_details' },
+    ] as const;
+
+    toggles.forEach(({ label, flag }) => {
+      fireEvent.click(screen.getByLabelText(label));
+      expect(updateOptions).toHaveBeenCalledWith({ [flag]: true });
+    });
+  });
 });
