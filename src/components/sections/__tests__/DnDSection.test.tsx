@@ -96,4 +96,59 @@ describe('DnDSection', () => {
       expect(enabledDropdown.hasAttribute('disabled')).toBe(false);
     });
   });
+
+  test('dropdown selections update monster, environment, magic school and item type', () => {
+    const updateOptions = jest.fn();
+    const options = {
+      ...DEFAULT_OPTIONS,
+      use_dnd_section: true,
+      use_dnd_monster_type: true,
+      dnd_monster_type: 'dragon',
+      use_dnd_environment: true,
+      dnd_environment: 'dungeon',
+      use_dnd_magic_school: true,
+      dnd_magic_school: 'evocation',
+      use_dnd_item_type: true,
+      dnd_item_type: 'magic sword',
+    };
+
+    render(
+      <DnDSection
+        options={options}
+        updateOptions={updateOptions}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+
+    const monsterSection = screen.getByText('Monster Type')
+      .parentElement as HTMLElement;
+    const monsterDropdown = within(monsterSection).getByRole('button');
+    fireEvent.click(monsterDropdown);
+    fireEvent.click(screen.getByRole('button', { name: /lich/i }));
+    expect(updateOptions).toHaveBeenCalledWith({ dnd_monster_type: 'lich' });
+
+    const envSection = screen.getByText('D&D Environment')
+      .parentElement as HTMLElement;
+    const envDropdown = within(envSection).getByRole('button');
+    fireEvent.click(envDropdown);
+    fireEvent.click(screen.getByRole('button', { name: /cave/i }));
+    expect(updateOptions).toHaveBeenCalledWith({ dnd_environment: 'cave' });
+
+    const schoolSection = screen.getByText('Magic School')
+      .parentElement as HTMLElement;
+    const schoolDropdown = within(schoolSection).getByRole('button');
+    fireEvent.click(schoolDropdown);
+    fireEvent.click(screen.getByRole('button', { name: /illusion/i }));
+    expect(updateOptions).toHaveBeenCalledWith({
+      dnd_magic_school: 'illusion',
+    });
+
+    const itemSection = screen.getByText('Item Type')
+      .parentElement as HTMLElement;
+    const itemDropdown = within(itemSection).getByRole('button');
+    fireEvent.click(itemDropdown);
+    fireEvent.click(screen.getByRole('button', { name: /amulet/i }));
+    expect(updateOptions).toHaveBeenCalledWith({ dnd_item_type: 'amulet' });
+  });
 });
