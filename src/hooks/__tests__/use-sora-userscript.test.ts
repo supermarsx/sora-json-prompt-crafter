@@ -27,6 +27,7 @@ describe('useSoraUserscript', () => {
     expect(result.current[0]).toBe(true);
     expect(result.current[1]).toBe('1.0');
     expect(postSpy).toHaveBeenCalledWith({ type: 'SORA_USERSCRIPT_ACK' }, '*');
+    expect(postSpy).toHaveBeenCalledWith({ type: 'SORA_DEBUG_PING' }, '*');
   });
 
   test('updates state via global callback', () => {
@@ -42,6 +43,7 @@ describe('useSoraUserscript', () => {
 
   test('responds to debug ping with pong', () => {
     const postSpy = jest.spyOn(window, 'postMessage');
+    const debugSpy = jest.spyOn(console, 'debug').mockImplementation(() => {});
     renderHook(() => useSoraUserscript());
 
     act(() => {
@@ -54,6 +56,7 @@ describe('useSoraUserscript', () => {
     });
 
     expect(postSpy).toHaveBeenCalledWith({ type: 'SORA_DEBUG_PONG' }, '*');
+    expect(debugSpy).toHaveBeenCalledWith('[Sora Loader] Debug ping received');
   });
 
   test('logs when debug pong received', () => {
@@ -70,6 +73,29 @@ describe('useSoraUserscript', () => {
     });
 
     expect(debugSpy).toHaveBeenCalledWith('[Sora Loader] Debug pong received');
+  });
+
+  test('clears timeout once ready processed', () => {
+    jest.useFakeTimers();
+    const debugSpy = jest.spyOn(console, 'debug').mockImplementation(() => {});
+    renderHook(() => useSoraUserscript(true));
+
+    act(() => {
+      window.dispatchEvent(
+        new MessageEvent('message', {
+          data: { type: 'SORA_USERSCRIPT_READY', version: '1.0' },
+          source: window,
+        }),
+      );
+      jest.advanceTimersByTime(3000);
+    });
+
+    expect(debugSpy).not.toHaveBeenCalledWith(
+      '[Sora Loader] No response, resetting state',
+    );
+
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
   });
 
   test('resets when READY never arrives', () => {
