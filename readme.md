@@ -1,16 +1,25 @@
 # Sora JSON Prompt Crafter
 
-Craft Sora prompts visually in your browser. No sign‑up and no data ever leaves your device.
-
 ![Banner displaying an infernal scenario and a prompt running away from ghosts](https://github.com/user-attachments/assets/0f19ca8e-acd1-4fa7-aa96-cadf479956fc)
 
-[![Try it live](https://img.shields.io/badge/Try%20it%20live-Lovable-purple?style=for-the-badge&logo=lovable)](https://sora-json-prompt-crafter.lovable.app)
-[![Stars](https://img.shields.io/github/stars/supermarsx/sora-json-prompt-crafter?style=for-the-badge)](https://github.com/supermarsx/sora-json-prompt-crafter/stargazers)
-[![Forks](https://img.shields.io/github/forks/supermarsx/sora-json-prompt-crafter?style=for-the-badge)](https://github.com/supermarsx/sora-json-prompt-crafter/network/members)
-[![Coverage](./coverage.svg)](./coverage.svg)
-[![License](https://img.shields.io/github/license/supermarsx/sora-json-prompt-crafter?style=for-the-badge)](license.md)
+![License](https://img.shields.io/github/license/supermarsx/sora-json-prompt-crafter?style=for-the-badge)
+![Commits](https://img.shields.io/github/commit-activity/t/supermarsx/sora-json-prompt-crafter?style=for-the-badge)
+![Stars](https://img.shields.io/github/stars/supermarsx/sora-json-prompt-crafter?style=for-the-badge)
+![Forks](https://img.shields.io/github/forks/supermarsx/sora-json-prompt-crafter?style=for-the-badge)
+![Watchers](https://img.shields.io/github/watchers/supermarsx/sora-json-prompt-crafter?style=for-the-badge)
 
-Sora JSON Prompt Crafter is a web interface for building specially crafted prompts for Sora's generative models. Adjust sliders and dropdowns to fine‑tune parameters like style preset, aspect ratio, video duration and more. Everything runs locally so your prompts stay private.
+![Build](https://img.shields.io/github/actions/workflow/status/supermarsx/sora-json-prompt-crafter/ci.yml?style=for-the-badge)
+![Coverage](./coverage.svg)
+![Issues](https://img.shields.io/github/issues/supermarsx/sora-json-prompt-crafter?style=for-the-badge)
+
+Sora JSON Prompt Crafter is a web interface for building specially crafted prompts for Sora's
+generative models. Adjust sliders and dropdowns to fine‑tune parameters like style preset,
+aspect ratio, video duration and more. The app generates a JSON snippet you can copy and
+use directly with Sora. The app has a privacy-first approach where everything is kept on your
+browser, no prompt data is shared or tracked. Dark mode is used as default for those of us that
+go "my eyes!" when there's bright white lights.
+
+[![Go to Lovable](https://img.shields.io/badge/Demo-at%20%F0%9F%92%96%20Lovable-white?style=for-the-badge&logo=lovable)](https://sora-json-prompt-crafter.lovable.app)
 
 ## Features
 
@@ -164,19 +173,9 @@ a JSON object (or URL via `loadCustomPresetsFromUrl`). The JSON can include
 matching the built‑in structures. Imported values are merged with existing
 presets so they become available in the UI.
 
-## Roadmap
-
-- **AI-assisted prompt suggestions** – optional helper to refine user text.
-- **Real-time preview** of generated images or video.
-- **Expanded preset library** with community contributions.
-- **Internationalization** for a translated interface.
-- **Enhanced mobile UX** with touch-friendly controls.
-- **Collaboration and sharing** improvements.
-- **CLI or editor plugin** for power users.
-
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development instructions. We label beginner friendly tasks with **good first issue**. By participating you agree to follow our [Code of Conduct](CODE_OF_CONDUCT.md).
+Pull requests are welcome. Please open an issue first to discuss major changes.
 
 ## Disclaimer
 
