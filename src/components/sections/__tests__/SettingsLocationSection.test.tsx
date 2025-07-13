@@ -90,4 +90,87 @@ describe('SettingsLocationSection', () => {
     const disabledInput = screen.getByLabelText(/^time of year$/i);
     expect(disabledInput.hasAttribute('disabled')).toBe(true);
   });
+
+  test('location, season and atmosphere mood fields behave correctly', () => {
+    const updateOptions = jest.fn();
+    let options = {
+      ...DEFAULT_OPTIONS,
+      use_settings_location: true,
+      use_location: false,
+      use_season: false,
+      use_atmosphere_mood: false,
+    };
+
+    const { rerender } = render(
+      <SettingsLocationSection
+        options={options}
+        updateOptions={updateOptions}
+      />,
+    );
+
+    const locationSection = screen.getByText('Location')
+      .parentElement as HTMLElement;
+    let locationDropdown = within(locationSection).getByRole('button');
+    const seasonSection = screen.getByText('Season')
+      .parentElement as HTMLElement;
+    let seasonDropdown = within(seasonSection).getByRole('button');
+    const moodSection = screen.getByText('Atmosphere Mood')
+      .parentElement as HTMLElement;
+    let moodDropdown = within(moodSection).getByRole('button');
+
+    expect(locationDropdown.hasAttribute('disabled')).toBe(true);
+    expect(seasonDropdown.hasAttribute('disabled')).toBe(true);
+    expect(moodDropdown.hasAttribute('disabled')).toBe(true);
+
+    fireEvent.click(screen.getByLabelText(/use location/i));
+    expect(updateOptions).toHaveBeenCalledWith({ use_location: true });
+    options = { ...options, use_location: true, location: 'Berlin, Germany' };
+    rerender(
+      <SettingsLocationSection
+        options={options}
+        updateOptions={updateOptions}
+      />,
+    );
+    locationDropdown = within(locationSection).getByRole('button');
+    expect(locationDropdown.hasAttribute('disabled')).toBe(false);
+    fireEvent.click(locationDropdown);
+    fireEvent.click(screen.getByRole('button', { name: /^tokyo, japan$/i }));
+    expect(updateOptions).toHaveBeenCalledWith({ location: 'Tokyo, Japan' });
+
+    fireEvent.click(screen.getByLabelText(/use season/i));
+    expect(updateOptions).toHaveBeenCalledWith({ use_season: true });
+    options = { ...options, use_season: true, season: 'default (any season)' };
+    rerender(
+      <SettingsLocationSection
+        options={options}
+        updateOptions={updateOptions}
+      />,
+    );
+    seasonDropdown = within(seasonSection).getByRole('button');
+    expect(seasonDropdown.hasAttribute('disabled')).toBe(false);
+    fireEvent.click(seasonDropdown);
+    fireEvent.click(screen.getByRole('button', { name: /^winter$/i }));
+    expect(updateOptions).toHaveBeenCalledWith({ season: 'winter' });
+
+    fireEvent.click(screen.getByLabelText(/use atmosphere mood/i));
+    expect(updateOptions).toHaveBeenCalledWith({ use_atmosphere_mood: true });
+    options = {
+      ...options,
+      use_atmosphere_mood: true,
+      atmosphere_mood: 'default (neutral mood)',
+    };
+    rerender(
+      <SettingsLocationSection
+        options={options}
+        updateOptions={updateOptions}
+      />,
+    );
+    moodDropdown = within(moodSection).getByRole('button');
+    expect(moodDropdown.hasAttribute('disabled')).toBe(false);
+    fireEvent.click(moodDropdown);
+    fireEvent.click(screen.getByRole('button', { name: /mysterious/i }));
+    expect(updateOptions).toHaveBeenCalledWith({
+      atmosphere_mood: 'mysterious',
+    });
+  });
 });
