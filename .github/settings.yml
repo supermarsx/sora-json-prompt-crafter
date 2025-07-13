@@ -1,0 +1,17 @@
+repository:
+  has_issues: true
+  has_discussions: true
+  has_projects: false
+  default_branch: main
+  topics:
+    - sora
+    - prompt-engineering
+    - text-to-video
+    - generative-ai
+    - json
+    - react
+    - typescript
+labels:
+  - name: good-first-issue
+    color: bfd4f2
+    description: Easy issue for newcomers
