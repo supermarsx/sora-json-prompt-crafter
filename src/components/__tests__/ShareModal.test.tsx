@@ -52,7 +52,11 @@ describe('ShareModal', () => {
     renderModal();
     const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent('Check out my Sora prompt configuration!')}`;
     fireEvent.click(screen.getByRole('button', { name: /facebook/i }));
-    expect(openSpy).toHaveBeenCalledWith(url, '_blank', 'width=600,height=400');
+    expect(openSpy).toHaveBeenCalledWith(
+      url,
+      '_blank',
+      'noopener,width=600,height=400',
+    );
     expect(trackEvent).toHaveBeenCalledWith(true, 'share_facebook');
   });
 
@@ -63,7 +67,11 @@ describe('ShareModal', () => {
     );
     const url = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(window.location.href)}`;
     fireEvent.click(screen.getByRole('button', { name: /twitter\/x/i }));
-    expect(openSpy).toHaveBeenCalledWith(url, '_blank', 'width=600,height=400');
+    expect(openSpy).toHaveBeenCalledWith(
+      url,
+      '_blank',
+      'noopener,width=600,height=400',
+    );
     expect(trackEvent).toHaveBeenCalledWith(true, 'share_twitter');
   });
 
@@ -74,7 +82,7 @@ describe('ShareModal', () => {
     );
     const url = `https://wa.me/?text=${text}`;
     fireEvent.click(screen.getByRole('button', { name: /whatsapp/i }));
-    expect(openSpy).toHaveBeenCalledWith(url, '_blank');
+    expect(openSpy).toHaveBeenCalledWith(url, '_blank', 'noopener');
     expect(trackEvent).toHaveBeenCalledWith(true, 'share_whatsapp');
   });
 
@@ -85,7 +93,7 @@ describe('ShareModal', () => {
     );
     const url = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${text}`;
     fireEvent.click(screen.getByRole('button', { name: /telegram/i }));
-    expect(openSpy).toHaveBeenCalledWith(url, '_blank');
+    expect(openSpy).toHaveBeenCalledWith(url, '_blank', 'noopener');
     expect(trackEvent).toHaveBeenCalledWith(true, 'share_telegram');
   });
 
