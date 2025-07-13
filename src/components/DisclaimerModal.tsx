@@ -89,16 +89,12 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({
             } catch {
               // ignore localStorage errors
             }
+            setHasFetched(true);
           }
         })
         .catch((err) => {
           if (err.name !== 'AbortError') {
             setText('Failed to load disclaimer.');
-          }
-        })
-        .finally(() => {
-          if (!signal.aborted) {
-            setHasFetched(true);
           }
         });
     })();
