@@ -84,4 +84,114 @@ describe('EnhancementsSection', () => {
       expect(updateOptions).toHaveBeenCalledWith({ [flag]: true });
     });
   });
+
+  test('handleSafetyFilterChange maps values correctly', () => {
+    const updateOptions = jest.fn();
+    const options = {
+      ...DEFAULT_OPTIONS,
+      use_safety_filter: true,
+      safety_filter: 'moderate',
+    };
+    render(
+      <EnhancementsSection
+        options={options}
+        updateOptions={updateOptions}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+
+    const section = screen.getByText('Safety Filter')
+      .parentElement as HTMLElement;
+    const dropdown = within(section).getByRole('button');
+    fireEvent.click(dropdown);
+    fireEvent.click(
+      screen.getByRole('button', { name: /off \(no filtering/i }),
+    );
+    expect(updateOptions).toHaveBeenCalledWith({ safety_filter: 'off' });
+
+    fireEvent.click(dropdown);
+    fireEvent.click(
+      screen.getByRole('button', { name: /high \(safe for work/i }),
+    );
+    expect(updateOptions).toHaveBeenCalledWith({ safety_filter: 'moderate' });
+  });
+
+  test('upscale slider updates value and disables when flag off', () => {
+    const updateOptions = jest.fn();
+    const enabled = {
+      ...DEFAULT_OPTIONS,
+      use_upscale_factor: true,
+      upscale: 2,
+    };
+    const { rerender } = render(
+      <EnhancementsSection
+        options={enabled}
+        updateOptions={updateOptions}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+
+    const slider = screen.getByRole('slider');
+    fireEvent.keyDown(slider, { key: 'ArrowRight' });
+    expect(updateOptions).toHaveBeenCalledWith({ upscale: 2.1 });
+
+    const disabled = { ...enabled, use_upscale_factor: false };
+    rerender(
+      <EnhancementsSection
+        options={disabled}
+        updateOptions={updateOptions}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+    const disabledSlider = screen.getByRole('slider');
+    expect(disabledSlider.getAttribute('data-disabled')).toBe('');
+  });
+
+  test('quality booster toggle enables dropdown and updates value', () => {
+    const updateOptions = jest.fn();
+    let options = {
+      ...DEFAULT_OPTIONS,
+      use_quality_booster: false,
+    };
+
+    const { rerender } = render(
+      <EnhancementsSection
+        options={options}
+        updateOptions={updateOptions}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+
+    const boosterSection = screen.getByText('Quality Booster')
+      .parentElement as HTMLElement;
+    let dropdown = within(boosterSection).getByRole('button');
+    expect(dropdown.hasAttribute('disabled')).toBe(true);
+
+    fireEvent.click(screen.getByLabelText(/use quality booster/i));
+    expect(updateOptions).toHaveBeenCalledWith({ use_quality_booster: true });
+
+    options = {
+      ...options,
+      use_quality_booster: true,
+      quality_booster: 'default (standard quality)',
+    };
+    rerender(
+      <EnhancementsSection
+        options={options}
+        updateOptions={updateOptions}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+
+    dropdown = within(boosterSection).getByRole('button');
+    expect(dropdown.hasAttribute('disabled')).toBe(false);
+    fireEvent.click(dropdown);
+    fireEvent.click(screen.getByRole('button', { name: /^4k$/i }));
+    expect(updateOptions).toHaveBeenCalledWith({ quality_booster: '4K' });
+  });
 });

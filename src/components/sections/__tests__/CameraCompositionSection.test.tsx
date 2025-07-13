@@ -159,4 +159,105 @@ describe('CameraCompositionSection', () => {
     ).getByRole('button');
     expect(angleDropdown.hasAttribute('disabled')).toBe(false);
   });
+
+  test('aperture, dof and blur-style toggles enable dropdowns and update values', () => {
+    const updateOptions = jest.fn();
+    let options = {
+      ...DEFAULT_OPTIONS,
+      use_camera_composition: true,
+      use_aperture: false,
+      use_dof: false,
+      use_blur_style: false,
+    };
+
+    const { rerender } = render(
+      <CameraCompositionSection
+        options={options}
+        updateOptions={updateOptions}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+
+    const apertureSection = screen.getByText('Aperture')
+      .parentElement as HTMLElement;
+    let apertureDropdown = within(apertureSection).getByRole('button');
+    const dofSection = screen.getByText('Depth of Field')
+      .parentElement as HTMLElement;
+    let dofDropdown = within(dofSection).getByRole('button');
+    const blurSection = screen.getByText('Blur Style')
+      .parentElement as HTMLElement;
+    let blurDropdown = within(blurSection).getByRole('button');
+
+    expect(apertureDropdown.hasAttribute('disabled')).toBe(true);
+    expect(dofDropdown.hasAttribute('disabled')).toBe(true);
+    expect(blurDropdown.hasAttribute('disabled')).toBe(true);
+
+    fireEvent.click(screen.getByLabelText(/use aperture/i));
+    expect(updateOptions).toHaveBeenCalledWith({ use_aperture: true });
+
+    options = {
+      ...options,
+      use_aperture: true,
+      aperture: 'default (auto aperture)',
+    };
+    rerender(
+      <CameraCompositionSection
+        options={options}
+        updateOptions={updateOptions}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+
+    apertureDropdown = within(apertureSection).getByRole('button');
+    expect(apertureDropdown.hasAttribute('disabled')).toBe(false);
+    fireEvent.click(apertureDropdown);
+    fireEvent.click(screen.getByRole('button', { name: /f\/1\.4/i }));
+    expect(updateOptions).toHaveBeenCalledWith({
+      aperture: 'f/1.4 (classic fast prime, buttery background)',
+    });
+
+    fireEvent.click(screen.getByLabelText(/use depth of field/i));
+    expect(updateOptions).toHaveBeenCalledWith({ use_dof: true });
+
+    options = { ...options, use_dof: true, depth_of_field: 'default' };
+    rerender(
+      <CameraCompositionSection
+        options={options}
+        updateOptions={updateOptions}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+
+    dofDropdown = within(dofSection).getByRole('button');
+    expect(dofDropdown.hasAttribute('disabled')).toBe(false);
+    fireEvent.click(dofDropdown);
+    fireEvent.click(
+      screen.getByRole('button', { name: /^shallow depth of field$/i }),
+    );
+    expect(updateOptions).toHaveBeenCalledWith({
+      depth_of_field: 'shallow depth of field',
+    });
+
+    fireEvent.click(screen.getByLabelText(/use blur style/i));
+    expect(updateOptions).toHaveBeenCalledWith({ use_blur_style: true });
+
+    options = { ...options, use_blur_style: true, blur_style: 'default' };
+    rerender(
+      <CameraCompositionSection
+        options={options}
+        updateOptions={updateOptions}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+
+    blurDropdown = within(blurSection).getByRole('button');
+    expect(blurDropdown.hasAttribute('disabled')).toBe(false);
+    fireEvent.click(blurDropdown);
+    fireEvent.click(screen.getByRole('button', { name: /bokeh blur/i }));
+    expect(updateOptions).toHaveBeenCalledWith({ blur_style: 'bokeh blur' });
+  });
 });
