@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         JSON Prompt Crafter Integration Sora Integration
 // @namespace    supermarsx
-// @version      1.3
+// @version      __USERSCRIPT_VERSION__
 // @description  Inject JSON prompt from external tab into Sora textarea
 // @match *://*/*
 // @grant        none
@@ -9,7 +9,7 @@
 // ==/UserScript==
 
 (() => {
-  const VERSION = '1.3';
+  const VERSION = '__USERSCRIPT_VERSION__';
   const DEBUG = true;
   const SESSION_KEY = 'sora_json_payload';
   console.log(`[Sora Injector] Loaded v${VERSION}`);
