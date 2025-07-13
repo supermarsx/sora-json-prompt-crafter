@@ -58,6 +58,7 @@ Example JSON output:
 ## Quick Start
 
 Requires **Node.js 22** or higher.
+Run `nvm use` to match the version in `.nvmrc`.
 
 To start using the prompt crafter locally clone and run using the following commands:
 
