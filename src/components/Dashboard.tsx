@@ -39,7 +39,7 @@ import { loadOptionsFromJson } from '@/lib/loadOptionsFromJson';
 import { OPTION_FLAG_MAP } from '@/lib/optionFlagMap';
 import { isValidOptions } from '@/lib/validateOptions';
 import { safeGet, safeSet } from '@/lib/storage';
-import { USERSCRIPT_VERSION } from '@/lib/config';
+import { USERSCRIPT_VERSION } from '@/version';
 import { useGithubStats } from '@/hooks/use-github-stats';
 import { useClipboard } from '@/hooks/use-clipboard';
 import { useTranslation } from 'react-i18next';

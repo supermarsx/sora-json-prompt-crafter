@@ -4,6 +4,8 @@ import path from 'path';
 import { componentTagger } from 'lovable-tagger';
 import { execSync } from 'child_process';
 import { VitePWA } from 'vite-plugin-pwa';
+import fs from 'fs';
+import { USERSCRIPT_VERSION } from './src/version';
 
 let commitHash = 'dev';
 let commitDate = 'dev';
@@ -33,6 +35,18 @@ export default defineConfig(({ mode }) => ({
       includeManifestIcons: false,
     }),
     mode === 'development' && componentTagger(),
+    {
+      name: 'inject-userscript-version',
+      apply: 'build',
+      writeBundle() {
+        const file = path.resolve(__dirname, 'dist/sora-userscript.user.js');
+        if (fs.existsSync(file)) {
+          let code = fs.readFileSync(file, 'utf8');
+          code = code.replace(/__USERSCRIPT_VERSION__/g, USERSCRIPT_VERSION);
+          fs.writeFileSync(file, code);
+        }
+      },
+    },
   ].filter(Boolean),
   resolve: {
     alias: {
