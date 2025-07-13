@@ -1,5 +1,11 @@
-import { renderHook, act } from '@testing-library/react';
-import { SidebarProvider } from '../sidebar';
+import {
+  renderHook,
+  act,
+  render,
+  screen,
+  fireEvent,
+} from '@testing-library/react';
+import { SidebarProvider, Sidebar, SidebarTrigger } from '../sidebar';
 import { useSidebar } from '../use-sidebar';
 import { SIDEBAR_KEYBOARD_SHORTCUT } from '../sidebar-constants';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -13,6 +19,16 @@ const mockUseIsMobile = useIsMobile as jest.Mock;
 
 function wrapper({ children }: { children: React.ReactNode }) {
   return <SidebarProvider>{children}</SidebarProvider>;
+}
+
+function SidebarState() {
+  const { open, openMobile } = useSidebar();
+  return (
+    <>
+      <div data-testid="open-state">{String(open)}</div>
+      <div data-testid="open-mobile">{String(openMobile)}</div>
+    </>
+  );
 }
 
 describe('useSidebar hook', () => {
@@ -69,5 +85,66 @@ describe('useSidebar hook', () => {
     });
 
     expect(result.current.open).toBe(false);
+  });
+});
+
+describe('SidebarProvider with components', () => {
+  beforeEach(() => {
+    mockUseIsMobile.mockReturnValue(false);
+    Object.defineProperty(document, 'cookie', { writable: true, value: '' });
+  });
+
+  function setup() {
+    render(
+      <SidebarProvider>
+        <Sidebar>
+          <div />
+        </Sidebar>
+        <SidebarTrigger />
+        <SidebarState />
+      </SidebarProvider>,
+    );
+  }
+
+  test('trigger and keyboard toggle desktop sidebar', () => {
+    setup();
+
+    expect(screen.getByTestId('open-state').textContent).toBe('true');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Toggle Sidebar' }));
+
+    expect(screen.getByTestId('open-state').textContent).toBe('false');
+    expect(document.cookie).toContain('sidebar:state=false');
+
+    fireEvent.keyDown(window, {
+      key: SIDEBAR_KEYBOARD_SHORTCUT,
+      ctrlKey: true,
+    });
+
+    expect(screen.getByTestId('open-state').textContent).toBe('true');
+    expect(document.cookie).toContain('sidebar:state=true');
+  });
+
+  test('mobile mode toggles openMobile only', () => {
+    mockUseIsMobile.mockReturnValue(true);
+    setup();
+
+    expect(screen.getByTestId('open-state').textContent).toBe('true');
+    expect(screen.getByTestId('open-mobile').textContent).toBe('false');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Toggle Sidebar' }));
+
+    expect(screen.getByTestId('open-mobile').textContent).toBe('true');
+    expect(screen.getByTestId('open-state').textContent).toBe('true');
+    expect(document.cookie).not.toContain('sidebar:state=');
+
+    fireEvent.keyDown(window, {
+      key: SIDEBAR_KEYBOARD_SHORTCUT,
+      ctrlKey: true,
+    });
+
+    expect(screen.getByTestId('open-mobile').textContent).toBe('false');
+    expect(screen.getByTestId('open-state').textContent).toBe('true');
+    expect(document.cookie).not.toContain('sidebar:state=');
   });
 });
