@@ -49,4 +49,25 @@ describe('isValidOptions', () => {
     );
     expect(isValidOptions({ seed: '123' as unknown as number })).toBe(false);
   });
+
+  test('rejects arrays for string fields', () => {
+    expect(isValidOptions({ prompt: ['foo'] as unknown as string })).toBe(false);
+  });
+
+  test('rejects objects for string fields', () => {
+    expect(isValidOptions({ prompt: { text: 'foo' } as unknown as string })).toBe(
+      false,
+    );
+  });
+
+  test('rejects null for non-nullable fields', () => {
+    expect(isValidOptions({ prompt: null as unknown as string })).toBe(false);
+  });
+
+  test('rejects unknown value types', () => {
+    // Symbol is not supported by the schema and should fail validation
+    expect(isValidOptions({ prompt: Symbol('foo') as unknown as string })).toBe(
+      false,
+    );
+  });
 });
