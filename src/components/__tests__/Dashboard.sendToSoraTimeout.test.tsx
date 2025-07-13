@@ -120,6 +120,11 @@ describe('sendToSora timeout', () => {
     act(() => {
       sendFn!();
     });
+    expect(openSpy).toHaveBeenCalledWith(
+      'https://sora.chatgpt.com',
+      '_blank',
+      'noopener',
+    );
 
     act(() => {
       jest.advanceTimersByTime(500);

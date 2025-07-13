@@ -302,6 +302,11 @@ describe('Dashboard interactions', () => {
     act(() => {
       fireEvent.click(sendButton);
     });
+    expect(openSpy).toHaveBeenCalledWith(
+      'https://sora.chatgpt.com',
+      '_blank',
+      'noopener',
+    );
 
     act(() => {
       jest.advanceTimersByTime(500);

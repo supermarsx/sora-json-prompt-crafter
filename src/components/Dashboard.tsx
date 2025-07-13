@@ -158,7 +158,7 @@ const Dashboard = () => {
   };
 
   const sendToSora = () => {
-    const win = window.open('https://sora.chatgpt.com', '_blank');
+    const win = window.open('https://sora.chatgpt.com', '_blank', 'noopener');
     if (!win) return;
     const payload = { type: 'INSERT_SORA_JSON', json: JSON.parse(jsonString) };
     const start = () => {
