@@ -136,6 +136,29 @@ describe('sora-userscript', () => {
     clearSpy.mockRestore();
   });
 
+  test('responds to debug ping with pong', async () => {
+    document.head.innerHTML = '<meta name="sora-json-prompt-crafter" />';
+    const debugSpy = jest.spyOn(console, 'debug').mockImplementation(() => {});
+
+    await import(USERSCRIPT_PATH);
+    debugSpy.mockClear();
+
+    const source = { postMessage: jest.fn() } as MessageEventSource;
+    window.dispatchEvent(
+      new MessageEvent('message', {
+        data: { type: 'SORA_DEBUG_PING' },
+        origin: 'https://crafter.local',
+        source,
+      }),
+    );
+
+    expect(source.postMessage).toHaveBeenCalledWith(
+      { type: 'SORA_DEBUG_PONG' },
+      '*',
+    );
+    expect(debugSpy).toHaveBeenCalledWith('[Sora Injector] Debug ping received');
+  });
+
   test('logs debug pong message', async () => {
     document.head.innerHTML = '<meta name="sora-json-prompt-crafter" />';
     const debugSpy = jest.spyOn(console, 'debug').mockImplementation(() => {});
