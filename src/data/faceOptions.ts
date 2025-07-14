@@ -144,7 +144,6 @@ export const makeupStyleOptions = [
   'henna',
   'mehndi',
   'wedding',
-  'festival',
   'holiday',
   'avant-garde glitter',
 ] as const;
