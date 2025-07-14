@@ -5,15 +5,31 @@ import DisclaimerModal from '../DisclaimerModal';
 describe('DisclaimerModal', () => {
   const originalFetch = global.fetch;
   let warnSpy: jest.SpyInstance;
+  let originalImportUrl: string | undefined;
+  let originalProcessUrl: string | undefined;
   beforeEach(() => {
     jest.restoreAllMocks();
     warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
     localStorage.clear();
+    originalImportUrl = (globalThis as { import: { meta: { env: { VITE_DISCLAIMER_URL?: string } } } }).import.meta.env.VITE_DISCLAIMER_URL;
+    originalProcessUrl = process.env.VITE_DISCLAIMER_URL;
+    delete (globalThis as { import: { meta: { env: { VITE_DISCLAIMER_URL?: string } } } }).import.meta.env.VITE_DISCLAIMER_URL;
+    delete process.env.VITE_DISCLAIMER_URL;
   });
 
   afterEach(() => {
     global.fetch = originalFetch;
     warnSpy.mockRestore();
+    if (originalImportUrl !== undefined) {
+      (globalThis as { import: { meta: { env: { VITE_DISCLAIMER_URL?: string } } } }).import.meta.env.VITE_DISCLAIMER_URL = originalImportUrl;
+    } else {
+      delete (globalThis as { import: { meta: { env: { VITE_DISCLAIMER_URL?: string } } } }).import.meta.env.VITE_DISCLAIMER_URL;
+    }
+    if (originalProcessUrl !== undefined) {
+      process.env.VITE_DISCLAIMER_URL = originalProcessUrl;
+    } else {
+      delete process.env.VITE_DISCLAIMER_URL;
+    }
   });
 
   test('renders fetched text on success', async () => {
@@ -56,6 +72,63 @@ describe('DisclaimerModal', () => {
     render(<DisclaimerModal open={false} onOpenChange={() => {}} />);
 
     expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  test('uses URL from import.meta.env when defined', async () => {
+    (globalThis as { import: { meta: { env: { VITE_DISCLAIMER_URL?: string } } } }).import.meta.env.VITE_DISCLAIMER_URL = '/custom.txt';
+    const originalFunction = global.Function;
+    global.Function = function (...args: string[]) {
+      if (
+        args.length === 1 &&
+        args[0] === 'return import.meta.env.VITE_DISCLAIMER_URL'
+      ) {
+        return () =>
+          (globalThis as { import: { meta: { env: { VITE_DISCLAIMER_URL?: string } } } }).import.meta.env
+            .VITE_DISCLAIMER_URL;
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      return new (originalFunction as any)(...args);
+    } as any;
+
+    const mockFetch = jest.fn().mockResolvedValue({
+      ok: true,
+      text: () => Promise.resolve('meta'),
+    } as Response);
+    global.fetch = mockFetch;
+
+    render(<DisclaimerModal open={true} onOpenChange={() => {}} />);
+
+    expect(mockFetch).toHaveBeenCalledWith('/custom.txt', expect.any(Object));
+    expect(await screen.findByText('meta')).toBeDefined();
+
+    global.Function = originalFunction;
+  });
+
+  test('uses URL from process.env when defined', async () => {
+    process.env.VITE_DISCLAIMER_URL = '/proc.txt';
+    const mockFetch = jest.fn().mockResolvedValue({
+      ok: true,
+      text: () => Promise.resolve('proc'),
+    } as Response);
+    global.fetch = mockFetch;
+
+    render(<DisclaimerModal open={true} onOpenChange={() => {}} />);
+
+    expect(mockFetch).toHaveBeenCalledWith('/proc.txt', expect.any(Object));
+    expect(await screen.findByText('proc')).toBeDefined();
+  });
+
+  test('defaults to /disclaimer.txt when no env vars', async () => {
+    const mockFetch = jest.fn().mockResolvedValue({
+      ok: true,
+      text: () => Promise.resolve('default'),
+    } as Response);
+    global.fetch = mockFetch;
+
+    render(<DisclaimerModal open={true} onOpenChange={() => {}} />);
+
+    expect(mockFetch).toHaveBeenCalledWith('/disclaimer.txt', expect.any(Object));
+    expect(await screen.findByText('default')).toBeDefined();
   });
 
   test('fetches only when opened', async () => {
