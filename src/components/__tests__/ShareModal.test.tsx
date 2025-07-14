@@ -143,4 +143,23 @@ describe('ShareModal', () => {
       });
     }
   });
+
+  test('shows error when clipboard write fails', async () => {
+    const writeText = jest.fn().mockRejectedValue(new Error('fail'));
+    const original = navigator.clipboard;
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: { writeText },
+    });
+    renderModal();
+    fireEvent.click(screen.getByRole('button', { name: /copy link/i }));
+    await waitFor(() =>
+      expect(toast.error).toHaveBeenCalledWith('Failed to copy link'),
+    );
+    expect(trackEvent).not.toHaveBeenCalled();
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: original,
+    });
+  });
 });
