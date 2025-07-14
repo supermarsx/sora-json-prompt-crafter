@@ -10,7 +10,7 @@
 
 (() => {
   const VERSION = '__USERSCRIPT_VERSION__';
-  const DEBUG = true;
+  const DEBUG = false;
   const SESSION_KEY = 'sora_json_payload';
   console.log(`[Sora Injector] Loaded v${VERSION}`);
   if (DEBUG) {

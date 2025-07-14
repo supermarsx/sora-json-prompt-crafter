@@ -38,10 +38,6 @@ describe('sora-userscript', () => {
       { type: 'SORA_USERSCRIPT_READY', version: expect.any(String) },
       '*',
     );
-    expect(mockPostMessage).toHaveBeenCalledWith(
-      { type: 'SORA_DEBUG_PING' },
-      '*',
-    );
   });
 
   test('fills textarea on INSERT_SORA_JSON and acknowledges', async () => {
@@ -75,9 +71,7 @@ describe('sora-userscript', () => {
 
     await import(USERSCRIPT_PATH);
 
-    expect(debugSpy).toHaveBeenCalledWith(
-      `[Sora Injector] Not a Sora or Crafter page on host ${window.location.hostname}, exiting`,
-    );
+    expect(debugSpy).not.toHaveBeenCalled();
     debugSpy.mockRestore();
   });
 
@@ -115,10 +109,10 @@ describe('sora-userscript', () => {
 
     await import(USERSCRIPT_PATH);
 
-    expect(mockPostMessage).toHaveBeenCalledTimes(2);
+    expect(mockPostMessage).toHaveBeenCalledTimes(1);
 
     jest.advanceTimersByTime(250);
-    expect(mockPostMessage).toHaveBeenCalledTimes(4);
+    expect(mockPostMessage).toHaveBeenCalledTimes(2);
 
     window.dispatchEvent(
       new MessageEvent('message', {
@@ -131,7 +125,7 @@ describe('sora-userscript', () => {
     expect(clearSpy).toHaveBeenCalled();
 
     jest.advanceTimersByTime(250);
-    expect(mockPostMessage).toHaveBeenCalledTimes(4);
+    expect(mockPostMessage).toHaveBeenCalledTimes(2);
 
     clearSpy.mockRestore();
   });
@@ -156,7 +150,7 @@ describe('sora-userscript', () => {
       { type: 'SORA_DEBUG_PONG' },
       '*',
     );
-    expect(debugSpy).toHaveBeenCalledWith('[Sora Injector] Debug ping received');
+    expect(debugSpy).not.toHaveBeenCalled();
   });
 
   test('logs debug pong message', async () => {
@@ -173,8 +167,6 @@ describe('sora-userscript', () => {
       }),
     );
 
-    expect(debugSpy).toHaveBeenCalledWith(
-      '[Sora Injector] Debug pong received',
-    );
+    expect(debugSpy).not.toHaveBeenCalled();
   });
 });
