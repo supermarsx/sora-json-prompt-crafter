@@ -121,7 +121,7 @@ describe('DisclaimerModal', () => {
     const matchMock = jest.fn().mockResolvedValue({
       text: () => Promise.resolve('cache text'),
     } as Response);
-    (global as unknown as { caches: CacheStorage }).caches = {
+    (window as unknown as { caches: CacheStorage }).caches = {
       match: matchMock,
     } as unknown as CacheStorage;
 
@@ -136,7 +136,7 @@ describe('DisclaimerModal', () => {
     expect(matchMock).toHaveBeenCalled();
     expect(fetchMock).not.toHaveBeenCalled();
 
-    delete (global as unknown as { caches?: CacheStorage }).caches;
+    delete (window as unknown as { caches?: CacheStorage }).caches;
   });
 
   test('no state update after unmount', async () => {

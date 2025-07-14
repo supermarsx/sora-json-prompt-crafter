@@ -56,18 +56,20 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({
 
     (async () => {
       try {
-        const cachedResponse = await caches.match(url);
-        if (cachedResponse) {
-          const txt = await cachedResponse.text();
-          if (!signal.aborted) {
-            setText(txt);
-            try {
-              localStorage.setItem(STORAGE_KEY, txt);
-            } catch {
-              // ignore localStorage errors
+        if (typeof window !== 'undefined' && window.caches) {
+          const cachedResponse = await window.caches.match(url);
+          if (cachedResponse) {
+            const txt = await cachedResponse.text();
+            if (!signal.aborted) {
+              setText(txt);
+              try {
+                localStorage.setItem(STORAGE_KEY, txt);
+              } catch {
+                // ignore localStorage errors
+              }
+              setHasFetched(true);
+              return;
             }
-            setHasFetched(true);
-            return;
           }
         }
       } catch {
