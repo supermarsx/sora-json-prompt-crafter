@@ -40,4 +40,26 @@ describe('ErrorBoundary', () => {
     expect(screen.queryByText(/something went wrong/i)).toBeNull();
     expect(screen.getByText('child content')).toBeTruthy();
   });
+
+  test('renders custom fallback and recovers on rerender', () => {
+    const { unmount } = render(
+      <ErrorBoundary fallback={<div>Oops</div>}>
+        <ProblemChild shouldThrow={true} />
+      </ErrorBoundary>,
+    );
+
+    expect(screen.getByText('Oops')).toBeTruthy();
+    expect(screen.queryByText(/something went wrong/i)).toBeNull();
+
+    unmount();
+
+    render(
+      <ErrorBoundary fallback={<div>Oops</div>}>
+        <ProblemChild shouldThrow={false} />
+      </ErrorBoundary>,
+    );
+
+    expect(screen.queryByText('Oops')).toBeNull();
+    expect(screen.getByText('child content')).toBeTruthy();
+  });
 });
