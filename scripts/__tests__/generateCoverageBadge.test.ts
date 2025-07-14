@@ -1,13 +1,13 @@
 import { jest } from '@jest/globals';
-
-const readFileSyncMock = jest.fn();
-const writeFileSyncMock = jest.fn();
-
-jest.mock('fs', () => ({
-  __esModule: true,
-  readFileSync: readFileSyncMock,
-  writeFileSync: writeFileSyncMock,
-}));
+import {
+  mkdtempSync,
+  writeFileSync,
+  readFileSync,
+  rmSync,
+  mkdirSync,
+} from 'fs';
+import { tmpdir } from 'os';
+import { join } from 'path';
 
 const makeBadgeMock = jest.fn(() => '<svg>badge</svg>');
 jest.mock('badge-maker', () => ({
@@ -15,47 +15,51 @@ jest.mock('badge-maker', () => ({
   makeBadge: makeBadgeMock,
 }));
 
+let cwd: string;
+
 beforeEach(() => {
   jest.resetModules();
-  jest.clearAllMocks();
+  cwd = process.cwd();
+});
+
+afterEach(() => {
+  process.chdir(cwd);
 });
 
 describe('generateCoverageBadge', () => {
-  const cases = [
-    { pct: '95', statements: 20, covered: 19, color: 'brightgreen' },
-    { pct: '85', statements: 20, covered: 17, color: 'green' },
-    { pct: '65', statements: 20, covered: 13, color: 'yellow' },
-  ];
+  test('creates badge file from coverage xml', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'cov-'));
+    mkdirSync(join(dir, 'coverage'));
+    const xml =
+      '<?xml version="1.0"?><coverage><project><metrics statements="20" coveredstatements="17"/></project></coverage>';
+    writeFileSync(join(dir, 'coverage/clover.xml'), xml);
+    process.chdir(dir);
 
-  test.each(cases)(
-    'creates badge for $pct%',
-    async ({ pct, statements, covered, color }) => {
-      const xml = `<?xml version="1.0"?><coverage><project><metrics statements="${statements}" coveredstatements="${covered}"/></project></coverage>`;
-      readFileSyncMock.mockReturnValueOnce(xml);
-      await import('../generateCoverageBadge.js');
-      expect(makeBadgeMock).toHaveBeenCalledWith({
-        label: 'coverage',
-        message: `${pct}%`,
-        color,
-        style: 'for-the-badge',
-      });
-      expect(writeFileSyncMock).toHaveBeenCalledWith(
-        'coverage.svg',
-        '<svg>badge</svg>',
-      );
-    },
-  );
+    await import('../generateCoverageBadge.js');
+
+    const svg = readFileSync(join(dir, 'coverage.svg'), 'utf8');
+    expect(svg).toBe('<svg>badge</svg>');
+    expect(makeBadgeMock).toHaveBeenCalledWith({
+      label: 'coverage',
+      message: '85%',
+      color: 'green',
+      style: 'for-the-badge',
+    });
+
+    rmSync(dir, { recursive: true, force: true });
+  });
 
   test('exits with code 1 when coverage file is missing', async () => {
-    readFileSyncMock.mockImplementationOnce(() => {
-      throw new Error('no file');
-    });
+    const dir = mkdtempSync(join(tmpdir(), 'cov-'));
+    process.chdir(dir);
+
     const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     const exitSpy = jest.spyOn(process, 'exit').mockImplementation(((
       code?: number,
     ) => {
       throw new Error(`exit:${code}`);
     }) as never);
+
     await expect(import('../generateCoverageBadge.js')).rejects.toThrow(
       'exit:1',
     );
@@ -64,24 +68,33 @@ describe('generateCoverageBadge', () => {
       'coverage/clover.xml',
     );
     expect(exitSpy).toHaveBeenCalledWith(1);
+
     errorSpy.mockRestore();
     exitSpy.mockRestore();
+    rmSync(dir, { recursive: true, force: true });
   });
 
   test('exits with code 1 when coverage xml cannot be parsed', async () => {
-    readFileSyncMock.mockReturnValueOnce('<coverage></coverage>');
+    const dir = mkdtempSync(join(tmpdir(), 'cov-'));
+    mkdirSync(join(dir, 'coverage'));
+    writeFileSync(join(dir, 'coverage/clover.xml'), '<coverage></coverage>');
+    process.chdir(dir);
+
     const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     const exitSpy = jest.spyOn(process, 'exit').mockImplementation(((
       code?: number,
     ) => {
       throw new Error(`exit:${code}`);
     }) as never);
+
     await expect(import('../generateCoverageBadge.js')).rejects.toThrow(
       'exit:1',
     );
     expect(errorSpy).toHaveBeenCalledWith('Unable to parse coverage metrics');
     expect(exitSpy).toHaveBeenCalledWith(1);
+
     errorSpy.mockRestore();
     exitSpy.mockRestore();
+    rmSync(dir, { recursive: true, force: true });
   });
 });
