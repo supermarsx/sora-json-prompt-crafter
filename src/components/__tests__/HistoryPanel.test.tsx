@@ -5,11 +5,13 @@ import {
   fireEvent,
   waitFor,
   act,
+  within,
 } from '@testing-library/react';
 import HistoryPanel from '../HistoryPanel';
 import { toast } from '@/components/ui/sonner-toast';
 import { trackEvent } from '@/lib/analytics';
 import { formatDateTime } from '@/lib/date';
+import { safeGet, safeSet, safeRemove } from '@/lib/storage';
 
 jest.mock('@/lib/analytics', () => ({
   __esModule: true,
@@ -27,6 +29,13 @@ jest.mock('@/components/ui/sonner-toast', () => ({
 jest.mock('@/lib/date', () => ({
   __esModule: true,
   formatDateTime: jest.fn(() => '20240101-000000'),
+}));
+
+jest.mock('@/lib/storage', () => ({
+  __esModule: true,
+  safeGet: jest.fn(),
+  safeSet: jest.fn(),
+  safeRemove: jest.fn(),
 }));
 
 jest.mock('../ClipboardImportModal', () => ({
@@ -143,5 +152,55 @@ describe('HistoryPanel basic actions', () => {
     fireEvent.click(screen.getByRole('button', { name: /^clear$/i }));
     expect(onClear).toHaveBeenCalled();
     expect(screen.queryByText(/clear history\?/i)).toBeNull();
+  });
+});
+
+describe('HistoryPanel action history', () => {
+  test('exports and clears actions', () => {
+    renderPanel();
+
+    const tab = screen.getByRole('tab', { name: /latest actions/i });
+    fireEvent.mouseDown(tab);
+    fireEvent.click(tab);
+
+    const panel = screen.getByRole('tabpanel', { name: /latest actions/i });
+    const exportBtn = within(panel).getByRole('button', { name: /^export$/i });
+    fireEvent.click(exportBtn);
+
+    expect(URL.createObjectURL).toHaveBeenCalled();
+    expect(toast.success).toHaveBeenCalledWith('Actions downloaded!');
+
+    const events: Event[] = [];
+    window.addEventListener('trackingHistoryUpdate', (e) => events.push(e));
+
+    const clearBtn = screen.getByRole('button', { name: /clear actions/i });
+    fireEvent.click(clearBtn);
+    fireEvent.click(screen.getByRole('button', { name: /^clear$/i }));
+
+    expect(safeRemove).toHaveBeenCalledWith('trackingHistory');
+    expect(events).toHaveLength(1);
+  });
+
+  test('deletes an action entry', () => {
+    (safeGet as jest.Mock).mockReturnValue([...sampleActions]);
+
+    const events: Event[] = [];
+    window.addEventListener('trackingHistoryUpdate', (e) => events.push(e));
+
+    renderPanel();
+
+    const tab = screen.getByRole('tab', { name: /latest actions/i });
+    fireEvent.mouseDown(tab);
+    fireEvent.click(tab);
+
+    const panel = screen.getByRole('tabpanel', { name: /latest actions/i });
+    const entryText = within(panel).getByText('a');
+    const entry = entryText.parentElement!.parentElement!;
+    const deleteBtn = within(entry).getByRole('button');
+    fireEvent.click(deleteBtn);
+    fireEvent.click(deleteBtn);
+
+    expect(safeSet).toHaveBeenCalledWith('trackingHistory', [], true);
+    expect(events).toHaveLength(1);
   });
 });
