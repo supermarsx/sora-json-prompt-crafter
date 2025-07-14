@@ -10,6 +10,7 @@ import Dashboard from '../Dashboard';
 import { toast } from '@/components/ui/sonner-toast';
 import { trackEvent } from '@/lib/analytics';
 import type { SoraOptions } from '@/lib/soraOptions';
+import { useSoraUserscript } from '@/hooks/use-sora-userscript';
 
 let copyFn: ((json: string) => void) | null = null;
 let updateFn: ((opts: Partial<SoraOptions>) => void) | null = null;
@@ -88,6 +89,8 @@ jest.mock('@/components/ui/sonner-toast', () => ({
   __esModule: true,
   toast: { success: jest.fn(), error: jest.fn() },
 }));
+
+const mockedUseSoraUserscript = useSoraUserscript as jest.Mock;
 
 describe('Dashboard github stats failure', () => {
   const originalFetch = global.fetch;
@@ -339,5 +342,29 @@ describe('Dashboard interactions', () => {
     openSpy.mockRestore();
     jest.runOnlyPendingTimers();
     jest.useRealTimers();
+  });
+});
+
+describe('userscript version', () => {
+  beforeEach(() => {
+    localStorage.setItem('soraToolsEnabled', 'true');
+    mockedUseSoraUserscript.mockReturnValue([true, '0.9']);
+    (trackEvent as jest.Mock).mockClear();
+    window.matchMedia = jest.fn().mockReturnValue({
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+    }) as unknown as typeof window.matchMedia;
+  });
+
+  afterEach(() => {
+    localStorage.clear();
+  });
+
+  test('shows update button when version differs', () => {
+    render(<Dashboard />);
+    const btn = screen.getByRole('link', { name: /update userscript/i });
+    expect(btn).toBeTruthy();
+    fireEvent.click(btn);
+    expect(trackEvent).toHaveBeenCalledWith(true, 'update_userscript');
   });
 });
