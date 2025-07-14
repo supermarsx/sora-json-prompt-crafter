@@ -48,6 +48,16 @@ describe('ShareModal', () => {
     openSpy.mockRestore();
   });
 
+  test('does not render when closed', () => {
+    render(
+      <ShareModal isOpen={false} onClose={() => {}} jsonContent="myjson" />,
+    );
+    expect(screen.queryByText(/Share your JSON prompt/i)).toBeNull();
+    expect(openSpy).not.toHaveBeenCalled();
+    expect(toast.success).not.toHaveBeenCalled();
+    expect(toast.error).not.toHaveBeenCalled();
+  });
+
   test('shares to Facebook', () => {
     renderModal();
     const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent('Check out my Sora prompt configuration!')}`;
