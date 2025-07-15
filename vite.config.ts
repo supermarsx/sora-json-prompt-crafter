@@ -36,13 +36,18 @@ export default defineConfig(({ mode }) => ({
     }),
     mode === 'development' && componentTagger(),
     {
-      name: 'inject-userscript-version',
+      name: 'inject-userscript-meta',
       apply: 'build',
       writeBundle() {
         const file = path.resolve(__dirname, 'dist/sora-userscript.user.js');
         if (fs.existsSync(file)) {
           let code = fs.readFileSync(file, 'utf8');
-          code = code.replace(/__USERSCRIPT_VERSION__/g, USERSCRIPT_VERSION);
+          code = code
+            .replace(/__USERSCRIPT_VERSION__/g, USERSCRIPT_VERSION)
+            .replace(
+              /const DEBUG = false;/,
+              `const DEBUG = ${mode === 'development' ? 'true' : 'false'};`,
+            );
           fs.writeFileSync(file, code);
         }
       },
