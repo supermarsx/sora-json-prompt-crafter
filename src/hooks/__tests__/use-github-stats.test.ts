@@ -60,4 +60,18 @@ describe('useGithubStats', () => {
       expect(toast.error).toHaveBeenCalledWith('Failed to load GitHub stats'),
     );
   });
+
+  test('aborts fetch on unmount', () => {
+    let signal: AbortSignal | undefined;
+    const fetchMock = jest.fn((_: RequestInfo, init?: RequestInit) => {
+      signal = init?.signal;
+      return new Promise(() => {});
+    });
+    global.fetch = fetchMock as unknown as typeof fetch;
+    const { unmount } = renderHook(() => useGithubStats());
+    expect(fetchMock).toHaveBeenCalled();
+    unmount();
+    expect(signal?.aborted).toBe(true);
+    expect(toast.error).not.toHaveBeenCalled();
+  });
 });
