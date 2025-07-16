@@ -75,4 +75,27 @@ describe('useResizeTracker', () => {
     unmount();
     expect(ro.disconnected).toBe(true);
   });
+
+  test('does nothing when ResizeObserver is missing', () => {
+    delete (
+      global as unknown as {
+        ResizeObserver?: typeof ResizeObserver;
+      }
+    ).ResizeObserver;
+
+    expect(() => render(createElement(Test))).not.toThrow();
+    expect(trackEvent).not.toHaveBeenCalled();
+  });
+
+  test('does nothing when ref current is null', () => {
+    function NullRefTest() {
+      const ref = useRef<HTMLDivElement>(null);
+      useResizeTracker(ref, true, 'resize');
+      return null;
+    }
+
+    render(createElement(NullRefTest));
+
+    expect(trackEvent).not.toHaveBeenCalled();
+  });
 });
