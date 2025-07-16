@@ -59,6 +59,24 @@ describe('useSoraUserscript', () => {
     expect(debugSpy).toHaveBeenCalledWith('[Sora Loader] Debug ping received');
   });
 
+  test('does not log debug when debug disabled', () => {
+    const postSpy = jest.spyOn(window, 'postMessage');
+    const debugSpy = jest.spyOn(console, 'debug').mockImplementation(() => {});
+    renderHook(() => useSoraUserscript(false));
+
+    act(() => {
+      window.dispatchEvent(
+        new MessageEvent('message', {
+          data: { type: 'SORA_DEBUG_PING' },
+          source: window,
+        }),
+      );
+    });
+
+    expect(postSpy).toHaveBeenCalledWith({ type: 'SORA_DEBUG_PONG' }, '*');
+    expect(debugSpy).not.toHaveBeenCalled();
+  });
+
   test('logs when debug pong received', () => {
     const debugSpy = jest.spyOn(console, 'debug').mockImplementation(() => {});
     renderHook(() => useSoraUserscript());
