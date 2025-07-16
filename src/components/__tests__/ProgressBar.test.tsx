@@ -81,4 +81,12 @@ describe('ProgressBar', () => {
     unmount();
     expect(removeSpy).toHaveBeenCalledWith('scroll', handler);
   });
+
+  test('does not track when tracking disabled', () => {
+    (useTracking as jest.Mock).mockReturnValueOnce([false]);
+    setMetrics(1000, 500);
+    render(<ProgressBar />);
+    scrollTo(500);
+    expect(trackEvent).not.toHaveBeenCalled();
+  });
 });
