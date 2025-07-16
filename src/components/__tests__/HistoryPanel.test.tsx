@@ -129,6 +129,57 @@ describe('HistoryPanel basic actions', () => {
     expect(URL.createObjectURL).toHaveBeenCalled();
   });
 
+  test('shows error when clipboard unsupported', () => {
+    const nav = navigator as unknown as { clipboard?: unknown };
+    const original = nav.clipboard;
+    delete nav.clipboard;
+
+    renderPanel();
+    (trackEvent as jest.Mock).mockClear();
+
+    const exportBtn = screen.getByRole('button', { name: /export/i });
+    fireEvent.mouseDown(exportBtn);
+    fireEvent.click(exportBtn);
+    fireEvent.click(screen.getByText(/copy all to clipboard/i));
+
+    expect(toast.error).toHaveBeenCalledWith('Clipboard not supported');
+    expect(trackEvent).not.toHaveBeenCalledWith(
+      expect.anything(),
+      'history_export',
+      expect.anything(),
+    );
+
+    if (original !== undefined) {
+      Object.defineProperty(navigator, 'clipboard', {
+        configurable: true,
+        value: original,
+      });
+    }
+  });
+
+  test('no success toast when clipboard write fails', async () => {
+    const writeText = jest.fn().mockRejectedValue(new Error('fail'));
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: { writeText },
+    });
+    const onOpenChange = jest.fn();
+
+    renderPanel({ onOpenChange });
+    (trackEvent as jest.Mock).mockClear();
+
+    const exportBtn = screen.getByRole('button', { name: /export/i });
+    fireEvent.mouseDown(exportBtn);
+    fireEvent.click(exportBtn);
+    fireEvent.click(screen.getByText(/copy all to clipboard/i));
+
+    await waitFor(() => expect(writeText).toHaveBeenCalled());
+    expect(toast.success).not.toHaveBeenCalledWith(
+      'Copied all history to clipboard!',
+    );
+    expect(onOpenChange).not.toHaveBeenCalled();
+  });
+
   test('delete and clear callbacks fire and timers reset', () => {
     const onDelete = jest.fn();
     const onClear = jest.fn();
