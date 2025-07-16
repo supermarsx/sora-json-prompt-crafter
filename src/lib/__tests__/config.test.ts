@@ -1,4 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test } from '@jest/globals';
+import { USERSCRIPT_VERSION as VERSION_FROM_VERSION } from '../../version';
+import { USERSCRIPT_VERSION as VERSION_FROM_CONFIG } from '../config';
 
 const metaEnv = (
   globalThis as unknown as {
@@ -59,5 +61,9 @@ describe('config', () => {
     expect(config.DISABLE_ANALYTICS).toBe(false);
     expect(config.DISABLE_STATS).toBe(false);
     expect(config.GTAG_DEBUG).toBe(false);
+  });
+
+  test('re-exports USERSCRIPT_VERSION correctly', () => {
+    expect(VERSION_FROM_CONFIG).toBe(VERSION_FROM_VERSION);
   });
 });
