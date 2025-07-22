@@ -1,8 +1,9 @@
 import { renderHook, act } from '@testing-library/react';
 import { useActionHistory } from '../use-action-history';
+import { TRACKING_HISTORY } from '@/lib/storage-keys';
 
 function setHistory(list: unknown) {
-  localStorage.setItem('trackingHistory', JSON.stringify(list));
+  localStorage.setItem(TRACKING_HISTORY, JSON.stringify(list));
 }
 
 describe('useActionHistory', () => {
