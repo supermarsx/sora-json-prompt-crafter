@@ -8,7 +8,8 @@ export function safeGet<T = string>(
     if (value === null) return defaultValue;
     if (parse) return JSON.parse(value) as T;
     return value;
-  } catch {
+  } catch (err) {
+    console.warn('safeGet failed', key, err);
     return defaultValue;
   }
 }
