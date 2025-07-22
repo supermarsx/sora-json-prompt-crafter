@@ -31,7 +31,18 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(clients.claim());
+  event.waitUntil(
+    caches
+      .keys()
+      .then((keys) =>
+        Promise.all(
+          keys
+            .filter((name) => name !== cacheName)
+            .map((name) => caches.delete(name)),
+        ),
+      )
+      .then(() => clients.claim()),
+  );
 });
 
 self.addEventListener('fetch', (event) => {

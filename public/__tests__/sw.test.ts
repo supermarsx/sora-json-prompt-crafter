@@ -29,6 +29,8 @@ describe('service worker', () => {
     (global as any).caches = {
       open: jest.fn().mockResolvedValue({ addAll: cacheAddAll }),
       match: jest.fn(),
+      keys: jest.fn().mockResolvedValue([]),
+      delete: jest.fn(),
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (global as any).fetch = jest.fn();
@@ -129,8 +131,24 @@ describe('service worker', () => {
     const waitUntil = jest.fn();
     const activateEvent = { waitUntil };
     await listeners.activate(activateEvent);
+    await waitUntil.mock.calls[0][0];
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect((global as any).self.clients.claim).toHaveBeenCalled();
     expect(waitUntil).toHaveBeenCalledWith(activationPromise);
+  });
+
+  test('deletes outdated caches on activate', async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (global as any).caches.keys.mockResolvedValue([
+      'old-cache',
+      'sora-prompt-cache-v2',
+    ]);
+    await import('../sw.js');
+    const waitUntil = jest.fn();
+    const activateEvent = { waitUntil };
+    await listeners.activate(activateEvent);
+    await waitUntil.mock.calls[0][0];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect((global as any).caches.delete).toHaveBeenCalledWith('old-cache');
   });
 });
