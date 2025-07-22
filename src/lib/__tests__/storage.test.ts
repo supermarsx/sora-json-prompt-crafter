@@ -11,8 +11,10 @@ describe('storage utils', () => {
   });
 
   test('safeGet returns default when JSON.parse throws', () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
     localStorage.setItem('bad', '{oops');
     expect(safeGet('bad', 'fallback', true)).toBe('fallback');
+    expect(warnSpy).toHaveBeenCalled();
   });
 
   test('safeGet parses JSON when present', () => {
