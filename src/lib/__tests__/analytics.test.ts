@@ -1,4 +1,5 @@
 let trackEvent: typeof import('../analytics').trackEvent;
+import { TRACKING_HISTORY } from '../storage-keys';
 
 describe('trackEvent', () => {
   beforeEach(async () => {
@@ -12,7 +13,7 @@ describe('trackEvent', () => {
   test('does nothing when tracking disabled', () => {
     const dispatchSpy = jest.spyOn(window, 'dispatchEvent');
     trackEvent(false, 'test');
-    expect(localStorage.getItem('trackingHistory')).toBeNull();
+    expect(localStorage.getItem(TRACKING_HISTORY)).toBeNull();
     expect(dispatchSpy).not.toHaveBeenCalled();
   });
 
@@ -24,7 +25,7 @@ describe('trackEvent', () => {
       }
     ).gtag = jest.fn();
     trackEvent(true, 'scroll_bottom');
-    const stored = JSON.parse(localStorage.getItem('trackingHistory') || '[]');
+    const stored = JSON.parse(localStorage.getItem(TRACKING_HISTORY) || '[]');
     expect(stored[0].action).toBe('scroll_bottom');
     expect(dispatchSpy).toHaveBeenCalled();
   });
@@ -103,7 +104,7 @@ describe('trackEvent', () => {
       date: new Date(i).toISOString(),
       action: `a${i}`,
     }));
-    localStorage.setItem('trackingHistory', JSON.stringify(items));
+    localStorage.setItem(TRACKING_HISTORY, JSON.stringify(items));
     (
       window as unknown as {
         gtag?: jest.Mock;
@@ -112,7 +113,7 @@ describe('trackEvent', () => {
 
     trackEvent(true, 'event');
 
-    const stored = JSON.parse(localStorage.getItem('trackingHistory') || '[]');
+    const stored = JSON.parse(localStorage.getItem(TRACKING_HISTORY) || '[]');
     expect(stored.length).toBe(100);
     expect(stored[0].action).toBe('event');
   });

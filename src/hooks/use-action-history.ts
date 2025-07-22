@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { safeGet } from '@/lib/storage';
+import { TRACKING_HISTORY } from '@/lib/storage-keys';
 
 export interface ActionEntry {
   date: string;
@@ -8,12 +9,12 @@ export interface ActionEntry {
 
 export function useActionHistory() {
   const [history, setHistory] = useState<ActionEntry[]>(() => {
-    return safeGet<ActionEntry[]>('trackingHistory', [], true);
+    return safeGet<ActionEntry[]>(TRACKING_HISTORY, [], true);
   });
 
   useEffect(() => {
     const handler = () => {
-      setHistory(safeGet<ActionEntry[]>('trackingHistory', [], true));
+      setHistory(safeGet<ActionEntry[]>(TRACKING_HISTORY, [], true));
     };
     window.addEventListener('trackingHistoryUpdate', handler);
     return () => window.removeEventListener('trackingHistoryUpdate', handler);

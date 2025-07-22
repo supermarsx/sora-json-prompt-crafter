@@ -40,6 +40,7 @@ import { trackEvent } from '@/lib/analytics';
 import { formatDateTime } from '@/lib/date';
 import { useTracking } from '@/hooks/use-tracking';
 import { safeGet, safeSet, safeRemove } from '@/lib/storage';
+import { TRACKING_HISTORY } from '@/lib/storage-keys';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
 export interface HistoryEntry {
@@ -147,7 +148,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
   };
 
   const clearActions = () => {
-    safeRemove('trackingHistory');
+    safeRemove(TRACKING_HISTORY);
     window.dispatchEvent(new Event('trackingHistoryUpdate'));
     toast.success('Actions cleared!');
   };
@@ -156,12 +157,12 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
 
   const deleteAction = (idx: number) => {
     const list = safeGet<{ date: string; action: string }[]>(
-      'trackingHistory',
+      TRACKING_HISTORY,
       [],
       true,
     );
     list.splice(idx, 1);
-    safeSet('trackingHistory', list, true);
+    safeSet(TRACKING_HISTORY, list, true);
     window.dispatchEvent(new Event('trackingHistoryUpdate'));
     toast.success('Action deleted!');
   };

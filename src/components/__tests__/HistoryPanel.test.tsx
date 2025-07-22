@@ -12,6 +12,7 @@ import { toast } from '@/components/ui/sonner-toast';
 import { trackEvent } from '@/lib/analytics';
 import { formatDateTime } from '@/lib/date';
 import { safeGet, safeSet, safeRemove } from '@/lib/storage';
+import { TRACKING_HISTORY } from '@/lib/storage-keys';
 
 jest.mock('@/lib/analytics', () => ({
   __esModule: true,
@@ -228,7 +229,7 @@ describe('HistoryPanel action history', () => {
     fireEvent.click(clearBtn);
     fireEvent.click(screen.getByRole('button', { name: /^clear$/i }));
 
-    expect(safeRemove).toHaveBeenCalledWith('trackingHistory');
+    expect(safeRemove).toHaveBeenCalledWith(TRACKING_HISTORY);
     expect(events).toHaveLength(1);
   });
 
@@ -251,7 +252,7 @@ describe('HistoryPanel action history', () => {
     fireEvent.click(deleteBtn);
     fireEvent.click(deleteBtn);
 
-    expect(safeSet).toHaveBeenCalledWith('trackingHistory', [], true);
+    expect(safeSet).toHaveBeenCalledWith(TRACKING_HISTORY, [], true);
     expect(events).toHaveLength(1);
   });
 });
