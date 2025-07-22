@@ -15,7 +15,7 @@ describe('useSoraUserscript', () => {
 
   test('updates state on message event', () => {
     const postSpy = jest.spyOn(window, 'postMessage');
-    const { result } = renderHook(() => useSoraUserscript());
+    const { result } = renderHook(() => useSoraUserscript(true));
     act(() => {
       window.dispatchEvent(
         new MessageEvent('message', {
@@ -44,7 +44,7 @@ describe('useSoraUserscript', () => {
   test('responds to debug ping with pong', () => {
     const postSpy = jest.spyOn(window, 'postMessage');
     const debugSpy = jest.spyOn(console, 'debug').mockImplementation(() => {});
-    renderHook(() => useSoraUserscript());
+    renderHook(() => useSoraUserscript(true));
 
     act(() => {
       window.dispatchEvent(
@@ -79,7 +79,7 @@ describe('useSoraUserscript', () => {
 
   test('logs when debug pong received', () => {
     const debugSpy = jest.spyOn(console, 'debug').mockImplementation(() => {});
-    renderHook(() => useSoraUserscript());
+    renderHook(() => useSoraUserscript(true));
 
     act(() => {
       window.dispatchEvent(
