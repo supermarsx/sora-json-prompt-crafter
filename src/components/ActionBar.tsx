@@ -294,6 +294,12 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           <DropdownMenuItem onSelect={() => setLocale('es')}>
             Español
           </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('pt-PT')}>
+            Português
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('ru')}>
+            Русский
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <Button
