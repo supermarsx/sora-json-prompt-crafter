@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
  * @param debug - When true, verbose debug messages are logged to the console.
  * @returns A tuple with installation status and the detected version.
  */
-export function useSoraUserscript(debug = true) {
+export function useSoraUserscript(debug = false) {
   const [installed, setInstalled] = useState(false);
   const [version, setVersion] = useState<string | null>(null);
   const timeoutRef = useRef<number>();
