@@ -1,5 +1,6 @@
 import { safeGet, safeSet } from './storage';
 import { MEASUREMENT_ID, GTAG_DEBUG } from './config';
+import { TRACKING_HISTORY } from './storage-keys';
 
 let trackingFailures = 0;
 let trackingDead = false;
@@ -14,13 +15,13 @@ export function trackEvent(
 
   try {
     const list = safeGet<{ date: string; action: string }[]>(
-      'trackingHistory',
+      TRACKING_HISTORY,
       [],
       true,
     ) as { date: string; action: string }[];
     list.unshift({ date: new Date().toLocaleString(), action: event });
     if (list.length > 100) list.length = 100;
-    if (!safeSet('trackingHistory', list, true)) throw new Error('fail');
+    if (!safeSet(TRACKING_HISTORY, list, true)) throw new Error('fail');
     window.dispatchEvent(new Event('trackingHistoryUpdate'));
   } catch {
     console.error('Tracking History: There was an error.');
