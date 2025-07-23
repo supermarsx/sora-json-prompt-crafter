@@ -13,6 +13,8 @@
   "reset": "Сброс",
   "regenerate": "Сгенерировать заново",
   "randomize": "Случайно",
+  "undo": "Отменить",
+  "redo": "Переделан",
   "enableTracking": "Включить отслеживание",
   "disableTracking": "Выключить отслеживание",
   "showHeaderButtons": "Показать кнопки заголовка",
@@ -140,7 +142,5 @@
   "timeOfYear": "Time of Year",
   "useAtmosphereMood": "Use Atmosphere Mood",
   "atmosphereMood": "Atmosphere Mood",
-  "atmosphereMoodOptions": "Atmosphere Mood Options",
-  "undo": "Отменить",
-  "redo": "Переделан"
+  "atmosphereMoodOptions": "Atmosphere Mood Options"
 }

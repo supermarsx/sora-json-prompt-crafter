@@ -13,6 +13,8 @@
   "reset": "リセット",
   "regenerate": "再生",
   "randomize": "ランダム化",
+  "undo": "元に戻します",
+  "redo": "やり直します",
   "enableTracking": "追跡を有効にします",
   "disableTracking": "追跡を無効にします",
   "showHeaderButtons": "ヘッダーボタンを表示します",
@@ -140,7 +142,5 @@
   "timeOfYear": "Time of Year",
   "useAtmosphereMood": "Use Atmosphere Mood",
   "atmosphereMood": "Atmosphere Mood",
-  "atmosphereMoodOptions": "Atmosphere Mood Options",
-  "undo": "元に戻します",
-  "redo": "やり直します"
+  "atmosphereMoodOptions": "Atmosphere Mood Options"
 }

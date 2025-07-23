@@ -13,6 +13,8 @@
   "reset": "Restablecer",
   "regenerate": "Regenerar",
   "randomize": "Aleatorizar",
+  "undo": "Deshacer",
+  "redo": "Rehacer",
   "enableTracking": "Habilitar Seguimiento",
   "disableTracking": "Deshabilitar Seguimiento",
   "showHeaderButtons": "Mostrar Botones de Encabezado",
@@ -140,7 +142,5 @@
   "timeOfYear": "Time of Year",
   "useAtmosphereMood": "Use Atmosphere Mood",
   "atmosphereMood": "Atmosphere Mood",
-  "atmosphereMoodOptions": "Atmosphere Mood Options",
-  "undo": "Deshacer",
-  "redo": "Rehacer"
+  "atmosphereMoodOptions": "Atmosphere Mood Options"
 }

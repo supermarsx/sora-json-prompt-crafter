@@ -13,6 +13,8 @@
   "reset": "Reset",
   "regenerate": "Regenerate",
   "randomize": "Randomize",
+  "undo": "Rückgängig machen",
+  "redo": "Wiederholen",
   "enableTracking": "Enable Tracking",
   "disableTracking": "Disable Tracking",
   "showHeaderButtons": "Show Header Buttons",
@@ -140,7 +142,5 @@
   "timeOfYear": "Time of Year",
   "useAtmosphereMood": "Use Atmosphere Mood",
   "atmosphereMood": "Atmosphere Mood",
-  "atmosphereMoodOptions": "Atmosphere Mood Options",
-  "undo": "Rückgängig machen",
-  "redo": "Wiederholen"
+  "atmosphereMoodOptions": "Atmosphere Mood Options"
 }

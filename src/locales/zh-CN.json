@@ -13,6 +13,8 @@
   "reset": "重置",
   "regenerate": "再生",
   "randomize": "随机化",
+  "undo": "Undo",
+  "redo": "Redo",
   "enableTracking": "启用跟踪",
   "disableTracking": "禁用跟踪",
   "showHeaderButtons": "显示标题按钮",
@@ -140,7 +142,5 @@
   "timeOfYear": "Time of Year",
   "useAtmosphereMood": "Use Atmosphere Mood",
   "atmosphereMood": "Atmosphere Mood",
-  "atmosphereMoodOptions": "Atmosphere Mood Options",
-  "undo": "Undo",
-  "redo": "Redo"
+  "atmosphereMoodOptions": "Atmosphere Mood Options"
 }
