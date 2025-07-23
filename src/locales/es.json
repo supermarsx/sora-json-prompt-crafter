@@ -87,5 +87,19 @@
   "clearHistoryDescription": "Esto eliminará todas las entradas permanentemente.",
   "clearActionsTitle": "¿Limpiar acciones recientes?",
   "clearActionsDescription": "Esto eliminará todas las acciones permanentemente.",
-  "entryDeleted": "¡Entrada eliminada!"
+  "entryDeleted": "¡Entrada eliminada!",
+  "shareTitle": "Comparte tu JSON prompt",
+  "shareDescription": "Elige una plataforma o copia un enlace directo.",
+  "shareFacebook": "Facebook",
+  "shareTwitter": "Twitter/X",
+  "shareWhatsApp": "WhatsApp",
+  "shareTelegram": "Telegram",
+  "copyLink": "Copiar enlace",
+  "sharedToFacebook": "¡Compartido en Facebook!",
+  "sharedToTwitter": "¡Compartido en Twitter!",
+  "sharedToWhatsApp": "¡Compartido en WhatsApp!",
+  "sharedToTelegram": "¡Compartido en Telegram!",
+  "linkCopied": "¡Enlace copiado al portapapeles!",
+  "copyFailed": "Error al copiar el enlace",
+  "clipboardUnsupported": "Portapapeles no soportado"
 }

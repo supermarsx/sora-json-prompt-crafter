@@ -6,6 +6,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { ShareModal } from '../ShareModal';
+import i18n from '@/i18n';
 import { trackEvent } from '@/lib/analytics';
 import { useTracking } from '@/hooks/use-tracking';
 import { toast } from '@/components/ui/sonner-toast';
@@ -120,7 +121,7 @@ describe('ShareModal', () => {
     await waitFor(() =>
       expect(writeText).toHaveBeenCalledWith(window.location.href),
     );
-    expect(toast.success).toHaveBeenCalledWith('Link copied to clipboard!');
+    expect(toast.success).toHaveBeenCalledWith(i18n.t('linkCopied'));
     expect(trackEvent).toHaveBeenCalledWith(true, 'copy_link');
     await waitFor(() =>
       expect(btn.querySelector('svg')?.getAttribute('class')).toContain(
@@ -144,7 +145,7 @@ describe('ShareModal', () => {
     delete nav.clipboard;
     renderModal();
     fireEvent.click(screen.getByRole('button', { name: /copy link/i }));
-    expect(toast.error).toHaveBeenCalledWith('Clipboard not supported');
+    expect(toast.error).toHaveBeenCalledWith(i18n.t('clipboardUnsupported'));
     expect(trackEvent).not.toHaveBeenCalled();
     if (original !== undefined) {
       Object.defineProperty(navigator, 'clipboard', {
@@ -164,7 +165,7 @@ describe('ShareModal', () => {
     renderModal();
     fireEvent.click(screen.getByRole('button', { name: /copy link/i }));
     await waitFor(() =>
-      expect(toast.error).toHaveBeenCalledWith('Failed to copy link'),
+      expect(toast.error).toHaveBeenCalledWith(i18n.t('copyFailed')),
     );
     expect(trackEvent).not.toHaveBeenCalled();
     Object.defineProperty(navigator, 'clipboard', {
