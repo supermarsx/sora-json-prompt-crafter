@@ -13,6 +13,8 @@
   "reset": "Repor",
   "regenerate": "Regenerar",
   "randomize": "Aleatorizar",
+  "undo": "Undo",
+  "redo": "Redo",
   "enableTracking": "Ativar Rastreio",
   "disableTracking": "Desativar Rastreio",
   "showHeaderButtons": "Mostrar Botões do Cabeçalho",
