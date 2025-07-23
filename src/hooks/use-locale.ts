@@ -4,7 +4,7 @@ import { useLocalStorageState } from './use-local-storage-state';
 import { LOCALE } from '@/lib/storage-keys';
 
 export function useLocale() {
-  const [locale, setLocale] = useLocalStorageState(LOCALE, 'en');
+  const [locale, setLocale] = useLocalStorageState(LOCALE, 'en-US');
 
   useEffect(() => {
     i18n.changeLanguage(locale);

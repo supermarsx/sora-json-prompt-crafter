@@ -24,11 +24,11 @@ describe('useLocale', () => {
     (storage.safeGet as jest.Mock).mockReturnValue('es');
     const { result } = renderHook(() => useLocale());
     expect(result.current[0]).toBe('es');
-    expect(storage.safeGet).toHaveBeenCalledWith(LOCALE, 'en', false);
+    expect(storage.safeGet).toHaveBeenCalledWith(LOCALE, 'en-US', false);
   });
 
   test('updates locale and persists value', () => {
-    (storage.safeGet as jest.Mock).mockReturnValue('en');
+    (storage.safeGet as jest.Mock).mockReturnValue('en-US');
     const { result } = renderHook(() => useLocale());
 
     act(() => {

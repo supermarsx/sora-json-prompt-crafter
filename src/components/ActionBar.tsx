@@ -290,17 +290,68 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem onSelect={() => setLocale('en')} className="gap-2">
-            <img src="/flags/us.svg" alt="English" className="w-4 h-4" /> English
+          <DropdownMenuItem
+            onSelect={() => setLocale('en-US')}
+            className="gap-2"
+          >
+            <img src="/flags/us.svg" alt="English" className="w-4 h-4" />{' '}
+            English (US)
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => setLocale('es')} className="gap-2">
-            <img src="/flags/es.svg" alt="Español" className="w-4 h-4" /> Español
+          <DropdownMenuItem
+            onSelect={() => setLocale('es-ES')}
+            className="gap-2"
+          >
+            <img src="/flags/es.svg" alt="Español" className="w-4 h-4" />{' '}
+            Español (España)
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => setLocale('pt-PT')} className="gap-2">
-            <img src="/flags/pt-PT.svg" alt="Português" className="w-4 h-4" /> Português
+          <DropdownMenuItem
+            onSelect={() => setLocale('pt-PT')}
+            className="gap-2"
+          >
+            <img src="/flags/pt-PT.svg" alt="Português" className="w-4 h-4" />{' '}
+            Português (Portugal)
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => setLocale('ru')} className="gap-2">
-            <img src="/flags/ru.svg" alt="Русский" className="w-4 h-4" /> Русский
+          <DropdownMenuItem
+            onSelect={() => setLocale('ru-RU')}
+            className="gap-2"
+          >
+            <img src="/flags/ru.svg" alt="Русский" className="w-4 h-4" />{' '}
+            Русский (Россия)
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => setLocale('pt-BR')}
+            className="gap-2"
+          >
+            <img src="/flags/br.svg" alt="Português" className="w-4 h-4" />{' '}
+            Português (Brasil)
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => setLocale('fr-FR')}
+            className="gap-2"
+          >
+            <img src="/flags/fr.svg" alt="Français" className="w-4 h-4" />{' '}
+            Français (France)
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => setLocale('de-DE')}
+            className="gap-2"
+          >
+            <img src="/flags/de.svg" alt="Deutsch" className="w-4 h-4" />{' '}
+            Deutsch (Deutschland)
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => setLocale('ja-JP')}
+            className="gap-2"
+          >
+            <img src="/flags/jp.svg" alt="日本語" className="w-4 h-4" /> 日本語
+            (日本)
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onSelect={() => setLocale('zh-CN')}
+            className="gap-2"
+          >
+            <img src="/flags/cn.svg" alt="中文" className="w-4 h-4" /> 中文
+            (中国)
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
