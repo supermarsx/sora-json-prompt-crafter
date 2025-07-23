@@ -37,6 +37,7 @@
   "negativePromptPlaceholder": "あなたが避けたいものを説明してください...",
   "showLabels": "ラベルを表示します",
   "hideLabels": "ラベルを非表示にします",
+  "shortenButtons": "Shorten Buttons",
   "language": "言語",
   "appName": "ソラJSONプロンプトクラフター",
   "tagline": "SORA生成設定を構成し、見事なAIで生成されたコンテンツの完璧なJSONプロンプトを取得します。",

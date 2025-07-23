@@ -37,6 +37,7 @@
   "negativePromptPlaceholder": "Descreva o que você deseja evitar ...",
   "showLabels": "Mostrar rótulos",
   "hideLabels": "Ocultar rótulos",
+  "shortenButtons": "Shorten Buttons",
   "language": "Linguagem",
   "appName": "Sora JSON Prompt Crafter",
   "tagline": "Definir suas configurações de geração Sora e obtenha o prompt JSON perfeito para um conteúdo impressionante gerado pela IA.",

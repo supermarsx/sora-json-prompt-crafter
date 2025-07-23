@@ -37,6 +37,7 @@
   "negativePromptPlaceholder": "Décrivez ce que vous voulez éviter ...",
   "showLabels": "Montrer les étiquettes",
   "hideLabels": "Masquer les étiquettes",
+  "shortenButtons": "Shorten Buttons",
   "language": "Langue",
   "appName": "Sora JSON Invite Crafter",
   "tagline": "Configurez vos paramètres de génération Sora et obtenez l'invite JSON parfaite pour un contenu superbe généré par AI.",

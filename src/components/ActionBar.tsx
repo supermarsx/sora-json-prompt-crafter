@@ -268,7 +268,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           >
             {actionLabelsEnabled ? (
               <>
-                <EyeOff className="w-4 h-4" /> {t('hideLabels')}
+                <EyeOff className="w-4 h-4" /> {t('shortenButtons')}
               </>
             ) : (
               <>
