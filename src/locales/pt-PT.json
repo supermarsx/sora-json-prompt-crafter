@@ -61,5 +61,22 @@
   "enableTrackingConfirm": "Ativar",
   "trackingDisabled": "Rastreamento desativado",
   "trackingEnabled": "Rastreamento ativado",
-  "cancel": "Cancelar"
+  "cancel": "Cancelar",
+  "clearHistory": "Limpar histórico",
+  "edited": "Editado",
+  "edit": "Editar",
+  "copied": "Copiado",
+  "preview": "Pré-visualizar",
+  "confirm": "Confirmar",
+  "delete": "Eliminar",
+  "historyEmptyPrompts": "Estamos sozinhos aqui, gera alguns prompts e copia-os 🥺",
+  "latestActionsIntro": "Estas são as tuas ações mais recentes, ficam guardadas aqui para referência. Se desativares o rastreio também desativas este histórico",
+  "export": "Exportar",
+  "clearActions": "Limpar ações",
+  "noActionsYet": "Ainda sem ações",
+  "clearHistoryTitle": "Limpar histórico?",
+  "clearHistoryDescription": "Isto vai remover todas as entradas permanentemente.",
+  "clearActionsTitle": "Limpar ações recentes?",
+  "clearActionsDescription": "Isto vai remover todas as ações permanentemente.",
+  "entryDeleted": "Entrada removida!"
 }
