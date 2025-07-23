@@ -13,6 +13,8 @@
   "reset": "Сброс",
   "regenerate": "Сгенерировать заново",
   "randomize": "Случайно",
+  "undo": "Undo",
+  "redo": "Redo",
   "enableTracking": "Включить отслеживание",
   "disableTracking": "Выключить отслеживание",
   "showHeaderButtons": "Показать кнопки заголовка",

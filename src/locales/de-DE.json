@@ -13,6 +13,8 @@
   "reset": "Reset",
   "regenerate": "Regenerate",
   "randomize": "Randomize",
+  "undo": "Undo",
+  "redo": "Redo",
   "enableTracking": "Enable Tracking",
   "disableTracking": "Disable Tracking",
   "showHeaderButtons": "Show Header Buttons",

@@ -13,6 +13,8 @@
   "reset": "Réinitialiser",
   "regenerate": "Régénérer",
   "randomize": "Randomiser",
+  "undo": "Undo",
+  "redo": "Redo",
   "enableTracking": "Activer le suivi",
   "disableTracking": "Désactiver le suivi",
   "showHeaderButtons": "Afficher les boutons d'en-tête",

@@ -13,6 +13,8 @@
   "reset": "リセット",
   "regenerate": "再生",
   "randomize": "ランダム化",
+  "undo": "Undo",
+  "redo": "Redo",
   "enableTracking": "追跡を有効にします",
   "disableTracking": "追跡を無効にします",
   "showHeaderButtons": "ヘッダーボタンを表示します",
