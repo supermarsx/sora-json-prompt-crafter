@@ -69,7 +69,7 @@ npm install
 npm run dev
 ```
 
-Copy `.env.example` to `.env` and adjust the variables. `VITE_MEASUREMENT_ID` holds your Google Analytics ID and `VITE_DISABLE_ANALYTICS` disables tracking. `VITE_DISABLE_STATS` disables the GitHub stats fetch. `VITE_DISCLAIMER_URL` can be set to load the disclaimer from a different URL. Set `VITE_GTAG_DEBUG` to `true` to enable GA debug mode.
+Copy `.env.example` to `.env` and adjust the variables. `VITE_MEASUREMENT_ID` holds your Google Analytics ID and `VITE_DISABLE_ANALYTICS` disables tracking. `VITE_DISABLE_STATS` disables the GitHub stats fetch. `VITE_DISCLAIMER_URL` can point to a custom path and should include a `{locale}` placeholder. Set `VITE_GTAG_DEBUG` to `true` to enable GA debug mode.
 Then open http://localhost:8080 in your browser.
 
 ### Docker
@@ -162,7 +162,7 @@ Copy `.env.example` to `.env` and adjust values as needed.
 - **`VITE_MEASUREMENT_ID`** (optional) – Google Analytics measurement ID. Defaults to `G-RVR9TSBQL7` if not set. See `.env.example` for the placeholder.
 - **`VITE_DISABLE_ANALYTICS`** (optional) – Set to `true` to disable all analytics tracking. Example provided in `.env.example`.
 - **`VITE_DISABLE_STATS`** (optional) – Set to `true` to disable fetching GitHub stats. Example provided in `.env.example`.
-- **`VITE_DISCLAIMER_URL`** (optional) – URL for the disclaimer text. Defaults to `/disclaimer.txt`.
+- **`VITE_DISCLAIMER_URL`** (optional) – Path pattern for the disclaimer text. Include `{locale}` to load the correct language. Defaults to `/disclaimers/disclaimer.{locale}.txt`.
 - **`VITE_GTAG_DEBUG`** (optional) – Set to `true` to enable Google Analytics debug mode.
 
 ## Custom Presets
@@ -181,9 +181,10 @@ Pull requests are welcome. Please open an issue first to discuss major changes.
 ## Disclaimer
 
 The full legal disclaimer displayed in the application is stored in
-`public/disclaimer.txt`. This file is copied to the `dist` directory during the
-build so it can be viewed at `/disclaimer.txt` in production. You can change the
-location by setting `VITE_DISCLAIMER_URL`.
+`public/disclaimers/disclaimer.en.txt` (and other languages). These files are
+copied to the `dist` directory during the build so they can be accessed under
+`/disclaimers/`. You can change the location by setting `VITE_DISCLAIMER_URL` to
+your own path pattern.
 
 ## Tracking/Analytics
 
