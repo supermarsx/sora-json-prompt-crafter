@@ -80,6 +80,10 @@ function createProps(
   overrides: Partial<React.ComponentProps<typeof ActionBar>> = {},
 ) {
   return {
+    onUndo: jest.fn(),
+    onRedo: jest.fn(),
+    canUndo: true,
+    canRedo: true,
     onCopy: jest.fn(),
     onClear: jest.fn(),
     onShare: jest.fn(),
@@ -120,6 +124,24 @@ describe('ActionBar', () => {
     const { unmount } = render(<ActionBar {...props} />);
     fireEvent.click(screen.getByRole('button', { name: /copy/i }));
     expect(props.onCopy).toHaveBeenCalled();
+  });
+
+  test('Undo and redo buttons call handlers', () => {
+    const props = createProps();
+    render(<ActionBar {...props} />);
+    fireEvent.click(screen.getByRole('button', { name: /undo/i }));
+    expect(props.onUndo).toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: /redo/i }));
+    expect(props.onRedo).toHaveBeenCalled();
+  });
+
+  test('undo/redo disabled states', () => {
+    const props = createProps({ canUndo: false, canRedo: false });
+    render(<ActionBar {...props} />);
+    const undoBtn = screen.getByRole('button', { name: /undo/i });
+    const redoBtn = screen.getByRole('button', { name: /redo/i });
+    expect(undoBtn.getAttribute('disabled')).not.toBeNull();
+    expect(redoBtn.getAttribute('disabled')).not.toBeNull();
   });
 
   test('Clear spins then resets', () => {

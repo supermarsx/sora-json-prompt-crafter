@@ -29,6 +29,8 @@ import {
   History,
   RotateCcw,
   RefreshCw,
+  Undo2,
+  Redo2,
   Shuffle,
   Eye,
   EyeOff,
@@ -42,6 +44,10 @@ import {
 } from 'lucide-react';
 
 interface ActionBarProps {
+  onUndo: () => void;
+  onRedo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
   onCopy: () => void;
   onClear: () => void;
   onShare: () => void;
@@ -68,6 +74,10 @@ interface ActionBarProps {
 }
 
 export const ActionBar: React.FC<ActionBarProps> = ({
+  onUndo,
+  onRedo,
+  canUndo,
+  canRedo,
   onCopy,
   onClear,
   onShare,
@@ -131,6 +141,26 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           {actionLabelsEnabled && t('sendToSora')}
         </Button>
       )}
+      <Button
+        onClick={onUndo}
+        variant="outline"
+        size="sm"
+        disabled={!canUndo}
+        className={cn({ 'gap-2': actionLabelsEnabled })}
+      >
+        <Undo2 className="w-4 h-4" />
+        {actionLabelsEnabled && t('undo')}
+      </Button>
+      <Button
+        onClick={onRedo}
+        variant="outline"
+        size="sm"
+        disabled={!canRedo}
+        className={cn({ 'gap-2': actionLabelsEnabled })}
+      >
+        <Redo2 className="w-4 h-4" />
+        {actionLabelsEnabled && t('redo')}
+      </Button>
       <Button
         onClick={onCopy}
         variant="outline"
