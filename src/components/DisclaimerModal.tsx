@@ -55,7 +55,7 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({
     }
     const pattern = disclaimerUrl ?? '/disclaimers/disclaimer.{locale}.txt';
     const url = pattern.replace('{locale}', locale);
-    const fallbackUrl = pattern.replace('{locale}', 'en');
+    const fallbackUrl = pattern.replace('{locale}', 'en-US');
 
     const fetchDisclaimer = async (u: string) => {
       try {

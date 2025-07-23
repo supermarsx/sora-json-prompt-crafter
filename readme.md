@@ -187,10 +187,33 @@ your own path pattern.
 
 ### Supported Languages
 
-- English (`disclaimer.en.txt`)
-- Spanish (`disclaimer.es.txt`)
-- Portuguese-PT (`disclaimer.pt-PT.txt`)
-- Russian (`disclaimer.ru.txt`)
+- English (US) (`disclaimer.en-US.txt`)
+- Spanish (Spain) (`disclaimer.es-ES.txt`)
+- Portuguese (Portugal) (`disclaimer.pt-PT.txt`)
+- Russian (`disclaimer.ru-RU.txt`)
+- Portuguese (Brazil) (`disclaimer.pt-BR.txt`)
+- French (`disclaimer.fr-FR.txt`)
+- German (Germany) (`disclaimer.de-DE.txt`)
+- Chinese (Simplified) (`disclaimer.zh-CN.txt`)
+- Italian (`disclaimer.it-IT.txt`)
+- Spanish (Mexico) (`disclaimer.es-MX.txt`)
+- English (UK) (`disclaimer.en-GB.txt`)
+- Bengali (`disclaimer.bn-IN.txt`)
+- Japanese (`disclaimer.ja-JP.txt`)
+- English (Pirate) (`disclaimer.en-PR.txt`)
+- Korean (`disclaimer.ko-KR.txt`)
+- Romanian (`disclaimer.ro-RO.txt`)
+- Swedish (`disclaimer.sv-SE.txt`)
+- Ukrainian (`disclaimer.uk-UA.txt`)
+- Nepali (`disclaimer.ne-NP.txt`)
+- Danish (`disclaimer.da-DK.txt`)
+- Estonian (`disclaimer.et-EE.txt`)
+- Finnish (`disclaimer.fi-FI.txt`)
+- Greek (`disclaimer.el-GR.txt`)
+- Thai (`disclaimer.th-TH.txt`)
+- German (Austria) (`disclaimer.de-AT.txt`)
+- French (Belgium) (`disclaimer.fr-BE.txt`)
+- Spanish (Argentina) (`disclaimer.es-AR.txt`)
 
 To add a new language, place `disclaimer.<locale>.txt` in
 `public/disclaimers/` and update the language list as needed.
