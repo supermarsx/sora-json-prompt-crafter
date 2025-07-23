@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import i18n from '@/i18n';
 import Dashboard from '../Dashboard';
 jest.mock('../Footer', () => ({ __esModule: true, default: () => null }));
 import { ShareModal } from '../ShareModal';
@@ -79,7 +80,7 @@ describe('clipboard fallback', () => {
     render(<ShareModal isOpen={true} onClose={() => {}} jsonContent="{}" />);
     const btn = screen.getByRole('button', { name: /copy link/i });
     fireEvent.click(btn);
-    expect(toast.error).toHaveBeenCalledWith('Clipboard not supported');
+    expect(toast.error).toHaveBeenCalledWith(i18n.t('clipboardUnsupported'));
     restore();
   });
 
@@ -94,7 +95,7 @@ describe('clipboard fallback', () => {
       />,
     );
     await waitFor(() =>
-      expect(toast.error).toHaveBeenCalledWith('Clipboard not supported'),
+      expect(toast.error).toHaveBeenCalledWith(i18n.t('clipboardUnsupported')),
     );
     restore();
   });
