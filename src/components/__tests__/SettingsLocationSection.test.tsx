@@ -1,5 +1,6 @@
 import { render, screen, fireEvent, within } from '@testing-library/react';
 import { SettingsLocationSection } from '../sections/SettingsLocationSection';
+import i18n from '@/i18n';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 
 beforeAll(() => {
@@ -25,7 +26,7 @@ describe('SettingsLocationSection', () => {
         updateOptions={updateOptions}
       />,
     );
-    fireEvent.click(screen.getByLabelText(/use environment/i));
+    fireEvent.click(screen.getByLabelText(i18n.t('useEnvironment')));
     expect(updateOptions).toHaveBeenCalledWith({ use_environment: true });
   });
 
@@ -43,7 +44,7 @@ describe('SettingsLocationSection', () => {
         updateOptions={updateOptions}
       />,
     );
-    let envSection = screen.getByText('Environment')
+    let envSection = screen.getByText(i18n.t('environment'))
       .parentElement as HTMLElement;
     let dropdown = within(envSection).getByRole('button');
     fireEvent.click(dropdown);
@@ -57,7 +58,8 @@ describe('SettingsLocationSection', () => {
         updateOptions={updateOptions}
       />,
     );
-    envSection = screen.getByText('Environment').parentElement as HTMLElement;
+    envSection = screen.getByText(i18n.t('environment'))
+      .parentElement as HTMLElement;
     dropdown = within(envSection).getByRole('button');
     expect(dropdown.hasAttribute('disabled')).toBe(true);
   });
@@ -76,7 +78,7 @@ describe('SettingsLocationSection', () => {
         updateOptions={updateOptions}
       />,
     );
-    const input = screen.getByLabelText(/^time of year$/i);
+    const input = screen.getByLabelText(i18n.t('timeOfYear'));
     fireEvent.change(input, { target: { value: 'winter' } });
     expect(updateOptions).toHaveBeenCalledWith({ time_of_year: 'winter' });
 
@@ -87,7 +89,7 @@ describe('SettingsLocationSection', () => {
         updateOptions={updateOptions}
       />,
     );
-    const disabledInput = screen.getByLabelText(/^time of year$/i);
+    const disabledInput = screen.getByLabelText(i18n.t('timeOfYear'));
     expect(disabledInput.hasAttribute('disabled')).toBe(true);
   });
 
@@ -108,13 +110,13 @@ describe('SettingsLocationSection', () => {
       />,
     );
 
-    const locationSection = screen.getByText('Location')
+    const locationSection = screen.getByText(i18n.t('location'))
       .parentElement as HTMLElement;
     let locationDropdown = within(locationSection).getByRole('button');
-    const seasonSection = screen.getByText('Season')
+    const seasonSection = screen.getByText(i18n.t('season'))
       .parentElement as HTMLElement;
     let seasonDropdown = within(seasonSection).getByRole('button');
-    const moodSection = screen.getByText('Atmosphere Mood')
+    const moodSection = screen.getByText(i18n.t('atmosphereMood'))
       .parentElement as HTMLElement;
     let moodDropdown = within(moodSection).getByRole('button');
 
@@ -122,7 +124,7 @@ describe('SettingsLocationSection', () => {
     expect(seasonDropdown.hasAttribute('disabled')).toBe(true);
     expect(moodDropdown.hasAttribute('disabled')).toBe(true);
 
-    fireEvent.click(screen.getByLabelText(/use location/i));
+    fireEvent.click(screen.getByLabelText(i18n.t('useLocation')));
     expect(updateOptions).toHaveBeenCalledWith({ use_location: true });
     options = { ...options, use_location: true, location: 'Berlin, Germany' };
     rerender(
@@ -137,7 +139,7 @@ describe('SettingsLocationSection', () => {
     fireEvent.click(screen.getByRole('button', { name: /^tokyo, japan$/i }));
     expect(updateOptions).toHaveBeenCalledWith({ location: 'Tokyo, Japan' });
 
-    fireEvent.click(screen.getByLabelText(/use season/i));
+    fireEvent.click(screen.getByLabelText(i18n.t('useSeason')));
     expect(updateOptions).toHaveBeenCalledWith({ use_season: true });
     options = { ...options, use_season: true, season: 'default (any season)' };
     rerender(
@@ -152,7 +154,7 @@ describe('SettingsLocationSection', () => {
     fireEvent.click(screen.getByRole('button', { name: /^winter$/i }));
     expect(updateOptions).toHaveBeenCalledWith({ season: 'winter' });
 
-    fireEvent.click(screen.getByLabelText(/use atmosphere mood/i));
+    fireEvent.click(screen.getByLabelText(i18n.t('useAtmosphereMood')));
     expect(updateOptions).toHaveBeenCalledWith({ use_atmosphere_mood: true });
     options = {
       ...options,
