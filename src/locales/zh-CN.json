@@ -37,6 +37,7 @@
   "negativePromptPlaceholder": "描述您要避免的...",
   "showLabels": "显示标签",
   "hideLabels": "隐藏标签",
+  "shortenButtons": "Shorten Buttons",
   "language": "语言",
   "appName": "Sora Json提示手工艺者",
   "tagline": "配置您的Sora生成设置，并获得完美的JSON提示，以获得令人惊叹的AI生成的内容。",

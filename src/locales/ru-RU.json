@@ -37,6 +37,7 @@
   "negativePromptPlaceholder": "Опишите, чего следует избегать...",
   "showLabels": "Показать метки",
   "hideLabels": "Скрыть метки",
+  "shortenButtons": "Shorten Buttons",
   "language": "Язык",
   "appName": "Sora JSON Prompt Crafter",
   "tagline": "Настройте параметры Sora и получите идеальный JSON для впечатляющего контента, созданного ИИ.",
