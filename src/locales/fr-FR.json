@@ -140,5 +140,7 @@
   "timeOfYear": "Time of Year",
   "useAtmosphereMood": "Use Atmosphere Mood",
   "atmosphereMood": "Atmosphere Mood",
-  "atmosphereMoodOptions": "Atmosphere Mood Options"
+  "atmosphereMoodOptions": "Atmosphere Mood Options",
+  "undo": "Défaire",
+  "redo": "Refaire"
 }
