@@ -343,23 +343,23 @@ export const ActionBar: React.FC<ActionBarProps> = ({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Disable tracking?</AlertDialogTitle>
+            <AlertDialogTitle>{t('disableTrackingTitle')}</AlertDialogTitle>
             <AlertDialogDescription>
-              This will stop sending anonymous usage data.
+              {t('disableTrackingDescription')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
                 onToggleTracking();
-                toast.success('Tracking disabled');
+                toast.success(t('trackingDisabled'));
                 trackEvent(true, 'disable_tracking_confirm');
                 trackEvent(true, 'toggle_tracking', { enabled: false });
                 setConfirmDisableTracking(false);
               }}
             >
-              Disable
+              {t('disableTrackingConfirm')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -371,23 +371,23 @@ export const ActionBar: React.FC<ActionBarProps> = ({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Enable tracking?</AlertDialogTitle>
+            <AlertDialogTitle>{t('enableTrackingTitle')}</AlertDialogTitle>
             <AlertDialogDescription>
-              This allows sending anonymous usage data to help improve the app.
+              {t('enableTrackingDescription')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
                 onToggleTracking();
-                toast.success('Tracking enabled');
+                toast.success(t('trackingEnabled'));
                 trackEvent(true, 'enable_tracking_confirm');
                 trackEvent(true, 'toggle_tracking', { enabled: true });
                 setConfirmEnableTracking(false);
               }}
             >
-              Enable
+              {t('enableTrackingConfirm')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
