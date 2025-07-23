@@ -35,6 +35,7 @@ import {
   Trash2,
   Send,
   Cog,
+  Languages,
   ChevronDown,
   ChevronUp,
   MoveDown,
@@ -284,21 +285,22 @@ export const ActionBar: React.FC<ActionBarProps> = ({
             size="sm"
             className={cn({ 'gap-2': actionLabelsEnabled })}
           >
-            {t('language')}
+            <Languages className="w-4 h-4" />
+            {actionLabelsEnabled && t('language')}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem onSelect={() => setLocale('en')}>
-            English
+          <DropdownMenuItem onSelect={() => setLocale('en')} className="gap-2">
+            <img src="/flags/us.svg" alt="English" className="w-4 h-4" /> English
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => setLocale('es')}>
-            Español
+          <DropdownMenuItem onSelect={() => setLocale('es')} className="gap-2">
+            <img src="/flags/es.svg" alt="Español" className="w-4 h-4" /> Español
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => setLocale('pt-PT')}>
-            Português
+          <DropdownMenuItem onSelect={() => setLocale('pt-PT')} className="gap-2">
+            <img src="/flags/pt-PT.svg" alt="Português" className="w-4 h-4" /> Português
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => setLocale('ru')}>
-            Русский
+          <DropdownMenuItem onSelect={() => setLocale('ru')} className="gap-2">
+            <img src="/flags/ru.svg" alt="Русский" className="w-4 h-4" /> Русский
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
