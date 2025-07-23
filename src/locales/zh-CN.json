@@ -109,5 +109,18 @@
   "bulkFileImportDescription": "选择一个JSON文件以导入提示。",
   "pleaseSelectFile": "请选择一个文件",
   "fileImported": "文件导入！",
-  "failedImportFile": "无法导入文件"
+  "failedImportFile": "无法导入文件",
+  "disclaimerTitle": "Intellectual Property & Software Disclaimer",
+  "disclaimerIntro": "The text below explains important legal information.",
+  "errorTitle": "Something went wrong",
+  "errorMessage": "An unexpected error occurred",
+  "tryAgain": "Try Again",
+  "footerCredits": "Open-Source Software made with ♥ @ {{year}} –",
+  "githubSource": "GitHub Source",
+  "disclaimer": "Disclaimer",
+  "versionLabel": "Version",
+  "shareQuote": "Check out my Sora prompt configuration!",
+  "shareQuoteTwitter": "Check out my Sora prompt configuration! #SoraAI #AIGeneration",
+  "shareQuoteWithJson": "Check out my Sora prompt configuration!\n\n{{json}}",
+  "failedToLoadDisclaimer": "Failed to load disclaimer."
 }

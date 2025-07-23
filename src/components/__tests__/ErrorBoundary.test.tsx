@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import ErrorBoundary from '../ErrorBoundary';
 import { jest } from '@jest/globals';
+import i18n from '@/i18n';
 
 function ProblemChild({ shouldThrow }: { shouldThrow: boolean }) {
   if (shouldThrow) {
@@ -26,7 +27,7 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>,
     );
 
-    expect(screen.getByText(/something went wrong/i)).toBeTruthy();
+    expect(screen.getByText(i18n.t('errorTitle'))).toBeTruthy();
 
     rerender(
       <ErrorBoundary>
@@ -34,10 +35,10 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>,
     );
 
-    const button = screen.getByRole('button', { name: /try again/i });
+    const button = screen.getByRole('button', { name: i18n.t('tryAgain') });
     fireEvent.click(button);
 
-    expect(screen.queryByText(/something went wrong/i)).toBeNull();
+    expect(screen.queryByText(i18n.t('errorTitle'))).toBeNull();
     expect(screen.getByText('child content')).toBeTruthy();
   });
 
@@ -49,7 +50,7 @@ describe('ErrorBoundary', () => {
     );
 
     expect(screen.getByText('Oops')).toBeTruthy();
-    expect(screen.queryByText(/something went wrong/i)).toBeNull();
+    expect(screen.queryByText(i18n.t('errorTitle'))).toBeNull();
 
     unmount();
 

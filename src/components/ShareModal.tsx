@@ -36,16 +36,14 @@ export const ShareModal: React.FC<ShareModalProps> = ({
   const [trackingEnabled] = useTracking();
   const { t } = useTranslation();
   const shareToFacebook = () => {
-    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent('Check out my Sora prompt configuration!')}`;
+    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(t('shareQuote'))}`;
     window.open(url, '_blank', 'noopener,width=600,height=400');
     toast.success(t('sharedToFacebook'));
     trackEvent(trackingEnabled, 'share_facebook');
   };
 
   const shareToTwitter = () => {
-    const text = encodeURIComponent(
-      'Check out my Sora prompt configuration! #SoraAI #AIGeneration',
-    );
+    const text = encodeURIComponent(t('shareQuoteTwitter'));
     const url = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(window.location.href)}`;
     window.open(url, '_blank', 'noopener,width=600,height=400');
     toast.success(t('sharedToTwitter'));
@@ -54,7 +52,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
 
   const shareToWhatsApp = () => {
     const text = encodeURIComponent(
-      `Check out my Sora prompt configuration!\n\n${jsonContent}`,
+      t('shareQuoteWithJson', { json: jsonContent }),
     );
     const url = `https://wa.me/?text=${text}`;
     window.open(url, '_blank', 'noopener');
@@ -64,7 +62,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
 
   const shareToTelegram = () => {
     const text = encodeURIComponent(
-      `Check out my Sora prompt configuration!\n\n${jsonContent}`,
+      t('shareQuoteWithJson', { json: jsonContent }),
     );
     const url = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${text}`;
     window.open(url, '_blank', 'noopener');

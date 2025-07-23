@@ -109,5 +109,18 @@
   "bulkFileImportDescription": "Selecciona un archivo JSON para importar prompts.",
   "pleaseSelectFile": "Por favor selecciona un archivo",
   "fileImported": "¡Archivo importado!",
-  "failedImportFile": "Error al importar el archivo"
+  "failedImportFile": "Error al importar el archivo",
+  "disclaimerTitle": "Intellectual Property & Software Disclaimer",
+  "disclaimerIntro": "The text below explains important legal information.",
+  "errorTitle": "Something went wrong",
+  "errorMessage": "An unexpected error occurred",
+  "tryAgain": "Try Again",
+  "footerCredits": "Open-Source Software made with ♥ @ {{year}} –",
+  "githubSource": "GitHub Source",
+  "disclaimer": "Disclaimer",
+  "versionLabel": "Version",
+  "shareQuote": "Check out my Sora prompt configuration!",
+  "shareQuoteTwitter": "Check out my Sora prompt configuration! #SoraAI #AIGeneration",
+  "shareQuoteWithJson": "Check out my Sora prompt configuration!\n\n{{json}}",
+  "failedToLoadDisclaimer": "Failed to load disclaimer."
 }

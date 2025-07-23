@@ -1,4 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import i18n from '@/i18n';
 import type React from 'react';
 import fs from 'fs';
 import ts from 'typescript';
@@ -42,13 +43,15 @@ describe('Footer', () => {
 
   test('renders commit hash and date', () => {
     render(<Footer onShowDisclaimer={() => {}} />);
-    expect(screen.getByText('Version abcd123 (2024-06-01)')).toBeTruthy();
+    expect(
+      screen.getByText(`${i18n.t('versionLabel')} abcd123 (2024-06-01)`),
+    ).toBeTruthy();
   });
 
   test('calls onShowDisclaimer when Disclaimer clicked', () => {
     const onShowDisclaimer = jest.fn();
     render(<Footer onShowDisclaimer={onShowDisclaimer} />);
-    const button = screen.getByRole('button', { name: /disclaimer/i });
+    const button = screen.getByRole('button', { name: i18n.t('disclaimer') });
     fireEvent.click(button);
     expect(onShowDisclaimer).toHaveBeenCalledTimes(1);
   });

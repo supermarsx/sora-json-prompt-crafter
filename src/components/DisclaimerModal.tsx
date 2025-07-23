@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocale } from '@/hooks/use-locale';
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogContent,
@@ -19,6 +20,7 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({
   onOpenChange,
 }) => {
   const [locale] = useLocale();
+  const { t } = useTranslation();
   const storageKey = `disclaimerText_${locale}`;
   const [text, setText] = useState('');
   const [hasFetched, setHasFetched] = useState(false);
@@ -102,7 +104,7 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({
           }
         } catch (err) {
           if ((err as { name?: string }).name !== 'AbortError') {
-            setText('Failed to load disclaimer.');
+            setText(t('failedToLoadDisclaimer'));
           }
         }
       }
@@ -111,18 +113,14 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({
     return () => {
       controller.abort();
     };
-  }, [open, hasFetched, locale, storageKey]);
+  }, [open, hasFetched, locale, storageKey, t]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>
-            Intellectual Property &amp; Software Disclaimer
-          </DialogTitle>
-          <DialogDescription>
-            The text below explains important legal information.
-          </DialogDescription>
+          <DialogTitle>{t('disclaimerTitle')}</DialogTitle>
+          <DialogDescription>{t('disclaimerIntro')}</DialogDescription>
         </DialogHeader>
         <ScrollArea className="h-[60vh] px-1">
           <p className="whitespace-pre-wrap text-sm">{text}</p>
