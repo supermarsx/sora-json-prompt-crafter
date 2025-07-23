@@ -101,5 +101,13 @@
   "sharedToTelegram": "Поделились в Telegram!",
   "linkCopied": "Ссылка скопирована в буфер обмена!",
   "copyFailed": "Не удалось скопировать ссылку",
-  "clipboardUnsupported": "Буфер обмена не поддерживается"
+  "clipboardUnsupported": "Буфер обмена не поддерживается",
+  "importJsonTitle": "Импортировать JSON",
+  "importJsonDescription": "Вставьте JSON или выберите файл, чтобы импортировать промпт.",
+  "pasteJsonPlaceholder": "Вставьте JSON здесь",
+  "clipboardImportDescription": "Вставьте JSON ниже, чтобы импортировать.",
+  "bulkFileImportDescription": "Выберите JSON-файл для импорта промптов.",
+  "pleaseSelectFile": "Пожалуйста, выберите файл",
+  "fileImported": "Файл импортирован!",
+  "failedImportFile": "Не удалось импортировать файл"
 }

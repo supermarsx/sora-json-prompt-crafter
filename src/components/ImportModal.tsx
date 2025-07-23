@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogContent,
@@ -24,6 +25,7 @@ export const ImportModal: React.FC<ImportModalProps> = ({
   onClose,
   onImport,
 }) => {
+  const { t } = useTranslation();
   const [text, setText] = useState('');
 
   const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,7 +44,7 @@ export const ImportModal: React.FC<ImportModalProps> = ({
       setText('');
       onClose();
     } catch {
-      toast.error('Invalid JSON');
+      toast.error(t('invalidJson'));
     }
   };
 
@@ -50,24 +52,22 @@ export const ImportModal: React.FC<ImportModalProps> = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Import JSON</DialogTitle>
-          <DialogDescription>
-            Paste JSON or choose a file to import your prompt.
-          </DialogDescription>
+          <DialogTitle>{t('importJsonTitle')}</DialogTitle>
+          <DialogDescription>{t('importJsonDescription')}</DialogDescription>
         </DialogHeader>
         <div className="space-y-2 py-4">
           <Textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder="Paste JSON here"
+            placeholder={t('pasteJsonPlaceholder')}
           />
           <Input type="file" accept=".json" onChange={handleFile} />
         </div>
         <DialogFooter>
           <Button variant="secondary" onClick={onClose}>
-            Cancel
+            {t('cancel')}
           </Button>
-          <Button onClick={handleImport}>Import</Button>
+          <Button onClick={handleImport}>{t('import')}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
