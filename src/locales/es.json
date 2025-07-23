@@ -61,5 +61,22 @@
   "enableTrackingConfirm": "Activar",
   "trackingDisabled": "Seguimiento deshabilitado",
   "trackingEnabled": "Seguimiento habilitado",
-  "cancel": "Cancelar"
+  "cancel": "Cancelar",
+  "clearHistory": "Limpiar historial",
+  "edited": "Editado",
+  "edit": "Editar",
+  "copied": "Copiado",
+  "preview": "Vista previa",
+  "confirm": "Confirmar",
+  "delete": "Eliminar",
+  "historyEmptyPrompts": "Estamos solos aquí, por favor genera algunos prompts y cópialos 🥺",
+  "latestActionsIntro": "Estas son tus acciones más recientes, se guardarán aquí para que las conozcas. Si deshabilitas el seguimiento también deshabilitarás este historial",
+  "export": "Exportar",
+  "clearActions": "Limpiar acciones",
+  "noActionsYet": "Aún no hay acciones",
+  "clearHistoryTitle": "¿Limpiar historial?",
+  "clearHistoryDescription": "Esto eliminará todas las entradas permanentemente.",
+  "clearActionsTitle": "¿Limpiar acciones recientes?",
+  "clearActionsDescription": "Esto eliminará todas las acciones permanentemente.",
+  "entryDeleted": "¡Entrada eliminada!"
 }

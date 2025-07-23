@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogContent,
@@ -72,6 +73,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
   onEdit,
   onImport,
 }) => {
+  const { t } = useTranslation();
   const [preview, setPreview] = useState<HistoryEntry | null>(null);
   const [trackingEnabled] = useTracking();
   const [confirmClear, setConfirmClear] = useState(false);
@@ -285,7 +287,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                   }}
                   disabled={noHistory}
                 >
-                  Clear History
+                  {t('clearHistory')}
                 </Button>
               </div>
               <ScrollArea className="h-[60vh]">
@@ -333,7 +335,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                           ) : (
                             <Edit className="w-4 h-4" />
                           )}{' '}
-                          {editedId === entry.id ? 'Edited' : 'Edit'}
+                          {editedId === entry.id ? t('edited') : t('edit')}
                         </Button>
                         <Button
                           size="sm"
@@ -355,7 +357,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                           ) : (
                             <Clipboard className="w-4 h-4" />
                           )}{' '}
-                          {copiedId === entry.id ? 'Copied' : 'Copy'}
+                          {copiedId === entry.id ? t('copied') : t('copy')}
                         </Button>
                         <Button
                           size="sm"
@@ -366,7 +368,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                           }}
                           className="gap-1"
                         >
-                          <Eye className="w-4 h-4" /> Preview
+                          <Eye className="w-4 h-4" /> {t('preview')}
                         </Button>
                         <Button
                           size="sm"
@@ -378,7 +380,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                                 'history_delete_confirm',
                               );
                               onDelete(entry.id);
-                              toast.success('Entry deleted!');
+                              toast.success(t('entryDeleted'));
                               setConfirmDeleteId(null);
                             } else {
                               setConfirmDeleteId(entry.id);
@@ -392,15 +394,16 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                           className={`gap-1 ${confirmDeleteId === entry.id ? 'animate-pulse' : ''}`}
                         >
                           <Trash2 className="w-4 h-4" />
-                          {confirmDeleteId === entry.id ? 'Confirm' : 'Delete'}
+                          {confirmDeleteId === entry.id
+                            ? t('confirm')
+                            : t('delete')}
                         </Button>
                       </div>
                     </div>
                   ))}
                   {history.length === 0 && (
                     <p className="text-center text-sm text-muted-foreground">
-                      We're lonely here, please generate some prompts and copy
-                      them 🥺
+                      {t('historyEmptyPrompts')}
                     </p>
                   )}
                 </div>
@@ -409,8 +412,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
             <TabsContent value="actions">
               <div className="flex justify-between items-center mb-2">
                 <p className="text-sm text-muted-foreground">
-                  This is your latest actions, they will be kept here for you to
-                  know. If you disable tracking you'll disable this history too
+                  {t('latestActionsIntro')}
                 </p>
                 <div className="flex gap-2">
                   <Button
@@ -420,7 +422,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                     onClick={exportActions}
                     disabled={noActions}
                   >
-                    <Download className="w-4 h-4" /> Export
+                    <Download className="w-4 h-4" /> {t('export')}
                   </Button>
                   <Button
                     size="sm"
@@ -428,7 +430,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                     onClick={requestClearActions}
                     disabled={noActions}
                   >
-                    Clear actions
+                    {t('clearActions')}
                   </Button>
                 </div>
               </div>
@@ -459,7 +461,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                   ))}
                   {actionHistory.length === 0 && (
                     <p className="text-center text-sm text-muted-foreground">
-                      No actions yet
+                      {t('noActionsYet')}
                     </p>
                   )}
                 </div>
@@ -472,13 +474,13 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
       <AlertDialog open={confirmClear} onOpenChange={setConfirmClear}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Clear history?</AlertDialogTitle>
+            <AlertDialogTitle>{t('clearHistoryTitle')}</AlertDialogTitle>
             <AlertDialogDescription>
-              This will remove all entries permanently.
+              {t('clearHistoryDescription')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
                 trackEvent(trackingEnabled, 'history_clear_confirm');
@@ -486,7 +488,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                 setConfirmClear(false);
               }}
             >
-              Clear
+              {t('clear')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -498,20 +500,20 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Clear latest actions?</AlertDialogTitle>
+            <AlertDialogTitle>{t('clearActionsTitle')}</AlertDialogTitle>
             <AlertDialogDescription>
-              This will remove all action entries permanently.
+              {t('clearActionsDescription')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
                 clearActions();
                 setConfirmClearActions(false);
               }}
             >
-              Clear
+              {t('clear')}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

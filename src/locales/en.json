@@ -61,5 +61,22 @@
   "enableTrackingConfirm": "Enable",
   "trackingDisabled": "Tracking disabled",
   "trackingEnabled": "Tracking enabled",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "clearHistory": "Clear History",
+  "edited": "Edited",
+  "edit": "Edit",
+  "copied": "Copied",
+  "preview": "Preview",
+  "confirm": "Confirm",
+  "delete": "Delete",
+  "historyEmptyPrompts": "We're lonely here, please generate some prompts and copy them 🥺",
+  "latestActionsIntro": "This is your latest actions, they will be kept here for you to know. If you disable tracking you'll disable this history too",
+  "export": "Export",
+  "clearActions": "Clear actions",
+  "noActionsYet": "No actions yet",
+  "clearHistoryTitle": "Clear history?",
+  "clearHistoryDescription": "This will remove all entries permanently.",
+  "clearActionsTitle": "Clear latest actions?",
+  "clearActionsDescription": "This will remove all action entries permanently.",
+  "entryDeleted": "Entry deleted!"
 }
