@@ -21,22 +21,22 @@ describe('useLocale', () => {
   });
 
   test('initializes state from localStorage', () => {
-    (storage.safeGet as jest.Mock).mockReturnValue('es');
+    (storage.safeGet as jest.Mock).mockReturnValue('es-ES');
     const { result } = renderHook(() => useLocale());
-    expect(result.current[0]).toBe('es');
-    expect(storage.safeGet).toHaveBeenCalledWith(LOCALE, 'en', false);
+    expect(result.current[0]).toBe('es-ES');
+    expect(storage.safeGet).toHaveBeenCalledWith(LOCALE, 'en-US', false);
   });
 
   test('updates locale and persists value', () => {
-    (storage.safeGet as jest.Mock).mockReturnValue('en');
+    (storage.safeGet as jest.Mock).mockReturnValue('en-US');
     const { result } = renderHook(() => useLocale());
 
     act(() => {
-      result.current[1]('fr');
+      result.current[1]('fr-FR');
     });
 
-    expect(i18n.changeLanguage).toHaveBeenLastCalledWith('fr');
-    expect(storage.safeSet).toHaveBeenLastCalledWith(LOCALE, 'fr');
-    expect(result.current[0]).toBe('fr');
+    expect(i18n.changeLanguage).toHaveBeenLastCalledWith('fr-FR');
+    expect(storage.safeSet).toHaveBeenLastCalledWith(LOCALE, 'fr-FR');
+    expect(result.current[0]).toBe('fr-FR');
   });
 });

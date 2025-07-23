@@ -290,17 +290,86 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem onSelect={() => setLocale('en')} className="gap-2">
-            <img src="/flags/us.svg" alt="English" className="w-4 h-4" /> English
+          <DropdownMenuItem onSelect={() => setLocale('en-US')} className="gap-2">
+            <img src="/flags/en-US.svg" alt="English (US)" className="w-4 h-4" /> English (US)
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => setLocale('es')} className="gap-2">
-            <img src="/flags/es.svg" alt="Español" className="w-4 h-4" /> Español
+          <DropdownMenuItem onSelect={() => setLocale('es-ES')} className="gap-2">
+            <img src="/flags/es-ES.svg" alt="Español (ES)" className="w-4 h-4" /> Español (ES)
           </DropdownMenuItem>
           <DropdownMenuItem onSelect={() => setLocale('pt-PT')} className="gap-2">
-            <img src="/flags/pt-PT.svg" alt="Português" className="w-4 h-4" /> Português
+            <img src="/flags/pt-PT.svg" alt="Português (PT)" className="w-4 h-4" /> Português (PT)
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => setLocale('ru')} className="gap-2">
-            <img src="/flags/ru.svg" alt="Русский" className="w-4 h-4" /> Русский
+          <DropdownMenuItem onSelect={() => setLocale('ru-RU')} className="gap-2">
+            <img src="/flags/ru-RU.svg" alt="Русский" className="w-4 h-4" /> Русский
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('pt-BR')} className="gap-2">
+            <img src="/flags/pt-BR.svg" alt="Português (BR)" className="w-4 h-4" /> Português (BR)
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('fr-FR')} className="gap-2">
+            <img src="/flags/fr-FR.svg" alt="Français" className="w-4 h-4" /> Français
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('de-DE')} className="gap-2">
+            <img src="/flags/de-DE.svg" alt="Deutsch" className="w-4 h-4" /> Deutsch
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('zh-CN')} className="gap-2">
+            <img src="/flags/zh-CN.svg" alt="中文" className="w-4 h-4" /> 中文
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('it-IT')} className="gap-2">
+            <img src="/flags/it-IT.svg" alt="Italiano" className="w-4 h-4" /> Italiano
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('es-MX')} className="gap-2">
+            <img src="/flags/es-MX.svg" alt="Español (MX)" className="w-4 h-4" /> Español (MX)
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('en-GB')} className="gap-2">
+            <img src="/flags/en-GB.svg" alt="English (UK)" className="w-4 h-4" /> English (UK)
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('bn-IN')} className="gap-2">
+            <img src="/flags/bn-IN.svg" alt="বাংলা" className="w-4 h-4" /> বাংলা
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('ja-JP')} className="gap-2">
+            <img src="/flags/ja-JP.svg" alt="日本語" className="w-4 h-4" /> 日本語
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('en-PR')} className="gap-2">
+            <img src="/flags/en-PR.svg" alt="Pirate" className="w-4 h-4" /> Pirate
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('ko-KR')} className="gap-2">
+            <img src="/flags/ko-KR.svg" alt="한국어" className="w-4 h-4" /> 한국어
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('ro-RO')} className="gap-2">
+            <img src="/flags/ro-RO.svg" alt="Română" className="w-4 h-4" /> Română
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('sv-SE')} className="gap-2">
+            <img src="/flags/sv-SE.svg" alt="Svenska" className="w-4 h-4" /> Svenska
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('uk-UA')} className="gap-2">
+            <img src="/flags/uk-UA.svg" alt="Українська" className="w-4 h-4" /> Українська
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('ne-NP')} className="gap-2">
+            <img src="/flags/ne-NP.svg" alt="नेपाली" className="w-4 h-4" /> नेपाली
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('da-DK')} className="gap-2">
+            <img src="/flags/da-DK.svg" alt="Dansk" className="w-4 h-4" /> Dansk
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('et-EE')} className="gap-2">
+            <img src="/flags/et-EE.svg" alt="Eesti" className="w-4 h-4" /> Eesti
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('fi-FI')} className="gap-2">
+            <img src="/flags/fi-FI.svg" alt="Suomi" className="w-4 h-4" /> Suomi
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('el-GR')} className="gap-2">
+            <img src="/flags/el-GR.svg" alt="Ελληνικά" className="w-4 h-4" /> Ελληνικά
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('th-TH')} className="gap-2">
+            <img src="/flags/th-TH.svg" alt="ไทย" className="w-4 h-4" /> ไทย
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('de-AT')} className="gap-2">
+            <img src="/flags/de-AT.svg" alt="Deutsch (AT)" className="w-4 h-4" /> Deutsch (AT)
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('fr-BE')} className="gap-2">
+            <img src="/flags/fr-BE.svg" alt="Français (BE)" className="w-4 h-4" /> Français (BE)
+          </DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => setLocale('es-AR')} className="gap-2">
+            <img src="/flags/es-AR.svg" alt="Español (AR)" className="w-4 h-4" /> Español (AR)
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
