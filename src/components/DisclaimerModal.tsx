@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useLocale } from '@/hooks/use-locale';
 import {
   Dialog,
   DialogContent,
@@ -13,12 +14,12 @@ interface DisclaimerModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
-const STORAGE_KEY = 'disclaimerText';
-
 const DisclaimerModal: React.FC<DisclaimerModalProps> = ({
   open,
   onOpenChange,
 }) => {
+  const [locale] = useLocale();
+  const storageKey = `disclaimerText_${locale}`;
   const [text, setText] = useState('');
   const [hasFetched, setHasFetched] = useState(false);
 
@@ -28,7 +29,7 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({
     }
 
     try {
-      const cached = localStorage.getItem(STORAGE_KEY);
+      const cached = localStorage.getItem(storageKey);
       if (cached) {
         setText(cached);
         setHasFetched(true);
@@ -52,59 +53,65 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({
           .env?.VITE_DISCLAIMER_URL;
       }
     }
-    const url = disclaimerUrl ?? '/disclaimer.txt';
+    const pattern = disclaimerUrl ?? '/disclaimers/disclaimer.{locale}.txt';
+    const url = pattern.replace('{locale}', locale);
+    const fallbackUrl = pattern.replace('{locale}', 'en');
 
-    (async () => {
+    const fetchDisclaimer = async (u: string) => {
       try {
         if (typeof window !== 'undefined' && window.caches) {
-          const cachedResponse = await window.caches.match(url);
+          const cachedResponse = await window.caches.match(u);
           if (cachedResponse) {
-            const txt = await cachedResponse.text();
-            if (!signal.aborted) {
-              setText(txt);
-              try {
-                localStorage.setItem(STORAGE_KEY, txt);
-              } catch {
-                // ignore localStorage errors
-              }
-              setHasFetched(true);
-              return;
-            }
+            return await cachedResponse.text();
           }
         }
       } catch {
         // ignore cache errors
       }
 
-      fetch(url, { signal })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error('Failed to fetch disclaimer');
+      const res = await fetch(u, { signal });
+      if (!res.ok) {
+        throw new Error('Failed to fetch disclaimer');
+      }
+      return res.text();
+    };
+
+    (async () => {
+      try {
+        const txt = await fetchDisclaimer(url);
+        if (!signal.aborted) {
+          setText(txt);
+          try {
+            localStorage.setItem(storageKey, txt);
+          } catch {
+            // ignore localStorage errors
           }
-          return res.text();
-        })
-        .then((txt) => {
+          setHasFetched(true);
+        }
+      } catch {
+        try {
+          const txt = await fetchDisclaimer(fallbackUrl);
           if (!signal.aborted) {
             setText(txt);
             try {
-              localStorage.setItem(STORAGE_KEY, txt);
+              localStorage.setItem(storageKey, txt);
             } catch {
               // ignore localStorage errors
             }
             setHasFetched(true);
           }
-        })
-        .catch((err) => {
-          if (err.name !== 'AbortError') {
+        } catch (err) {
+          if ((err as { name?: string }).name !== 'AbortError') {
             setText('Failed to load disclaimer.');
           }
-        });
+        }
+      }
     })();
 
     return () => {
       controller.abort();
     };
-  }, [open, hasFetched]);
+  }, [open, hasFetched, locale, storageKey]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
