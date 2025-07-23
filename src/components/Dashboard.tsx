@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Sun,
   Moon,
@@ -31,6 +31,7 @@ import { useLogo } from '@/hooks/use-logo';
 import { useActionLabels } from '@/hooks/use-action-labels';
 import { useSoraUserscript } from '@/hooks/use-sora-userscript';
 import { useActionHistory } from '@/hooks/use-action-history';
+import { useUndoRedo } from '@/hooks/use-undo-redo';
 import { trackEvent } from '@/lib/analytics';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { generateJson } from '@/lib/generateJson';
@@ -48,7 +49,14 @@ import { useLocale } from '@/hooks/use-locale';
 const Dashboard = () => {
   const { t } = useTranslation();
   useLocale();
-  const [options, setOptions] = useState<SoraOptions>(() => {
+  const {
+    state: options,
+    setState: setOptions,
+    undo,
+    redo,
+    canUndo,
+    canRedo,
+  } = useUndoRedo<SoraOptions>(() => {
     try {
       const stored = safeGet('currentJson');
       if (stored) {
@@ -560,6 +568,10 @@ const Dashboard = () => {
       </div>
 
       <ActionBar
+        onUndo={undo}
+        onRedo={redo}
+        canUndo={canUndo}
+        canRedo={canRedo}
         onCopy={copyToClipboard}
         onClear={clearJson}
         onShare={shareJson}

@@ -10,6 +10,7 @@ import Dashboard from '../Dashboard';
 import { toast } from '@/components/ui/sonner-toast';
 import { trackEvent } from '@/lib/analytics';
 import type { SoraOptions } from '@/lib/soraOptions';
+import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { useSoraUserscript } from '@/hooks/use-sora-userscript';
 
 let copyFn: ((json: string) => void) | null = null;
@@ -274,6 +275,40 @@ describe('Dashboard interactions', () => {
       const history = JSON.parse(localStorage.getItem('jsonHistory') || '[]');
       expect(history).toHaveLength(1);
       expect(history[0].json).toContain('foo');
+    });
+  });
+
+  test('undo and redo revert option changes', async () => {
+    render(<Dashboard />);
+    await waitFor(() => expect(updateFn).not.toBeNull());
+
+    act(() => {
+      updateFn?.({ prompt: 'foo' });
+    });
+
+    await waitFor(() => {
+      const json = JSON.parse(localStorage.getItem('currentJson') || '{}');
+      expect(json.prompt).toBe('foo');
+    });
+
+    const undoButton = screen.getByRole('button', { name: /undo/i });
+    act(() => {
+      fireEvent.click(undoButton);
+    });
+
+    await waitFor(() => {
+      const json = JSON.parse(localStorage.getItem('currentJson') || '{}');
+      expect(json.prompt).toBe(DEFAULT_OPTIONS.prompt);
+    });
+
+    const redoButton = screen.getByRole('button', { name: /redo/i });
+    act(() => {
+      fireEvent.click(redoButton);
+    });
+
+    await waitFor(() => {
+      const json = JSON.parse(localStorage.getItem('currentJson') || '{}');
+      expect(json.prompt).toBe('foo');
     });
   });
 
