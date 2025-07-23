@@ -27,8 +27,6 @@ import thTH from './locales/th-TH.json';
 import deAT from './locales/de-AT.json';
 import frBE from './locales/fr-BE.json';
 import esAR from './locales/es-AR.json';
-import jaJP from './locales/ja-JP.json';
-import zhCN from './locales/zh-CN.json';
 
 const resources = {
   'en-US': { translation: enUS },
@@ -58,8 +56,6 @@ const resources = {
   'de-AT': { translation: deAT },
   'fr-BE': { translation: frBE },
   'es-AR': { translation: esAR },
-  'ja-JP': { translation: jaJP },
-  'zh-CN': { translation: zhCN },
 };
 
 i18n.use(initReactI18next).init({
