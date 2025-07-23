@@ -1,4 +1,12 @@
 import { jest } from '@jest/globals';
+import fs from 'fs';
+import path from 'path';
+
+const disclaimerDir = path.resolve(__dirname, '../disclaimers');
+const localizedDisclaimers = fs
+  .readdirSync(disclaimerDir)
+  .filter((file) => file.startsWith('disclaimer.') && file.endsWith('.txt'))
+  .map((file) => `/disclaimers/${file}`);
 
 const staticAssets = [
   '/',
@@ -9,10 +17,7 @@ const staticAssets = [
   '/favicon-96x96.png',
   '/apple-touch-icon.png',
   '/disclaimer.txt',
-  '/disclaimers/disclaimer.en.txt',
-  '/disclaimers/disclaimer.es.txt',
-  '/disclaimers/disclaimer.pt-PT.txt',
-  '/disclaimers/disclaimer.ru.txt',
+  ...localizedDisclaimers,
   '/placeholder.svg',
   '/web-app-manifest-192x192.png',
   '/web-app-manifest-512x512.png',
