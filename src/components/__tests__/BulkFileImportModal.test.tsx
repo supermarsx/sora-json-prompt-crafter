@@ -3,6 +3,7 @@ import BulkFileImportModal from '../BulkFileImportModal';
 import { toast } from '@/components/ui/sonner-toast';
 import { trackEvent } from '@/lib/analytics';
 import { useTracking } from '@/hooks/use-tracking';
+import i18n from '@/i18n';
 
 jest.mock('@/lib/analytics', () => ({
   __esModule: true,
@@ -59,7 +60,7 @@ describe('BulkFileImportModal', () => {
     expect(trackEvent).toHaveBeenCalledWith(true, 'history_import', {
       type: 'bulk_file',
     });
-    expect(toast.success).toHaveBeenCalledWith('File imported!');
+    expect(toast.success).toHaveBeenCalledWith(i18n.t('fileImported'));
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });
 
@@ -88,7 +89,7 @@ describe('BulkFileImportModal', () => {
     });
     fireEvent.click(screen.getByRole('button', { name: /import/i }));
     await waitFor(() =>
-      expect(toast.error).toHaveBeenCalledWith('Failed to import file'),
+      expect(toast.error).toHaveBeenCalledWith(i18n.t('failedImportFile')),
     );
     expect(onImport).not.toHaveBeenCalled();
     expect(trackEvent).not.toHaveBeenCalled();
@@ -108,7 +109,7 @@ describe('BulkFileImportModal', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /import/i }));
 
-    expect(toast.error).toHaveBeenCalledWith('Please select a file');
+    expect(toast.error).toHaveBeenCalledWith(i18n.t('pleaseSelectFile'));
     expect(onImport).not.toHaveBeenCalled();
   });
 });

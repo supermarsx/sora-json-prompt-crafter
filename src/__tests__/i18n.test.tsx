@@ -17,7 +17,7 @@ test('renders spanish translation', () => {
 });
 
 test('falls back to english when language unsupported', () => {
-  i18n.changeLanguage('fr');
+  i18n.changeLanguage('xx');
   render(
     <I18nextProvider i18n={i18n}>
       <span>{i18n.t('copy')}</span>

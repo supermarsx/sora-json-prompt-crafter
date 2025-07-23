@@ -3,6 +3,7 @@ import ClipboardImportModal from '../ClipboardImportModal';
 import { trackEvent } from '@/lib/analytics';
 import { useTracking } from '@/hooks/use-tracking';
 import { toast } from '@/components/ui/sonner-toast';
+import i18n from '@/i18n';
 
 jest.mock('@/lib/analytics', () => ({
   __esModule: true,
@@ -128,7 +129,7 @@ describe('ClipboardImportModal', () => {
     const button = screen.getByRole('button', { name: /import/i });
     fireEvent.click(button);
 
-    expect(toast.error).toHaveBeenCalledWith('Invalid JSON');
+    expect(toast.error).toHaveBeenCalledWith(i18n.t('invalidJson'));
     expect(onImport).not.toHaveBeenCalled();
     expect(onOpenChange).toHaveBeenCalledWith(false);
   });

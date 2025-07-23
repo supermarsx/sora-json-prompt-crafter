@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { trackEvent } from '@/lib/analytics';
 import { useTracking } from '@/hooks/use-tracking';
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogContent,
@@ -29,6 +30,7 @@ const ClipboardImportModal: React.FC<ClipboardImportModalProps> = ({
 }) => {
   const [text, setText] = useState('');
   const [trackingEnabled] = useTracking();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (open) {
@@ -40,10 +42,10 @@ const ClipboardImportModal: React.FC<ClipboardImportModalProps> = ({
             /* ignore clipboard read errors */
           });
       } else {
-        toast.error('Clipboard not supported');
+        toast.error(t('clipboardUnsupported'));
       }
     }
-  }, [open]);
+  }, [open, t]);
 
   const handleImport = () => {
     if (!text.trim()) {
@@ -80,7 +82,7 @@ const ClipboardImportModal: React.FC<ClipboardImportModalProps> = ({
       if (!strings.length) throw new Error('invalid');
       onImport(strings);
     } catch {
-      toast.error('Invalid JSON');
+      toast.error(t('invalidJson'));
       onOpenChange(false);
       return;
     }
@@ -94,19 +96,21 @@ const ClipboardImportModal: React.FC<ClipboardImportModalProps> = ({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>Paste JSON below to import.</DialogDescription>
+          <DialogDescription>
+            {t('clipboardImportDescription')}
+          </DialogDescription>
         </DialogHeader>
         <Textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Paste JSON here"
+          placeholder={t('pasteJsonPlaceholder')}
           className="my-4"
         />
         <DialogFooter>
           <Button variant="secondary" onClick={() => onOpenChange(false)}>
-            Cancel
+            {t('cancel')}
           </Button>
-          <Button onClick={handleImport}>Import</Button>
+          <Button onClick={handleImport}>{t('import')}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
