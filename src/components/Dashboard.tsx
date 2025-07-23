@@ -126,7 +126,7 @@ const Dashboard = () => {
   }, [options]);
 
   const copyToClipboard = async () => {
-    const success = await copy(jsonString, 'Sora JSON copied to clipboard!');
+    const success = await copy(jsonString, t('jsonCopied'));
     if (success) {
       setCopied(true);
       const entry: HistoryEntry = {
@@ -148,7 +148,7 @@ const Dashboard = () => {
 
   const clearJson = () => {
     setJsonString('{}');
-    toast.success('JSON cleared!');
+    toast.success(t('jsonCleared'));
     trackEvent(trackingEnabled, 'clear_json');
   };
 
@@ -191,17 +191,17 @@ const Dashboard = () => {
       if (!isValidOptions(obj)) throw new Error('invalid');
       setOptions((prev) => ({ ...prev, ...obj }));
       setShowImportModal(false);
-      toast.success('JSON imported!');
+      toast.success(t('jsonImported'));
       trackEvent(trackingEnabled, 'import_button');
     } catch {
-      toast.error('Invalid JSON');
+      toast.error(t('invalidJson'));
     }
   };
 
   const resetJson = () => {
     // Reset to default options
     setOptions(DEFAULT_OPTIONS);
-    toast.success('Settings reset to defaults!');
+    toast.success(t('settingsReset'));
     trackEvent(trackingEnabled, 'reset_button');
   };
 
@@ -210,7 +210,7 @@ const Dashboard = () => {
       ...prev,
       seed: Math.floor(Math.random() * 10000),
     }));
-    toast.success('JSON regenerated with new seed!');
+    toast.success(t('jsonRegenerated'));
     trackEvent(trackingEnabled, 'regenerate_button');
   };
 
@@ -227,7 +227,7 @@ const Dashboard = () => {
     };
 
     setOptions((prev) => ({ ...prev, ...randomOptions }));
-    toast.success('Options randomized!');
+    toast.success(t('optionsRandomized'));
     trackEvent(trackingEnabled, 'randomize_button');
   };
 
@@ -293,7 +293,7 @@ const Dashboard = () => {
   const clearHistory = () => setHistory([]);
 
   const copyHistoryEntry = async (json: string) => {
-    const success = await copy(json, 'Sora JSON copied to clipboard!');
+    const success = await copy(json, t('jsonCopied'));
     if (success) {
       trackEvent(trackingEnabled, 'history_copy');
     }
@@ -334,7 +334,7 @@ const Dashboard = () => {
       trackEvent(trackingEnabled, 'selected_json_prompt');
       trackEvent(trackingEnabled, 'history_edit');
     } catch {
-      toast.error('Invalid JSON');
+      toast.error(t('invalidJson'));
     }
   };
 
@@ -368,12 +368,9 @@ const Dashboard = () => {
                   className="w-10 h-10 animate-rainbow dark:animate-rainbow-dark"
                 />
               )}
-              Sora JSON Prompt Crafter
+              {t('appName')}
             </h1>
-            <p className="text-muted-foreground select-none">
-              Configure your Sora generation settings and get the perfect JSON
-              prompt for stunning AI-generated content.
-            </p>
+            <p className="text-muted-foreground select-none">{t('tagline')}</p>
             {headerButtonsEnabled && (
               <div className="flex flex-wrap items-center gap-2 mt-2">
                 <Button asChild variant="outline" size="sm" className="gap-1">
@@ -384,7 +381,7 @@ const Dashboard = () => {
                     className="flex items-center gap-1"
                     onClick={() => trackEvent(trackingEnabled, 'click_sponsor')}
                   >
-                    <Heart className="w-4 h-4" /> Sponsor
+                    <Heart className="w-4 h-4" /> {t('sponsor')}
                   </a>
                 </Button>
                 <Button asChild variant="outline" size="sm" className="gap-1">
@@ -395,7 +392,7 @@ const Dashboard = () => {
                     className="flex items-center gap-1"
                     onClick={() => trackEvent(trackingEnabled, 'see_github')}
                   >
-                    <Github className="w-4 h-4" /> GitHub
+                    <Github className="w-4 h-4" /> {t('github')}
                   </a>
                 </Button>
                 <Button asChild variant="outline" size="sm" className="gap-1">
@@ -407,7 +404,8 @@ const Dashboard = () => {
                     onClick={() => trackEvent(trackingEnabled, 'star_github')}
                   >
                     <Star className="w-4 h-4" />
-                    Star{githubStats?.stars ? ` ${githubStats.stars}` : ''}
+                    {t('star')}
+                    {githubStats?.stars ? ` ${githubStats.stars}` : ''}
                   </a>
                 </Button>
                 <Button asChild variant="outline" size="sm" className="gap-1">
@@ -419,7 +417,8 @@ const Dashboard = () => {
                     onClick={() => trackEvent(trackingEnabled, 'fork_github')}
                   >
                     <GitFork className="w-4 h-4" />
-                    Fork{githubStats?.forks ? ` ${githubStats.forks}` : ''}
+                    {t('fork')}
+                    {githubStats?.forks ? ` ${githubStats.forks}` : ''}
                   </a>
                 </Button>
                 <Button asChild variant="outline" size="sm" className="gap-1">
@@ -431,7 +430,8 @@ const Dashboard = () => {
                     onClick={() => trackEvent(trackingEnabled, 'open_issues')}
                   >
                     <Bug className="w-4 h-4" />
-                    Issues{githubStats?.issues ? ` ${githubStats.issues}` : ''}
+                    {t('issues')}
+                    {githubStats?.issues ? ` ${githubStats.issues}` : ''}
                   </a>
                 </Button>
                 <Button asChild variant="outline" size="sm" className="gap-1">
@@ -488,7 +488,7 @@ const Dashboard = () => {
               </div>
             )}
             <p className="text-xs mt-2 text-muted-foreground">
-              By using this tool you agree by the{' '}
+              {t('agreeToDisclaimer')}{' '}
               <button
                 onClick={() => {
                   setShowDisclaimer(true);
