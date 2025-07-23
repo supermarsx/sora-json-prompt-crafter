@@ -186,28 +186,24 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>History</DialogTitle>
-            <DialogDescription>
-              Review and manage your saved prompts and recent actions.
-            </DialogDescription>
+            <DialogTitle>{t('history')}</DialogTitle>
+            <DialogDescription>{t('historyDescription')}</DialogDescription>
           </DialogHeader>
           <Tabs value={tab} onValueChange={setTab}>
             <TabsList className="mb-4">
-              <TabsTrigger value="prompts">JSON Prompts</TabsTrigger>
-              <TabsTrigger value="actions">Latest Actions</TabsTrigger>
+              <TabsTrigger value="prompts">{t('jsonPromptsTab')}</TabsTrigger>
+              <TabsTrigger value="actions">{t('latestActionsTab')}</TabsTrigger>
             </TabsList>
             <TabsContent value="prompts">
               <p className="text-sm text-muted-foreground mb-2">
-                This is your clipboard copied prompt history, every copied
-                prompt goes here. You can review them, export them or delete
-                them when you don't need them any longer
+                {t('historyPromptsIntro')}
               </p>
               <div className="mb-4 flex justify-between items-center gap-2">
                 <div className="flex gap-2">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline" size="sm" className="gap-1">
-                        <ImportIcon className="w-4 h-4" /> Import
+                        <ImportIcon className="w-4 h-4" /> {t('import')}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
@@ -219,7 +215,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                           setShowClipboard(true);
                         }}
                       >
-                        Paste from clipboard
+                        {t('pasteFromClipboard')}
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onSelect={() => {
@@ -229,7 +225,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                           setShowBulkClipboard(true);
                         }}
                       >
-                        Bulk paste from clipboard
+                        {t('bulkPasteFromClipboard')}
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onSelect={() => {
@@ -239,7 +235,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                           setShowBulkFile(true);
                         }}
                       >
-                        Bulk file import
+                        {t('bulkFileImport')}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -251,7 +247,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                         className="gap-1"
                         disabled={noHistory}
                       >
-                        <Download className="w-4 h-4" /> Export
+                        <Download className="w-4 h-4" /> {t('export')}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
@@ -263,7 +259,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                           exportClipboard();
                         }}
                       >
-                        Copy all to clipboard
+                        {t('copyAllToClipboard')}
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onSelect={() => {
@@ -273,7 +269,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                           exportFile();
                         }}
                       >
-                        Download JSON
+                        {t('downloadJson')}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>

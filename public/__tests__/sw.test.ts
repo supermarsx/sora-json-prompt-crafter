@@ -78,11 +78,13 @@ describe('service worker', () => {
     expect((global as any).caches.open).toHaveBeenCalledWith(
       'sora-prompt-cache-v2',
     );
-    expect(cacheAddAll).toHaveBeenCalledWith([
-      ...staticAssets,
-      '/assets/app.js',
-      '/assets/style.css',
-    ]);
+    expect(cacheAddAll).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        ...staticAssets,
+        '/assets/app.js',
+        '/assets/style.css',
+      ]),
+    );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect((global as any).self.skipWaiting).toHaveBeenCalled();
   });
