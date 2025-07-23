@@ -1,4 +1,5 @@
 import React from 'react';
+import i18n from '@/i18n';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -20,16 +21,17 @@ interface SettingsLocationSectionProps {
 export const SettingsLocationSection: React.FC<
   SettingsLocationSectionProps
 > = ({ options, updateOptions }) => {
+  const t = i18n.t.bind(i18n);
   return (
     <CollapsibleSection
-      title="Settings & Location"
+      title={t('settingsLocation')}
       isOptional={true}
       isEnabled={options.use_settings_location}
       onToggle={(enabled) => updateOptions({ use_settings_location: enabled })}
     >
       <div className="grid grid-cols-1 gap-4">
         <div>
-          <Label htmlFor="year">Year</Label>
+          <Label htmlFor="year">{t('year')}</Label>
           <Input
             id="year"
             type="number"
@@ -48,16 +50,16 @@ export const SettingsLocationSection: React.FC<
               updateOptions({ use_environment: !!checked })
             }
           />
-          <Label htmlFor="use_environment">Use Environment</Label>
+          <Label htmlFor="use_environment">{t('useEnvironment')}</Label>
         </div>
 
         <div>
-          <Label>Environment</Label>
+          <Label>{t('environment')}</Label>
           <SearchableDropdown
             options={environmentOptions}
             value={options.environment}
             onValueChange={(value) => updateOptions({ environment: value })}
-            label="Environment Options"
+            label={t('environmentOptions')}
             disabled={!options.use_environment}
           />
         </div>
@@ -70,16 +72,16 @@ export const SettingsLocationSection: React.FC<
               updateOptions({ use_location: !!checked })
             }
           />
-          <Label htmlFor="use_location">Use Location</Label>
+          <Label htmlFor="use_location">{t('useLocation')}</Label>
         </div>
 
         <div>
-          <Label>Location</Label>
+          <Label>{t('location')}</Label>
           <SearchableDropdown
             options={locationOptions}
             value={options.location || 'Berlin, Germany'}
             onValueChange={(value) => updateOptions({ location: value })}
-            label="Location Options"
+            label={t('locationOptions')}
             disabled={!options.use_location}
           />
         </div>
@@ -92,16 +94,16 @@ export const SettingsLocationSection: React.FC<
               updateOptions({ use_season: !!checked })
             }
           />
-          <Label htmlFor="use_season">Use Season</Label>
+          <Label htmlFor="use_season">{t('useSeason')}</Label>
         </div>
 
         <div>
-          <Label>Season</Label>
+          <Label>{t('season')}</Label>
           <SearchableDropdown
             options={seasonOptions}
             value={options.season || 'default (any season)'}
             onValueChange={(value) => updateOptions({ season: value })}
-            label="Season Options"
+            label={t('seasonOptions')}
             disabled={!options.use_season}
           />
         </div>
@@ -114,11 +116,11 @@ export const SettingsLocationSection: React.FC<
               updateOptions({ use_time_of_year: !!checked })
             }
           />
-          <Label htmlFor="use_time_of_year">Use Time of Year</Label>
+          <Label htmlFor="use_time_of_year">{t('useTimeOfYear')}</Label>
         </div>
 
         <div>
-          <Label htmlFor="time_of_year">Time of Year</Label>
+          <Label htmlFor="time_of_year">{t('timeOfYear')}</Label>
           <Input
             id="time_of_year"
             value={options.time_of_year}
@@ -135,16 +137,16 @@ export const SettingsLocationSection: React.FC<
               updateOptions({ use_atmosphere_mood: !!checked })
             }
           />
-          <Label htmlFor="use_atmosphere_mood">Use Atmosphere Mood</Label>
+          <Label htmlFor="use_atmosphere_mood">{t('useAtmosphereMood')}</Label>
         </div>
 
         <div>
-          <Label>Atmosphere Mood</Label>
+          <Label>{t('atmosphereMood')}</Label>
           <SearchableDropdown
             options={atmosphereMoodOptions}
             value={options.atmosphere_mood || 'default (neutral mood)'}
             onValueChange={(value) => updateOptions({ atmosphere_mood: value })}
-            label="Atmosphere Mood Options"
+            label={t('atmosphereMoodOptions')}
             disabled={!options.use_atmosphere_mood}
           />
         </div>

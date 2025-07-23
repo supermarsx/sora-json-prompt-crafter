@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MultiSelectDropdown } from '../MultiSelectDropdown';
+import i18n from '@/i18n';
 
 describe('MultiSelectDropdown', () => {
   const options = ['foo', 'bar', 'baz'];
@@ -13,15 +14,21 @@ describe('MultiSelectDropdown', () => {
       />,
     );
 
-    expect(screen.queryByPlaceholderText(/search options/i)).toBeNull();
+    expect(
+      screen.queryByPlaceholderText(i18n.t('searchOptionsPlaceholder')),
+    ).toBeNull();
 
     fireEvent.click(screen.getByRole('button'));
 
-    expect(screen.getByPlaceholderText(/search options/i)).toBeTruthy();
+    expect(
+      screen.getByPlaceholderText(i18n.t('searchOptionsPlaceholder')),
+    ).toBeTruthy();
 
     fireEvent.click(screen.getByRole('button', { name: /close/i }));
 
-    expect(screen.queryByPlaceholderText(/search options/i)).toBeNull();
+    expect(
+      screen.queryByPlaceholderText(i18n.t('searchOptionsPlaceholder')),
+    ).toBeNull();
   });
 
   test('filters options based on search query', () => {
@@ -34,7 +41,9 @@ describe('MultiSelectDropdown', () => {
     );
 
     fireEvent.click(screen.getByRole('button'));
-    const input = screen.getByPlaceholderText(/search options/i);
+    const input = screen.getByPlaceholderText(
+      i18n.t('searchOptionsPlaceholder'),
+    );
     fireEvent.change(input, { target: { value: 'ba' } });
 
     expect(screen.queryByText('Foo')).toBeNull();

@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogContent,
@@ -25,10 +26,13 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
   options,
   value,
   onValueChange,
-  placeholder = 'Select option...',
-  label = 'Options',
+  placeholder,
+  label,
   disabled = false,
 }) => {
+  const { t } = useTranslation();
+  const placeholderText = placeholder ?? t('searchablePlaceholder');
+  const labelText = label ?? t('searchableLabel');
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -83,23 +87,21 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
           disabled={disabled}
         >
           <span className="truncate">
-            {value ? formatLabel(value) : placeholder}
+            {value ? formatLabel(value) : placeholderText}
           </span>
           <ChevronDown className="w-4 h-4 ml-2 flex-shrink-0" />
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-md max-h-[80vh]">
         <DialogHeader>
-          <DialogTitle>{label}</DialogTitle>
-          <DialogDescription>
-            Search for an option and select a single value.
-          </DialogDescription>
+          <DialogTitle>{labelText}</DialogTitle>
+          <DialogDescription>{t('searchableDescription')}</DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
-              placeholder="Search options..."
+              placeholder={t('searchOptionsPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"

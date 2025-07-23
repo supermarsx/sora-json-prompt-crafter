@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogContent,
@@ -25,9 +26,12 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   options,
   value,
   onValueChange,
-  placeholder = 'Select options...',
-  label = 'Options',
+  placeholder,
+  label,
 }) => {
+  const { t } = useTranslation();
+  const placeholderText = placeholder ?? t('multiSelectPlaceholder');
+  const labelText = label ?? t('multiSelectLabel');
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -72,7 +76,7 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   };
 
   const displayValue =
-    value.length > 0 ? value.map(formatLabel).join(', ') : placeholder;
+    value.length > 0 ? value.map(formatLabel).join(', ') : placeholderText;
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -84,16 +88,14 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
       </DialogTrigger>
       <DialogContent className="max-w-md max-h-[80vh]">
         <DialogHeader>
-          <DialogTitle>{label}</DialogTitle>
-          <DialogDescription>
-            Search for options and select any that apply.
-          </DialogDescription>
+          <DialogTitle>{labelText}</DialogTitle>
+          <DialogDescription>{t('multiSelectDescription')}</DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
-              placeholder="Search options..."
+              placeholder={t('searchOptionsPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"

@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { SearchableDropdown } from '../SearchableDropdown';
+import i18n from '@/i18n';
 import React from 'react';
 
 function Wrapper({ options }: { options: string[] }) {
@@ -25,8 +26,12 @@ describe('SearchableDropdown', () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: /select option/i }));
-    const input = screen.getByPlaceholderText(/search options/i);
+    fireEvent.click(
+      screen.getByRole('button', { name: i18n.t('searchablePlaceholder') }),
+    );
+    const input = screen.getByPlaceholderText(
+      i18n.t('searchOptionsPlaceholder'),
+    );
     fireEvent.change(input, { target: { value: 'ap' } });
 
     expect(screen.getByRole('button', { name: 'Apple' })).toBeDefined();
@@ -36,11 +41,15 @@ describe('SearchableDropdown', () => {
 
   test('selecting an option updates value and closes menu', () => {
     render(<Wrapper options={options} />);
-    fireEvent.click(screen.getByRole('button', { name: /select option/i }));
+    fireEvent.click(
+      screen.getByRole('button', { name: i18n.t('searchablePlaceholder') }),
+    );
     fireEvent.click(screen.getByRole('button', { name: 'Banana' }));
 
     expect(screen.getByRole('button', { name: 'Banana' })).toBeDefined();
-    expect(screen.queryByPlaceholderText(/search options/i)).toBeNull();
+    expect(
+      screen.queryByPlaceholderText(i18n.t('searchOptionsPlaceholder')),
+    ).toBeNull();
   });
 
   test('disabled state prevents opening', () => {
@@ -52,9 +61,13 @@ describe('SearchableDropdown', () => {
         disabled
       />,
     );
-    const trigger = screen.getByRole('button', { name: /select option/i });
+    const trigger = screen.getByRole('button', {
+      name: i18n.t('searchablePlaceholder'),
+    });
     expect(trigger.hasAttribute('disabled')).toBe(true);
     fireEvent.click(trigger);
-    expect(screen.queryByPlaceholderText(/search options/i)).toBeNull();
+    expect(
+      screen.queryByPlaceholderText(i18n.t('searchOptionsPlaceholder')),
+    ).toBeNull();
   });
 });
