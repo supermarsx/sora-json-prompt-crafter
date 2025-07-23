@@ -180,11 +180,20 @@ Pull requests are welcome. Please open an issue first to discuss major changes.
 
 ## Disclaimer
 
-The full legal disclaimer displayed in the application is stored in
-`public/disclaimers/disclaimer.en.txt` (and other languages). These files are
-copied to the `dist` directory during the build so they can be accessed under
+The full legal disclaimers are located under `public/disclaimers/`. They are
+copied to the `dist` directory during the build so they can be accessed from
 `/disclaimers/`. You can change the location by setting `VITE_DISCLAIMER_URL` to
 your own path pattern.
+
+### Supported Languages
+
+- English (`disclaimer.en.txt`)
+- Spanish (`disclaimer.es.txt`)
+- Portuguese-PT (`disclaimer.pt-PT.txt`)
+- Russian (`disclaimer.ru.txt`)
+
+To add a new language, place `disclaimer.<locale>.txt` in
+`public/disclaimers/` and update the language list as needed.
 
 ## Tracking/Analytics
 
