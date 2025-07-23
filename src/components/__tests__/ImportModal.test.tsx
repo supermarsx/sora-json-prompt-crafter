@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import ImportModal from '../ImportModal';
 import { toast } from '@/components/ui/sonner-toast';
+import i18n from '@/i18n';
 
 jest.mock('@/components/ui/sonner-toast', () => ({
   __esModule: true,
@@ -74,7 +75,7 @@ describe('ImportModal', () => {
     const button = screen.getByRole('button', { name: /import/i });
     fireEvent.click(button);
 
-    expect(toast.error).toHaveBeenCalledWith('Invalid JSON');
+    expect(toast.error).toHaveBeenCalledWith(i18n.t('invalidJson'));
     expect(onImport).not.toHaveBeenCalled();
   });
 });

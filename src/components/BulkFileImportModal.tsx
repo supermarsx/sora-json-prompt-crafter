@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { trackEvent } from '@/lib/analytics';
 import { useTracking } from '@/hooks/use-tracking';
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogContent,
@@ -27,10 +28,11 @@ const BulkFileImportModal: React.FC<BulkFileImportModalProps> = ({
 }) => {
   const [file, setFile] = useState<File | null>(null);
   const [trackingEnabled] = useTracking();
+  const { t } = useTranslation();
 
   const handleImport = async () => {
     if (!file) {
-      toast.error('Please select a file');
+      toast.error(t('pleaseSelectFile'));
       return;
     }
     try {
@@ -60,12 +62,12 @@ const BulkFileImportModal: React.FC<BulkFileImportModalProps> = ({
       }
       if (!jsons.length) throw new Error('invalid');
       onImport(jsons);
-      toast.success('File imported!');
+      toast.success(t('fileImported'));
       trackEvent(trackingEnabled, 'history_import', { type: 'bulk_file' });
       setFile(null);
       onOpenChange(false);
     } catch {
-      toast.error('Failed to import file');
+      toast.error(t('failedImportFile'));
     }
   };
 
@@ -73,9 +75,9 @@ const BulkFileImportModal: React.FC<BulkFileImportModalProps> = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Bulk File Import</DialogTitle>
+          <DialogTitle>{t('bulkFileImport')}</DialogTitle>
           <DialogDescription>
-            Select a JSON file to import prompts.
+            {t('bulkFileImportDescription')}
           </DialogDescription>
         </DialogHeader>
         <Input
@@ -85,9 +87,9 @@ const BulkFileImportModal: React.FC<BulkFileImportModalProps> = ({
         />
         <DialogFooter>
           <Button variant="secondary" onClick={() => onOpenChange(false)}>
-            Cancel
+            {t('cancel')}
           </Button>
-          <Button onClick={handleImport}>Import</Button>
+          <Button onClick={handleImport}>{t('import')}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
