@@ -76,6 +76,7 @@
   "jsonPromptsTab": "Invites JSON",
   "latestActionsTab": "Actions récentes",
   "historyPromptsIntro": "Ceci est l'historique des invites copiées dans le presse-papiers ; chaque invite copiée y apparaît. Vous pouvez les consulter, les exporter ou les supprimer lorsqu'elles ne sont plus nécessaires.",
+  "historyEmptyPrompts": "Nous sommes seuls ici, générez quelques invites et copiez-les 🥺",
   "latestActionsIntro": "Voici vos actions récentes, conservées ici pour référence. Si vous désactivez le suivi, cet historique sera également désactivé.",
   "export": "Exporter",
   "pasteFromClipboard": "Coller depuis le presse-papiers",

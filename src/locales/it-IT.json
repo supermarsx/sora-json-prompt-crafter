@@ -76,6 +76,7 @@
   "jsonPromptsTab": "Prompt JSON",
   "latestActionsTab": "Azioni recenti",
   "historyPromptsIntro": "Questa è la cronologia dei prompt copiati negli appunti; ogni prompt copiato viene elencato qui. Puoi rivederli, esportarli o eliminarli quando non servono più.",
+  "historyEmptyPrompts": "Qui siamo soli, genera qualche prompt e copiali 🥺",
   "latestActionsIntro": "Queste sono le tue azioni più recenti, verranno mantenute qui per riferimento. Disabilitando il tracciamento, verrà disabilitata anche questa cronologia.",
   "export": "Esporta",
   "pasteFromClipboard": "Incolla dagli appunti",
