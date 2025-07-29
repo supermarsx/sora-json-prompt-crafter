@@ -319,7 +319,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
             {actionLabelsEnabled && t('language')}
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent className="max-h-screen sm:max-h-[50vh] overflow-y-auto">
           <DropdownMenuItem
             onSelect={() => setLocale('en-US')}
             className="gap-2"
