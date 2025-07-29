@@ -76,6 +76,7 @@
   "jsonPromptsTab": "Prompts JSON",
   "latestActionsTab": "Ações recentes",
   "historyPromptsIntro": "Este é o histórico de prompts copiados; cada prompt copiado aparece aqui. Você pode revisá-los, exportá-los ou excluí-los quando não precisar mais.",
+  "historyEmptyPrompts": "Estamos sozinhos aqui, gere alguns prompts e copie-os 🥺",
   "latestActionsIntro": "Estas são suas ações recentes, mantidas para referência. Se desativar o monitoramento, este histórico também será desativado.",
   "export": "Exportar",
   "pasteFromClipboard": "Colar da área de transferência",

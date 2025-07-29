@@ -76,6 +76,7 @@
   "jsonPromptsTab": "JSON 提示",
   "latestActionsTab": "最新操作",
   "historyPromptsIntro": "这是复制到剪贴板的提示历史记录；每次复制的提示都会显示在此处。您可以查看、导出或在不需要时删除它们。",
+  "historyEmptyPrompts": "这里很寂寞，请生成一些提示并复制它们 🥺",
   "latestActionsIntro": "这些是您的最近操作，将在此处保留以供参考。如果禁用跟踪，也会禁用此历史记录。",
   "export": "导出",
   "pasteFromClipboard": "从剪贴板粘贴",

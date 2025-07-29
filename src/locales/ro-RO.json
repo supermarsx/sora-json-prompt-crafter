@@ -76,6 +76,7 @@
   "jsonPromptsTab": "Prompts JSON",
   "latestActionsTab": "Acțiuni recente",
   "historyPromptsIntro": "Aceasta este istoricul prompturilor copiate în clipboard; fiecare prompt copiat apare aici. Le poți revizui, exporta sau șterge când nu mai sunt necesare.",
+  "historyEmptyPrompts": "Ne simțim singuri aici, generează câteva prompturi și copiază-le 🥺",
   "latestActionsIntro": "Acestea sunt acțiunile tale recente, afișate aici pentru referință. Dezactivând urmărirea, acest istoric va fi, de asemenea, dezactivat.",
   "export": "Exportă",
   "pasteFromClipboard": "Lipește din clipboard",
