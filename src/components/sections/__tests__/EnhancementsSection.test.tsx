@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, within } from '@testing-library/react';
+import i18n from '@/i18n';
 import { EnhancementsSection } from '../EnhancementsSection';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 
@@ -42,7 +43,7 @@ describe('EnhancementsSection', () => {
         onToggle={() => {}}
       />,
     );
-    let section = screen.getByText('Safety Filter')
+    let section = screen.getByText(i18n.t('safetyFilter'))
       .parentElement as HTMLElement;
     let dropdown = within(section).getByRole('button');
     fireEvent.click(dropdown);
@@ -58,7 +59,8 @@ describe('EnhancementsSection', () => {
         onToggle={() => {}}
       />,
     );
-    section = screen.getByText('Safety Filter').parentElement as HTMLElement;
+    section = screen.getByText(i18n.t('safetyFilter'))
+      .parentElement as HTMLElement;
     dropdown = within(section).getByRole('button');
     expect(dropdown.hasAttribute('disabled')).toBe(true);
   });
@@ -101,7 +103,7 @@ describe('EnhancementsSection', () => {
       />,
     );
 
-    const section = screen.getByText('Safety Filter')
+    const section = screen.getByText(i18n.t('safetyFilter'))
       .parentElement as HTMLElement;
     const dropdown = within(section).getByRole('button');
     fireEvent.click(dropdown);
@@ -166,7 +168,7 @@ describe('EnhancementsSection', () => {
       />,
     );
 
-    const boosterSection = screen.getByText('Quality Booster')
+    const boosterSection = screen.getByText(i18n.t('qualityBooster'))
       .parentElement as HTMLElement;
     let dropdown = within(boosterSection).getByRole('button');
     expect(dropdown.hasAttribute('disabled')).toBe(true);

@@ -1,11 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import {
-  ToastProvider,
-  Toast,
-  ToastViewport,
-  ToastClose,
-} from '../toast';
+import { ToastProvider, Toast, ToastViewport, ToastClose } from '../toast';
 
 function ToastExample() {
   const [open, setOpen] = React.useState(true);

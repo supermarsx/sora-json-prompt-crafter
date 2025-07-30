@@ -23,7 +23,9 @@ describe('isValidOptions', () => {
   });
 
   test('accepts composition_rules arrays and style_preset objects', () => {
-    expect(isValidOptions({ composition_rules: ['rule of thirds'] })).toBe(true);
+    expect(isValidOptions({ composition_rules: ['rule of thirds'] })).toBe(
+      true,
+    );
     expect(
       isValidOptions({ style_preset: { category: 'foo', style: 'bar' } }),
     ).toBe(true);
@@ -44,20 +46,22 @@ describe('isValidOptions', () => {
   });
 
   test('rejects invalid types for specific fields', () => {
-    expect(isValidOptions({ composition_rules: {} as unknown as string[] })).toBe(
-      false,
-    );
+    expect(
+      isValidOptions({ composition_rules: {} as unknown as string[] }),
+    ).toBe(false);
     expect(isValidOptions({ seed: '123' as unknown as number })).toBe(false);
   });
 
   test('rejects arrays for string fields', () => {
-    expect(isValidOptions({ prompt: ['foo'] as unknown as string })).toBe(false);
+    expect(isValidOptions({ prompt: ['foo'] as unknown as string })).toBe(
+      false,
+    );
   });
 
   test('rejects objects for string fields', () => {
-    expect(isValidOptions({ prompt: { text: 'foo' } as unknown as string })).toBe(
-      false,
-    );
+    expect(
+      isValidOptions({ prompt: { text: 'foo' } as unknown as string }),
+    ).toBe(false);
   });
 
   test('rejects null for non-nullable fields', () => {

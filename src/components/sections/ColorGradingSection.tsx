@@ -1,5 +1,6 @@
 import React from 'react';
 import { Label } from '@/components/ui/label';
+import { useTranslation } from 'react-i18next';
 import { SearchableDropdown } from '../SearchableDropdown';
 import { CollapsibleSection } from '../CollapsibleSection';
 import type { SoraOptions } from '@/lib/soraOptions';
@@ -14,6 +15,7 @@ export const ColorGradingSection: React.FC<ColorGradingSectionProps> = ({
   options,
   updateOptions,
 }) => {
+  const { t } = useTranslation();
   return (
     <CollapsibleSection
       title="Color Grading"
@@ -23,7 +25,7 @@ export const ColorGradingSection: React.FC<ColorGradingSectionProps> = ({
     >
       <div className="space-y-4">
         <div>
-          <Label>Color Grade</Label>
+          <Label>{t('colorGrade')}</Label>
           <SearchableDropdown
             options={colorGradingOptions}
             value={options.color_grade || 'default (no specific color grading)'}

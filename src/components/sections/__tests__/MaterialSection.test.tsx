@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, within } from '@testing-library/react';
+import i18n from '@/i18n';
 import { MaterialSection } from '../MaterialSection';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 
@@ -40,7 +41,7 @@ describe('MaterialSection', () => {
         updateOptions={updateOptions}
       />,
     );
-    const section = screen.getByText('Secondary Material')
+    const section = screen.getByText(i18n.t('secondaryMaterial'))
       .parentElement as HTMLElement;
     let dropdown = within(section).getByRole('button');
     fireEvent.click(dropdown);
@@ -74,7 +75,7 @@ describe('MaterialSection', () => {
       />,
     );
 
-    const section = screen.getByText('Made Out Of')
+    const section = screen.getByText(i18n.t('madeOutOf'))
       .parentElement as HTMLElement;
     const dropdown = within(section).getByRole('button');
     fireEvent.click(dropdown);

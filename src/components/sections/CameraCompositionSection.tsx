@@ -1,5 +1,6 @@
 import React from 'react';
 import { Label } from '@/components/ui/label';
+import { useTranslation } from 'react-i18next';
 import {
   Select,
   SelectContent,
@@ -33,6 +34,7 @@ interface CameraCompositionSectionProps {
 export const CameraCompositionSection: React.FC<
   CameraCompositionSectionProps
 > = ({ options, updateOptions, isEnabled, onToggle }) => {
+  const { t } = useTranslation();
   const handleCompositionRulesChange = (selectedRules: string[]) => {
     updateOptions({ composition_rules: selectedRules });
   };
@@ -46,7 +48,7 @@ export const CameraCompositionSection: React.FC<
     >
       <div className="grid grid-cols-1 gap-4">
         <div>
-          <Label>Camera Type</Label>
+          <Label>{t('cameraType')}</Label>
           <SearchableDropdown
             options={cameraTypeOptions}
             value={options.camera_type}
@@ -63,11 +65,11 @@ export const CameraCompositionSection: React.FC<
               updateOptions({ use_lens_type: !!checked })
             }
           />
-          <Label htmlFor="use_lens_type">Use Lens Type</Label>
+          <Label htmlFor="use_lens_type">{t('useLensType')}</Label>
         </div>
 
         <div>
-          <Label>Lens Type</Label>
+          <Label>{t('lensType')}</Label>
           <SearchableDropdown
             options={lensTypeOptions}
             value={options.lens_type}
@@ -78,7 +80,7 @@ export const CameraCompositionSection: React.FC<
         </div>
 
         <div>
-          <Label>Shot Type</Label>
+          <Label>{t('shotType')}</Label>
           <SearchableDropdown
             options={shotTypeOptions}
             value={options.shot_type}
@@ -95,11 +97,11 @@ export const CameraCompositionSection: React.FC<
               updateOptions({ use_camera_angle: !!checked })
             }
           />
-          <Label htmlFor="use_camera_angle">Use Camera Angle</Label>
+          <Label htmlFor="use_camera_angle">{t('useCameraAngle')}</Label>
         </div>
 
         <div>
-          <Label>Camera Angle</Label>
+          <Label>{t('cameraAngle')}</Label>
           <SearchableDropdown
             options={cameraAngleOptions}
             value={options.camera_angle}
@@ -110,7 +112,7 @@ export const CameraCompositionSection: React.FC<
         </div>
 
         <div>
-          <Label htmlFor="subject_focus">Subject Focus</Label>
+          <Label htmlFor="subject_focus">{t('subjectFocus')}</Label>
           <Select
             value={options.subject_focus}
             onValueChange={(
@@ -131,7 +133,7 @@ export const CameraCompositionSection: React.FC<
         </div>
 
         <div>
-          <Label>Composition Rules</Label>
+          <Label>{t('compositionRules')}</Label>
           <MultiSelectDropdown
             options={compositionRulesOptions}
             value={options.composition_rules}
@@ -149,11 +151,11 @@ export const CameraCompositionSection: React.FC<
               updateOptions({ use_aperture: !!checked })
             }
           />
-          <Label htmlFor="use_aperture">Use Aperture</Label>
+          <Label htmlFor="use_aperture">{t('useAperture')}</Label>
         </div>
 
         <div>
-          <Label>Aperture</Label>
+          <Label>{t('aperture')}</Label>
           <SearchableDropdown
             options={apertureOptions}
             value={options.aperture}
@@ -169,11 +171,11 @@ export const CameraCompositionSection: React.FC<
             checked={options.use_dof}
             onCheckedChange={(checked) => updateOptions({ use_dof: !!checked })}
           />
-          <Label htmlFor="use_dof">Use Depth of Field</Label>
+          <Label htmlFor="use_dof">{t('useDepthOfField')}</Label>
         </div>
 
         <div>
-          <Label>Depth of Field</Label>
+          <Label>{t('depthOfField')}</Label>
           <SearchableDropdown
             options={depthOfFieldOptions}
             value={options.depth_of_field || 'default'}
@@ -191,11 +193,11 @@ export const CameraCompositionSection: React.FC<
               updateOptions({ use_blur_style: !!checked })
             }
           />
-          <Label htmlFor="use_blur_style">Use Blur Style</Label>
+          <Label htmlFor="use_blur_style">{t('useBlurStyle')}</Label>
         </div>
 
         <div>
-          <Label>Blur Style</Label>
+          <Label>{t('blurStyle')}</Label>
           <SearchableDropdown
             options={blurStyleOptions}
             value={options.blur_style || 'default'}

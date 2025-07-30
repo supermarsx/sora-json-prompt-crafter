@@ -1,5 +1,6 @@
 import React from 'react';
 import { Label } from '@/components/ui/label';
+import { useTranslation } from 'react-i18next';
 import { Checkbox } from '@/components/ui/checkbox';
 import { SearchableDropdown } from '../SearchableDropdown';
 import { CollapsibleSection } from '../CollapsibleSection';
@@ -15,6 +16,7 @@ export const MaterialSection: React.FC<MaterialSectionProps> = ({
   options,
   updateOptions,
 }) => {
+  const { t } = useTranslation();
   return (
     <CollapsibleSection
       title="Material"
@@ -24,7 +26,7 @@ export const MaterialSection: React.FC<MaterialSectionProps> = ({
     >
       <div className="space-y-4">
         <div>
-          <Label>Made Out Of</Label>
+          <Label>{t('madeOutOf')}</Label>
           <SearchableDropdown
             options={materialOptions}
             value={options.made_out_of}
@@ -41,11 +43,13 @@ export const MaterialSection: React.FC<MaterialSectionProps> = ({
               updateOptions({ use_secondary_material: !!checked })
             }
           />
-          <Label htmlFor="use_secondary_material">Use Secondary Material</Label>
+          <Label htmlFor="use_secondary_material">
+            {t('useSecondaryMaterial')}
+          </Label>
         </div>
 
         <div>
-          <Label>Secondary Material</Label>
+          <Label>{t('secondaryMaterial')}</Label>
           <SearchableDropdown
             options={materialOptions}
             value={options.secondary_material || 'default'}

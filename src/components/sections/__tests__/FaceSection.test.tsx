@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, within } from '@testing-library/react';
+import i18n from '@/i18n';
 import { FaceSection } from '../FaceSection';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 
@@ -35,7 +36,7 @@ describe('FaceSection', () => {
     const { rerender } = render(
       <FaceSection options={enabledOptions} updateOptions={updateOptions} />,
     );
-    let section = screen.getByText('Subject Gender')
+    let section = screen.getByText(i18n.t('subjectGender'))
       .parentElement as HTMLElement;
     let dropdown = within(section).getByRole('button');
     fireEvent.click(dropdown);
@@ -46,7 +47,8 @@ describe('FaceSection', () => {
     rerender(
       <FaceSection options={disabledOptions} updateOptions={updateOptions} />,
     );
-    section = screen.getByText('Subject Gender').parentElement as HTMLElement;
+    section = screen.getByText(i18n.t('subjectGender'))
+      .parentElement as HTMLElement;
     dropdown = within(section).getByRole('button');
     expect(dropdown.hasAttribute('disabled')).toBe(true);
   });
@@ -63,7 +65,8 @@ describe('FaceSection', () => {
       <FaceSection options={options} updateOptions={updateOptions} />,
     );
 
-    let section = screen.getByText('Makeup Style').parentElement as HTMLElement;
+    let section = screen.getByText(i18n.t('makeupStyle'))
+      .parentElement as HTMLElement;
     let dropdown = within(section).getByRole('button');
     expect(dropdown.hasAttribute('disabled')).toBe(true);
 
@@ -77,7 +80,8 @@ describe('FaceSection', () => {
     };
     rerender(<FaceSection options={options} updateOptions={updateOptions} />);
 
-    section = screen.getByText('Makeup Style').parentElement as HTMLElement;
+    section = screen.getByText(i18n.t('makeupStyle'))
+      .parentElement as HTMLElement;
     dropdown = within(section).getByRole('button');
     fireEvent.click(dropdown);
     fireEvent.click(screen.getByRole('button', { name: /^bold glam$/i }));
@@ -96,7 +100,7 @@ describe('FaceSection', () => {
       <FaceSection options={options} updateOptions={updateOptions} />,
     );
 
-    let section = screen.getByText('Character Mood')
+    let section = screen.getByText(i18n.t('characterMood'))
       .parentElement as HTMLElement;
     let dropdown = within(section).getByRole('button');
     expect(dropdown.hasAttribute('disabled')).toBe(true);
@@ -111,7 +115,8 @@ describe('FaceSection', () => {
     };
     rerender(<FaceSection options={options} updateOptions={updateOptions} />);
 
-    section = screen.getByText('Character Mood').parentElement as HTMLElement;
+    section = screen.getByText(i18n.t('characterMood'))
+      .parentElement as HTMLElement;
     dropdown = within(section).getByRole('button');
     fireEvent.click(dropdown);
     fireEvent.click(screen.getByRole('button', { name: /^happy$/i }));

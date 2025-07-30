@@ -1,5 +1,6 @@
 import React from 'react';
 import { Label } from '@/components/ui/label';
+import { useTranslation } from 'react-i18next';
 import { Checkbox } from '@/components/ui/checkbox';
 import { SearchableDropdown } from '../SearchableDropdown';
 import { CollapsibleSection } from '../CollapsibleSection';
@@ -23,6 +24,7 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
   isEnabled,
   onToggle,
 }) => {
+  const { t } = useTranslation();
   const handleSafetyFilterChange = (value: string) => {
     // Map string values to the expected type
     let safetyFilter: SoraOptions['safety_filter'];
@@ -54,7 +56,7 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
               updateOptions({ prevent_deformities: !!checked })
             }
           />
-          <Label htmlFor="prevent_deformities">Prevent Deformities</Label>
+          <Label htmlFor="prevent_deformities">{t('preventDeformities')}</Label>
         </div>
 
         <div className="flex items-center space-x-2">
@@ -65,11 +67,13 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
               updateOptions({ use_upscale_factor: !!checked })
             }
           />
-          <Label htmlFor="use_upscale_factor">Use Upscale Factor</Label>
+          <Label htmlFor="use_upscale_factor">{t('useUpscaleFactor')}</Label>
         </div>
 
         <div>
-          <Label htmlFor="upscale">Upscale Factor: {options.upscale}</Label>
+          <Label htmlFor="upscale">
+            {t('upscaleFactorLabel', { value: options.upscale })}
+          </Label>
           <Slider
             value={[options.upscale]}
             onValueChange={(value) => updateOptions({ upscale: value[0] })}
@@ -89,11 +93,11 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
               updateOptions({ use_safety_filter: !!checked })
             }
           />
-          <Label htmlFor="use_safety_filter">Use Safety Filter</Label>
+          <Label htmlFor="use_safety_filter">{t('useSafetyFilter')}</Label>
         </div>
 
         <div>
-          <Label>Safety Filter</Label>
+          <Label>{t('safetyFilter')}</Label>
           <SearchableDropdown
             options={safetyFilterOptions}
             value={options.safety_filter || 'default (auto safety level)'}
@@ -112,7 +116,7 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
             }
           />
           <Label htmlFor="keep_typography_details">
-            Keep Typography Details
+            {t('keepTypographyDetails')}
           </Label>
         </div>
 
@@ -124,11 +128,11 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
               updateOptions({ use_quality_booster: !!checked })
             }
           />
-          <Label htmlFor="use_quality_booster">Use Quality Booster</Label>
+          <Label htmlFor="use_quality_booster">{t('useQualityBooster')}</Label>
         </div>
 
         <div>
-          <Label>Quality Booster</Label>
+          <Label>{t('qualityBooster')}</Label>
           <SearchableDropdown
             options={qualityBoosterOptions}
             value={options.quality_booster || 'default (standard quality)'}
@@ -147,7 +151,7 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
             }
           />
           <Label htmlFor="enhance_object_reflections">
-            Enhance Object Reflections
+            {t('enhanceObjectReflections')}
           </Label>
         </div>
 
@@ -159,7 +163,7 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
               updateOptions({ keep_key_details: !!checked })
             }
           />
-          <Label htmlFor="keep_key_details">Keep Key Details</Label>
+          <Label htmlFor="keep_key_details">{t('keepKeyDetails')}</Label>
         </div>
       </div>
     </CollapsibleSection>

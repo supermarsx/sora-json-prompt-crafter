@@ -21,7 +21,7 @@ describe('locale completeness', () => {
       }
     }
     if (reports.length > 0) {
-      fail(`Missing translation keys:\n${reports.join('\n')}`);
+      throw new Error(`Missing translation keys:\n${reports.join('\n')}`);
     }
   });
 });
