@@ -1,19 +1,18 @@
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
 
-export function useUndoRedo<T>(
-  initialValue: T | (() => T),
-  limit = 50,
-) {
-  const init = typeof initialValue === 'function'
-    ? (initialValue as () => T)()
-    : initialValue;
+export function useUndoRedo<T>(initialValue: T | (() => T), limit = 50) {
+  const init =
+    typeof initialValue === 'function'
+      ? (initialValue as () => T)()
+      : initialValue;
   const historyRef = useRef<T[]>([init]);
   const indexRef = useRef(0);
   const [state, setState] = useState<T>(init);
 
   const push: Dispatch<SetStateAction<T>> = (value) => {
     setState((prev) => {
-      const next = typeof value === 'function' ? (value as (p: T) => T)(prev) : value;
+      const next =
+        typeof value === 'function' ? (value as (p: T) => T)(prev) : value;
       let hist = historyRef.current.slice(0, indexRef.current + 1);
       hist.push(next);
       if (hist.length > limit) hist = hist.slice(hist.length - limit);

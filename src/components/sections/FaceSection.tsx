@@ -1,5 +1,6 @@
 import React from 'react';
 import { Label } from '@/components/ui/label';
+import { useTranslation } from 'react-i18next';
 import { Checkbox } from '@/components/ui/checkbox';
 import { SearchableDropdown } from '../SearchableDropdown';
 import { CollapsibleSection } from '../CollapsibleSection';
@@ -19,6 +20,7 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
   options,
   updateOptions,
 }) => {
+  const { t } = useTranslation();
   return (
     <CollapsibleSection
       title="Face"
@@ -35,7 +37,7 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
               updateOptions({ add_same_face: !!checked })
             }
           />
-          <Label htmlFor="add_same_face">Add the Same Face</Label>
+          <Label htmlFor="add_same_face">{t('addSameFace')}</Label>
         </div>
 
         <div className="flex items-center space-x-2">
@@ -46,7 +48,7 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
               updateOptions({ dont_change_face: !!checked })
             }
           />
-          <Label htmlFor="dont_change_face">Don't Change the Face</Label>
+          <Label htmlFor="dont_change_face">{t('dontChangeFace')}</Label>
         </div>
 
         <div className="flex items-center space-x-2">
@@ -57,11 +59,11 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
               updateOptions({ use_subject_gender: !!checked })
             }
           />
-          <Label htmlFor="use_subject_gender">Use Subject Gender</Label>
+          <Label htmlFor="use_subject_gender">{t('useSubjectGender')}</Label>
         </div>
 
         <div>
-          <Label>Subject Gender</Label>
+          <Label>{t('subjectGender')}</Label>
           <SearchableDropdown
             options={subjectGenderOptions}
             value={options.subject_gender || 'default (auto/inferred gender)'}
@@ -79,11 +81,11 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
               updateOptions({ use_makeup_style: !!checked })
             }
           />
-          <Label htmlFor="use_makeup_style">Use Makeup Style</Label>
+          <Label htmlFor="use_makeup_style">{t('useMakeupStyle')}</Label>
         </div>
 
         <div>
-          <Label>Makeup Style</Label>
+          <Label>{t('makeupStyle')}</Label>
           <SearchableDropdown
             options={makeupStyleOptions}
             value={options.makeup_style || 'default (no specific makeup)'}
@@ -101,11 +103,11 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
               updateOptions({ use_character_mood: !!checked })
             }
           />
-          <Label htmlFor="use_character_mood">Use Character Mood</Label>
+          <Label htmlFor="use_character_mood">{t('useCharacterMood')}</Label>
         </div>
 
         <div>
-          <Label>Character Mood</Label>
+          <Label>{t('characterMood')}</Label>
           <SearchableDropdown
             options={characterMoodOptions}
             value={options.character_mood || 'default (neutral mood)'}

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Label } from '@/components/ui/label';
+import { useTranslation } from 'react-i18next';
 import {
   Select,
   SelectContent,
@@ -22,6 +23,7 @@ export const StyleSection: React.FC<StyleSectionProps> = ({
   updateNestedOptions,
   updateOptions,
 }) => {
+  const { t } = useTranslation();
   const formatLabel = (value: string) => {
     return value
       .split(' ')
@@ -38,7 +40,7 @@ export const StyleSection: React.FC<StyleSectionProps> = ({
     >
       <div className="grid grid-cols-1 gap-4">
         <div>
-          <Label htmlFor="style_category">Style Category</Label>
+          <Label htmlFor="style_category">{t('styleCategory')}</Label>
           <Select
             value={options.style_preset.category}
             onValueChange={(value) =>
@@ -59,7 +61,7 @@ export const StyleSection: React.FC<StyleSectionProps> = ({
         </div>
 
         <div>
-          <Label htmlFor="style_preset">Style</Label>
+          <Label htmlFor="style_preset">{t('style')}</Label>
           <Select
             value={options.style_preset.style}
             onValueChange={(value) =>

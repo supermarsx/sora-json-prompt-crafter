@@ -1,5 +1,6 @@
 import React from 'react';
 import { Label } from '@/components/ui/label';
+import { useTranslation } from 'react-i18next';
 import { Checkbox } from '@/components/ui/checkbox';
 import { SearchableDropdown } from '../SearchableDropdown';
 import { CollapsibleSection } from '../CollapsibleSection';
@@ -28,6 +29,7 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
   isEnabled,
   onToggle,
 }) => {
+  const { t } = useTranslation();
   return (
     <CollapsibleSection
       title="Dungeons & Dragons"
@@ -44,11 +46,13 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
               updateOptions({ use_dnd_character_race: !!checked })
             }
           />
-          <Label htmlFor="use_dnd_character_race">Use Character Race</Label>
+          <Label htmlFor="use_dnd_character_race">
+            {t('useCharacterRace')}
+          </Label>
         </div>
 
         <div>
-          <Label>Character Race</Label>
+          <Label>{t('characterRace')}</Label>
           <SearchableDropdown
             options={characterRaceOptions}
             value={options.dnd_character_race || 'human'}
@@ -68,11 +72,13 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
               updateOptions({ use_dnd_character_class: !!checked })
             }
           />
-          <Label htmlFor="use_dnd_character_class">Use Character Class</Label>
+          <Label htmlFor="use_dnd_character_class">
+            {t('useCharacterClass')}
+          </Label>
         </div>
 
         <div>
-          <Label>Character Class</Label>
+          <Label>{t('characterClass')}</Label>
           <SearchableDropdown
             options={characterClassOptions}
             value={options.dnd_character_class || 'fighter'}
@@ -93,12 +99,12 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
             }
           />
           <Label htmlFor="use_dnd_character_background">
-            Use Character Background
+            {t('useCharacterBackground')}
           </Label>
         </div>
 
         <div>
-          <Label>Character Background</Label>
+          <Label>{t('characterBackground')}</Label>
           <SearchableDropdown
             options={characterBackgroundOptions}
             value={options.dnd_character_background || 'soldier'}
@@ -119,12 +125,12 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
             }
           />
           <Label htmlFor="use_dnd_character_alignment">
-            Use Character Alignment
+            {t('useCharacterAlignment')}
           </Label>
         </div>
 
         <div>
-          <Label>Character Alignment</Label>
+          <Label>{t('characterAlignment')}</Label>
           <SearchableDropdown
             options={characterAlignmentOptions}
             value={options.dnd_character_alignment || 'lawful good'}
@@ -144,11 +150,11 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
               updateOptions({ use_dnd_monster_type: !!checked })
             }
           />
-          <Label htmlFor="use_dnd_monster_type">Use Monster Type</Label>
+          <Label htmlFor="use_dnd_monster_type">{t('useMonsterType')}</Label>
         </div>
 
         <div>
-          <Label>Monster Type</Label>
+          <Label>{t('monsterType')}</Label>
           <SearchableDropdown
             options={monsterTypeOptions}
             value={options.dnd_monster_type || 'dragon'}
@@ -168,11 +174,11 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
               updateOptions({ use_dnd_environment: !!checked })
             }
           />
-          <Label htmlFor="use_dnd_environment">Use D&D Environment</Label>
+          <Label htmlFor="use_dnd_environment">{t('useDnDEnvironment')}</Label>
         </div>
 
         <div>
-          <Label>D&D Environment</Label>
+          <Label>{t('dndEnvironment')}</Label>
           <SearchableDropdown
             options={dndEnvironmentOptions}
             value={options.dnd_environment || 'dungeon'}
@@ -190,11 +196,11 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
               updateOptions({ use_dnd_magic_school: !!checked })
             }
           />
-          <Label htmlFor="use_dnd_magic_school">Use Magic School</Label>
+          <Label htmlFor="use_dnd_magic_school">{t('useMagicSchool')}</Label>
         </div>
 
         <div>
-          <Label>Magic School</Label>
+          <Label>{t('magicSchool')}</Label>
           <SearchableDropdown
             options={magicSchoolOptions}
             value={options.dnd_magic_school || 'evocation'}
@@ -214,11 +220,11 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
               updateOptions({ use_dnd_item_type: !!checked })
             }
           />
-          <Label htmlFor="use_dnd_item_type">Use Item Type</Label>
+          <Label htmlFor="use_dnd_item_type">{t('useItemType')}</Label>
         </div>
 
         <div>
-          <Label>Item Type</Label>
+          <Label>{t('itemType')}</Label>
           <SearchableDropdown
             options={itemTypeOptions}
             value={options.dnd_item_type || 'magic sword'}

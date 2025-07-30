@@ -1,7 +1,4 @@
-import {
-  MOBILE_BREAKPOINT,
-  SINGLE_COLUMN_BREAKPOINT,
-} from '../breakpoints';
+import { MOBILE_BREAKPOINT, SINGLE_COLUMN_BREAKPOINT } from '../breakpoints';
 import {
   DARK_MODE,
   SORA_TOOLS_ENABLED,

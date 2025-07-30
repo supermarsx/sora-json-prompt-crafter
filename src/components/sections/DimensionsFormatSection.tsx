@@ -1,5 +1,6 @@
 import React from 'react';
 import { Label } from '@/components/ui/label';
+import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -22,6 +23,7 @@ interface DimensionsFormatSectionProps {
 export const DimensionsFormatSection: React.FC<
   DimensionsFormatSectionProps
 > = ({ options, updateOptions, isEnabled, onToggle }) => {
+  const { t } = useTranslation();
   const qualityOptions = [
     'maximum',
     'ultra',
@@ -57,7 +59,7 @@ export const DimensionsFormatSection: React.FC<
     >
       <div className="grid grid-cols-1 gap-4">
         <div>
-          <Label htmlFor="aspect_ratio">Aspect Ratio</Label>
+          <Label htmlFor="aspect_ratio">{t('aspectRatio')}</Label>
           <Select
             value={options.aspect_ratio}
             onValueChange={(value: '16:9' | '21:9' | '4:3' | '1:1' | '9:16') =>
@@ -78,7 +80,7 @@ export const DimensionsFormatSection: React.FC<
         </div>
 
         <div>
-          <Label htmlFor="quality">Quality</Label>
+          <Label htmlFor="quality">{t('quality')}</Label>
           <Select
             value={options.quality}
             onValueChange={(value) =>
@@ -106,12 +108,12 @@ export const DimensionsFormatSection: React.FC<
               updateOptions({ use_dimensions: !!checked })
             }
           />
-          <Label htmlFor="use_dimensions">Use Custom Dimensions</Label>
+          <Label htmlFor="use_dimensions">{t('useDimensions')}</Label>
         </div>
 
         <>
           <div>
-            <Label htmlFor="width">Width</Label>
+            <Label htmlFor="width">{t('width')}</Label>
             <Input
               id="width"
               type="number"
@@ -123,7 +125,7 @@ export const DimensionsFormatSection: React.FC<
             />
           </div>
           <div>
-            <Label htmlFor="height">Height</Label>
+            <Label htmlFor="height">{t('height')}</Label>
             <Input
               id="height"
               type="number"
@@ -137,7 +139,7 @@ export const DimensionsFormatSection: React.FC<
         </>
 
         <div>
-          <Label htmlFor="output_format">Output Format</Label>
+          <Label htmlFor="output_format">{t('outputFormat')}</Label>
           <Select
             value={options.output_format}
             onValueChange={(value: 'png' | 'jpg' | 'webp') =>
@@ -156,7 +158,7 @@ export const DimensionsFormatSection: React.FC<
         </div>
 
         <div>
-          <Label htmlFor="dynamic_range">Dynamic Range</Label>
+          <Label htmlFor="dynamic_range">{t('dynamicRange')}</Label>
           <Select
             value={options.dynamic_range}
             onValueChange={(value: 'SDR' | 'HDR') =>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Label } from '@/components/ui/label';
+import { useTranslation } from 'react-i18next';
 import { Input } from '@/components/ui/input';
 import {
   Select,
@@ -26,6 +27,7 @@ export const VideoMotionSection: React.FC<VideoMotionSectionProps> = ({
   isEnabled,
   onToggle,
 }) => {
+  const { t } = useTranslation();
   return (
     <CollapsibleSection
       title="Video & Motion"
@@ -42,11 +44,11 @@ export const VideoMotionSection: React.FC<VideoMotionSectionProps> = ({
               updateOptions({ use_duration: !!checked })
             }
           />
-          <Label htmlFor="use_duration">Use Duration</Label>
+          <Label htmlFor="use_duration">{t('useDuration')}</Label>
         </div>
 
         <div>
-          <Label htmlFor="duration_seconds">Duration (seconds)</Label>
+          <Label htmlFor="duration_seconds">{t('durationSeconds')}</Label>
           <Input
             id="duration_seconds"
             type="number"
@@ -68,11 +70,11 @@ export const VideoMotionSection: React.FC<VideoMotionSectionProps> = ({
               updateOptions({ extended_fps: !!checked })
             }
           />
-          <Label htmlFor="extended_fps">Extended FPS (up to 240)</Label>
+          <Label htmlFor="extended_fps">{t('extendedFps')}</Label>
         </div>
 
         <div>
-          <Label htmlFor="fps">FPS</Label>
+          <Label htmlFor="fps">{t('fps')}</Label>
           <Input
             id="fps"
             type="number"
@@ -92,13 +94,13 @@ export const VideoMotionSection: React.FC<VideoMotionSectionProps> = ({
             }
           />
           <Label htmlFor="extended_motion_strength">
-            Extended Motion Strength (up to 10)
+            {t('extendedMotionStrength')}
           </Label>
         </div>
 
         <div>
           <Label htmlFor="motion_strength">
-            Motion Strength: {options.motion_strength}
+            {t('motionStrengthLabel', { value: options.motion_strength })}
           </Label>
           <Slider
             value={[options.motion_strength]}
@@ -113,7 +115,7 @@ export const VideoMotionSection: React.FC<VideoMotionSectionProps> = ({
         </div>
 
         <div>
-          <Label htmlFor="camera_motion">Camera Motion</Label>
+          <Label htmlFor="camera_motion">{t('cameraMotion')}</Label>
           <Select
             value={options.camera_motion}
             onValueChange={(value) => updateOptions({ camera_motion: value })}
@@ -136,7 +138,7 @@ export const VideoMotionSection: React.FC<VideoMotionSectionProps> = ({
         </div>
 
         <div>
-          <Label htmlFor="motion_direction">Motion Direction</Label>
+          <Label htmlFor="motion_direction">{t('motionDirection')}</Label>
           <Select
             value={options.motion_direction}
             onValueChange={(
@@ -158,7 +160,7 @@ export const VideoMotionSection: React.FC<VideoMotionSectionProps> = ({
         </div>
 
         <div>
-          <Label htmlFor="frame_interpolation">Frame Interpolation</Label>
+          <Label htmlFor="frame_interpolation">{t('frameInterpolation')}</Label>
           <Select
             value={options.frame_interpolation}
             onValueChange={(value: 'smooth' | 'realistic' | 'sharp') =>

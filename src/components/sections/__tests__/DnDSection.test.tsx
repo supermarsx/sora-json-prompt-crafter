@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, within } from '@testing-library/react';
+import i18n from '@/i18n';
 import { DnDSection } from '../DnDSection';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 
@@ -31,32 +32,32 @@ describe('DnDSection', () => {
     const toggles = [
       {
         label: /use character race/i,
-        section: 'Character Race',
+        section: i18n.t('characterRace'),
         flag: 'use_dnd_character_race',
       },
       {
         label: /use character class/i,
-        section: 'Character Class',
+        section: i18n.t('characterClass'),
         flag: 'use_dnd_character_class',
       },
       {
         label: /use character background/i,
-        section: 'Character Background',
+        section: i18n.t('characterBackground'),
         flag: 'use_dnd_character_background',
       },
       {
         label: /use character alignment/i,
-        section: 'Character Alignment',
+        section: i18n.t('characterAlignment'),
         flag: 'use_dnd_character_alignment',
       },
       {
         label: /use monster type/i,
-        section: 'Monster Type',
+        section: i18n.t('monsterType'),
         flag: 'use_dnd_monster_type',
       },
       {
         label: /use d&d environment/i,
-        section: 'D&D Environment',
+        section: i18n.t('dndEnvironment'),
         flag: 'use_dnd_environment',
       },
       {
@@ -121,21 +122,21 @@ describe('DnDSection', () => {
       />,
     );
 
-    const monsterSection = screen.getByText('Monster Type')
+    const monsterSection = screen.getByText(i18n.t('monsterType'))
       .parentElement as HTMLElement;
     const monsterDropdown = within(monsterSection).getByRole('button');
     fireEvent.click(monsterDropdown);
     fireEvent.click(screen.getByRole('button', { name: /lich/i }));
     expect(updateOptions).toHaveBeenCalledWith({ dnd_monster_type: 'lich' });
 
-    const envSection = screen.getByText('D&D Environment')
+    const envSection = screen.getByText(i18n.t('dndEnvironment'))
       .parentElement as HTMLElement;
     const envDropdown = within(envSection).getByRole('button');
     fireEvent.click(envDropdown);
     fireEvent.click(screen.getByRole('button', { name: /cave/i }));
     expect(updateOptions).toHaveBeenCalledWith({ dnd_environment: 'cave' });
 
-    const schoolSection = screen.getByText('Magic School')
+    const schoolSection = screen.getByText(i18n.t('magicSchool'))
       .parentElement as HTMLElement;
     const schoolDropdown = within(schoolSection).getByRole('button');
     fireEvent.click(schoolDropdown);
@@ -144,7 +145,7 @@ describe('DnDSection', () => {
       dnd_magic_school: 'illusion',
     });
 
-    const itemSection = screen.getByText('Item Type')
+    const itemSection = screen.getByText(i18n.t('itemType'))
       .parentElement as HTMLElement;
     const itemDropdown = within(itemSection).getByRole('button');
     fireEvent.click(itemDropdown);

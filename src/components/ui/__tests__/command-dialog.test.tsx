@@ -10,7 +10,7 @@ describe('CommandDialog accessibility', () => {
     render(
       <CommandDialog open onOpenChange={() => {}}>
         <CommandInput placeholder="search" />
-      </CommandDialog>
+      </CommandDialog>,
     );
 
     expect(warnSpy).not.toHaveBeenCalled();

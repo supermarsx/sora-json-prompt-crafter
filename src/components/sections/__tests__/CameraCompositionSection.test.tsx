@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, within } from '@testing-library/react';
+import i18n from '@/i18n';
 import { CameraCompositionSection } from '../CameraCompositionSection';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 
@@ -47,7 +48,7 @@ describe('CameraCompositionSection', () => {
         onToggle={() => {}}
       />,
     );
-    let lensSection = screen.getByText('Lens Type')
+    let lensSection = screen.getByText(i18n.t('lensType'))
       .parentElement as HTMLElement;
     let dropdown = within(lensSection).getByRole('button');
     fireEvent.click(dropdown);
@@ -63,7 +64,8 @@ describe('CameraCompositionSection', () => {
         onToggle={() => {}}
       />,
     );
-    lensSection = screen.getByText('Lens Type').parentElement as HTMLElement;
+    lensSection = screen.getByText(i18n.t('lensType'))
+      .parentElement as HTMLElement;
     dropdown = within(lensSection).getByRole('button');
     expect(dropdown.hasAttribute('disabled')).toBe(true);
   });
@@ -114,10 +116,10 @@ describe('CameraCompositionSection', () => {
     );
 
     let lensDropdown = within(
-      screen.getByText('Lens Type').parentElement as HTMLElement,
+      screen.getByText(i18n.t('lensType')).parentElement as HTMLElement,
     ).getByRole('button');
     let angleDropdown = within(
-      screen.getByText('Camera Angle').parentElement as HTMLElement,
+      screen.getByText(i18n.t('cameraAngle')).parentElement as HTMLElement,
     ).getByRole('button');
 
     expect(lensDropdown.hasAttribute('disabled')).toBe(true);
@@ -137,7 +139,7 @@ describe('CameraCompositionSection', () => {
     );
 
     lensDropdown = within(
-      screen.getByText('Lens Type').parentElement as HTMLElement,
+      screen.getByText(i18n.t('lensType')).parentElement as HTMLElement,
     ).getByRole('button');
     expect(lensDropdown.hasAttribute('disabled')).toBe(false);
 
@@ -155,7 +157,7 @@ describe('CameraCompositionSection', () => {
     );
 
     angleDropdown = within(
-      screen.getByText('Camera Angle').parentElement as HTMLElement,
+      screen.getByText(i18n.t('cameraAngle')).parentElement as HTMLElement,
     ).getByRole('button');
     expect(angleDropdown.hasAttribute('disabled')).toBe(false);
   });
@@ -179,13 +181,13 @@ describe('CameraCompositionSection', () => {
       />,
     );
 
-    const apertureSection = screen.getByText('Aperture')
+    const apertureSection = screen.getByText(i18n.t('aperture'))
       .parentElement as HTMLElement;
     let apertureDropdown = within(apertureSection).getByRole('button');
-    const dofSection = screen.getByText('Depth of Field')
+    const dofSection = screen.getByText(i18n.t('depthOfField'))
       .parentElement as HTMLElement;
     let dofDropdown = within(dofSection).getByRole('button');
-    const blurSection = screen.getByText('Blur Style')
+    const blurSection = screen.getByText(i18n.t('blurStyle'))
       .parentElement as HTMLElement;
     let blurDropdown = within(blurSection).getByRole('button');
 

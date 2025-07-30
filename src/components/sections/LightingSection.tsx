@@ -1,5 +1,6 @@
 import React from 'react';
 import { Label } from '@/components/ui/label';
+import { useTranslation } from 'react-i18next';
 import { SearchableDropdown } from '../SearchableDropdown';
 import { CollapsibleSection } from '../CollapsibleSection';
 import type { SoraOptions } from '@/lib/soraOptions';
@@ -14,6 +15,7 @@ export const LightingSection: React.FC<LightingSectionProps> = ({
   options,
   updateOptions,
 }) => {
+  const { t } = useTranslation();
   return (
     <CollapsibleSection
       title="Lighting"
@@ -23,7 +25,7 @@ export const LightingSection: React.FC<LightingSectionProps> = ({
     >
       <div className="space-y-4">
         <div>
-          <Label>Lighting</Label>
+          <Label>{t('lighting')}</Label>
           <SearchableDropdown
             options={lightingOptions}
             value={options.lighting || ''}
