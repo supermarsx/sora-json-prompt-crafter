@@ -142,5 +142,6 @@
   "timeOfYear": "Vuoden aika",
   "useAtmosphereMood": "Käytä tunnelmaa",
   "atmosphereMood": "Tunnelma",
-  "atmosphereMoodOptions": "Tunnelmavaihtoehdot"
+  "atmosphereMoodOptions": "Tunnelmavaihtoehdot",
+  "shareCaption": "Tutustu SORA-kehotekokoonpanooni!"
 }

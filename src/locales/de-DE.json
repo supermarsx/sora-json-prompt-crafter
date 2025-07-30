@@ -142,5 +142,6 @@
   "timeOfYear": "Jahreszeit",
   "useAtmosphereMood": "Stimmung verwenden",
   "atmosphereMood": "Stimmung",
-  "atmosphereMoodOptions": "Stimmungsoptionen"
+  "atmosphereMoodOptions": "Stimmungsoptionen",
+  "shareCaption": "Schauen Sie sich meine SORA-Prompt-Konfiguration an!"
 }

@@ -142,5 +142,6 @@
   "timeOfYear": "시기",
   "useAtmosphereMood": "분위기 사용",
   "atmosphereMood": "분위기",
-  "atmosphereMoodOptions": "분위기 옵션"
+  "atmosphereMoodOptions": "분위기 옵션",
+  "shareCaption": "내 Sora 프롬프트 구성을 확인하십시오!"
 }

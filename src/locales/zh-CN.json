@@ -142,5 +142,6 @@
   "timeOfYear": "时间",
   "useAtmosphereMood": "使用氛围心情",
   "atmosphereMood": "氛围心情",
-  "atmosphereMoodOptions": "氛围心情选项"
+  "atmosphereMoodOptions": "氛围心情选项",
+  "shareCaption": "查看我的Sora提示配置！"
 }

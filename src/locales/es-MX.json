@@ -142,5 +142,6 @@
   "timeOfYear": "Época del año",
   "useAtmosphereMood": "Usar ambiente",
   "atmosphereMood": "Ambiente",
-  "atmosphereMoodOptions": "Opciones de ambiente"
+  "atmosphereMoodOptions": "Opciones de ambiente",
+  "shareCaption": "¡Echa un vistazo a mi configuración del indicador Sora!"
 }

@@ -142,5 +142,6 @@
   "timeOfYear": "Perioada anului",
   "useAtmosphereMood": "Folosește atmosfera",
   "atmosphereMood": "Atmosferă",
-  "atmosphereMoodOptions": "Opțiuni atmosferă"
+  "atmosphereMoodOptions": "Opțiuni atmosferă",
+  "shareCaption": "Verificați configurația promptului meu Sora!"
 }

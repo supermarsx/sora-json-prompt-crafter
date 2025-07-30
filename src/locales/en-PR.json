@@ -142,5 +142,6 @@
   "timeOfYear": "Time o' Year",
   "useAtmosphereMood": "Use Atmosphere Mood",
   "atmosphereMood": "Atmosphere Mood",
-  "atmosphereMoodOptions": "Atmosphere Mood Options"
+  "atmosphereMoodOptions": "Atmosphere Mood Options",
+  "shareCaption": "Check out my Sora prompt configuration!"
 }

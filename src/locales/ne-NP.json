@@ -142,5 +142,6 @@
   "timeOfYear": "वर्षको समय",
   "useAtmosphereMood": "माहौल प्रयोग गर्नुहोस्",
   "atmosphereMood": "माहौल",
-  "atmosphereMoodOptions": "माहौल विकल्पहरू"
+  "atmosphereMoodOptions": "माहौल विकल्पहरू",
+  "shareCaption": "मेरो सोरा प्रोम्प्ट कन्फिगरेसन जाँच गर्नुहोस्!"
 }

@@ -142,5 +142,6 @@
   "timeOfYear": "ช่วงเวลาของปี",
   "useAtmosphereMood": "ใช้บรรยากาศ",
   "atmosphereMood": "บรรยากาศ",
-  "atmosphereMoodOptions": "ตัวเลือกบรรยากาศ"
+  "atmosphereMoodOptions": "ตัวเลือกบรรยากาศ",
+  "shareCaption": "ตรวจสอบการกำหนดค่า Sora prompt ของฉัน!"
 }

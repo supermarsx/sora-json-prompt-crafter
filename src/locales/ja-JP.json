@@ -142,5 +142,6 @@
   "timeOfYear": "時期",
   "useAtmosphereMood": "雰囲気のムードを使用",
   "atmosphereMood": "雰囲気のムード",
-  "atmosphereMoodOptions": "雰囲気ムードオプション"
+  "atmosphereMoodOptions": "雰囲気ムードオプション",
+  "shareCaption": "私のSoraプロンプト設定をチェックしてください！"
 }

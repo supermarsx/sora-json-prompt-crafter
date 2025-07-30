@@ -142,5 +142,6 @@
   "timeOfYear": "Årstid",
   "useAtmosphereMood": "Brug stemning",
   "atmosphereMood": "Stemning",
-  "atmosphereMoodOptions": "Stemningsmuligheder"
+  "atmosphereMoodOptions": "Stemningsmuligheder",
+  "shareCaption": "Tjek min Sora promptkonfiguration!"
 }

@@ -142,5 +142,6 @@
   "timeOfYear": "Altura do Ano",
   "useAtmosphereMood": "Usar Atmosfera",
   "atmosphereMood": "Atmosfera",
-  "atmosphereMoodOptions": "Opções de Atmosfera"
+  "atmosphereMoodOptions": "Opções de Atmosfera",
+  "shareCaption": "Confira a minha configuração de prompt do Sora!"
 }

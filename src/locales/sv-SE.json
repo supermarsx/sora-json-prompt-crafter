@@ -142,5 +142,6 @@
   "timeOfYear": "Årstid",
   "useAtmosphereMood": "Använd stämning",
   "atmosphereMood": "Stämning",
-  "atmosphereMoodOptions": "Stämningsval"
+  "atmosphereMoodOptions": "Stämningsval",
+  "shareCaption": "Kolla in min Sora promptkonfiguration!"
 }
