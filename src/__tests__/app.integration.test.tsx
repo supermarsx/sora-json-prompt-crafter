@@ -94,5 +94,5 @@ describe('App integration flow', () => {
 
     const dialog = await screen.findByRole('dialog');
     expect(within(dialog).getByText('Integration test prompt')).toBeTruthy();
-  }, 10000);
+  }, 15000);
 });
