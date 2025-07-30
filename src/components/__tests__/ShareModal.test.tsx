@@ -61,7 +61,7 @@ describe('ShareModal', () => {
 
   test('shares to Facebook', () => {
     renderModal();
-    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent('Check out my Sora prompt configuration!')}`;
+    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(i18n.t('shareCaption'))}`;
     fireEvent.click(screen.getByRole('button', { name: /facebook/i }));
     expect(openSpy).toHaveBeenCalledWith(
       url,
@@ -74,7 +74,7 @@ describe('ShareModal', () => {
   test('shares to Twitter', () => {
     renderModal();
     const text = encodeURIComponent(
-      'Check out my Sora prompt configuration! #SoraAI #AIGeneration',
+      `${i18n.t('shareCaption')} #SoraAI #AIGeneration`,
     );
     const url = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(window.location.href)}`;
     fireEvent.click(screen.getByRole('button', { name: /twitter\/x/i }));
@@ -88,9 +88,7 @@ describe('ShareModal', () => {
 
   test('shares to WhatsApp', () => {
     renderModal();
-    const text = encodeURIComponent(
-      `Check out my Sora prompt configuration!\n\nmyjson`,
-    );
+    const text = encodeURIComponent(`${i18n.t('shareCaption')}\n\nmyjson`);
     const url = `https://wa.me/?text=${text}`;
     fireEvent.click(screen.getByRole('button', { name: /whatsapp/i }));
     expect(openSpy).toHaveBeenCalledWith(url, '_blank', 'noopener');
@@ -99,9 +97,7 @@ describe('ShareModal', () => {
 
   test('shares to Telegram', () => {
     renderModal();
-    const text = encodeURIComponent(
-      `Check out my Sora prompt configuration!\n\nmyjson`,
-    );
+    const text = encodeURIComponent(`${i18n.t('shareCaption')}\n\nmyjson`);
     const url = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${text}`;
     fireEvent.click(screen.getByRole('button', { name: /telegram/i }));
     expect(openSpy).toHaveBeenCalledWith(url, '_blank', 'noopener');

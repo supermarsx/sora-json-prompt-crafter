@@ -35,17 +35,16 @@ export const ShareModal: React.FC<ShareModalProps> = ({
   const [copied, setCopied] = useState(false);
   const [trackingEnabled] = useTracking();
   const { t } = useTranslation();
+  const shareCaption = t('shareCaption');
   const shareToFacebook = () => {
-    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent('Check out my Sora prompt configuration!')}`;
+    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(shareCaption)}`;
     window.open(url, '_blank', 'noopener,width=600,height=400');
     toast.success(t('sharedToFacebook'));
     trackEvent(trackingEnabled, 'share_facebook');
   };
 
   const shareToTwitter = () => {
-    const text = encodeURIComponent(
-      'Check out my Sora prompt configuration! #SoraAI #AIGeneration',
-    );
+    const text = encodeURIComponent(`${shareCaption} #SoraAI #AIGeneration`);
     const url = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(window.location.href)}`;
     window.open(url, '_blank', 'noopener,width=600,height=400');
     toast.success(t('sharedToTwitter'));
@@ -53,9 +52,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
   };
 
   const shareToWhatsApp = () => {
-    const text = encodeURIComponent(
-      `Check out my Sora prompt configuration!\n\n${jsonContent}`,
-    );
+    const text = encodeURIComponent(`${shareCaption}\n\n${jsonContent}`);
     const url = `https://wa.me/?text=${text}`;
     window.open(url, '_blank', 'noopener');
     toast.success(t('sharedToWhatsApp'));
@@ -63,9 +60,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
   };
 
   const shareToTelegram = () => {
-    const text = encodeURIComponent(
-      `Check out my Sora prompt configuration!\n\n${jsonContent}`,
-    );
+    const text = encodeURIComponent(`${shareCaption}\n\n${jsonContent}`);
     const url = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${text}`;
     window.open(url, '_blank', 'noopener');
     toast.success(t('sharedToTelegram'));

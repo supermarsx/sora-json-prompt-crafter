@@ -142,5 +142,6 @@
   "timeOfYear": "Aasta aeg",
   "useAtmosphereMood": "Kasuta meeleolu",
   "atmosphereMood": "Meeleolu",
-  "atmosphereMoodOptions": "Meeleolu valikud"
+  "atmosphereMoodOptions": "Meeleolu valikud",
+  "shareCaption": "Vaadake minu Sora kiiret konfiguratsiooni!"
 }

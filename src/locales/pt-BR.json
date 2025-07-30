@@ -142,5 +142,6 @@
   "timeOfYear": "Período do ano",
   "useAtmosphereMood": "Usar clima atmosférico",
   "atmosphereMood": "Clima atmosférico",
-  "atmosphereMoodOptions": "Opções de clima atmosférico"
+  "atmosphereMoodOptions": "Opções de clima atmosférico",
+  "shareCaption": "Confira a minha configuração de prompt do Sora!"
 }

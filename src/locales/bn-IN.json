@@ -142,5 +142,6 @@
   "timeOfYear": "বর্ষপঞ্জি সময়",
   "useAtmosphereMood": "পরিবেশের মুড ব্যবহার করুন",
   "atmosphereMood": "পরিবেশের মুড",
-  "atmosphereMoodOptions": "মুডের অপশনসমূহ"
+  "atmosphereMoodOptions": "মুডের অপশনসমূহ",
+  "shareCaption": "আমার Sora প্রম্পট কনফিগারেশন দেখুন!"
 }

@@ -142,5 +142,6 @@
   "timeOfYear": "Période de l’année",
   "useAtmosphereMood": "Utiliser l’ambiance",
   "atmosphereMood": "Ambiance",
-  "atmosphereMoodOptions": "Options d’ambiance"
+  "atmosphereMoodOptions": "Options d’ambiance",
+  "shareCaption": "Découvrez ma configuration d'invite Sora !"
 }
