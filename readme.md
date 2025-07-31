@@ -40,7 +40,7 @@ go "my eyes!" when there's bright white lights.
 - Advanced specialized prompting options
 - Artifact and defect correction presets
 - No-fuss tracking toggle
-- Internationalization support
+- Internationalization support for English, Spanish, Portuguese (Portugal), and Russian – switch languages via the Action Bar
 - Works offline thanks to service worker caching of assets
 
 Example JSON output:
@@ -220,7 +220,7 @@ To add a new language:
 1. Create `src/locales/<locale>.json` with the same keys as `en-US.json`.
 2. Add a matching `disclaimer.<locale>.txt` in `public/disclaimers/`.
 3. Import the locale in `src/i18n.ts` and include its flag under `public/flags/`.
-4. *(Optional)* run `scripts/fill_translations.py` to pre-fill untranslated keys.
+4. _(Optional)_ run `scripts/fill_translations.py` to pre-fill untranslated keys.
 
 ## Tracking/Analytics
 
