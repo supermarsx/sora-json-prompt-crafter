@@ -41,11 +41,15 @@ describe('DimensionsFormatSection', () => {
     );
     const comboboxes = screen.getAllByRole('combobox');
     fireEvent.click(comboboxes[0]);
-    fireEvent.click(screen.getByRole('option', { name: /4:3/i }));
+    fireEvent.click(
+      screen.getByRole('option', { name: i18n.t('aspectRatioLabels.4:3') }),
+    );
     expect(updateOptions).toHaveBeenCalledWith({ aspect_ratio: '4:3' });
 
     fireEvent.click(comboboxes[1]);
-    fireEvent.click(screen.getByRole('option', { name: /ultra/i }));
+    fireEvent.click(
+      screen.getByRole('option', { name: i18n.t('qualityOptions.ultra') }),
+    );
     expect(updateOptions).toHaveBeenCalledWith({ quality: 'ultra' });
   });
 

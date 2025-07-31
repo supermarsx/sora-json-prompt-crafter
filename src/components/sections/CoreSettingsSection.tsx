@@ -83,7 +83,7 @@ export const CoreSettingsSection: React.FC<CoreSettingsSectionProps> = ({
             <SelectContent>
               {qualityOptions.map((quality) => (
                 <SelectItem key={quality} value={quality}>
-                  {quality.charAt(0).toUpperCase() + quality.slice(1)}
+                  {t(`qualityOptions.${quality}`)}
                 </SelectItem>
               ))}
             </SelectContent>

@@ -220,7 +220,7 @@ To add a new language:
 1. Create `src/locales/<locale>.json` with the same keys as `en-US.json`.
 2. Add a matching `disclaimer.<locale>.txt` in `public/disclaimers/`.
 3. Import the locale in `src/i18n.ts` and include its flag under `public/flags/`.
-4. *(Optional)* run `scripts/fill_translations.py` to pre-fill untranslated keys.
+4. _(Optional)_ run `scripts/fill_translations.py` to pre-fill untranslated keys.
 
 ## Tracking/Analytics
 

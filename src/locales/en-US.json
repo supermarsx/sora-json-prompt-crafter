@@ -214,6 +214,43 @@
   "frameInterpolation": "Frame Interpolation",
   "styleCategory": "Style Category",
   "style": "Style",
+  "qualityOptions": {
+    "maximum": "Maximum",
+    "ultra": "Ultra",
+    "excellent": "Excellent",
+    "high": "High",
+    "good": "Good",
+    "standard": "Standard",
+    "draft": "Draft",
+    "medium": "Medium",
+    "moderate": "Moderate",
+    "minimum": "Minimum",
+    "low": "Low",
+    "below standard": "Below Standard",
+    "bad": "Bad",
+    "poor": "Poor",
+    "unacceptable": "Unacceptable",
+    "defective": "Defective"
+  },
+  "aspectRatioLabels": {
+    "16:9": "16:9 (Widescreen)",
+    "21:9": "21:9 (Ultra-wide)",
+    "4:3": "4:3 (Standard)",
+    "1:1": "1:1 (Square)",
+    "9:16": "9:16 (Portrait)"
+  },
+  "stylePresetCategories": {
+    "Classic Art & Painting": "Classic Art & Painting",
+    "Modern Digital & Illustration": "Modern Digital & Illustration",
+    "Photography & Cinematic": "Photography & Cinematic",
+    "Fashion & Portrait": "Fashion & Portrait",
+    "Culture & World Inspiration": "Culture & World Inspiration",
+    "Genre/Theme": "Genre/Theme",
+    "Lighting & Mood": "Lighting & Mood",
+    "Decorative & Textural": "Decorative & Textural",
+    "Commercial/Professional": "Commercial/Professional",
+    "Famous Artists/Influences": "Famous Artists/Influences"
+  },
   "cameraPresets": {
     "shotType": {
       "default": "default",
