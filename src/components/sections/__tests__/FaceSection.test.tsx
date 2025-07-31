@@ -122,4 +122,25 @@ describe('FaceSection', () => {
     fireEvent.click(screen.getByRole('button', { name: /^happy$/i }));
     expect(updateOptions).toHaveBeenCalledWith({ character_mood: 'happy' });
   });
+
+  test('dropdown shows localized options when language changes', async () => {
+    await i18n.changeLanguage('es-ES');
+    render(
+      <FaceSection
+        options={{
+          ...DEFAULT_OPTIONS,
+          use_face_enhancements: true,
+          use_subject_gender: true,
+        }}
+        updateOptions={() => {}}
+      />,
+    );
+    const section = screen.getByText(i18n.t('subjectGender'))
+      .parentElement as HTMLElement;
+    fireEvent.click(within(section).getByRole('button'));
+    expect(
+      await screen.findByRole('button', { name: /femenino/i }),
+    ).toBeDefined();
+    await i18n.changeLanguage('en-US');
+  });
 });

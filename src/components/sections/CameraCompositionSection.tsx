@@ -13,6 +13,8 @@ import { SearchableDropdown } from '../SearchableDropdown';
 import { MultiSelectDropdown } from '../MultiSelectDropdown';
 import { CollapsibleSection } from '../CollapsibleSection';
 import type { SoraOptions } from '@/lib/soraOptions';
+import { cameraOptionTranslations } from '@/data/optionTranslations';
+import { getOptionLabel as translateOption } from '@/lib/optionTranslator';
 import {
   shotTypeOptions,
   cameraAngleOptions,
@@ -22,6 +24,8 @@ import {
   apertureOptions,
   blurStyleOptions,
   depthOfFieldOptions,
+  subjectFocusOptions,
+  type SubjectFocusOption,
 } from '@/data/cameraPresets';
 
 interface CameraCompositionSectionProps {
@@ -54,6 +58,9 @@ export const CameraCompositionSection: React.FC<
             value={options.camera_type}
             onValueChange={(value) => updateOptions({ camera_type: value })}
             label="Camera Type"
+            getOptionLabel={(opt) =>
+              translateOption(opt, cameraOptionTranslations.cameraType, t)
+            }
           />
         </div>
 
@@ -76,6 +83,9 @@ export const CameraCompositionSection: React.FC<
             onValueChange={(value) => updateOptions({ lens_type: value })}
             label="Lens Type"
             disabled={!options.use_lens_type}
+            getOptionLabel={(opt) =>
+              translateOption(opt, cameraOptionTranslations.lensType, t)
+            }
           />
         </div>
 
@@ -86,6 +96,9 @@ export const CameraCompositionSection: React.FC<
             value={options.shot_type}
             onValueChange={(value) => updateOptions({ shot_type: value })}
             label="Shot Type"
+            getOptionLabel={(opt) =>
+              translateOption(opt, cameraOptionTranslations.shotType, t)
+            }
           />
         </div>
 
@@ -108,6 +121,9 @@ export const CameraCompositionSection: React.FC<
             onValueChange={(value) => updateOptions({ camera_angle: value })}
             label="Camera Angle"
             disabled={!options.use_camera_angle}
+            getOptionLabel={(opt) =>
+              translateOption(opt, cameraOptionTranslations.cameraAngle, t)
+            }
           />
         </div>
 
@@ -115,19 +131,23 @@ export const CameraCompositionSection: React.FC<
           <Label htmlFor="subject_focus">{t('subjectFocus')}</Label>
           <Select
             value={options.subject_focus}
-            onValueChange={(
-              value: 'center' | 'left' | 'right' | 'top' | 'bottom',
-            ) => updateOptions({ subject_focus: value })}
+            onValueChange={(value: SubjectFocusOption) =>
+              updateOptions({ subject_focus: value })
+            }
           >
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="center">Center</SelectItem>
-              <SelectItem value="left">Left</SelectItem>
-              <SelectItem value="right">Right</SelectItem>
-              <SelectItem value="top">Top</SelectItem>
-              <SelectItem value="bottom">Bottom</SelectItem>
+              {subjectFocusOptions.map((focus) => (
+                <SelectItem key={focus} value={focus}>
+                  {translateOption(
+                    focus,
+                    cameraOptionTranslations.subjectFocus,
+                    t,
+                  )}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -140,6 +160,9 @@ export const CameraCompositionSection: React.FC<
             onValueChange={handleCompositionRulesChange}
             label="Composition Rules"
             placeholder="Select composition rules..."
+            getOptionLabel={(opt) =>
+              translateOption(opt, cameraOptionTranslations.compositionRules, t)
+            }
           />
         </div>
 
@@ -162,6 +185,9 @@ export const CameraCompositionSection: React.FC<
             onValueChange={(value) => updateOptions({ aperture: value })}
             label="Aperture"
             disabled={!options.use_aperture}
+            getOptionLabel={(opt) =>
+              translateOption(opt, cameraOptionTranslations.aperture, t)
+            }
           />
         </div>
 
@@ -182,6 +208,9 @@ export const CameraCompositionSection: React.FC<
             onValueChange={(value) => updateOptions({ depth_of_field: value })}
             label="Depth of Field Options"
             disabled={!options.use_dof}
+            getOptionLabel={(opt) =>
+              translateOption(opt, cameraOptionTranslations.depthOfField, t)
+            }
           />
         </div>
 
@@ -204,6 +233,9 @@ export const CameraCompositionSection: React.FC<
             onValueChange={(value) => updateOptions({ blur_style: value })}
             label="Blur Style Options"
             disabled={!options.use_blur_style}
+            getOptionLabel={(opt) =>
+              translateOption(opt, cameraOptionTranslations.blurStyle, t)
+            }
           />
         </div>
       </div>

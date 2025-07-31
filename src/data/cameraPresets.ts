@@ -424,3 +424,12 @@ export const depthOfFieldOptions = [
   'background in focus',
 ] as const;
 export type DepthOfFieldOption = (typeof depthOfFieldOptions)[number];
+
+export const subjectFocusOptions = [
+  'center',
+  'left',
+  'right',
+  'top',
+  'bottom',
+] as const;
+export type SubjectFocusOption = (typeof subjectFocusOptions)[number];
