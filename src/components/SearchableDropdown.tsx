@@ -20,6 +20,7 @@ interface SearchableDropdownProps {
   placeholder?: string;
   label?: string;
   disabled?: boolean;
+  getOptionLabel?: (option: string) => string;
 }
 
 export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
@@ -29,6 +30,7 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
   placeholder,
   label,
   disabled = false,
+  getOptionLabel,
 }) => {
   const { t } = useTranslation();
   const placeholderText = placeholder ?? t('searchablePlaceholder');
@@ -66,6 +68,7 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
   }, [sortedOptions, searchQuery]);
 
   const formatLabel = (option: string) => {
+    if (getOptionLabel) return getOptionLabel(option);
     return option
       .split(' ')
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))

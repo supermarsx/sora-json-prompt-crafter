@@ -67,7 +67,7 @@ describe('App integration flow', () => {
         // Loading the lazily imported Dashboard component can
         // take a bit longer on slower CI machines. Allow extra
         // time for the input to appear to avoid flaky failures.
-        timeout: 5000,
+        timeout: 10000,
       },
     );
     fireEvent.change(promptInput, {

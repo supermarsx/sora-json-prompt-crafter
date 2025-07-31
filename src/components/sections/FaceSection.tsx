@@ -5,6 +5,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { SearchableDropdown } from '../SearchableDropdown';
 import { CollapsibleSection } from '../CollapsibleSection';
 import type { SoraOptions } from '@/lib/soraOptions';
+import { faceOptionTranslations } from '@/data/optionTranslations';
+import { getOptionLabel as translateOption } from '@/lib/optionTranslator';
 
 import {
   subjectGenderOptions,
@@ -70,6 +72,9 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
             onValueChange={(value) => updateOptions({ subject_gender: value })}
             label="Subject Gender Options"
             disabled={!options.use_subject_gender}
+            getOptionLabel={(opt) =>
+              translateOption(opt, faceOptionTranslations.subjectGender, t)
+            }
           />
         </div>
 
@@ -92,6 +97,9 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
             onValueChange={(value) => updateOptions({ makeup_style: value })}
             label="Makeup Style Options"
             disabled={!options.use_makeup_style}
+            getOptionLabel={(opt) =>
+              translateOption(opt, faceOptionTranslations.makeupStyle, t)
+            }
           />
         </div>
 
@@ -114,6 +122,9 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
             onValueChange={(value) => updateOptions({ character_mood: value })}
             label="Character Mood Options"
             disabled={!options.use_character_mood}
+            getOptionLabel={(opt) =>
+              translateOption(opt, faceOptionTranslations.characterMood, t)
+            }
           />
         </div>
       </div>

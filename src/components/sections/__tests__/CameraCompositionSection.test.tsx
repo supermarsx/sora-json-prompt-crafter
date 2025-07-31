@@ -10,6 +10,8 @@ beforeAll(() => {
     unobserve() {}
     disconnect() {}
   };
+  // jsdom doesn't implement scrollIntoView
+  window.HTMLElement.prototype.scrollIntoView = jest.fn();
 });
 
 describe('CameraCompositionSection', () => {
@@ -261,5 +263,50 @@ describe('CameraCompositionSection', () => {
     fireEvent.click(blurDropdown);
     fireEvent.click(screen.getByRole('button', { name: /bokeh blur/i }));
     expect(updateOptions).toHaveBeenCalledWith({ blur_style: 'bokeh blur' });
+  });
+
+  test('lens type dropdown localizes options when language changes', async () => {
+    await i18n.changeLanguage('es-ES');
+    render(
+      <CameraCompositionSection
+        options={{
+          ...DEFAULT_OPTIONS,
+          use_camera_composition: true,
+          use_lens_type: true,
+        }}
+        updateOptions={() => {}}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+    const lensSection = screen.getByText(i18n.t('lensType'))
+      .parentElement as HTMLElement;
+    fireEvent.click(within(lensSection).getByRole('button'));
+    expect(
+      await screen.findByRole('button', { name: /gran angular 24mm/i }),
+    ).toBeDefined();
+    await i18n.changeLanguage('en-US');
+  });
+
+  test('subject focus dropdown localizes options when language changes', async () => {
+    await i18n.changeLanguage('es-ES');
+    render(
+      <CameraCompositionSection
+        options={{
+          ...DEFAULT_OPTIONS,
+          use_camera_composition: true,
+        }}
+        updateOptions={() => {}}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+    const focusSection = screen.getByText(i18n.t('subjectFocus'))
+      .parentElement as HTMLElement;
+    fireEvent.click(within(focusSection).getByRole('combobox'));
+    expect(
+      await screen.findByRole('option', { name: /centro/i }),
+    ).toBeDefined();
+    await i18n.changeLanguage('en-US');
   });
 });

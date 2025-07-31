@@ -20,6 +20,7 @@ interface MultiSelectDropdownProps {
   onValueChange: (value: string[]) => void;
   placeholder?: string;
   label?: string;
+  getOptionLabel?: (option: string) => string;
 }
 
 export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
@@ -28,6 +29,7 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   onValueChange,
   placeholder,
   label,
+  getOptionLabel,
 }) => {
   const { t } = useTranslation();
   const placeholderText = placeholder ?? t('multiSelectPlaceholder');
@@ -59,6 +61,7 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   }, [sortedOptions, searchQuery]);
 
   const formatLabel = (option: string) => {
+    if (getOptionLabel) return getOptionLabel(option);
     return option
       .split(' ')
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
