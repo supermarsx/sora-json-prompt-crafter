@@ -543,13 +543,13 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
         open={showClipboard}
         onOpenChange={setShowClipboard}
         onImport={onImport}
-        title="Import from Clipboard"
+        title={t('importFromClipboard')}
       />
       <ClipboardImportModal
         open={showBulkClipboard}
         onOpenChange={setShowBulkClipboard}
         onImport={onImport}
-        title="Bulk Import from Clipboard"
+        title={t('bulkImportFromClipboard')}
       />
       <BulkFileImportModal
         open={showBulkFile}

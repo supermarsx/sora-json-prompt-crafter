@@ -91,7 +91,7 @@ describe('clipboard fallback', () => {
         open={true}
         onOpenChange={() => {}}
         onImport={() => {}}
-        title="Import"
+        title={i18n.t('importFromClipboard')}
       />,
     );
     await waitFor(() =>

@@ -19,9 +19,11 @@ describe('ImportModal', () => {
     const onImport = jest.fn();
     const onClose = jest.fn();
     render(<ImportModal isOpen={true} onClose={onClose} onImport={onImport} />);
-    const textarea = screen.getByPlaceholderText(/paste json/i);
+    const textarea = screen.getByPlaceholderText(
+      i18n.t('pasteJsonPlaceholder'),
+    );
     fireEvent.change(textarea, { target: { value: '{"prompt":"test"}' } });
-    const button = screen.getByRole('button', { name: /import/i });
+    const button = screen.getByRole('button', { name: i18n.t('import') });
     fireEvent.click(button);
 
     expect(onImport).toHaveBeenCalledWith('{"prompt":"test"}');
@@ -49,7 +51,7 @@ describe('ImportModal', () => {
       'input[type="file"]',
     ) as HTMLInputElement;
     const textarea = screen.getByPlaceholderText(
-      /paste json/i,
+      i18n.t('pasteJsonPlaceholder'),
     ) as HTMLTextAreaElement;
     fireEvent.change(input, {
       target: {
@@ -59,7 +61,7 @@ describe('ImportModal', () => {
 
     await waitFor(() => expect(textarea.value).toBe(fileContent));
 
-    const button = screen.getByRole('button', { name: /import/i });
+    const button = screen.getByRole('button', { name: i18n.t('import') });
     fireEvent.click(button);
 
     expect(onImport).toHaveBeenCalledWith(fileContent);
@@ -70,9 +72,11 @@ describe('ImportModal', () => {
     const onImport = jest.fn();
     const onClose = jest.fn();
     render(<ImportModal isOpen={true} onClose={onClose} onImport={onImport} />);
-    const textarea = screen.getByPlaceholderText(/paste json/i);
+    const textarea = screen.getByPlaceholderText(
+      i18n.t('pasteJsonPlaceholder'),
+    );
     fireEvent.change(textarea, { target: { value: '{bad json' } });
-    const button = screen.getByRole('button', { name: /import/i });
+    const button = screen.getByRole('button', { name: i18n.t('import') });
     fireEvent.click(button);
 
     expect(toast.error).toHaveBeenCalledWith(i18n.t('invalidJson'));
