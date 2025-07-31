@@ -4,7 +4,9 @@ import path from 'path';
 describe('locale completeness', () => {
   const localesDir = path.resolve(__dirname, '../src/locales');
   const referencePath = path.join(localesDir, 'en-US.json');
-  const reference = JSON.parse(fs.readFileSync(referencePath, 'utf-8')) as Record<string, unknown>;
+  const reference = JSON.parse(
+    fs.readFileSync(referencePath, 'utf-8'),
+  ) as Record<string, unknown>;
   const referenceKeys = Object.keys(reference);
 
   test('all locale files contain every key from en-US.json', () => {

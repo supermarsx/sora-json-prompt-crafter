@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { DimensionsFormatSection } from '../sections/DimensionsFormatSection';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
+import i18n from '@/i18n';
 
 describe('DimensionsFormatSection', () => {
   test('checkbox toggle updates option', () => {
@@ -40,11 +41,15 @@ describe('DimensionsFormatSection', () => {
     );
     const comboboxes = screen.getAllByRole('combobox');
     fireEvent.click(comboboxes[0]);
-    fireEvent.click(screen.getByRole('option', { name: /4:3/i }));
+    fireEvent.click(
+      screen.getByRole('option', { name: i18n.t('aspectRatioLabels.4:3') })
+    );
     expect(updateOptions).toHaveBeenCalledWith({ aspect_ratio: '4:3' });
 
     fireEvent.click(comboboxes[1]);
-    fireEvent.click(screen.getByRole('option', { name: /ultra/i }));
+    fireEvent.click(
+      screen.getByRole('option', { name: i18n.t('qualityOptions.ultra') })
+    );
     expect(updateOptions).toHaveBeenCalledWith({ quality: 'ultra' });
   });
 

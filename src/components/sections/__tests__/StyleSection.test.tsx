@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { StyleSection } from '../StyleSection';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
+import i18n from '@/i18n';
 
 beforeAll(() => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -46,7 +47,9 @@ describe('StyleSection', () => {
     const categoryDropdown = screen.getAllByRole('combobox')[0];
     fireEvent.click(categoryDropdown);
     fireEvent.click(
-      screen.getByRole('option', { name: /modern digital & illustration/i }),
+      screen.getByRole('option', {
+        name: i18n.t('stylePresetCategories.Modern Digital & Illustration'),
+      }),
     );
     expect(updateNestedOptions).toHaveBeenCalledWith(
       'style_preset.category',

@@ -53,7 +53,7 @@ export const StyleSection: React.FC<StyleSectionProps> = ({
             <SelectContent>
               {Object.keys(stylePresets).map((category) => (
                 <SelectItem key={category} value={category}>
-                  {category}
+                  {t(`stylePresetCategories.${category}`)}
                 </SelectItem>
               ))}
             </SelectContent>

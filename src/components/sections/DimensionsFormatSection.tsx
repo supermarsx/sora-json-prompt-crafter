@@ -42,13 +42,7 @@ export const DimensionsFormatSection: React.FC<
     'unacceptable',
     'defective',
   ];
-
-  const formatLabel = (value: string) => {
-    return value
-      .split(' ')
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
-  };
+  const aspectRatios = ['16:9', '21:9', '4:3', '1:1', '9:16'];
 
   return (
     <CollapsibleSection
@@ -70,11 +64,11 @@ export const DimensionsFormatSection: React.FC<
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="16:9">16:9 (Widescreen)</SelectItem>
-              <SelectItem value="21:9">21:9 (Ultra-wide)</SelectItem>
-              <SelectItem value="4:3">4:3 (Standard)</SelectItem>
-              <SelectItem value="1:1">1:1 (Square)</SelectItem>
-              <SelectItem value="9:16">9:16 (Portrait)</SelectItem>
+              {aspectRatios.map((ratio) => (
+                <SelectItem key={ratio} value={ratio}>
+                  {t(`aspectRatioLabels.${ratio}`)}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -93,7 +87,7 @@ export const DimensionsFormatSection: React.FC<
             <SelectContent>
               {qualityOptions.map((quality) => (
                 <SelectItem key={quality} value={quality}>
-                  {formatLabel(quality)}
+                  {t(`qualityOptions.${quality}`)}
                 </SelectItem>
               ))}
             </SelectContent>
