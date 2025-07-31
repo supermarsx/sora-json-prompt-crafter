@@ -3,10 +3,13 @@ import fs from 'fs';
 import path from 'path';
 
 const disclaimerDir = path.resolve(__dirname, '../disclaimers');
-const localizedDisclaimers = fs
-  .readdirSync(disclaimerDir)
-  .filter((file) => file.startsWith('disclaimer.') && file.endsWith('.txt'))
-  .map((file) => `/disclaimers/${file}`);
+function getLocalizedDisclaimers(): string[] {
+  return fs
+    .readdirSync(disclaimerDir)
+    .filter((file) => file.startsWith('disclaimer.') && file.endsWith('.txt'))
+    .map((file) => `/disclaimers/${file}`);
+}
+const localizedDisclaimers = getLocalizedDisclaimers();
 
 const staticAssets = [
   '/',
@@ -89,6 +92,9 @@ describe('service worker', () => {
         '/assets/app.js',
         '/assets/style.css',
       ]),
+    );
+    expect(cacheAddAll).toHaveBeenCalledWith(
+      expect.arrayContaining(localizedDisclaimers),
     );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect((global as any).self.skipWaiting).toHaveBeenCalled();
