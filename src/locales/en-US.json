@@ -828,5 +828,7 @@
       "sensual": "sensual",
       "alluring": "alluring"
     }
-  }
+  },
+  "importFromClipboard": "Import from clipboard",
+  "bulkImportFromClipboard": "Bulk import from clipboard"
 }

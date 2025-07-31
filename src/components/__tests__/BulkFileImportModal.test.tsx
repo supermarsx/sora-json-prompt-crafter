@@ -53,7 +53,7 @@ describe('BulkFileImportModal', () => {
     fireEvent.change(input, {
       target: { files: [file] },
     });
-    fireEvent.click(screen.getByRole('button', { name: /import/i }));
+    fireEvent.click(screen.getByRole('button', { name: i18n.t('import') }));
     await waitFor(() =>
       expect(onImport).toHaveBeenCalledWith(['{"prompt":"test"}']),
     );
@@ -87,7 +87,7 @@ describe('BulkFileImportModal', () => {
     fireEvent.change(input, {
       target: { files: [file] },
     });
-    fireEvent.click(screen.getByRole('button', { name: /import/i }));
+    fireEvent.click(screen.getByRole('button', { name: i18n.t('import') }));
     await waitFor(() =>
       expect(toast.error).toHaveBeenCalledWith(i18n.t('failedImportFile')),
     );
@@ -107,7 +107,7 @@ describe('BulkFileImportModal', () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: /import/i }));
+    fireEvent.click(screen.getByRole('button', { name: i18n.t('import') }));
 
     expect(toast.error).toHaveBeenCalledWith(i18n.t('pleaseSelectFile'));
     expect(onImport).not.toHaveBeenCalled();
