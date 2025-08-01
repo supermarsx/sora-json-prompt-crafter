@@ -8,6 +8,7 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface DisclaimerModalProps {
   open: boolean;
@@ -125,7 +126,11 @@ const DisclaimerModal: React.FC<DisclaimerModalProps> = ({
           </DialogDescription>
         </DialogHeader>
         <ScrollArea className="h-[60vh] px-1">
-          <p className="whitespace-pre-wrap text-sm">{text}</p>
+          {text === '' && !hasFetched ? (
+            <Skeleton data-testid="disclaimer-loader" className="h-24 w-full" />
+          ) : (
+            <p className="whitespace-pre-wrap text-sm">{text}</p>
+          )}
         </ScrollArea>
       </DialogContent>
     </Dialog>

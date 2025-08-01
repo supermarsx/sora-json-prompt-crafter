@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import { jest } from '@jest/globals';
 import DisclaimerModal from '../DisclaimerModal';
 
@@ -56,6 +56,29 @@ describe('DisclaimerModal', () => {
     render(<DisclaimerModal open={false} onOpenChange={() => {}} />);
 
     expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  test('shows loader while fetching', async () => {
+    let resolveFetch: (value: Response) => void = () => {};
+    global.fetch = jest.fn().mockImplementation(
+      () =>
+        new Promise<Response>((res) => {
+          resolveFetch = res;
+        }),
+    );
+
+    render(<DisclaimerModal open={true} onOpenChange={() => {}} />);
+
+    expect(screen.getByTestId('disclaimer-loader')).toBeDefined();
+
+    await act(async () => {
+      resolveFetch({
+        ok: true,
+        text: () => Promise.resolve('loaded text'),
+      } as Response);
+    });
+
+    expect(await screen.findByText('loaded text')).toBeDefined();
   });
 
   test('fetches only when opened', async () => {
