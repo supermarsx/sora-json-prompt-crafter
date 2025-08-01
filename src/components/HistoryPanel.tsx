@@ -108,12 +108,12 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
 
   const exportClipboard = async () => {
     if (!('clipboard' in navigator)) {
-      toast.error('Clipboard not supported');
+      toast.error(t('clipboardUnsupported'));
       return;
     }
     try {
       await navigator.clipboard.writeText(JSON.stringify(history, null, 2));
-      toast.success('Copied all history to clipboard!');
+      toast.success(t('copiedAllHistory'));
       trackEvent(trackingEnabled, 'history_export', { type: 'clipboard' });
     } catch {
       /* ignore */
@@ -131,7 +131,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
     a.download = `history-${datetime}-${rand}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    toast.success('History downloaded!');
+    toast.success(t('historyDownloaded'));
     trackEvent(trackingEnabled, 'history_export', { type: 'file' });
   };
 
@@ -146,13 +146,13 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
     a.download = `latest-actions-${datetime}-${rand}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    toast.success('Actions downloaded!');
+    toast.success(t('actionsDownloaded'));
   };
 
   const clearActions = () => {
     safeRemove(TRACKING_HISTORY);
     window.dispatchEvent(new Event('trackingHistoryUpdate'));
-    toast.success('Actions cleared!');
+    toast.success(t('actionsCleared'));
   };
 
   const requestClearActions = () => setConfirmClearActions(true);
@@ -166,7 +166,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
     list.splice(idx, 1);
     safeSet(TRACKING_HISTORY, list, true);
     window.dispatchEvent(new Event('trackingHistoryUpdate'));
-    toast.success('Action deleted!');
+    toast.success(t('actionDeleted'));
   };
 
   const requestDeleteAction = (idx: number) => {
@@ -518,10 +518,8 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
       <Dialog open={!!preview} onOpenChange={() => setPreview(null)}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>JSON Preview</DialogTitle>
-            <DialogDescription>
-              Preview the generated JSON output.
-            </DialogDescription>
+            <DialogTitle>{t('jsonPreviewTitle')}</DialogTitle>
+            <DialogDescription>{t('jsonPreviewDescription')}</DialogDescription>
           </DialogHeader>
           {preview && (
             <ScrollArea className="h-[60vh]">
@@ -543,13 +541,13 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
         open={showClipboard}
         onOpenChange={setShowClipboard}
         onImport={onImport}
-        title="Import from Clipboard"
+        title={t('importFromClipboard')}
       />
       <ClipboardImportModal
         open={showBulkClipboard}
         onOpenChange={setShowBulkClipboard}
         onImport={onImport}
-        title="Bulk Import from Clipboard"
+        title={t('bulkImportFromClipboard')}
       />
       <BulkFileImportModal
         open={showBulkFile}
