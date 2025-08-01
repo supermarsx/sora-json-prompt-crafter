@@ -7,6 +7,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,7 +18,14 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { Import as ImportIcon, RotateCcw, RefreshCw, Shuffle, Eye, EyeOff } from 'lucide-react';
+import {
+  Import as ImportIcon,
+  RotateCcw,
+  RefreshCw,
+  Shuffle,
+  Eye,
+  EyeOff,
+} from 'lucide-react';
 import { toast } from '@/components/ui/sonner-toast';
 import { trackEvent } from '@/lib/analytics';
 
@@ -75,116 +83,134 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
           <DialogHeader>
             <DialogTitle>{t('manage')}</DialogTitle>
           </DialogHeader>
-          <div className="space-y-2 py-2">
-            <Button variant="outline" className="w-full justify-start gap-2" onClick={onImport}>
-              <ImportIcon className="w-4 h-4" /> {t('import')}
-            </Button>
-            <Button variant="outline" className="w-full justify-start gap-2" onClick={onReset}>
-              <RotateCcw className="w-4 h-4" /> {t('reset')}
-            </Button>
-            <Button variant="outline" className="w-full justify-start gap-2" onClick={onRegenerate}>
-              <RefreshCw className="w-4 h-4" /> {t('regenerate')}
-            </Button>
-            <Button variant="outline" className="w-full justify-start gap-2" onClick={onRandomize}>
-              <Shuffle className="w-4 h-4" /> {t('randomize')}
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full justify-start gap-2"
-              onClick={() => {
-                if (trackingEnabled) {
-                  setConfirmDisableTracking(true);
-                } else {
-                  setConfirmEnableTracking(true);
-                }
-              }}
-            >
-              {trackingEnabled ? (
-                <>
-                  <EyeOff className="w-4 h-4" /> {t('disableTracking')}
-                </>
-              ) : (
-                <>
-                  <Eye className="w-4 h-4" /> {t('enableTracking')}
-                </>
-              )}
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full justify-start gap-2 hidden"
-              onClick={onToggleSoraTools}
-            >
-              {soraToolsEnabled ? (
-                <>
-                  <EyeOff className="w-4 h-4" /> Hide Sora Integration
-                </>
-              ) : (
-                <>
-                  <Eye className="w-4 h-4" /> Show Sora Integration
-                </>
-              )}
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full justify-start gap-2"
-              onClick={() => {
-                onToggleHeaderButtons();
-                trackEvent(trackingEnabled, 'toggle_header_buttons', {
-                  enabled: !headerButtonsEnabled,
-                });
-              }}
-            >
-              {headerButtonsEnabled ? (
-                <>
-                  <EyeOff className="w-4 h-4" /> {t('hideHeaderButtons')}
-                </>
-              ) : (
-                <>
-                  <Eye className="w-4 h-4" /> {t('showHeaderButtons')}
-                </>
-              )}
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full justify-start gap-2"
-              onClick={() => {
-                onToggleLogo();
-                trackEvent(trackingEnabled, 'toggle_logo', {
-                  enabled: !logoEnabled,
-                });
-              }}
-            >
-              {logoEnabled ? (
-                <>
-                  <EyeOff className="w-4 h-4" /> {t('hideLogo')}
-                </>
-              ) : (
-                <>
-                  <Eye className="w-4 h-4" /> {t('showLogo')}
-                </>
-              )}
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full justify-start gap-2"
-              onClick={() => {
-                onToggleActionLabels();
-                trackEvent(trackingEnabled, 'toggle_action_labels', {
-                  enabled: !actionLabelsEnabled,
-                });
-              }}
-            >
-              {actionLabelsEnabled ? (
-                <>
-                  <EyeOff className="w-4 h-4" /> {t('shortenButtons')}
-                </>
-              ) : (
-                <>
-                  <Eye className="w-4 h-4" /> {t('showLabels')}
-                </>
-              )}
-            </Button>
-          </div>
+          <ScrollArea className="max-h-[70vh]">
+            <div className="space-y-2 py-2">
+              <Button
+                variant="outline"
+                className="w-full justify-start gap-2"
+                onClick={onImport}
+              >
+                <ImportIcon className="w-4 h-4" /> {t('import')}
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full justify-start gap-2"
+                onClick={onReset}
+              >
+                <RotateCcw className="w-4 h-4" /> {t('reset')}
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full justify-start gap-2"
+                onClick={onRegenerate}
+              >
+                <RefreshCw className="w-4 h-4" /> {t('regenerate')}
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full justify-start gap-2"
+                onClick={onRandomize}
+              >
+                <Shuffle className="w-4 h-4" /> {t('randomize')}
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full justify-start gap-2"
+                onClick={() => {
+                  if (trackingEnabled) {
+                    setConfirmDisableTracking(true);
+                  } else {
+                    setConfirmEnableTracking(true);
+                  }
+                }}
+              >
+                {trackingEnabled ? (
+                  <>
+                    <EyeOff className="w-4 h-4" /> {t('disableTracking')}
+                  </>
+                ) : (
+                  <>
+                    <Eye className="w-4 h-4" /> {t('enableTracking')}
+                  </>
+                )}
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full justify-start gap-2 hidden"
+                onClick={onToggleSoraTools}
+              >
+                {soraToolsEnabled ? (
+                  <>
+                    <EyeOff className="w-4 h-4" /> Hide Sora Integration
+                  </>
+                ) : (
+                  <>
+                    <Eye className="w-4 h-4" /> Show Sora Integration
+                  </>
+                )}
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full justify-start gap-2"
+                onClick={() => {
+                  onToggleHeaderButtons();
+                  trackEvent(trackingEnabled, 'toggle_header_buttons', {
+                    enabled: !headerButtonsEnabled,
+                  });
+                }}
+              >
+                {headerButtonsEnabled ? (
+                  <>
+                    <EyeOff className="w-4 h-4" /> {t('hideHeaderButtons')}
+                  </>
+                ) : (
+                  <>
+                    <Eye className="w-4 h-4" /> {t('showHeaderButtons')}
+                  </>
+                )}
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full justify-start gap-2"
+                onClick={() => {
+                  onToggleLogo();
+                  trackEvent(trackingEnabled, 'toggle_logo', {
+                    enabled: !logoEnabled,
+                  });
+                }}
+              >
+                {logoEnabled ? (
+                  <>
+                    <EyeOff className="w-4 h-4" /> {t('hideLogo')}
+                  </>
+                ) : (
+                  <>
+                    <Eye className="w-4 h-4" /> {t('showLogo')}
+                  </>
+                )}
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full justify-start gap-2"
+                onClick={() => {
+                  onToggleActionLabels();
+                  trackEvent(trackingEnabled, 'toggle_action_labels', {
+                    enabled: !actionLabelsEnabled,
+                  });
+                }}
+              >
+                {actionLabelsEnabled ? (
+                  <>
+                    <EyeOff className="w-4 h-4" /> {t('shortenButtons')}
+                  </>
+                ) : (
+                  <>
+                    <Eye className="w-4 h-4" /> {t('showLabels')}
+                  </>
+                )}
+              </Button>
+            </div>
+          </ScrollArea>
         </DialogContent>
       </Dialog>
 
