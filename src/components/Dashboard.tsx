@@ -29,6 +29,8 @@ import { useSoraTools } from '@/hooks/use-sora-tools';
 import { useHeaderButtons } from '@/hooks/use-header-buttons';
 import { useLogo } from '@/hooks/use-logo';
 import { useActionLabels } from '@/hooks/use-action-labels';
+import { useUndoRedoLabels } from '@/hooks/use-undo-redo-labels';
+import { useCopyLabels } from '@/hooks/use-copy-labels';
 import { useSoraUserscript } from '@/hooks/use-sora-userscript';
 import { useActionHistory } from '@/hooks/use-action-history';
 import { useUndoRedo } from '@/hooks/use-undo-redo';
@@ -90,6 +92,8 @@ const Dashboard = () => {
   const [headerButtonsEnabled, setHeaderButtonsEnabled] = useHeaderButtons();
   const [logoEnabled, setLogoEnabled] = useLogo();
   const [actionLabelsEnabled, setActionLabelsEnabled] = useActionLabels();
+  const [undoRedoLabelsEnabled, setUndoRedoLabelsEnabled] = useUndoRedoLabels();
+  const [copyLabelsEnabled, setCopyLabelsEnabled] = useCopyLabels();
   const [userscriptInstalled, userscriptVersion] = useSoraUserscript();
   const actionHistory = useActionHistory();
   const githubStats = useGithubStats();
@@ -211,6 +215,23 @@ const Dashboard = () => {
     setOptions(DEFAULT_OPTIONS);
     toast.success(t('settingsReset'));
     trackEvent(trackingEnabled, 'reset_button');
+  };
+
+  const hardReset = () => {
+    localStorage.clear();
+    setOptions(DEFAULT_OPTIONS);
+    setHistory([]);
+    setJsonString('{}');
+    setDarkMode(true);
+    setTrackingEnabled(true);
+    setSoraToolsEnabled(false);
+    setHeaderButtonsEnabled(true);
+    setLogoEnabled(true);
+    setActionLabelsEnabled(true);
+    setUndoRedoLabelsEnabled(true);
+    setCopyLabelsEnabled(true);
+    toast.success(t('settingsReset'));
+    trackEvent(true, 'hard_reset');
   };
 
   const regenerateJson = () => {
@@ -580,6 +601,7 @@ const Dashboard = () => {
         onImport={() => setShowImportModal(true)}
         onHistory={() => setShowHistory(true)}
         onReset={resetJson}
+        onHardReset={hardReset}
         onRegenerate={regenerateJson}
         onRandomize={randomizeJson}
         trackingEnabled={trackingEnabled}
@@ -596,6 +618,12 @@ const Dashboard = () => {
         onToggleActionLabels={() =>
           setActionLabelsEnabled(!actionLabelsEnabled)
         }
+        undoRedoLabelsEnabled={undoRedoLabelsEnabled}
+        onToggleUndoRedoLabels={() =>
+          setUndoRedoLabelsEnabled(!undoRedoLabelsEnabled)
+        }
+        copyLabelsEnabled={copyLabelsEnabled}
+        onToggleCopyLabels={() => setCopyLabelsEnabled(!copyLabelsEnabled)}
         copied={copied}
         showJumpToJson={isSingleColumn}
         onJumpToJson={scrollToJson}

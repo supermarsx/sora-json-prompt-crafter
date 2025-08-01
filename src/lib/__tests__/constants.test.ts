@@ -5,6 +5,8 @@ import {
   HEADER_BUTTONS_ENABLED,
   LOGO_ENABLED,
   ACTION_LABELS_ENABLED,
+  UNDO_REDO_LABELS_ENABLED,
+  COPY_LABELS_ENABLED,
   TRACKING_ENABLED,
   LOCALE,
 } from '../storage-keys';
@@ -21,6 +23,8 @@ describe('constants', () => {
     expect(HEADER_BUTTONS_ENABLED).toBe('headerButtonsEnabled');
     expect(LOGO_ENABLED).toBe('logoEnabled');
     expect(ACTION_LABELS_ENABLED).toBe('actionLabelsEnabled');
+    expect(UNDO_REDO_LABELS_ENABLED).toBe('undoRedoLabelsEnabled');
+    expect(COPY_LABELS_ENABLED).toBe('copyLabelsEnabled');
     expect(TRACKING_ENABLED).toBe('trackingEnabled');
     expect(LOCALE).toBe('locale');
   });

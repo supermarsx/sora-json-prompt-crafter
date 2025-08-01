@@ -59,6 +59,11 @@ interface ActionBarProps {
   onToggleLogo: () => void;
   actionLabelsEnabled: boolean;
   onToggleActionLabels: () => void;
+  undoRedoLabelsEnabled: boolean;
+  onToggleUndoRedoLabels: () => void;
+  copyLabelsEnabled: boolean;
+  onToggleCopyLabels: () => void;
+  onHardReset: () => void;
   copied: boolean;
   showJumpToJson?: boolean;
   onJumpToJson?: () => void;
@@ -89,6 +94,11 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   onToggleLogo,
   actionLabelsEnabled,
   onToggleActionLabels,
+  undoRedoLabelsEnabled,
+  onToggleUndoRedoLabels,
+  copyLabelsEnabled,
+  onToggleCopyLabels,
+  onHardReset,
   copied,
   showJumpToJson,
   onJumpToJson,
@@ -98,7 +108,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   const [minimized, setMinimized] = useState(false);
   const [clearing, setClearing] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  
+
   if (minimized) {
     return (
       <div className="fixed bottom-4 right-4 z-50">
@@ -136,29 +146,29 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         variant="outline"
         size="sm"
         disabled={!canUndo}
-        className={cn({ 'gap-2': actionLabelsEnabled })}
+        className={cn({ 'gap-2': undoRedoLabelsEnabled })}
       >
         <Undo2 className="w-4 h-4" />
-        {actionLabelsEnabled && t('undo')}
+        {undoRedoLabelsEnabled && t('undo')}
       </Button>
       <Button
         onClick={onRedo}
         variant="outline"
         size="sm"
         disabled={!canRedo}
-        className={cn({ 'gap-2': actionLabelsEnabled })}
+        className={cn({ 'gap-2': undoRedoLabelsEnabled })}
       >
         <Redo2 className="w-4 h-4" />
-        {actionLabelsEnabled && t('redo')}
+        {undoRedoLabelsEnabled && t('redo')}
       </Button>
       <Button
         onClick={onCopy}
         variant="outline"
         size="sm"
-        className={cn({ 'gap-2': actionLabelsEnabled })}
+        className={cn({ 'gap-2': copyLabelsEnabled })}
       >
         {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-        {actionLabelsEnabled && t('copy')}
+        {copyLabelsEnabled && t('copy')}
       </Button>
       <Button
         onClick={() => {
@@ -168,19 +178,19 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         }}
         variant="outline"
         size="sm"
-        className={cn({ 'gap-2': actionLabelsEnabled })}
+        className={cn({ 'gap-2': copyLabelsEnabled })}
       >
         <Trash2 className={`w-4 h-4 ${clearing ? 'animate-spin' : ''}`} />
-        {actionLabelsEnabled && t('clear')}
+        {copyLabelsEnabled && t('clear')}
       </Button>
       <Button
         onClick={onShare}
         variant="outline"
         size="sm"
-        className={cn({ 'gap-2': actionLabelsEnabled })}
+        className={cn({ 'gap-2': copyLabelsEnabled })}
       >
         <Share className="w-4 h-4" />
-        {actionLabelsEnabled && t('share')}
+        {copyLabelsEnabled && t('share')}
       </Button>
       <Button
         onClick={() => setShowSettings(true)}
@@ -545,8 +555,12 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         onToggleLogo={onToggleLogo}
         actionLabelsEnabled={actionLabelsEnabled}
         onToggleActionLabels={onToggleActionLabels}
+        undoRedoLabelsEnabled={undoRedoLabelsEnabled}
+        onToggleUndoRedoLabels={onToggleUndoRedoLabels}
+        copyLabelsEnabled={copyLabelsEnabled}
+        onToggleCopyLabels={onToggleCopyLabels}
+        onHardReset={onHardReset}
       />
-
     </div>
   );
 };
