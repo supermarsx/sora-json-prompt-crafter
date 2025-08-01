@@ -35,6 +35,7 @@ go "my eyes!" when there's bright white lights.
 - Current generated JSON persists through page reloads
 - Stores up to 100 copied JSON prompts in a dedicated history panel
 - Import and Export functions for copied JSON entries
+- Dedicated Settings panel for import, reset and customization options
 - Extensive quality, ambient and setting presets
 - Lots of pop culture presets
 - Specific framing, dimension and base presets
@@ -227,7 +228,7 @@ To add a new language:
 ## Tracking/Analytics
 
 Theres only anonymous usage that tracks actions but not data from the users that you
-can enable or disable from the manage button dropdown. Be aware that disabling tracking
+can enable or disable from the **Settings** panel. Be aware that disabling tracking
 disables user side action log too. We ask kindly for you to still allow tracking for
 statistical and improvement purposes. No prompt data or inputs are ever tracked.
 
