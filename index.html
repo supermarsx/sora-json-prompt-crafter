@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -22,6 +22,14 @@
       name="twitter:image"
       content="https://lovable.dev/opengraph-image-p98pqg.png"
     />
+    <script>
+      try {
+        const locale = localStorage.getItem('locale') || 'en';
+        document.documentElement.lang = locale;
+      } catch {
+        document.documentElement.lang = 'en';
+      }
+    </script>
     <script>
       try {
         const val = localStorage.getItem('darkMode');
