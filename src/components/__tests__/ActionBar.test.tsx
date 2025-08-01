@@ -163,13 +163,13 @@ describe('ActionBar', () => {
     expect(getIconClass()).not.toContain('animate-spin');
   });
 
-  test('Manage disable/enable tracking confirms and toggles', () => {
+  test('Settings disable/enable tracking confirms and toggles', () => {
     const props = createProps();
     const { unmount } = render(<ActionBar {...props} />);
-    fireEvent.click(screen.getByText(/manage/i));
+    fireEvent.click(screen.getByText(/settings/i));
     fireEvent.click(screen.getByText(/disable tracking/i));
     expect(screen.getByText(/disable tracking\?/i)).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: /^disable$/i }));
+    fireEvent.click(screen.getByText(/^disable$/i));
     expect(props.onToggleTracking).toHaveBeenCalledTimes(1);
     expect(toast.success).toHaveBeenCalledWith('Tracking disabled');
 
@@ -177,10 +177,10 @@ describe('ActionBar', () => {
 
     const props2 = createProps({ trackingEnabled: false });
     render(<ActionBar {...props2} />);
-    fireEvent.click(screen.getByText(/manage/i));
+    fireEvent.click(screen.getByText(/settings/i));
     fireEvent.click(screen.getByText(/enable tracking/i));
     expect(screen.getByText(/enable tracking\?/i)).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: /^enable$/i }));
+    fireEvent.click(screen.getByText(/^enable$/i));
     expect(props2.onToggleTracking).toHaveBeenCalledTimes(1);
     expect(toast.success).toHaveBeenCalledWith('Tracking enabled');
   });

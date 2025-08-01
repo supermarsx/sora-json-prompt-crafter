@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocale } from '@/hooks/use-locale';
 import { Button } from '@/components/ui/button';
-import { toast } from '@/components/ui/sonner-toast';
 import { trackEvent } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
 import {
@@ -11,16 +10,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+
+import SettingsPanel from './SettingsPanel';
 import {
   Copy,
   Check,
@@ -106,9 +97,8 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   const [locale, setLocale] = useLocale();
   const [minimized, setMinimized] = useState(false);
   const [clearing, setClearing] = useState(false);
-  const [confirmDisableTracking, setConfirmDisableTracking] = useState(false);
-  const [confirmEnableTracking, setConfirmEnableTracking] = useState(false);
-
+  const [showSettings, setShowSettings] = useState(false);
+  
   if (minimized) {
     return (
       <div className="fixed bottom-4 right-4 z-50">
@@ -192,122 +182,14 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         <Share className="w-4 h-4" />
         {actionLabelsEnabled && t('share')}
       </Button>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="outline"
-            size="sm"
-            className={cn({ 'gap-2': actionLabelsEnabled })}
-          >
-            <Cog className="w-4 h-4" /> {actionLabelsEnabled && t('manage')}
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem onSelect={onImport} className="gap-2">
-            <Import className="w-4 h-4" /> {t('import')}
-          </DropdownMenuItem>
-          <DropdownMenuItem onSelect={onReset} className="gap-2">
-            <RotateCcw className="w-4 h-4" /> {t('reset')}
-          </DropdownMenuItem>
-          <DropdownMenuItem onSelect={onRegenerate} className="gap-2">
-            <RefreshCw className="w-4 h-4" /> {t('regenerate')}
-          </DropdownMenuItem>
-          <DropdownMenuItem onSelect={onRandomize} className="gap-2">
-            <Shuffle className="w-4 h-4" /> {t('randomize')}
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onSelect={() => {
-              if (trackingEnabled) {
-                setConfirmDisableTracking(true);
-              } else {
-                setConfirmEnableTracking(true);
-              }
-            }}
-            className="gap-2"
-          >
-            {trackingEnabled ? (
-              <>
-                <EyeOff className="w-4 h-4" /> {t('disableTracking')}
-              </>
-            ) : (
-              <>
-                <Eye className="w-4 h-4" /> {t('enableTracking')}
-              </>
-            )}
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onSelect={onToggleSoraTools}
-            className="gap-2 hidden"
-          >
-            {soraToolsEnabled ? (
-              <>
-                <EyeOff className="w-4 h-4" /> Hide Sora Integration
-              </>
-            ) : (
-              <>
-                <Eye className="w-4 h-4" /> Show Sora Integration
-              </>
-            )}
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onSelect={() => {
-              onToggleHeaderButtons();
-              trackEvent(trackingEnabled, 'toggle_header_buttons', {
-                enabled: !headerButtonsEnabled,
-              });
-            }}
-            className="gap-2"
-          >
-            {headerButtonsEnabled ? (
-              <>
-                <EyeOff className="w-4 h-4" /> {t('hideHeaderButtons')}
-              </>
-            ) : (
-              <>
-                <Eye className="w-4 h-4" /> {t('showHeaderButtons')}
-              </>
-            )}
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onSelect={() => {
-              onToggleLogo();
-              trackEvent(trackingEnabled, 'toggle_logo', {
-                enabled: !logoEnabled,
-              });
-            }}
-            className="gap-2"
-          >
-            {logoEnabled ? (
-              <>
-                <EyeOff className="w-4 h-4" /> {t('hideLogo')}
-              </>
-            ) : (
-              <>
-                <Eye className="w-4 h-4" /> {t('showLogo')}
-              </>
-            )}
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onSelect={() => {
-              onToggleActionLabels();
-              trackEvent(trackingEnabled, 'toggle_action_labels', {
-                enabled: !actionLabelsEnabled,
-              });
-            }}
-            className="gap-2"
-          >
-            {actionLabelsEnabled ? (
-              <>
-                <EyeOff className="w-4 h-4" /> {t('shortenButtons')}
-              </>
-            ) : (
-              <>
-                <Eye className="w-4 h-4" /> {t('showLabels')}
-              </>
-            )}
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <Button
+        onClick={() => setShowSettings(true)}
+        variant="outline"
+        size="sm"
+        className={cn({ 'gap-2': actionLabelsEnabled })}
+      >
+        <Cog className="w-4 h-4" /> {actionLabelsEnabled && t('manage')}
+      </Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -646,61 +528,25 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         <ChevronDown className="w-4 h-4" />
       </Button>
 
-      <AlertDialog
-        open={confirmDisableTracking}
-        onOpenChange={setConfirmDisableTracking}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t('disableTrackingTitle')}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {t('disableTrackingDescription')}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => {
-                onToggleTracking();
-                toast.success(t('trackingDisabled'));
-                trackEvent(true, 'disable_tracking_confirm');
-                trackEvent(true, 'toggle_tracking', { enabled: false });
-                setConfirmDisableTracking(false);
-              }}
-            >
-              {t('disableTrackingConfirm')}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <SettingsPanel
+        open={showSettings}
+        onOpenChange={setShowSettings}
+        onImport={onImport}
+        onReset={onReset}
+        onRegenerate={onRegenerate}
+        onRandomize={onRandomize}
+        trackingEnabled={trackingEnabled}
+        onToggleTracking={onToggleTracking}
+        soraToolsEnabled={soraToolsEnabled}
+        onToggleSoraTools={onToggleSoraTools}
+        headerButtonsEnabled={headerButtonsEnabled}
+        onToggleHeaderButtons={onToggleHeaderButtons}
+        logoEnabled={logoEnabled}
+        onToggleLogo={onToggleLogo}
+        actionLabelsEnabled={actionLabelsEnabled}
+        onToggleActionLabels={onToggleActionLabels}
+      />
 
-      <AlertDialog
-        open={confirmEnableTracking}
-        onOpenChange={setConfirmEnableTracking}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{t('enableTrackingTitle')}</AlertDialogTitle>
-            <AlertDialogDescription>
-              {t('enableTrackingDescription')}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => {
-                onToggleTracking();
-                toast.success(t('trackingEnabled'));
-                trackEvent(true, 'enable_tracking_confirm');
-                trackEvent(true, 'toggle_tracking', { enabled: true });
-                setConfirmEnableTracking(false);
-              }}
-            >
-              {t('enableTrackingConfirm')}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 };
