@@ -3,13 +3,19 @@ import { purgeCache } from '../purgeCache';
 describe('purgeCache', () => {
   beforeEach(() => {
     localStorage.clear();
-    (globalThis as unknown as { caches: unknown }).caches = {
+    (globalThis as { caches: CacheStorage }).caches = {
       keys: jest.fn(() => Promise.resolve(['a', 'b'])),
       delete: jest.fn(() => Promise.resolve(true)),
-    } as unknown as CacheStorage;
-    (globalThis.navigator as any).serviceWorker = {
+    } as CacheStorage;
+    (
+      globalThis.navigator as { serviceWorker: ServiceWorkerContainer }
+    ).serviceWorker = {
       getRegistrations: jest.fn(() =>
-        Promise.resolve([{ unregister: jest.fn(() => Promise.resolve(true)) } as ServiceWorkerRegistration]),
+        Promise.resolve([
+          {
+            unregister: jest.fn(() => Promise.resolve(true)),
+          } as ServiceWorkerRegistration,
+        ]),
       ),
     };
     localStorage.setItem('currentJson', 'v');
@@ -20,10 +26,8 @@ describe('purgeCache', () => {
   });
 
   afterEach(() => {
-    // @ts-ignore
-    delete (globalThis as any).caches;
-    // @ts-ignore
-    delete (globalThis.navigator as any).serviceWorker;
+    delete (globalThis as { caches?: unknown }).caches;
+    delete (globalThis.navigator as { serviceWorker?: unknown }).serviceWorker;
   });
 
   test('clears caches, storage, service workers, and reloads', async () => {
