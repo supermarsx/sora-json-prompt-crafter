@@ -1,5 +1,5 @@
 import React from 'react';
-import '@/i18n';
+import i18n from '@/i18n';
 import {
   render,
   screen,
@@ -144,7 +144,7 @@ describe('HistoryPanel basic actions', () => {
     fireEvent.click(exportBtn);
     fireEvent.click(screen.getByText(/copy all to clipboard/i));
 
-    expect(toast.error).toHaveBeenCalledWith('Clipboard not supported');
+    expect(toast.error).toHaveBeenCalledWith(i18n.t('clipboardUnsupported'));
     expect(trackEvent).not.toHaveBeenCalledWith(
       expect.anything(),
       'history_export',
@@ -176,9 +176,7 @@ describe('HistoryPanel basic actions', () => {
     fireEvent.click(screen.getByText(/copy all to clipboard/i));
 
     await waitFor(() => expect(writeText).toHaveBeenCalled());
-    expect(toast.success).not.toHaveBeenCalledWith(
-      'Copied all history to clipboard!',
-    );
+    expect(toast.success).not.toHaveBeenCalledWith(i18n.t('copiedAllHistory'));
     expect(onOpenChange).not.toHaveBeenCalled();
   });
 
@@ -221,7 +219,7 @@ describe('HistoryPanel action history', () => {
     fireEvent.click(exportBtn);
 
     expect(URL.createObjectURL).toHaveBeenCalled();
-    expect(toast.success).toHaveBeenCalledWith('Actions downloaded!');
+    expect(toast.success).toHaveBeenCalledWith(i18n.t('actionsDownloaded'));
 
     const events: Event[] = [];
     window.addEventListener('trackingHistoryUpdate', (e) => events.push(e));

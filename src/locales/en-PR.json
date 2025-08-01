@@ -858,5 +858,14 @@
     "Decorative & Textural": "Decorative & Textural",
     "Commercial/Professional": "Commercial/Professional",
     "Famous Artists/Influences": "Famous Artists/Influences"
-  }
+  },
+  "copiedAllHistory": "Copied all history to clipboard!",
+  "historyDownloaded": "History downloaded!",
+  "actionsDownloaded": "Actions downloaded!",
+  "actionsCleared": "Actions cleared!",
+  "actionDeleted": "Action deleted!",
+  "jsonPreviewTitle": "JSON Preview",
+  "jsonPreviewDescription": "Preview the generated JSON output.",
+  "importFromClipboard": "Import from Clipboard",
+  "bulkImportFromClipboard": "Bulk Import from Clipboard"
 }
