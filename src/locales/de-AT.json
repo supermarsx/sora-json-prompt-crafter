@@ -13,6 +13,7 @@
   "reset": "Zurücksetzen",
   "regenerate": "Neu generieren",
   "randomize": "Zufällig",
+  "purgeCache": "Purge Cache",
   "undo": "Rückgängig",
   "redo": "Wiederholen",
   "enableTracking": "Tracking aktivieren",

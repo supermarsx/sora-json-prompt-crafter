@@ -13,6 +13,7 @@
   "reset": "Сброс",
   "regenerate": "Сгенерировать заново",
   "randomize": "Случайно",
+  "purgeCache": "Purge Cache",
   "undo": "Отменить",
   "redo": "Повторить",
   "enableTracking": "Включить отслеживание",

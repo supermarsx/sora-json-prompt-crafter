@@ -13,6 +13,7 @@
   "reset": "รีเซ็ต",
   "regenerate": "สร้างใหม่",
   "randomize": "สุ่ม",
+  "purgeCache": "Purge Cache",
   "undo": "เลิกทำ",
   "redo": "ทำซ้ำ",
   "enableTracking": "เปิดการติดตาม",

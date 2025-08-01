@@ -13,6 +13,7 @@
   "reset": "Reset",
   "regenerate": "Regenerate",
   "randomize": "Randomise",
+  "purgeCache": "Purge Cache",
   "undo": "Undo",
   "redo": "Redo",
   "enableTracking": "Enable Tracking",
