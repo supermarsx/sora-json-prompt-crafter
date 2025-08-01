@@ -42,7 +42,7 @@ go "my eyes!" when there's bright white lights.
 - Advanced specialized prompting options
 - Artifact and defect correction presets
 - No-fuss tracking toggle
-- Internationalization support for English, Spanish and other 2 dozens of locales – switch languages via the Action Bar
+- Internationalization support for English, Spanish and other 2 dozens of locales
 - Works offline thanks to service worker caching of assets
 
 Example JSON output:
