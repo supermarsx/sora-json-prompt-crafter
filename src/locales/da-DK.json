@@ -13,6 +13,7 @@
   "reset": "Nulstil",
   "regenerate": "Generer igen",
   "randomize": "Tilfældiggør",
+  "purgeCache": "Purge Cache",
   "undo": "Fortryd",
   "redo": "Gentag",
   "enableTracking": "Aktivér sporing",

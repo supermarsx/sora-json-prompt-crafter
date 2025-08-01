@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 import { toast } from '@/components/ui/sonner-toast';
 import { trackEvent } from '@/lib/analytics';
+import { purgeCache } from '@/lib/purgeCache';
 
 interface SettingsPanelProps {
   open: boolean;
@@ -208,6 +209,16 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     <Eye className="w-4 h-4" /> {t('showLabels')}
                   </>
                 )}
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full justify-start gap-2"
+                onClick={() => {
+                  purgeCache();
+                  trackEvent(trackingEnabled, 'purge_cache');
+                }}
+              >
+                {t('purgeCache')}
               </Button>
             </div>
           </ScrollArea>

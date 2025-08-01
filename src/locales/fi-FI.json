@@ -13,6 +13,7 @@
   "reset": "Palauta oletuksiin",
   "regenerate": "Luo uudelleen",
   "randomize": "Satunnaista",
+  "purgeCache": "Purge Cache",
   "undo": "Kumoa",
   "redo": "Tee uudelleen",
   "enableTracking": "Ota seuranta käyttöön",

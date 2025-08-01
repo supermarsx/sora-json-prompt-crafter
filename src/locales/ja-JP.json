@@ -13,6 +13,7 @@
   "reset": "リセット",
   "regenerate": "再生成",
   "randomize": "ランダム化",
+  "purgeCache": "Purge Cache",
   "undo": "元に戻す",
   "redo": "やり直す",
   "enableTracking": "トラッキングを有効化",

@@ -13,6 +13,7 @@
   "reset": "Återställ",
   "regenerate": "Regenerera",
   "randomize": "Slumpa",
+  "purgeCache": "Purge Cache",
   "undo": "Ångra",
   "redo": "Gör om",
   "enableTracking": "Aktivera spårning",

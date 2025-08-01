@@ -13,6 +13,7 @@
   "reset": "Lähtesta",
   "regenerate": "Genereeri uuesti",
   "randomize": "Juhuslikusta",
+  "purgeCache": "Purge Cache",
   "undo": "Võta tagasi",
   "redo": "Tee uuesti",
   "enableTracking": "Luba jälgimine",
