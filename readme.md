@@ -46,6 +46,7 @@ go "my eyes!" when there's bright white lights.
 - Shared links append `?ref=share` for referral tracking
 - Internationalization support for English, Spanish and other 2 dozens of locales
 - Works offline thanks to service worker caching of assets
+- Automatically checks for service worker updates on load and when opening the Settings panel
 
 Example JSON output:
 

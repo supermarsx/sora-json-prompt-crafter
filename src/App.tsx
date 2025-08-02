@@ -7,6 +7,7 @@ import i18n from './i18n';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useEffect, lazy, Suspense } from 'react';
 import { safeGet } from '@/lib/storage';
+import { useUpdateCheck } from '@/hooks/use-update-check';
 const Index = lazy(() => import('./pages/Index'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 import ErrorBoundary from './components/ErrorBoundary';
@@ -26,6 +27,11 @@ const App = () => {
       document.documentElement.classList.add('dark');
     }
   }, []);
+
+  const checkForUpdate = useUpdateCheck();
+  useEffect(() => {
+    checkForUpdate();
+  }, [checkForUpdate]);
 
   return (
     <I18nextProvider i18n={i18n}>
