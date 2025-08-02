@@ -61,7 +61,9 @@ describe('ShareModal', () => {
 
   test('shares to Facebook', () => {
     renderModal();
-    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(i18n.t('shareCaption'))}`;
+    const shareUrl = new URL(window.location.href);
+    shareUrl.searchParams.set('ref', 'share');
+    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl.toString())}&quote=${encodeURIComponent(i18n.t('shareCaption'))}`;
     fireEvent.click(screen.getByRole('button', { name: /facebook/i }));
     expect(openSpy).toHaveBeenCalledWith(
       url,
@@ -76,7 +78,9 @@ describe('ShareModal', () => {
     const text = encodeURIComponent(
       `${i18n.t('shareCaption')} #SoraAI #AIGeneration`,
     );
-    const url = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(window.location.href)}`;
+    const shareUrl = new URL(window.location.href);
+    shareUrl.searchParams.set('ref', 'share');
+    const url = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(shareUrl.toString())}`;
     fireEvent.click(screen.getByRole('button', { name: /twitter\/x/i }));
     expect(openSpy).toHaveBeenCalledWith(
       url,
@@ -88,7 +92,9 @@ describe('ShareModal', () => {
 
   test('shares to WhatsApp', () => {
     renderModal();
-    const text = encodeURIComponent(`${i18n.t('shareCaption')}\n\nmyjson`);
+    const shareUrl = new URL(window.location.href);
+    shareUrl.searchParams.set('ref', 'share');
+    const text = encodeURIComponent(`${i18n.t('shareCaption')}\n\nmyjson\n${shareUrl.toString()}`);
     const url = `https://wa.me/?text=${text}`;
     fireEvent.click(screen.getByRole('button', { name: /whatsapp/i }));
     expect(openSpy).toHaveBeenCalledWith(url, '_blank', 'noopener');
@@ -98,7 +104,9 @@ describe('ShareModal', () => {
   test('shares to Telegram', () => {
     renderModal();
     const text = encodeURIComponent(`${i18n.t('shareCaption')}\n\nmyjson`);
-    const url = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${text}`;
+    const shareUrl = new URL(window.location.href);
+    shareUrl.searchParams.set('ref', 'share');
+    const url = `https://t.me/share/url?url=${encodeURIComponent(shareUrl.toString())}&text=${text}`;
     fireEvent.click(screen.getByRole('button', { name: /telegram/i }));
     expect(openSpy).toHaveBeenCalledWith(url, '_blank', 'noopener');
     expect(trackEvent).toHaveBeenCalledWith(true, 'share_telegram');
@@ -114,8 +122,10 @@ describe('ShareModal', () => {
     renderModal();
     const btn = screen.getByRole('button', { name: /copy link/i });
     fireEvent.click(btn);
+    const shareUrl = new URL(window.location.href);
+    shareUrl.searchParams.set('ref', 'share');
     await waitFor(() =>
-      expect(writeText).toHaveBeenCalledWith(window.location.href),
+      expect(writeText).toHaveBeenCalledWith(shareUrl.toString()),
     );
     expect(toast.success).toHaveBeenCalledWith(i18n.t('linkCopied'));
     expect(trackEvent).toHaveBeenCalledWith(true, 'copy_link');

@@ -43,6 +43,7 @@ go "my eyes!" when there's bright white lights.
 - Advanced specialized prompting options
 - Artifact and defect correction presets
 - No-fuss tracking toggle
+- Shared links append `?ref=share` for referral tracking
 - Internationalization support for English, Spanish and other 2 dozens of locales
 - Works offline thanks to service worker caching of assets
 

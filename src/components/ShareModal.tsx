@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { trackEvent } from '@/lib/analytics';
 import { useTracking } from '@/hooks/use-tracking';
 import { useTranslation } from 'react-i18next';
@@ -36,8 +36,13 @@ export const ShareModal: React.FC<ShareModalProps> = ({
   const [trackingEnabled] = useTracking();
   const { t } = useTranslation();
   const shareCaption = t('shareCaption');
+  const shareUrl = useMemo(() => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('ref', 'share');
+    return url.toString();
+  }, []);
   const shareToFacebook = () => {
-    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}&quote=${encodeURIComponent(shareCaption)}`;
+    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareCaption)}`;
     window.open(url, '_blank', 'noopener,width=600,height=400');
     toast.success(t('sharedToFacebook'));
     trackEvent(trackingEnabled, 'share_facebook');
@@ -45,14 +50,14 @@ export const ShareModal: React.FC<ShareModalProps> = ({
 
   const shareToTwitter = () => {
     const text = encodeURIComponent(`${shareCaption} #SoraAI #AIGeneration`);
-    const url = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(window.location.href)}`;
+    const url = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(shareUrl)}`;
     window.open(url, '_blank', 'noopener,width=600,height=400');
     toast.success(t('sharedToTwitter'));
     trackEvent(trackingEnabled, 'share_twitter');
   };
 
   const shareToWhatsApp = () => {
-    const text = encodeURIComponent(`${shareCaption}\n\n${jsonContent}`);
+    const text = encodeURIComponent(`${shareCaption}\n\n${jsonContent}\n${shareUrl}`);
     const url = `https://wa.me/?text=${text}`;
     window.open(url, '_blank', 'noopener');
     toast.success(t('sharedToWhatsApp'));
@@ -61,7 +66,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
 
   const shareToTelegram = () => {
     const text = encodeURIComponent(`${shareCaption}\n\n${jsonContent}`);
-    const url = `https://t.me/share/url?url=${encodeURIComponent(window.location.href)}&text=${text}`;
+    const url = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${text}`;
     window.open(url, '_blank', 'noopener');
     toast.success(t('sharedToTelegram'));
     trackEvent(trackingEnabled, 'share_telegram');
@@ -73,7 +78,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
       return;
     }
     try {
-      await navigator.clipboard.writeText(window.location.href);
+      await navigator.clipboard.writeText(shareUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
       toast.success(t('linkCopied'));
