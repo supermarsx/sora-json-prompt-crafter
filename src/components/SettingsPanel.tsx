@@ -29,6 +29,7 @@ import {
 import { toast } from '@/components/ui/sonner-toast';
 import { trackEvent } from '@/lib/analytics';
 import { purgeCache } from '@/lib/purgeCache';
+import { useUpdateCheck } from '@/hooks/use-update-check';
 
 interface SettingsPanelProps {
   open: boolean;
@@ -70,12 +71,14 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   const { t } = useTranslation();
   const [confirmDisableTracking, setConfirmDisableTracking] = useState(false);
   const [confirmEnableTracking, setConfirmEnableTracking] = useState(false);
+  const checkForUpdate = useUpdateCheck();
 
   useEffect(() => {
     if (open) {
       trackEvent(trackingEnabled, 'settings_open');
+      checkForUpdate();
     }
-  }, [open, trackingEnabled]);
+  }, [open, trackingEnabled, checkForUpdate]);
 
   return (
     <>
