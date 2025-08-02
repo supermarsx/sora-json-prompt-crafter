@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { SearchableDropdown } from '../SearchableDropdown';
 import { CollapsibleSection } from '../CollapsibleSection';
 import type { SoraOptions } from '@/lib/soraOptions';
 import { stylePresets } from '@/data/stylePresets';
@@ -62,25 +63,19 @@ export const StyleSection: React.FC<StyleSectionProps> = ({
 
         <div>
           <Label htmlFor="style_preset">{t('style')}</Label>
-          <Select
+          <SearchableDropdown
+            options={
+              stylePresets[
+                options.style_preset.category as keyof typeof stylePresets
+              ] ?? []
+            }
             value={options.style_preset.style}
             onValueChange={(value) =>
               updateNestedOptions('style_preset.style', value)
             }
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {stylePresets[
-                options.style_preset.category as keyof typeof stylePresets
-              ]?.map((style) => (
-                <SelectItem key={style} value={style}>
-                  {formatLabel(style)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            label="Style Options"
+            placeholder="Select style..."
+          />
         </div>
       </div>
     </CollapsibleSection>

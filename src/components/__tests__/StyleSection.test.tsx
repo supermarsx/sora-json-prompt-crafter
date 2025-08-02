@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, within } from '@testing-library/react';
 import { StyleSection } from '../sections/StyleSection';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 
@@ -23,9 +23,12 @@ describe('StyleSection', () => {
         updateOptions={updateOptions}
       />,
     );
-    const comboboxes = screen.getAllByRole('combobox');
-    fireEvent.click(comboboxes[1]);
-    fireEvent.click(screen.getByRole('option', { name: /film still/i }));
+    const section = screen.getByText('Style').parentElement as HTMLElement;
+    const dropdown = within(section).getByRole('button');
+    fireEvent.click(dropdown);
+    const input = screen.getByPlaceholderText('Search options...');
+    fireEvent.change(input, { target: { value: 'film' } });
+    fireEvent.click(screen.getByRole('button', { name: /film still/i }));
     expect(updateNestedOptions).toHaveBeenCalledWith(
       'style_preset.style',
       'film still',
