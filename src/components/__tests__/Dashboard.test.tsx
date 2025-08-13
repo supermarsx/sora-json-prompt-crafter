@@ -17,6 +17,7 @@ let copyFn: ((json: string) => void) | null = null;
 let updateFn: ((opts: Partial<SoraOptions>) => void) | null = null;
 const mockUseDarkMode = jest.fn(() => [false, jest.fn()] as const);
 let sendFn: (() => void) | null = null;
+let resetFn: (() => void) | null = null;
 jest.mock('../HistoryPanel', () => ({
   __esModule: true,
   default: ({ onCopy }: { onCopy: (json: string) => void }) => {
@@ -57,6 +58,7 @@ jest.mock('../ActionBar', () => {
     ...actual,
     ActionBar: (props: Record<string, unknown>) => {
       sendFn = props.onSendToSora;
+      resetFn = props.onReset;
       return actual.ActionBar(props);
     },
   };
@@ -309,6 +311,33 @@ describe('Dashboard interactions', () => {
     await waitFor(() => {
       const json = JSON.parse(localStorage.getItem('currentJson') || '{}');
       expect(json.prompt).toBe('foo');
+    });
+  });
+
+  test('undo is disabled after reset', async () => {
+    render(<Dashboard />);
+    await waitFor(() => expect(updateFn).not.toBeNull());
+
+    act(() => {
+      updateFn?.({ prompt: 'bar' });
+    });
+
+    await waitFor(() => {
+      expect(
+        (screen.getByRole('button', { name: /undo/i }) as HTMLButtonElement)
+          .disabled,
+      ).toBe(false);
+    });
+
+    act(() => {
+      resetFn?.();
+    });
+
+    await waitFor(() => {
+      expect(
+        (screen.getByRole('button', { name: /undo/i }) as HTMLButtonElement)
+          .disabled,
+      ).toBe(true);
     });
   });
 

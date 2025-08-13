@@ -36,11 +36,19 @@ export function useUndoRedo<T>(initialValue: T | (() => T), limit = 50) {
     }
   };
 
+  const reset = (newValue?: T) => {
+    const value = newValue ?? init;
+    historyRef.current = [value];
+    indexRef.current = 0;
+    setState(value);
+  };
+
   return {
     state,
     setState: push,
     undo,
     redo,
+    reset,
     canUndo: indexRef.current > 0,
     canRedo: indexRef.current < historyRef.current.length - 1,
   } as const;

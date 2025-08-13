@@ -54,6 +54,7 @@ const Dashboard = () => {
     setState: setOptions,
     undo,
     redo,
+    reset,
     canUndo,
     canRedo,
   } = useUndoRedo<SoraOptions>(() => {
@@ -208,7 +209,7 @@ const Dashboard = () => {
 
   const resetJson = () => {
     // Reset to default options
-    setOptions(DEFAULT_OPTIONS);
+    reset(DEFAULT_OPTIONS);
     toast.success(t('settingsReset'));
     trackEvent(trackingEnabled, 'reset_button');
   };
