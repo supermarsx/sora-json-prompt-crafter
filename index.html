@@ -30,8 +30,16 @@
         document.documentElement.lang = 'en';
       }
     </script>
-    <script type="module" src="/src/init-dark-mode.ts"></script>
-    <script type="module" src="/src/init-analytics.ts"></script>
+    <script>
+      try {
+        const val = localStorage.getItem('darkMode');
+        if (val === null || val === 'true') {
+          document.documentElement.classList.add('dark');
+        }
+      } catch {
+        document.documentElement.classList.add('dark');
+      }
+    </script>
   </head>
 
   <body>
