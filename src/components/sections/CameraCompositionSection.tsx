@@ -8,10 +8,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
 import { SearchableDropdown } from '../SearchableDropdown';
 import { MultiSelectDropdown } from '../MultiSelectDropdown';
 import { CollapsibleSection } from '../CollapsibleSection';
+import { ToggleField } from '../ToggleField';
 import type { SoraOptions } from '@/lib/soraOptions';
 import { cameraOptionTranslations } from '@/data/optionTranslations';
 import { getOptionLabel as translateOption } from '@/lib/optionTranslator';
@@ -64,30 +64,27 @@ export const CameraCompositionSection: React.FC<
           />
         </div>
 
-        <div className="flex items-center space-x-2 mb-4">
-          <Checkbox
-            id="use_lens_type"
-            checked={options.use_lens_type}
-            onCheckedChange={(checked) =>
-              updateOptions({ use_lens_type: !!checked })
-            }
-          />
-          <Label htmlFor="use_lens_type">{t('useLensType')}</Label>
-        </div>
-
-        <div>
-          <Label>{t('lensType')}</Label>
-          <SearchableDropdown
-            options={lensTypeOptions}
-            value={options.lens_type}
-            onValueChange={(value) => updateOptions({ lens_type: value })}
-            label="Lens Type"
-            disabled={!options.use_lens_type}
-            getOptionLabel={(opt) =>
-              translateOption(opt, cameraOptionTranslations.lensType, t)
-            }
-          />
-        </div>
+        <ToggleField
+          id="use_lens_type"
+          label={t('useLensType')}
+          checked={options.use_lens_type}
+          onCheckedChange={(checked) =>
+            updateOptions({ use_lens_type: !!checked })
+          }
+        >
+          <div>
+            <Label>{t('lensType')}</Label>
+            <SearchableDropdown
+              options={lensTypeOptions}
+              value={options.lens_type}
+              onValueChange={(value) => updateOptions({ lens_type: value })}
+              label="Lens Type"
+              getOptionLabel={(opt) =>
+                translateOption(opt, cameraOptionTranslations.lensType, t)
+              }
+            />
+          </div>
+        </ToggleField>
 
         <div>
           <Label>{t('shotType')}</Label>
@@ -102,30 +99,29 @@ export const CameraCompositionSection: React.FC<
           />
         </div>
 
-        <div className="flex items-center space-x-2 mb-4">
-          <Checkbox
-            id="use_camera_angle"
-            checked={options.use_camera_angle}
-            onCheckedChange={(checked) =>
-              updateOptions({ use_camera_angle: !!checked })
-            }
-          />
-          <Label htmlFor="use_camera_angle">{t('useCameraAngle')}</Label>
-        </div>
-
-        <div>
-          <Label>{t('cameraAngle')}</Label>
-          <SearchableDropdown
-            options={cameraAngleOptions}
-            value={options.camera_angle}
-            onValueChange={(value) => updateOptions({ camera_angle: value })}
-            label="Camera Angle"
-            disabled={!options.use_camera_angle}
-            getOptionLabel={(opt) =>
-              translateOption(opt, cameraOptionTranslations.cameraAngle, t)
-            }
-          />
-        </div>
+        <ToggleField
+          id="use_camera_angle"
+          label={t('useCameraAngle')}
+          checked={options.use_camera_angle}
+          onCheckedChange={(checked) =>
+            updateOptions({ use_camera_angle: !!checked })
+          }
+        >
+          <div>
+            <Label>{t('cameraAngle')}</Label>
+            <SearchableDropdown
+              options={cameraAngleOptions}
+              value={options.camera_angle}
+              onValueChange={(value) =>
+                updateOptions({ camera_angle: value })
+              }
+              label="Camera Angle"
+              getOptionLabel={(opt) =>
+                translateOption(opt, cameraOptionTranslations.cameraAngle, t)
+              }
+            />
+          </div>
+        </ToggleField>
 
         <div>
           <Label htmlFor="subject_focus">{t('subjectFocus')}</Label>
@@ -166,78 +162,81 @@ export const CameraCompositionSection: React.FC<
           />
         </div>
 
-        <div className="flex items-center space-x-2 mb-4">
-          <Checkbox
-            id="use_aperture"
-            checked={options.use_aperture}
-            onCheckedChange={(checked) =>
-              updateOptions({ use_aperture: !!checked })
-            }
-          />
-          <Label htmlFor="use_aperture">{t('useAperture')}</Label>
-        </div>
+        <ToggleField
+          id="use_aperture"
+          label={t('useAperture')}
+          checked={options.use_aperture}
+          onCheckedChange={(checked) =>
+            updateOptions({ use_aperture: !!checked })
+          }
+        >
+          <div>
+            <Label>{t('aperture')}</Label>
+            <SearchableDropdown
+              options={apertureOptions}
+              value={options.aperture}
+              onValueChange={(value) =>
+                updateOptions({ aperture: value })
+              }
+              label="Aperture"
+              getOptionLabel={(opt) =>
+                translateOption(opt, cameraOptionTranslations.aperture, t)
+              }
+            />
+          </div>
+        </ToggleField>
 
-        <div>
-          <Label>{t('aperture')}</Label>
-          <SearchableDropdown
-            options={apertureOptions}
-            value={options.aperture}
-            onValueChange={(value) => updateOptions({ aperture: value })}
-            label="Aperture"
-            disabled={!options.use_aperture}
-            getOptionLabel={(opt) =>
-              translateOption(opt, cameraOptionTranslations.aperture, t)
-            }
-          />
-        </div>
+        <ToggleField
+          id="use_dof"
+          label={t('useDepthOfField')}
+          checked={options.use_dof}
+          onCheckedChange={(checked) =>
+            updateOptions({ use_dof: !!checked })
+          }
+        >
+          <div>
+            <Label>{t('depthOfField')}</Label>
+            <SearchableDropdown
+              options={depthOfFieldOptions}
+              value={options.depth_of_field || 'default'}
+              onValueChange={(value) =>
+                updateOptions({ depth_of_field: value })
+              }
+              label="Depth of Field Options"
+              getOptionLabel={(opt) =>
+                translateOption(
+                  opt,
+                  cameraOptionTranslations.depthOfField,
+                  t,
+                )
+              }
+            />
+          </div>
+        </ToggleField>
 
-        <div className="flex items-center space-x-2 mb-4">
-          <Checkbox
-            id="use_dof"
-            checked={options.use_dof}
-            onCheckedChange={(checked) => updateOptions({ use_dof: !!checked })}
-          />
-          <Label htmlFor="use_dof">{t('useDepthOfField')}</Label>
-        </div>
-
-        <div>
-          <Label>{t('depthOfField')}</Label>
-          <SearchableDropdown
-            options={depthOfFieldOptions}
-            value={options.depth_of_field || 'default'}
-            onValueChange={(value) => updateOptions({ depth_of_field: value })}
-            label="Depth of Field Options"
-            disabled={!options.use_dof}
-            getOptionLabel={(opt) =>
-              translateOption(opt, cameraOptionTranslations.depthOfField, t)
-            }
-          />
-        </div>
-
-        <div className="flex items-center space-x-2 mb-4">
-          <Checkbox
-            id="use_blur_style"
-            checked={options.use_blur_style}
-            onCheckedChange={(checked) =>
-              updateOptions({ use_blur_style: !!checked })
-            }
-          />
-          <Label htmlFor="use_blur_style">{t('useBlurStyle')}</Label>
-        </div>
-
-        <div>
-          <Label>{t('blurStyle')}</Label>
-          <SearchableDropdown
-            options={blurStyleOptions}
-            value={options.blur_style || 'default'}
-            onValueChange={(value) => updateOptions({ blur_style: value })}
-            label="Blur Style Options"
-            disabled={!options.use_blur_style}
-            getOptionLabel={(opt) =>
-              translateOption(opt, cameraOptionTranslations.blurStyle, t)
-            }
-          />
-        </div>
+        <ToggleField
+          id="use_blur_style"
+          label={t('useBlurStyle')}
+          checked={options.use_blur_style}
+          onCheckedChange={(checked) =>
+            updateOptions({ use_blur_style: !!checked })
+          }
+        >
+          <div>
+            <Label>{t('blurStyle')}</Label>
+            <SearchableDropdown
+              options={blurStyleOptions}
+              value={options.blur_style || 'default'}
+              onValueChange={(value) =>
+                updateOptions({ blur_style: value })
+              }
+              label="Blur Style Options"
+              getOptionLabel={(opt) =>
+                translateOption(opt, cameraOptionTranslations.blurStyle, t)
+              }
+            />
+          </div>
+        </ToggleField>
       </div>
     </CollapsibleSection>
   );

@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
+import { ToggleField } from '../ToggleField';
 import type { SoraOptions } from '@/lib/soraOptions';
 import { useResizeTracker } from '@/hooks/use-resize-tracker';
 
@@ -38,29 +38,24 @@ export const PromptSection: React.FC<PromptSectionProps> = ({
         />
       </div>
 
-      <div>
-        <div className="flex items-center space-x-2 mb-2">
-          <Checkbox
-            id="use_negative_prompt"
-            checked={options.use_negative_prompt}
-            onCheckedChange={(checked) =>
-              updateOptions({ use_negative_prompt: !!checked })
-            }
-          />
-          <Label htmlFor="negative_prompt" className="text-base font-semibold">
-            {t('negativePrompt')}
-          </Label>
-        </div>
+      <ToggleField
+        id="use_negative_prompt"
+        label={t('negativePrompt')}
+        checked={options.use_negative_prompt}
+        onCheckedChange={(checked) =>
+          updateOptions({ use_negative_prompt: !!checked })
+        }
+      >
         <Textarea
           id="negative_prompt"
           value={options.negative_prompt}
           onChange={(e) => updateOptions({ negative_prompt: e.target.value })}
           placeholder={t('negativePromptPlaceholder')}
           className="min-h-[80px] resize-y"
-          disabled={!options.use_negative_prompt}
           ref={negativeRef}
+          aria-label={t('negativePrompt')}
         />
-      </div>
+      </ToggleField>
     </div>
   );
 };

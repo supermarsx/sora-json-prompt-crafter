@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Checkbox } from '@/components/ui/checkbox';
 import { SearchableDropdown } from '../SearchableDropdown';
 import { CollapsibleSection } from '../CollapsibleSection';
+import { ToggleField } from '../ToggleField';
 import type { SoraOptions } from '@/lib/soraOptions';
 import { faceOptionTranslations } from '@/data/optionTranslations';
 import { getOptionLabel as translateOption } from '@/lib/optionTranslator';
@@ -53,80 +54,79 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
           <Label htmlFor="dont_change_face">{t('dontChangeFace')}</Label>
         </div>
 
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id="use_subject_gender"
-            checked={options.use_subject_gender}
-            onCheckedChange={(checked) =>
-              updateOptions({ use_subject_gender: !!checked })
-            }
-          />
-          <Label htmlFor="use_subject_gender">{t('useSubjectGender')}</Label>
-        </div>
+        <ToggleField
+          id="use_subject_gender"
+          label={t('useSubjectGender')}
+          checked={options.use_subject_gender}
+          onCheckedChange={(checked) =>
+            updateOptions({ use_subject_gender: !!checked })
+          }
+        >
+          <div>
+            <Label>{t('subjectGender')}</Label>
+            <SearchableDropdown
+              options={subjectGenderOptions}
+              value={
+                options.subject_gender || 'default (auto/inferred gender)'
+              }
+              onValueChange={(value) => updateOptions({ subject_gender: value })}
+              label="Subject Gender Options"
+              getOptionLabel={(opt) =>
+                translateOption(opt, faceOptionTranslations.subjectGender, t)
+              }
+            />
+          </div>
+        </ToggleField>
 
-        <div>
-          <Label>{t('subjectGender')}</Label>
-          <SearchableDropdown
-            options={subjectGenderOptions}
-            value={options.subject_gender || 'default (auto/inferred gender)'}
-            onValueChange={(value) => updateOptions({ subject_gender: value })}
-            label="Subject Gender Options"
-            disabled={!options.use_subject_gender}
-            getOptionLabel={(opt) =>
-              translateOption(opt, faceOptionTranslations.subjectGender, t)
-            }
-          />
-        </div>
+        <ToggleField
+          id="use_makeup_style"
+          label={t('useMakeupStyle')}
+          checked={options.use_makeup_style}
+          onCheckedChange={(checked) =>
+            updateOptions({ use_makeup_style: !!checked })
+          }
+        >
+          <div>
+            <Label>{t('makeupStyle')}</Label>
+            <SearchableDropdown
+              options={makeupStyleOptions}
+              value={
+                options.makeup_style || 'default (no specific makeup)'
+              }
+              onValueChange={(value) => updateOptions({ makeup_style: value })}
+              label="Makeup Style Options"
+              getOptionLabel={(opt) =>
+                translateOption(opt, faceOptionTranslations.makeupStyle, t)
+              }
+            />
+          </div>
+        </ToggleField>
 
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id="use_makeup_style"
-            checked={options.use_makeup_style}
-            onCheckedChange={(checked) =>
-              updateOptions({ use_makeup_style: !!checked })
-            }
-          />
-          <Label htmlFor="use_makeup_style">{t('useMakeupStyle')}</Label>
-        </div>
-
-        <div>
-          <Label>{t('makeupStyle')}</Label>
-          <SearchableDropdown
-            options={makeupStyleOptions}
-            value={options.makeup_style || 'default (no specific makeup)'}
-            onValueChange={(value) => updateOptions({ makeup_style: value })}
-            label="Makeup Style Options"
-            disabled={!options.use_makeup_style}
-            getOptionLabel={(opt) =>
-              translateOption(opt, faceOptionTranslations.makeupStyle, t)
-            }
-          />
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id="use_character_mood"
-            checked={options.use_character_mood}
-            onCheckedChange={(checked) =>
-              updateOptions({ use_character_mood: !!checked })
-            }
-          />
-          <Label htmlFor="use_character_mood">{t('useCharacterMood')}</Label>
-        </div>
-
-        <div>
-          <Label>{t('characterMood')}</Label>
-          <SearchableDropdown
-            options={characterMoodOptions}
-            value={options.character_mood || 'default (neutral mood)'}
-            onValueChange={(value) => updateOptions({ character_mood: value })}
-            label="Character Mood Options"
-            disabled={!options.use_character_mood}
-            getOptionLabel={(opt) =>
-              translateOption(opt, faceOptionTranslations.characterMood, t)
-            }
-          />
-        </div>
+        <ToggleField
+          id="use_character_mood"
+          label={t('useCharacterMood')}
+          checked={options.use_character_mood}
+          onCheckedChange={(checked) =>
+            updateOptions({ use_character_mood: !!checked })
+          }
+        >
+          <div>
+            <Label>{t('characterMood')}</Label>
+            <SearchableDropdown
+              options={characterMoodOptions}
+              value={
+                options.character_mood || 'default (neutral mood)'
+              }
+              onValueChange={(value) =>
+                updateOptions({ character_mood: value })
+              }
+              label="Character Mood Options"
+              getOptionLabel={(opt) =>
+                translateOption(opt, faceOptionTranslations.characterMood, t)
+              }
+            />
+          </div>
+        </ToggleField>
       </div>
     </CollapsibleSection>
   );
