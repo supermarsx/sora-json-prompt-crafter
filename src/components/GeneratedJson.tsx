@@ -59,8 +59,11 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
   );
 
   return (
-    <div className="h-full overflow-y-auto" ref={containerRef}>
-      <pre className="p-6 text-sm font-mono whitespace-pre-wrap break-words leading-relaxed">
+    <div
+      className="h-full overflow-y-auto overflow-x-hidden"
+      ref={containerRef}
+    >
+      <pre className="p-6 text-sm font-mono whitespace-pre-wrap break-all leading-relaxed">
         {diffParts
           ? diffParts.map((part, idx) =>
               renderHighlighted(part.value, Boolean(part.added), idx),
