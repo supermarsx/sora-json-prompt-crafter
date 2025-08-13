@@ -47,9 +47,10 @@ describe('ControlPanel', () => {
     }
 
     // toggle an optional section (Core Settings)
-    const header = screen.getByText('Core Settings')
-      .parentElement as HTMLElement;
-    const checkbox = within(header).getByRole('checkbox');
+    const container = screen
+      .getByText('Core Settings')
+      .closest('div') as HTMLElement;
+    const checkbox = within(container).getByRole('checkbox');
     fireEvent.click(checkbox);
     expect(updateOptions).toHaveBeenCalledWith({ use_core_settings: true });
   });
