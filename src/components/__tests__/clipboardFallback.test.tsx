@@ -3,6 +3,7 @@ import i18n from '@/i18n';
 import Dashboard from '../Dashboard';
 jest.mock('../Footer', () => ({ __esModule: true, default: () => null }));
 import { ShareModal } from '../ShareModal';
+import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import ClipboardImportModal from '../ClipboardImportModal';
 import { HistoryPanel } from '../HistoryPanel';
 import { toast } from '@/components/ui/sonner-toast';
@@ -77,7 +78,14 @@ describe('clipboard fallback', () => {
 
   test('ShareModal copy shows error', () => {
     const restore = restoreClipboard();
-    render(<ShareModal isOpen={true} onClose={() => {}} jsonContent="{}" />);
+    render(
+      <ShareModal
+        isOpen={true}
+        onClose={() => {}}
+        jsonContent="{}"
+        options={DEFAULT_OPTIONS}
+      />,
+    );
     const btn = screen.getByRole('button', { name: /copy link/i });
     fireEvent.click(btn);
     expect(toast.error).toHaveBeenCalledWith(i18n.t('clipboardUnsupported'));

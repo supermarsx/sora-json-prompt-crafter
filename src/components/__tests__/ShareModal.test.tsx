@@ -10,6 +10,8 @@ import i18n from '@/i18n';
 import { trackEvent } from '@/lib/analytics';
 import { useTracking } from '@/hooks/use-tracking';
 import { toast } from '@/components/ui/sonner-toast';
+import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
+import { serializeOptions } from '@/lib/urlOptions';
 
 jest.mock('@/lib/analytics', () => ({
   __esModule: true,
@@ -31,7 +33,12 @@ jest.mock('@/components/ui/sonner-toast', () => ({
 
 function renderModal() {
   return render(
-    <ShareModal isOpen={true} onClose={() => {}} jsonContent="myjson" />,
+    <ShareModal
+      isOpen={true}
+      onClose={() => {}}
+      jsonContent="myjson"
+      options={DEFAULT_OPTIONS}
+    />,
   );
 }
 
@@ -51,7 +58,12 @@ describe('ShareModal', () => {
 
   test('does not render when closed', () => {
     render(
-      <ShareModal isOpen={false} onClose={() => {}} jsonContent="myjson" />,
+      <ShareModal
+        isOpen={false}
+        onClose={() => {}}
+        jsonContent="myjson"
+        options={DEFAULT_OPTIONS}
+      />,
     );
     expect(screen.queryByText(/Share your JSON prompt/i)).toBeNull();
     expect(openSpy).not.toHaveBeenCalled();
@@ -63,6 +75,7 @@ describe('ShareModal', () => {
     renderModal();
     const shareUrl = new URL(window.location.href);
     shareUrl.searchParams.set('ref', 'share');
+    shareUrl.hash = serializeOptions(DEFAULT_OPTIONS);
     const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl.toString())}&quote=${encodeURIComponent(i18n.t('shareCaption'))}`;
     fireEvent.click(screen.getByRole('button', { name: /facebook/i }));
     expect(openSpy).toHaveBeenCalledWith(
@@ -80,6 +93,7 @@ describe('ShareModal', () => {
     );
     const shareUrl = new URL(window.location.href);
     shareUrl.searchParams.set('ref', 'share');
+    shareUrl.hash = serializeOptions(DEFAULT_OPTIONS);
     const url = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(shareUrl.toString())}`;
     fireEvent.click(screen.getByRole('button', { name: /twitter\/x/i }));
     expect(openSpy).toHaveBeenCalledWith(
@@ -94,6 +108,7 @@ describe('ShareModal', () => {
     renderModal();
     const shareUrl = new URL(window.location.href);
     shareUrl.searchParams.set('ref', 'share');
+    shareUrl.hash = serializeOptions(DEFAULT_OPTIONS);
     const text = encodeURIComponent(`${i18n.t('shareCaption')}\n\nmyjson\n${shareUrl.toString()}`);
     const url = `https://wa.me/?text=${text}`;
     fireEvent.click(screen.getByRole('button', { name: /whatsapp/i }));
@@ -106,6 +121,7 @@ describe('ShareModal', () => {
     const text = encodeURIComponent(`${i18n.t('shareCaption')}\n\nmyjson`);
     const shareUrl = new URL(window.location.href);
     shareUrl.searchParams.set('ref', 'share');
+    shareUrl.hash = serializeOptions(DEFAULT_OPTIONS);
     const url = `https://t.me/share/url?url=${encodeURIComponent(shareUrl.toString())}&text=${text}`;
     fireEvent.click(screen.getByRole('button', { name: /telegram/i }));
     expect(openSpy).toHaveBeenCalledWith(url, '_blank', 'noopener');
@@ -124,6 +140,7 @@ describe('ShareModal', () => {
     fireEvent.click(btn);
     const shareUrl = new URL(window.location.href);
     shareUrl.searchParams.set('ref', 'share');
+    shareUrl.hash = serializeOptions(DEFAULT_OPTIONS);
     await waitFor(() =>
       expect(writeText).toHaveBeenCalledWith(shareUrl.toString()),
     );

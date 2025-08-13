@@ -20,17 +20,21 @@ import {
   Check,
 } from 'lucide-react';
 import { toast } from '@/components/ui/sonner-toast';
+import type { SoraOptions } from '@/lib/soraOptions';
+import { serializeOptions } from '@/lib/urlOptions';
 
 interface ShareModalProps {
   isOpen: boolean;
   onClose: () => void;
   jsonContent: string;
+  options: SoraOptions;
 }
 
 export const ShareModal: React.FC<ShareModalProps> = ({
   isOpen,
   onClose,
   jsonContent,
+  options,
 }) => {
   const [copied, setCopied] = useState(false);
   const [trackingEnabled] = useTracking();
@@ -39,8 +43,9 @@ export const ShareModal: React.FC<ShareModalProps> = ({
   const shareUrl = useMemo(() => {
     const url = new URL(window.location.href);
     url.searchParams.set('ref', 'share');
+    url.hash = serializeOptions(options);
     return url.toString();
-  }, []);
+  }, [options]);
   const shareToFacebook = () => {
     const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareCaption)}`;
     window.open(url, '_blank', 'noopener,width=600,height=400');

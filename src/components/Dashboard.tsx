@@ -40,6 +40,7 @@ import { loadOptionsFromJson } from '@/lib/loadOptionsFromJson';
 import { OPTION_FLAG_MAP } from '@/lib/optionFlagMap';
 import { isValidOptions } from '@/lib/validateOptions';
 import { safeGet, safeSet } from '@/lib/storage';
+import { getOptionsFromUrl } from '@/lib/urlOptions';
 import { USERSCRIPT_VERSION } from '@/version';
 import { useGithubStats } from '@/hooks/use-github-stats';
 import { useClipboard } from '@/hooks/use-clipboard';
@@ -49,16 +50,10 @@ import { useLocale } from '@/hooks/use-locale';
 const Dashboard = () => {
   const { t } = useTranslation();
   useLocale();
-  const {
-    state: options,
-    setState: setOptions,
-    undo,
-    redo,
-    reset,
-    canUndo,
-    canRedo,
-  } = useUndoRedo<SoraOptions>(() => {
+  const initializeOptions = () => {
     try {
+      const fromUrl = getOptionsFromUrl();
+      if (fromUrl) return fromUrl;
       const stored = safeGet('currentJson');
       if (stored) {
         const parsed = loadOptionsFromJson(stored);
@@ -69,13 +64,24 @@ const Dashboard = () => {
       console.error('Error initializing options:', error);
       return DEFAULT_OPTIONS;
     }
-  });
+  };
+
+  const initialOptions = initializeOptions();
+
+  const {
+    state: options,
+    setState: setOptions,
+    undo,
+    redo,
+    reset,
+    canUndo,
+    canRedo,
+  } = useUndoRedo<SoraOptions>(() => initialOptions);
 
   const [copied, setCopied] = useState(false);
-  const [jsonString, setJsonString] = useState(() => {
-    const stored = safeGet('currentJson');
-    return stored ?? '{}';
-  });
+  const [jsonString, setJsonString] = useState(() =>
+    generateJson(initialOptions),
+  );
 
   const [showShareModal, setShowShareModal] = useState(false);
   const [showImportModal, setShowImportModal] = useState(false);
@@ -597,6 +603,7 @@ const Dashboard = () => {
         isOpen={showShareModal}
         onClose={() => setShowShareModal(false)}
         jsonContent={jsonString}
+        options={options}
       />
       <HistoryPanel
         open={showHistory}
