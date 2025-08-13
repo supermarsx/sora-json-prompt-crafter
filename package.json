@@ -4,16 +4,17 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "build:dev": "vite build --mode development",
+    "dev": "npm run copy-locales && vite",
+    "build": "npm run copy-locales && vite build",
+    "build:dev": "npm run copy-locales && vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "jest",
     "coverage": "jest --coverage && node scripts/generateCoverageBadge.js",
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
-    "accessibility": "node scripts/accessibilityCheck.js"
+    "accessibility": "node scripts/accessibilityCheck.js",
+    "copy-locales": "node scripts/copyTranslations.js"
   },
   "overrides": {
     "test-exclude": "^7.0.1"
