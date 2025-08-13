@@ -96,9 +96,27 @@ export function importCustomPresets(data: string | CustomPresetData): void {
 }
 
 export async function loadCustomPresetsFromUrl(url: string) {
+  let res: Response;
   try {
-    const res = await fetch(url);
-    const json = await res.json();
+    res = await fetch(url);
+  } catch (err) {
+    throw new Error('Failed to load custom presets: ' + err);
+  }
+
+  if (!res.ok) {
+    throw new Error(
+      `Failed to load custom presets: HTTP ${res.status} ${res.statusText || ''}`.trim(),
+    );
+  }
+
+  let json: unknown;
+  try {
+    json = await res.json();
+  } catch (err) {
+    throw new Error('Failed to load custom presets: invalid JSON: ' + err);
+  }
+
+  try {
     importCustomPresets(json);
   } catch (err) {
     throw new Error('Failed to load custom presets: ' + err);

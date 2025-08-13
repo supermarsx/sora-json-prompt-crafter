@@ -98,6 +98,8 @@ describe('loadCustomPresetsFromUrl', () => {
   test('loads presets from URL', async () => {
     const data = { stylePresets: { Foo: ['bar'] } };
     global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
       json: jest.fn().mockResolvedValue(data),
     }) as unknown as typeof fetch;
     const { stylePresets } = await import('../../data/stylePresets');
@@ -106,6 +108,18 @@ describe('loadCustomPresetsFromUrl', () => {
 
     expect(fetch).toHaveBeenCalledWith('http://example.com');
     expect(stylePresets.Foo).toEqual(['bar']);
+  });
+
+  test('rejects when response not OK', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: false,
+      status: 404,
+      statusText: 'Not Found',
+    }) as unknown as typeof fetch;
+
+    await expect(loadCustomPresetsFromUrl('bad')).rejects.toThrow(
+      'Failed to load custom presets: HTTP 404 Not Found',
+    );
   });
 
   test('rejects when fetch fails', async () => {
@@ -123,19 +137,23 @@ describe('loadCustomPresetsFromUrl', () => {
 
   test('rejects when response json fails', async () => {
     global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
       json: jest.fn().mockRejectedValue(new Error('invalid')),
     }) as unknown as typeof fetch;
 
     const spy = jest.spyOn(presetLoaderModule, 'importCustomPresets');
 
     await expect(loadCustomPresetsFromUrl('oops')).rejects.toThrow(
-      'Failed to load custom presets: Error: invalid',
+      'Failed to load custom presets: invalid JSON: Error: invalid',
     );
     expect(spy).not.toHaveBeenCalled();
   });
 
   test('rejects when parsed JSON is invalid', async () => {
     global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
       json: jest.fn().mockResolvedValue('not json'),
     }) as unknown as typeof fetch;
 
