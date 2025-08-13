@@ -12,34 +12,29 @@ jest.mock('../components/Dashboard', () => ({
 }));
 
 import App from '../App';
-import { safeGet } from '@/lib/storage';
 import '../i18n';
-
-jest.mock('@/lib/storage', () => ({
-  __esModule: true,
-  safeGet: jest.fn(),
-}));
+import { DARK_MODE } from '@/lib/storage-keys';
 
 describe('App dark mode handling', () => {
   beforeEach(() => {
     document.documentElement.classList.remove('dark');
-    (safeGet as jest.Mock).mockReset();
+    localStorage.clear();
     window.matchMedia = jest.fn().mockReturnValue({
+      matches: true,
       addEventListener: jest.fn(),
       removeEventListener: jest.fn(),
     }) as unknown as typeof window.matchMedia;
   });
 
-  test('adds dark class when safeGet returns null', async () => {
-    (safeGet as jest.Mock).mockReturnValueOnce(null);
+  test('adds dark class when matchMedia prefers dark', async () => {
     await act(async () => {
       render(<App />);
     });
     expect(document.documentElement.classList.contains('dark')).toBe(true);
   });
 
-  test('does not add dark class when safeGet returns value', async () => {
-    (safeGet as jest.Mock).mockReturnValueOnce('true');
+  test('respects localStorage value over matchMedia', async () => {
+    localStorage.setItem(DARK_MODE, 'false');
     await act(async () => {
       render(<App />);
     });

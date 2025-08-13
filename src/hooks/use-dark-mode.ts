@@ -3,7 +3,11 @@ import { useLocalStorageState } from './use-local-storage-state';
 import { DARK_MODE } from '@/lib/storage-keys';
 
 export function useDarkMode() {
-  const [isDark, setIsDark] = useLocalStorageState(DARK_MODE, true);
+  const prefersDark =
+    typeof window !== 'undefined' && 'matchMedia' in window
+      ? window.matchMedia('(prefers-color-scheme: dark)').matches
+      : true;
+  const [isDark, setIsDark] = useLocalStorageState(DARK_MODE, prefersDark);
 
   useEffect(() => {
     const root = document.documentElement;
