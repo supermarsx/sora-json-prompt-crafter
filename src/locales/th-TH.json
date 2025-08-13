@@ -107,6 +107,7 @@
   "copyFailed": "คัดลอกลิงก์ไม่สำเร็จ",
   "clipboardNotSupported": "คลิปบอร์ดไม่รองรับ",
   "clipboardUnsupported": "คลิปบอร์ดไม่รองรับ",
+  "githubStatsError": "Failed to load GitHub stats",
   "importJsonTitle": "นำเข้า JSON",
   "importJsonDescription": "วาง JSON หรือเลือกไฟล์เพื่อนำเข้าพรอมต์ของคุณ",
   "pasteJsonPlaceholder": "วาง JSON ที่นี่",

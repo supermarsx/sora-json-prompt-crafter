@@ -41,9 +41,11 @@ describe('useClipboard', () => {
       value: { writeText },
     });
     const { result } = renderHook(() => useClipboard(), { wrapper });
-    await expect(result.current.copy('foo', 'ok')).resolves.toBe(true);
+    await expect(result.current.copy('foo', i18n.t('copied'))).resolves.toBe(
+      true,
+    );
     expect(writeText).toHaveBeenCalledWith('foo');
-    expect(toast.success).toHaveBeenCalledWith('ok');
+    expect(toast.success).toHaveBeenCalledWith(i18n.t('copied'));
   });
 
   test('shows error when API missing', async () => {

@@ -107,6 +107,7 @@
   "copyFailed": "Kopieren des Links fehlgeschlagen",
   "clipboardNotSupported": "Zwischenablage wird nicht unterstützt",
   "clipboardUnsupported": "Zwischenablage wird nicht unterstützt",
+  "githubStatsError": "Failed to load GitHub stats",
   "importJsonTitle": "JSON importieren",
   "importJsonDescription": "Füge JSON ein oder wähle eine Datei, um den Prompt zu importieren.",
   "pasteJsonPlaceholder": "JSON hier einfügen",

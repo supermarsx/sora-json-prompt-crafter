@@ -107,6 +107,7 @@
   "copyFailed": "Copyin' link failed",
   "clipboardNotSupported": "Clipboard not supported, matey",
   "clipboardUnsupported": "Clipboard not supported, matey",
+  "githubStatsError": "Failed to load GitHub stats",
   "importJsonTitle": "Import JSON",
   "importJsonDescription": "Paste JSON or choose a file to smuggle a prompt aboard.",
   "pasteJsonPlaceholder": "Paste JSON here",

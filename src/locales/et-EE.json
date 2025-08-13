@@ -107,6 +107,7 @@
   "copyFailed": "Lingi kopeerimine ebaõnnestus",
   "clipboardNotSupported": "Lõikepuhvrit ei toetata",
   "clipboardUnsupported": "Lõikepuhvrit ei toetata",
+  "githubStatsError": "Failed to load GitHub stats",
   "importJsonTitle": "Impordi JSON",
   "importJsonDescription": "Kleebi JSON või vali fail, et importida prompt.",
   "pasteJsonPlaceholder": "Kleebi JSON siia",

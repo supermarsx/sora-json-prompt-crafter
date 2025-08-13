@@ -107,6 +107,7 @@
   "copyFailed": "Falha ao copiar link",
   "clipboardNotSupported": "Área de transferência não suportada",
   "clipboardUnsupported": "Área de transferência não suportada",
+  "githubStatsError": "Failed to load GitHub stats",
   "importJsonTitle": "Importar JSON",
   "importJsonDescription": "Cole o JSON ou selecione um arquivo para importar seu prompt.",
   "pasteJsonPlaceholder": "Cole o JSON aqui",

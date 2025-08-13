@@ -107,6 +107,7 @@
   "copyFailed": "Η αντιγραφή του συνδέσμου απέτυχε",
   "clipboardNotSupported": "Το πρόχειρο δεν υποστηρίζεται",
   "clipboardUnsupported": "Το πρόχειρο δεν υποστηρίζεται",
+  "githubStatsError": "Failed to load GitHub stats",
   "importJsonTitle": "Εισαγωγή JSON",
   "importJsonDescription": "Επικολλήστε JSON ή επιλέξτε αρχείο για εισαγωγή prompt.",
   "pasteJsonPlaceholder": "Επικολλήστε JSON εδώ",

@@ -107,6 +107,7 @@
   "copyFailed": "Copiere link eșuată",
   "clipboardNotSupported": "Clipboard neacceptat",
   "clipboardUnsupported": "Clipboard neacceptat",
+  "githubStatsError": "Failed to load GitHub stats",
   "importJsonTitle": "Importă JSON",
   "importJsonDescription": "Lipește JSON sau selectează un fișier pentru importul promptului tău.",
   "pasteJsonPlaceholder": "Lipește JSON aici",

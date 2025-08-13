@@ -107,6 +107,7 @@
   "copyFailed": "Linkin kopiointi epäonnistui",
   "clipboardNotSupported": "Leikepöytää ei tueta",
   "clipboardUnsupported": "Leikepöytää ei tueta",
+  "githubStatsError": "Failed to load GitHub stats",
   "importJsonTitle": "Tuo JSON",
   "importJsonDescription": "Liitä JSON tai valitse tiedosto kehotteen tuomista varten.",
   "pasteJsonPlaceholder": "Liitä JSON tähän",

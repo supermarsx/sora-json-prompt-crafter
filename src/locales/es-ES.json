@@ -107,6 +107,7 @@
   "copyFailed": "Fallo al copiar el enlace",
   "clipboardNotSupported": "El portapapeles no está soportado",
   "clipboardUnsupported": "El portapapeles no está soportado",
+  "githubStatsError": "Failed to load GitHub stats",
   "importJsonTitle": "Importar JSON",
   "importJsonDescription": "Pega JSON o elige un archivo para importar un prompt.",
   "pasteJsonPlaceholder": "Pega JSON aquí",

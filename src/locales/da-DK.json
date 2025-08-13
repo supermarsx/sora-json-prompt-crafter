@@ -107,6 +107,7 @@
   "copyFailed": "Kopiering af link mislykkedes",
   "clipboardNotSupported": "Udklipsholder understøttes ikke",
   "clipboardUnsupported": "Udklipsholder understøttes ikke",
+  "githubStatsError": "Failed to load GitHub stats",
   "importJsonTitle": "Importer JSON",
   "importJsonDescription": "Indsæt JSON eller vælg en fil for at importere prompten.",
   "pasteJsonPlaceholder": "Indsæt JSON her",

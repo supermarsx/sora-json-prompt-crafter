@@ -107,6 +107,7 @@
   "copyFailed": "复制链接失败",
   "clipboardNotSupported": "剪贴板不受支持",
   "clipboardUnsupported": "剪贴板不受支持",
+  "githubStatsError": "Failed to load GitHub stats",
   "importJsonTitle": "导入 JSON",
   "importJsonDescription": "粘贴 JSON 或选择文件导入您的提示。",
   "pasteJsonPlaceholder": "在此处粘贴 JSON",

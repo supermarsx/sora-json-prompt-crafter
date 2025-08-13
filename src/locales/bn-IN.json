@@ -107,6 +107,7 @@
   "copyFailed": "লিংক কপি ব্যর্থ হয়েছে",
   "clipboardNotSupported": "ক্লিপবোর্ড সমর্থিত নয়",
   "clipboardUnsupported": "ক্লিপবোর্ড সমর্থিত নয়",
+  "githubStatsError": "Failed to load GitHub stats",
   "importJsonTitle": "JSON আমদানি করুন",
   "importJsonDescription": "প্রম্পট আমদানির জন্য JSON পেস্ট করুন অথবা ফাইল নির্বাচন করুন।",
   "pasteJsonPlaceholder": "এখানে JSON পেস্ট করুন",
