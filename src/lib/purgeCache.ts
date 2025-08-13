@@ -31,5 +31,6 @@ export async function purgeCache(): Promise<void> {
     console.warn('Failed to unregister service workers', err);
   }
 
-  location.reload(true);
+  console.info('Caches cleared, reloading page');
+  window.location.reload();
 }
