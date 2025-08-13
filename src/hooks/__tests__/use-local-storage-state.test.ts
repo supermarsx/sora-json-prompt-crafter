@@ -6,6 +6,7 @@ jest.mock('@/lib/storage', () => ({
   __esModule: true,
   safeGet: jest.fn(),
   safeSet: jest.fn(),
+  safeRemove: jest.fn(),
 }));
 
 describe('useLocalStorageState', () => {
@@ -44,6 +45,22 @@ describe('useLocalStorageState', () => {
 
     expect(storage.safeSet).toHaveBeenLastCalledWith('obj', { a: 2 }, true);
     expect(result.current[0]).toEqual({ a: 2 });
+  });
+
+  test('removes key instead of persisting default value', () => {
+    (storage.safeGet as jest.Mock).mockReturnValue('default');
+
+    const { result } = renderHook(() => useLocalStorageState('key', 'default'));
+
+    expect(storage.safeRemove).toHaveBeenCalledWith('key');
+    expect(storage.safeSet).not.toHaveBeenCalled();
+
+    act(() => {
+      result.current[1]('default');
+    });
+
+    expect(storage.safeRemove).toHaveBeenCalledWith('key');
+    expect(storage.safeSet).not.toHaveBeenCalled();
   });
 
   test('updates state when storage event fires for same key', () => {

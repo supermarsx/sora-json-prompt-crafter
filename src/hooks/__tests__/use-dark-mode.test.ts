@@ -16,6 +16,7 @@ describe('useDarkMode', () => {
 
   test('reads and writes localStorage', () => {
     const setSpy = jest.spyOn(Storage.prototype, 'setItem');
+    const removeSpy = jest.spyOn(Storage.prototype, 'removeItem');
     localStorage.setItem(DARK_MODE, 'false');
     const { result } = renderHook(() => useDarkMode());
     expect(result.current[0]).toBe(false);
@@ -25,8 +26,9 @@ describe('useDarkMode', () => {
       result.current[1](true);
     });
 
-    expect(localStorage.getItem(DARK_MODE)).toBe('true');
-    expect(setSpy).toHaveBeenCalledWith(DARK_MODE, 'true');
+    expect(removeSpy).toHaveBeenCalledWith(DARK_MODE);
+    expect(localStorage.getItem(DARK_MODE)).toBeNull();
+    expect(setSpy).toHaveBeenCalledWith(DARK_MODE, 'false');
     expect(hasDarkClass()).toBe(true);
   });
 

@@ -13,6 +13,7 @@ jest.mock('@/lib/storage', () => ({
   __esModule: true,
   safeGet: jest.fn(),
   safeSet: jest.fn(),
+  safeRemove: jest.fn(),
 }));
 
 describe('useLocale', () => {
