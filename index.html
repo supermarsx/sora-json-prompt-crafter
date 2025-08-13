@@ -47,9 +47,18 @@
     <script type="module" src="/src/main.tsx"></script>
     <script>
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js');
-        });
+        if (import.meta.env.PROD) {
+          window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js');
+          });
+        } else {
+          // During development, ensure no service worker interferes with Vite's
+          // dev server. Unregister any existing workers to avoid caching
+          // artifacts that cause proxy errors like `?html-proxy&index=0.js`.
+          navigator.serviceWorker
+            .getRegistrations()
+            .then((regs) => regs.forEach((r) => r.unregister()));
+        }
       }
     </script>
   </body>
