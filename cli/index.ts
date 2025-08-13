@@ -24,15 +24,18 @@ function parseArgs(argv: string[]): Record<string, string | boolean> {
   return args;
 }
 
-function buildOptionsFromFlags(values: Record<string, string | boolean>): SoraOptions {
+function buildOptionsFromFlags(
+  values: Record<string, string | boolean>,
+): SoraOptions {
   const updates: Partial<SoraOptions> = {};
 
   Object.entries(values).forEach(([key, value]) => {
     if (key === 'file') return;
-    const defaultVal = DEFAULT_OPTIONS[key as keyof SoraOptions];
+    const typedKey = key as keyof SoraOptions;
+    const defaultVal = DEFAULT_OPTIONS[typedKey];
     if (defaultVal === undefined) return;
 
-    let parsed: any = value;
+    let parsed: unknown = value;
     if (typeof defaultVal === 'number') {
       parsed = Number(value);
     } else if (typeof defaultVal === 'boolean') {
@@ -40,12 +43,14 @@ function buildOptionsFromFlags(values: Record<string, string | boolean>): SoraOp
     } else if (Array.isArray(defaultVal)) {
       parsed = String(value).split(',');
     }
-    (updates as any)[key] = parsed;
+
+    // Cast to the specific option type before assignment
+    updates[typedKey] = parsed as typeof defaultVal;
 
     const flag = OPTION_FLAG_MAP[key];
-    if (flag) (updates as any)[flag] = true;
-    if (key.startsWith('dnd_')) (updates as any).use_dnd_section = true;
-    if (key === 'width' || key === 'height') (updates as any).use_dimensions = true;
+    if (flag) updates[flag] = true;
+    if (key.startsWith('dnd_')) updates.use_dnd_section = true;
+    if (key === 'width' || key === 'height') updates.use_dimensions = true;
   });
 
   return { ...DEFAULT_OPTIONS, ...updates };
