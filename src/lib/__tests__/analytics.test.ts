@@ -49,15 +49,15 @@ describe('trackEvent', () => {
   });
 
   test('does not call gtag when missing', () => {
-    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
 
     trackEvent(true, 'foo');
     trackEvent(true, 'bar');
 
-    expect(errorSpy).toHaveBeenCalledWith(
+    expect(warnSpy).toHaveBeenCalledWith(
       'Tracking Analytics: gtag function missing.',
     );
-    expect(errorSpy).toHaveBeenCalledTimes(1);
+    expect(warnSpy).toHaveBeenCalledTimes(1);
   });
 
   test('gtag errors stop further tracking', () => {

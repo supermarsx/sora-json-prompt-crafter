@@ -1,4 +1,4 @@
-import { render, screen, act } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { jest } from '@jest/globals';
 import DisclaimerModal from '../DisclaimerModal';
 
@@ -59,24 +59,23 @@ describe('DisclaimerModal', () => {
   });
 
   test('shows loader while fetching', async () => {
-    let resolveFetch: (value: Response) => void = () => {};
     global.fetch = jest.fn().mockImplementation(
       () =>
         new Promise<Response>((res) => {
-          resolveFetch = res;
+          setTimeout(
+            () =>
+              res({
+                ok: true,
+                text: () => Promise.resolve('loaded text'),
+              } as Response),
+            0,
+          );
         }),
     );
 
     render(<DisclaimerModal open={true} onOpenChange={() => {}} />);
 
     expect(screen.getByTestId('disclaimer-loader')).toBeDefined();
-
-    await act(async () => {
-      resolveFetch({
-        ok: true,
-        text: () => Promise.resolve('loaded text'),
-      } as Response);
-    });
 
     expect(await screen.findByText('loaded text')).toBeDefined();
   });
@@ -96,7 +95,7 @@ describe('DisclaimerModal', () => {
 
     rerender(<DisclaimerModal open={true} onOpenChange={() => {}} />);
 
-    expect(mockFetch).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(mockFetch).toHaveBeenCalledTimes(1));
     expect(await screen.findByText('loaded text')).toBeDefined();
   });
 
