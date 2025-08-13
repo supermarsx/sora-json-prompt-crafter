@@ -247,8 +247,12 @@ describe('HistoryPanel action history', () => {
     const panel = screen.getByRole('tabpanel', { name: /latest actions/i });
     const entryText = within(panel).getByText('a');
     const entry = entryText.parentElement!.parentElement!;
-    const deleteBtn = within(entry).getByRole('button');
+    const deleteBtn = within(entry).getByRole('button', {
+      name: i18n.t('delete'),
+    });
+    expect(deleteBtn.getAttribute('aria-label')).toBe(i18n.t('delete'));
     fireEvent.click(deleteBtn);
+    expect(deleteBtn.getAttribute('aria-label')).toBe(i18n.t('confirm'));
     fireEvent.click(deleteBtn);
 
     expect(safeSet).toHaveBeenCalledWith(TRACKING_HISTORY, [], true);

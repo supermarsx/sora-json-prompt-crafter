@@ -445,6 +445,11 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                           variant="ghost"
                           className={`p-0 w-3.5 h-3.5 ${confirmDeleteActionIdx === idx ? 'text-destructive animate-pulse' : ''}`}
                           onClick={() => requestDeleteAction(idx)}
+                          aria-label={
+                            confirmDeleteActionIdx === idx
+                              ? t('confirm')
+                              : t('delete')
+                          }
                         >
                           {confirmDeleteActionIdx === idx ? (
                             <Check className="w-3.5 h-3.5" />
