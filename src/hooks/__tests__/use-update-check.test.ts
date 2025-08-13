@@ -14,7 +14,10 @@ describe('useUpdateCheck', () => {
 
   it('calls update on registration', async () => {
     const update = jest.fn().mockResolvedValue(undefined);
-    const getRegistration = jest.fn().mockResolvedValue({ update });
+    const getRegistration = jest.fn().mockResolvedValue({
+      update,
+      active: {},
+    });
     Object.defineProperty(navigator, 'serviceWorker', {
       configurable: true,
       value: { getRegistration },
@@ -30,7 +33,11 @@ describe('useUpdateCheck', () => {
   it('sets updateAvailable when registration has waiting worker', async () => {
     const update = jest.fn().mockResolvedValue(undefined);
     const waiting = {};
-    const getRegistration = jest.fn().mockResolvedValue({ update, waiting });
+    const getRegistration = jest.fn().mockResolvedValue({
+      update,
+      waiting,
+      active: {},
+    });
     Object.defineProperty(navigator, 'serviceWorker', {
       configurable: true,
       value: { getRegistration },
@@ -41,5 +48,19 @@ describe('useUpdateCheck', () => {
       await result.current.checkForUpdate();
     });
     expect(result.current.updateAvailable).toBe(true);
+  });
+
+  it('skips update when registration has no active worker', async () => {
+    const update = jest.fn().mockResolvedValue(undefined);
+    const getRegistration = jest.fn().mockResolvedValue({ update });
+    Object.defineProperty(navigator, 'serviceWorker', {
+      configurable: true,
+      value: { getRegistration },
+    });
+    const { result } = renderHook(() => useUpdateCheck());
+    await act(async () => {
+      await result.current.checkForUpdate();
+    });
+    expect(update).not.toHaveBeenCalled();
   });
 });

@@ -7,7 +7,7 @@ export function useUpdateCheck() {
     if (!('serviceWorker' in navigator) || !navigator.serviceWorker) return;
     try {
       const registration = await navigator.serviceWorker.getRegistration();
-      if (!registration) return;
+      if (!registration || !registration.active) return;
       await registration.update();
       if (registration.waiting) {
         setUpdateAvailable(true);
