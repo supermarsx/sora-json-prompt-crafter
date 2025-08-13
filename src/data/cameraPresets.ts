@@ -1,8 +1,7 @@
+import { COMMON_OPTION_PREFIXES } from './commonOptions';
+
 export const shotTypeOptions = [
-  'default',
-  'as is',
-  'not defined',
-  'keep original',
+  ...COMMON_OPTION_PREFIXES,
   'establishing',
   'wide',
   'extreme wide',
@@ -65,10 +64,7 @@ export const shotTypeOptions = [
 export type ShotTypeOption = (typeof shotTypeOptions)[number];
 
 export const cameraAngleOptions = [
-  'default',
-  'as is',
-  'not defined',
-  'keep original',
+  ...COMMON_OPTION_PREFIXES,
   'eye-level',
   'high',
   'low',
@@ -241,10 +237,7 @@ export const cameraTypeOptions = [
 export type CameraTypeOption = (typeof cameraTypeOptions)[number];
 
 export const lensTypeOptions = [
-  'default',
-  'as is',
-  'not defined',
-  'keep original',
+  ...COMMON_OPTION_PREFIXES,
   'standard 50mm',
   'wide 24mm',
   'ultra wide 14mm',
