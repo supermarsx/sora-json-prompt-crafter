@@ -13,16 +13,18 @@ i18n.use(initReactI18next).init({
 export async function changeLanguageAsync(lng: string) {
   if (!i18n.hasResourceBundle(lng, 'translation')) {
     try {
-      const { default: translation } = await import(
-        `./locales/${lng}.json`
-      );
-      i18n.addResourceBundle(
-        lng,
-        'translation',
-        translation as Resource,
-        true,
-        true,
-      );
+      const url = `/locales/${lng}.json`;
+      let response: Response | undefined =
+        typeof caches !== 'undefined' ? await caches.match(url) : undefined;
+      if (!response) {
+        response = await fetch(url);
+        if (typeof caches !== 'undefined') {
+          const cache = await caches.open('sora-prompt-cache-v2');
+          cache.put(url, response.clone());
+        }
+      }
+      const translation = (await response.json()) as Resource;
+      i18n.addResourceBundle(lng, 'translation', translation, true, true);
     } catch (error) {
       console.warn(`Failed to load translations for ${lng}`, error);
     }
