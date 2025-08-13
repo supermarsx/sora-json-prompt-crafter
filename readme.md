@@ -77,6 +77,26 @@ npm run dev
 Copy `.env.example` to `.env` and adjust the variables. `VITE_MEASUREMENT_ID` holds your Google Analytics ID and `VITE_DISABLE_ANALYTICS` disables tracking. `VITE_DISABLE_STATS` disables the GitHub stats fetch. `VITE_DISCLAIMER_URL` can point to a custom path and should include a `{locale}` placeholder. Set `VITE_GTAG_DEBUG` to `true` to enable GA debug mode.
 Then open http://localhost:8080 in your browser.
 
+### CLI
+
+Generate prompt JSON directly from the command line:
+
+```sh
+npx ts-node cli/index.ts --prompt "A castle at dawn" --width 800
+```
+
+Load options from a JSON file instead:
+
+```sh
+npx ts-node cli/index.ts --file options.json
+```
+
+When installed from npm, the CLI is exposed as `sora-crafter`:
+
+```sh
+sora-crafter --prompt "A castle at dawn"
+```
+
 ### Docker
 
 Build and run a containerized version of the app:
