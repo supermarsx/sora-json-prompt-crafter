@@ -51,6 +51,9 @@ describe('GeneratedJson', () => {
     const added = div.querySelectorAll('span.animate-highlight');
     expect(added.length).toBeGreaterThan(0);
     expect(added[0].textContent).toBe(',"b":2');
+    const token = div.querySelector('pre span span');
+    expect(token).toBeTruthy();
+    expect(token?.getAttribute('style')).toBeTruthy();
 
     act(() => {
       jest.advanceTimersByTime(2000);

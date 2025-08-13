@@ -1,6 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { diffChars, Change } from 'diff';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import jsonLang from 'react-syntax-highlighter/dist/cjs/languages/prism/json';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import { trackEvent } from '@/lib/analytics';
+
+SyntaxHighlighter.registerLanguage('json', jsonLang);
 
 interface Props {
   json: string;
@@ -38,21 +43,29 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
     }
   }, [json]);
 
+  const renderHighlighted = (value: string, added: boolean, key: number) => (
+    <span key={key} className={added ? 'animate-highlight' : undefined}>
+      <SyntaxHighlighter
+        language="json"
+        style={vscDarkPlus}
+        PreTag="span"
+        CodeTag="span"
+        wrapLongLines
+        customStyle={{ margin: 0, padding: 0, background: 'none' }}
+      >
+        {value}
+      </SyntaxHighlighter>
+    </span>
+  );
+
   return (
     <div className="h-full overflow-y-auto" ref={containerRef}>
       <pre className="p-6 text-sm font-mono whitespace-pre-wrap break-words leading-relaxed">
-        <code>
-          {diffParts
-            ? diffParts.map((part, idx) => (
-                <span
-                  key={idx}
-                  className={part.added ? 'animate-highlight' : undefined}
-                >
-                  {part.value}
-                </span>
-              ))
-            : json}
-        </code>
+        {diffParts
+          ? diffParts.map((part, idx) =>
+              renderHighlighted(part.value, Boolean(part.added), idx),
+            )
+          : renderHighlighted(json, false, 0)}
       </pre>
     </div>
   );
