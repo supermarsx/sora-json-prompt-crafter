@@ -11,10 +11,26 @@ describe('CollapsibleSection', () => {
 
     expect(screen.getByText('content')).toBeTruthy();
 
-    fireEvent.click(screen.getByText('Test Section'));
+    fireEvent.click(screen.getByRole('button', { name: 'Test Section' }));
     expect(screen.queryByText('content')).toBeNull();
 
-    fireEvent.click(screen.getByText('Test Section'));
+    fireEvent.click(screen.getByRole('button', { name: 'Test Section' }));
+    expect(screen.getByText('content')).toBeTruthy();
+  });
+
+  test('keyboard interaction toggles visibility', () => {
+    render(
+      <CollapsibleSection title="Keyboard Section">
+        <div>content</div>
+      </CollapsibleSection>,
+    );
+
+    const header = screen.getByRole('button', { name: 'Keyboard Section' });
+
+    fireEvent.keyDown(header, { key: 'Enter' });
+    expect(screen.queryByText('content')).toBeNull();
+
+    fireEvent.keyDown(header, { key: ' ' });
     expect(screen.getByText('content')).toBeTruthy();
   });
 

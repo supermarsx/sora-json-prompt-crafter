@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useId, useState } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 
 interface CollapsibleSectionProps {
@@ -21,42 +20,43 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
   defaultOpen = true,
 }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
+  const contentId = useId();
 
   return (
     <div className="border border-border rounded-lg">
-      <div
-        className="flex items-center justify-between p-4 bg-muted/30 cursor-pointer"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <div className="flex items-center gap-3">
-          {isOptional && (
-            <Checkbox
-              checked={isEnabled}
-              onCheckedChange={onToggle}
-              className="flex-shrink-0"
-              onClick={(e) => e.stopPropagation()}
-            />
-          )}
-          <h3 className="font-semibold text-lg">{title}</h3>
-        </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsOpen(!isOpen);
+      <div className="flex items-center gap-3 p-4 bg-muted/30">
+        {isOptional && (
+          <Checkbox
+            checked={isEnabled}
+            onCheckedChange={onToggle}
+            className="flex-shrink-0"
+            onClick={(e) => e.stopPropagation()}
+          />
+        )}
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setIsOpen(!isOpen);
+            }
           }}
-          className="p-1"
+          className="flex items-center justify-between w-full text-left"
+          aria-expanded={isOpen}
+          aria-controls={contentId}
         >
+          <h3 className="font-semibold text-lg">{title}</h3>
           {isOpen ? (
             <ChevronDown className="w-4 h-4" />
           ) : (
             <ChevronRight className="w-4 h-4" />
           )}
-        </Button>
+        </button>
       </div>
       {isOpen && (
         <div
+          id={contentId}
           className={`p-4 space-y-4 ${!isEnabled && isOptional ? 'opacity-50 pointer-events-none' : ''}`}
         >
           {children}

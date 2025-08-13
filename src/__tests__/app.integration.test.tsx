@@ -51,8 +51,8 @@ beforeEach(() => {
 });
 
 function openStylePreset() {
-  const header = screen.getByText('Style Preset').parentElement as HTMLElement;
-  const checkbox = within(header).getByRole('checkbox');
+  const container = screen.getByText('Style Preset').closest('div') as HTMLElement;
+  const checkbox = within(container).getByRole('checkbox');
   fireEvent.click(checkbox);
 }
 
