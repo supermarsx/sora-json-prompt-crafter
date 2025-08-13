@@ -6,8 +6,8 @@ import { I18nextProvider } from 'react-i18next';
 import i18n from './i18n';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useEffect, lazy, Suspense } from 'react';
-import { safeGet } from '@/lib/storage';
 import { useUpdateCheck } from '@/hooks/use-update-check';
+import { useDarkMode } from '@/hooks/use-dark-mode';
 const Index = lazy(() => import('./pages/Index'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 import ErrorBoundary from './components/ErrorBoundary';
@@ -22,12 +22,7 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
-  useEffect(() => {
-    if (safeGet('darkMode') === null) {
-      document.documentElement.classList.add('dark');
-    }
-  }, []);
-
+  useDarkMode();
   const checkForUpdate = useUpdateCheck();
   useEffect(() => {
     checkForUpdate();
