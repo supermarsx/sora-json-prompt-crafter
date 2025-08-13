@@ -105,6 +105,7 @@
   "sharedToTelegram": "Partajat pe Telegram!",
   "linkCopied": "Link copiat în clipboard!",
   "copyFailed": "Copiere link eșuată",
+  "clipboardNotSupported": "Clipboard neacceptat",
   "clipboardUnsupported": "Clipboard neacceptat",
   "importJsonTitle": "Importă JSON",
   "importJsonDescription": "Lipește JSON sau selectează un fișier pentru importul promptului tău.",

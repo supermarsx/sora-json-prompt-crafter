@@ -105,6 +105,7 @@
   "sharedToTelegram": "Shared to Telegram!",
   "linkCopied": "Link stashed in clipboard!",
   "copyFailed": "Copyin' link failed",
+  "clipboardNotSupported": "Clipboard not supported, matey",
   "clipboardUnsupported": "Clipboard not supported, matey",
   "importJsonTitle": "Import JSON",
   "importJsonDescription": "Paste JSON or choose a file to smuggle a prompt aboard.",

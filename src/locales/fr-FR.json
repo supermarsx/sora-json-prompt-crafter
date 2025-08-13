@@ -105,6 +105,7 @@
   "sharedToTelegram": "Partagé sur Telegram !",
   "linkCopied": "Lien copié dans le presse-papiers !",
   "copyFailed": "Échec de la copie du lien",
+  "clipboardNotSupported": "Presse-papiers non pris en charge",
   "clipboardUnsupported": "Presse-papiers non pris en charge",
   "importJsonTitle": "Importer le JSON",
   "importJsonDescription": "Collez le JSON ou sélectionnez un fichier pour importer votre invite.",

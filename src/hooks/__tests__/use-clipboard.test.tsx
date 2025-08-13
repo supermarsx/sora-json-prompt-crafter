@@ -1,6 +1,8 @@
 import { renderHook } from '@testing-library/react';
 import { useClipboard } from '../use-clipboard';
 import { toast } from '@/components/ui/sonner-toast';
+import { I18nextProvider } from 'react-i18next';
+import i18n from '@/i18n';
 
 jest.mock('@/components/ui/sonner-toast', () => ({
   __esModule: true,
@@ -28,13 +30,17 @@ describe('useClipboard', () => {
     }
   });
 
+  const wrapper = ({ children }: { children: React.ReactNode }) => (
+    <I18nextProvider i18n={i18n}>{children}</I18nextProvider>
+  );
+
   test('copies text when API available', async () => {
     const writeText = jest.fn().mockResolvedValue(undefined);
     Object.defineProperty(navigator, 'clipboard', {
       configurable: true,
       value: { writeText },
     });
-    const { result } = renderHook(() => useClipboard());
+    const { result } = renderHook(() => useClipboard(), { wrapper });
     await expect(result.current.copy('foo', 'ok')).resolves.toBe(true);
     expect(writeText).toHaveBeenCalledWith('foo');
     expect(toast.success).toHaveBeenCalledWith('ok');
@@ -42,9 +48,11 @@ describe('useClipboard', () => {
 
   test('shows error when API missing', async () => {
     delete (navigator as unknown as { clipboard?: Clipboard }).clipboard;
-    const { result } = renderHook(() => useClipboard());
+    const { result } = renderHook(() => useClipboard(), { wrapper });
     await expect(result.current.copy('foo')).resolves.toBe(false);
-    expect(toast.error).toHaveBeenCalledWith('Clipboard not supported');
+    expect(toast.error).toHaveBeenCalledWith(
+      i18n.t('clipboardNotSupported'),
+    );
   });
 
   test('shows error when writeText fails', async () => {
@@ -53,9 +61,10 @@ describe('useClipboard', () => {
       configurable: true,
       value: { writeText },
     });
-    const { result } = renderHook(() => useClipboard());
+    const { result } = renderHook(() => useClipboard(), { wrapper });
     await expect(result.current.copy('bar')).resolves.toBe(false);
     expect(writeText).toHaveBeenCalledWith('bar');
-    expect(toast.error).toHaveBeenCalledWith('Failed to copy to clipboard');
+    expect(toast.error).toHaveBeenCalledWith(i18n.t('copyFailed'));
   });
 });
+

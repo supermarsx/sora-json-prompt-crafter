@@ -105,6 +105,7 @@
   "sharedToTelegram": "Опубликовано в Telegram!",
   "linkCopied": "Ссылка скопирована в буфер обмена!",
   "copyFailed": "Не удалось скопировать ссылку",
+  "clipboardNotSupported": "Буфер обмена не поддерживается",
   "clipboardUnsupported": "Буфер обмена не поддерживается",
   "importJsonTitle": "Импортировать JSON",
   "importJsonDescription": "Вставьте JSON или выберите файл, чтобы импортировать промпт.",

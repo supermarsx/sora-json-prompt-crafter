@@ -105,6 +105,7 @@
   "sharedToTelegram": "Jagatud Telegramis!",
   "linkCopied": "Link kopeeriti lõikepuhvrisse!",
   "copyFailed": "Lingi kopeerimine ebaõnnestus",
+  "clipboardNotSupported": "Lõikepuhvrit ei toetata",
   "clipboardUnsupported": "Lõikepuhvrit ei toetata",
   "importJsonTitle": "Impordi JSON",
   "importJsonDescription": "Kleebi JSON või vali fail, et importida prompt.",

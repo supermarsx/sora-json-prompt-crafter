@@ -105,6 +105,7 @@
   "sharedToTelegram": "แชร์ไปยัง Telegram แล้ว!",
   "linkCopied": "คัดลอกลิงก์ไปยังคลิปบอร์ดแล้ว!",
   "copyFailed": "คัดลอกลิงก์ไม่สำเร็จ",
+  "clipboardNotSupported": "คลิปบอร์ดไม่รองรับ",
   "clipboardUnsupported": "คลิปบอร์ดไม่รองรับ",
   "importJsonTitle": "นำเข้า JSON",
   "importJsonDescription": "วาง JSON หรือเลือกไฟล์เพื่อนำเข้าพรอมต์ของคุณ",

@@ -105,6 +105,7 @@
   "sharedToTelegram": "Auf Telegram geteilt!",
   "linkCopied": "Link in die Zwischenablage kopiert!",
   "copyFailed": "Link konnte nicht kopiert werden",
+  "clipboardNotSupported": "Zwischenablage wird nicht unterstützt",
   "clipboardUnsupported": "Zwischenablage wird nicht unterstützt",
   "importJsonTitle": "JSON importieren",
   "importJsonDescription": "Füge JSON ein oder wähle eine Datei, um den Prompt zu importieren.",

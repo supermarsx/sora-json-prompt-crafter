@@ -105,6 +105,7 @@
   "sharedToTelegram": "Jaettu Telegramissa!",
   "linkCopied": "Linkki kopioitu leikepöydälle!",
   "copyFailed": "Linkin kopiointi epäonnistui",
+  "clipboardNotSupported": "Leikepöytää ei tueta",
   "clipboardUnsupported": "Leikepöytää ei tueta",
   "importJsonTitle": "Tuo JSON",
   "importJsonDescription": "Liitä JSON tai valitse tiedosto kehotteen tuomista varten.",

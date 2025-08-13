@@ -105,6 +105,7 @@
   "sharedToTelegram": "Delt på Telegram!",
   "linkCopied": "Link kopieret til udklipsholder!",
   "copyFailed": "Kopiering af link mislykkedes",
+  "clipboardNotSupported": "Udklipsholder understøttes ikke",
   "clipboardUnsupported": "Udklipsholder understøttes ikke",
   "importJsonTitle": "Importer JSON",
   "importJsonDescription": "Indsæt JSON eller vælg en fil for at importere prompten.",
