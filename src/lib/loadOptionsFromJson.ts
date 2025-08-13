@@ -1,15 +1,26 @@
 import { DEFAULT_OPTIONS } from './defaultOptions';
 import type { SoraOptions } from './soraOptions';
 import { OPTION_FLAG_MAP } from './optionFlagMap';
+import { isValidOptions } from './validateOptions';
 
 export function loadOptionsFromJson(json: string): SoraOptions | null {
   try {
-    const obj = JSON.parse(json);
+    const obj: Record<string, unknown> = JSON.parse(json);
+
+    ['__proto__', 'constructor', 'prototype'].forEach((key) => {
+      if (key in obj) delete obj[key];
+    });
+
+    if (!isValidOptions(obj)) {
+      return null;
+    }
+
     if (Array.isArray(obj.composition_rules)) {
       obj.composition_rules = obj.composition_rules.map((r: string) =>
         r.replace(/_/g, ' '),
       );
     }
+
     const enableMap = OPTION_FLAG_MAP;
 
     const flagUpdates: Partial<SoraOptions> = {};
@@ -21,7 +32,7 @@ export function loadOptionsFromJson(json: string): SoraOptions | null {
         flagUpdates.use_dimensions = true;
     });
 
-    return { ...DEFAULT_OPTIONS, ...obj, ...flagUpdates };
+    return { ...DEFAULT_OPTIONS, ...(obj as Partial<SoraOptions>), ...flagUpdates };
   } catch (e) {
     console.error('Error parsing stored options:', e);
     return null;

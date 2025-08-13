@@ -19,6 +19,11 @@ describe('loadOptionsFromJson', () => {
     spy.mockRestore();
   });
 
+  test('returns null for invalid options object', () => {
+    const bad = JSON.stringify({ steps: 'ten' });
+    expect(loadOptionsFromJson(bad)).toBeNull();
+  });
+
   test('normalizes composition_rules from snake_case', () => {
     const json = JSON.stringify({ composition_rules: ['rule_of_thirds'] });
     const result = loadOptionsFromJson(json);
@@ -63,5 +68,14 @@ describe('loadOptionsFromJson', () => {
     expect(result.subject_gender).toBe('female');
     expect(result.use_makeup_style).toBe(true);
     expect(result.makeup_style).toBe('gothic');
+  });
+
+  test('ignores dangerous keys to prevent prototype pollution', () => {
+    const json = '{"constructor":{"prototype":{"polluted":"yes"}}}';
+    const result = loadOptionsFromJson(json);
+    expect(result).not.toBeNull();
+    const typed = result as unknown as Record<string, unknown>;
+    expect(typed['polluted']).toBeUndefined();
+    expect(({} as Record<string, unknown>)['polluted']).toBeUndefined();
   });
 });
