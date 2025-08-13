@@ -1,7 +1,7 @@
+import { COMMON_OPTION_PREFIXES } from './commonOptions';
+
 export const materialOptions = [
-  'default',
-  'not defined',
-  'keep original',
+  ...COMMON_OPTION_PREFIXES,
   'any',
   'surprise me',
   'real textures only',

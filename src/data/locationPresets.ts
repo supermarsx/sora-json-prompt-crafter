@@ -1,7 +1,7 @@
+import { COMMON_OPTION_PREFIXES } from './commonOptions';
+
 export const environmentOptions = [
-  'default',
-  'not defined',
-  'keep original',
+  ...COMMON_OPTION_PREFIXES,
   'any',
   'real world only',
   'original worlds only',
