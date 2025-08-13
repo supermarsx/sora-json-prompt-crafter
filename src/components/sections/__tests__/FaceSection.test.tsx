@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, within } from '@testing-library/react';
-import i18n from '@/i18n';
+import i18n, { changeLanguageAsync } from '@/i18n';
 import { FaceSection } from '../FaceSection';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 
@@ -124,7 +124,7 @@ describe('FaceSection', () => {
   });
 
   test('dropdown shows localized options when language changes', async () => {
-    await i18n.changeLanguage('es-ES');
+    await changeLanguageAsync('es-ES');
     render(
       <FaceSection
         options={{
@@ -141,6 +141,6 @@ describe('FaceSection', () => {
     expect(
       await screen.findByRole('button', { name: /femenino/i }),
     ).toBeDefined();
-    await i18n.changeLanguage('en-US');
+    await changeLanguageAsync('en-US');
   });
 });
