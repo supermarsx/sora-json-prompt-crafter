@@ -258,13 +258,28 @@ describe('Dashboard interactions', () => {
     render(<Dashboard />);
     await waitFor(() => expect(updateFn).not.toBeNull());
 
+    (trackEvent as jest.Mock).mockClear();
+
     act(() => {
-      updateFn?.({ prompt: 'foo' });
+      updateFn?.({ prompt: 'foo', negative_prompt: 'bar' });
     });
+
+    const optionCalls = (trackEvent as jest.Mock).mock.calls.filter(
+      (c) => c[1] === 'options_change',
+    );
+    expect(optionCalls).toHaveLength(1);
+    expect(optionCalls[0]).toEqual([
+      true,
+      'options_change',
+      { keys: 'prompt,negative_prompt' },
+    ]);
+
+    (trackEvent as jest.Mock).mockClear();
 
     await waitFor(() => {
       const json = JSON.parse(localStorage.getItem('currentJson') || '{}');
       expect(json.prompt).toBe('foo');
+      expect(json.negative_prompt).toBe('bar');
     });
 
     const copyButton = screen.getByRole('button', { name: /copy/i });
