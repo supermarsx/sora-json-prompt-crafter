@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { diffChars, Change } from 'diff';
-import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import SyntaxHighlighter from 'react-syntax-highlighter/dist/cjs/prism-light';
 import jsonLang from 'react-syntax-highlighter/dist/cjs/languages/prism/json';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import { trackEvent } from '@/lib/analytics';
