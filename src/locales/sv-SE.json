@@ -105,6 +105,7 @@
   "sharedToTelegram": "Delad på Telegram!",
   "linkCopied": "Länk kopierad till urklipp!",
   "copyFailed": "Misslyckades kopiera länk",
+  "clipboardNotSupported": "Urklipp stöds inte",
   "clipboardUnsupported": "Urklipp stöds inte",
   "importJsonTitle": "Importera JSON",
   "importJsonDescription": "Klistra in JSON eller välj en fil för att importera en prompt.",

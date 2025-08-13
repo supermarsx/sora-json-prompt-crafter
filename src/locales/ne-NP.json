@@ -105,6 +105,7 @@
   "sharedToTelegram": "Telegram मा साझा गरियो!",
   "linkCopied": "लिङ्क क्लिपबोर्डमा प्रतिलिपि गरियो!",
   "copyFailed": "लिङ्क प्रतिलिपि असफल",
+  "clipboardNotSupported": "क्लिपबोर्ड समर्थन छैन",
   "clipboardUnsupported": "क्लिपबोर्ड समर्थन छैन",
   "importJsonTitle": "JSON आयात गर्नुहोस्",
   "importJsonDescription": "प्रम्प्ट आयात गर्न JSON पेस्ट गर्नुहोस् वा फाइल छान्नुहोस्।",

@@ -105,6 +105,7 @@
   "sharedToTelegram": "Telegramに共有しました！",
   "linkCopied": "リンクをクリップボードにコピーしました！",
   "copyFailed": "リンクのコピーに失敗しました",
+  "clipboardNotSupported": "クリップボードはサポートされていません",
   "clipboardUnsupported": "クリップボードはサポートされていません",
   "importJsonTitle": "JSONをインポート",
   "importJsonDescription": "JSONを貼り付けるか、ファイルを選択してプロンプトをインポートしてください。",

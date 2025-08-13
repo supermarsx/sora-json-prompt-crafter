@@ -105,6 +105,7 @@
   "sharedToTelegram": "¡Compartido en Telegram!",
   "linkCopied": "¡Enlace copiado al portapapeles!",
   "copyFailed": "Falló la copia del enlace",
+  "clipboardNotSupported": "El portapapeles no está soportado",
   "clipboardUnsupported": "El portapapeles no está soportado",
   "importJsonTitle": "Importar JSON",
   "importJsonDescription": "Pegá JSON o elegí un archivo para importar un prompt.",

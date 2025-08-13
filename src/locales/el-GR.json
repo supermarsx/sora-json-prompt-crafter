@@ -105,6 +105,7 @@
   "sharedToTelegram": "Κοινοποιήθηκε στο Telegram!",
   "linkCopied": "Ο σύνδεσμος αντιγράφηκε στο πρόχειρο!",
   "copyFailed": "Η αντιγραφή του συνδέσμου απέτυχε",
+  "clipboardNotSupported": "Το πρόχειρο δεν υποστηρίζεται",
   "clipboardUnsupported": "Το πρόχειρο δεν υποστηρίζεται",
   "importJsonTitle": "Εισαγωγή JSON",
   "importJsonDescription": "Επικολλήστε JSON ή επιλέξτε αρχείο για εισαγωγή prompt.",

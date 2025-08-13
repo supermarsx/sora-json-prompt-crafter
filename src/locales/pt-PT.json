@@ -105,6 +105,7 @@
   "sharedToTelegram": "Partilhado no Telegram!",
   "linkCopied": "Ligação copiada para a área de transferência!",
   "copyFailed": "Falha ao copiar a ligação",
+  "clipboardNotSupported": "Área de transferência não suportada",
   "clipboardUnsupported": "Área de transferência não suportada",
   "importJsonTitle": "Importar JSON",
   "importJsonDescription": "Cole o JSON ou escolha um ficheiro para importar o seu prompt.",
