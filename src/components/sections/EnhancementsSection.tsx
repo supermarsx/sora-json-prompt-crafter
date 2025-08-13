@@ -5,6 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { SearchableDropdown } from '../SearchableDropdown';
 import { CollapsibleSection } from '../CollapsibleSection';
 import { Slider } from '@/components/ui/slider';
+import { ToggleField } from '../ToggleField';
 import type { SoraOptions } from '@/lib/soraOptions';
 
 import {
@@ -59,53 +60,49 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
           <Label htmlFor="prevent_deformities">{t('preventDeformities')}</Label>
         </div>
 
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id="use_upscale_factor"
-            checked={options.use_upscale_factor}
-            onCheckedChange={(checked) =>
-              updateOptions({ use_upscale_factor: !!checked })
-            }
-          />
-          <Label htmlFor="use_upscale_factor">{t('useUpscaleFactor')}</Label>
-        </div>
+        <ToggleField
+          id="use_upscale_factor"
+          label={t('useUpscaleFactor')}
+          checked={options.use_upscale_factor}
+          onCheckedChange={(checked) =>
+            updateOptions({ use_upscale_factor: !!checked })
+          }
+        >
+          <div>
+            <Label htmlFor="upscale">
+              {t('upscaleFactorLabel', { value: options.upscale })}
+            </Label>
+            <Slider
+              value={[options.upscale]}
+              onValueChange={(value) => updateOptions({ upscale: value[0] })}
+              min={1}
+              max={4}
+              step={0.1}
+              className="mt-2"
+            />
+          </div>
+        </ToggleField>
 
-        <div>
-          <Label htmlFor="upscale">
-            {t('upscaleFactorLabel', { value: options.upscale })}
-          </Label>
-          <Slider
-            value={[options.upscale]}
-            onValueChange={(value) => updateOptions({ upscale: value[0] })}
-            min={1}
-            max={4}
-            step={0.1}
-            className="mt-2"
-            disabled={!options.use_upscale_factor}
-          />
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id="use_safety_filter"
-            checked={options.use_safety_filter}
-            onCheckedChange={(checked) =>
-              updateOptions({ use_safety_filter: !!checked })
-            }
-          />
-          <Label htmlFor="use_safety_filter">{t('useSafetyFilter')}</Label>
-        </div>
-
-        <div>
-          <Label>{t('safetyFilter')}</Label>
-          <SearchableDropdown
-            options={safetyFilterOptions}
-            value={options.safety_filter || 'default (auto safety level)'}
-            onValueChange={handleSafetyFilterChange}
-            label="Safety Filter Options"
-            disabled={!options.use_safety_filter}
-          />
-        </div>
+        <ToggleField
+          id="use_safety_filter"
+          label={t('useSafetyFilter')}
+          checked={options.use_safety_filter}
+          onCheckedChange={(checked) =>
+            updateOptions({ use_safety_filter: !!checked })
+          }
+        >
+          <div>
+            <Label>{t('safetyFilter')}</Label>
+            <SearchableDropdown
+              options={safetyFilterOptions}
+              value={
+                options.safety_filter || 'default (auto safety level)'
+              }
+              onValueChange={handleSafetyFilterChange}
+              label="Safety Filter Options"
+            />
+          </div>
+        </ToggleField>
 
         <div className="flex items-center space-x-2">
           <Checkbox
@@ -120,27 +117,28 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
           </Label>
         </div>
 
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id="use_quality_booster"
-            checked={options.use_quality_booster}
-            onCheckedChange={(checked) =>
-              updateOptions({ use_quality_booster: !!checked })
-            }
-          />
-          <Label htmlFor="use_quality_booster">{t('useQualityBooster')}</Label>
-        </div>
-
-        <div>
-          <Label>{t('qualityBooster')}</Label>
-          <SearchableDropdown
-            options={qualityBoosterOptions}
-            value={options.quality_booster || 'default (standard quality)'}
-            onValueChange={(value) => updateOptions({ quality_booster: value })}
-            label="Quality Booster Options"
-            disabled={!options.use_quality_booster}
-          />
-        </div>
+        <ToggleField
+          id="use_quality_booster"
+          label={t('useQualityBooster')}
+          checked={options.use_quality_booster}
+          onCheckedChange={(checked) =>
+            updateOptions({ use_quality_booster: !!checked })
+          }
+        >
+          <div>
+            <Label>{t('qualityBooster')}</Label>
+            <SearchableDropdown
+              options={qualityBoosterOptions}
+              value={
+                options.quality_booster || 'default (standard quality)'
+              }
+              onValueChange={(value) =>
+                updateOptions({ quality_booster: value })
+              }
+              label="Quality Booster Options"
+            />
+          </div>
+        </ToggleField>
 
         <div className="flex items-center space-x-2">
           <Checkbox

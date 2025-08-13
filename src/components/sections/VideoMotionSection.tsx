@@ -12,6 +12,7 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import { CollapsibleSection } from '../CollapsibleSection';
+import { ToggleField } from '../ToggleField';
 import type { SoraOptions } from '@/lib/soraOptions';
 
 interface VideoMotionSectionProps {
@@ -36,31 +37,28 @@ export const VideoMotionSection: React.FC<VideoMotionSectionProps> = ({
       onToggle={onToggle}
     >
       <div className="grid grid-cols-1 gap-4">
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id="use_duration"
-            checked={options.use_duration}
-            onCheckedChange={(checked) =>
-              updateOptions({ use_duration: !!checked })
-            }
-          />
-          <Label htmlFor="use_duration">{t('useDuration')}</Label>
-        </div>
-
-        <div>
-          <Label htmlFor="duration_seconds">{t('durationSeconds')}</Label>
-          <Input
-            id="duration_seconds"
-            type="number"
-            value={options.duration_seconds}
-            onChange={(e) =>
-              updateOptions({ duration_seconds: parseInt(e.target.value) })
-            }
-            min="1"
-            max="30"
-            disabled={!options.use_duration}
-          />
-        </div>
+        <ToggleField
+          id="use_duration"
+          label={t('useDuration')}
+          checked={options.use_duration}
+          onCheckedChange={(checked) =>
+            updateOptions({ use_duration: !!checked })
+          }
+        >
+          <div>
+            <Label htmlFor="duration_seconds">{t('durationSeconds')}</Label>
+            <Input
+              id="duration_seconds"
+              type="number"
+              value={options.duration_seconds}
+              onChange={(e) =>
+                updateOptions({ duration_seconds: parseInt(e.target.value) })
+              }
+              min="1"
+              max="30"
+            />
+          </div>
+        </ToggleField>
 
         <div className="flex items-center space-x-2">
           <Checkbox

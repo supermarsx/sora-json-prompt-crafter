@@ -23,7 +23,9 @@ describe('PromptSection', () => {
     fireEvent.change(promptInput, { target: { value: 'new prompt' } });
     expect(updateOptions).toHaveBeenCalledWith({ prompt: 'new prompt' });
 
-    const negativeInput = screen.getByLabelText(/^negative prompt$/i);
+    const negativeInput = screen.getByRole('textbox', {
+      name: /negative prompt/i,
+    });
     fireEvent.change(negativeInput, { target: { value: 'new negative' } });
     expect(updateOptions).toHaveBeenCalledWith({
       negative_prompt: 'new negative',
@@ -41,7 +43,7 @@ describe('PromptSection', () => {
       />,
     );
 
-    const textarea = screen.getByLabelText(/^negative prompt$/i);
+    const textarea = screen.getByRole('textbox', { name: /negative prompt/i });
     expect(textarea.hasAttribute('disabled')).toBe(true);
 
     const checkbox = screen.getByRole('checkbox');
@@ -56,7 +58,9 @@ describe('PromptSection', () => {
       />,
     );
     expect(
-      screen.getByLabelText(/^negative prompt$/i).hasAttribute('disabled'),
+      screen.getByRole('textbox', { name: /negative prompt/i }).hasAttribute(
+        'disabled',
+      ),
     ).toBe(false);
   });
 });

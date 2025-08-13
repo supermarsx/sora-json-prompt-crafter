@@ -9,8 +9,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
 import { CollapsibleSection } from '../CollapsibleSection';
+import { ToggleField } from '../ToggleField';
 import type { SoraOptions } from '@/lib/soraOptions';
 
 interface DimensionsFormatSectionProps {
@@ -94,43 +94,39 @@ export const DimensionsFormatSection: React.FC<
           </Select>
         </div>
 
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id="use_dimensions"
-            checked={options.use_dimensions}
-            onCheckedChange={(checked) =>
-              updateOptions({ use_dimensions: !!checked })
-            }
-          />
-          <Label htmlFor="use_dimensions">{t('useDimensions')}</Label>
-        </div>
-
-        <>
-          <div>
-            <Label htmlFor="width">{t('width')}</Label>
-            <Input
-              id="width"
-              type="number"
-              value={options.width || 1024}
-              onChange={(e) =>
-                updateOptions({ width: parseInt(e.target.value) })
-              }
-              disabled={!options.use_dimensions}
-            />
+        <ToggleField
+          id="use_dimensions"
+          label={t('useDimensions')}
+          checked={options.use_dimensions}
+          onCheckedChange={(checked) =>
+            updateOptions({ use_dimensions: !!checked })
+          }
+        >
+          <div className="grid grid-cols-1 gap-4">
+            <div>
+              <Label htmlFor="width">{t('width')}</Label>
+              <Input
+                id="width"
+                type="number"
+                value={options.width || 1024}
+                onChange={(e) =>
+                  updateOptions({ width: parseInt(e.target.value) })
+                }
+              />
+            </div>
+            <div>
+              <Label htmlFor="height">{t('height')}</Label>
+              <Input
+                id="height"
+                type="number"
+                value={options.height || 576}
+                onChange={(e) =>
+                  updateOptions({ height: parseInt(e.target.value) })
+                }
+              />
+            </div>
           </div>
-          <div>
-            <Label htmlFor="height">{t('height')}</Label>
-            <Input
-              id="height"
-              type="number"
-              value={options.height || 576}
-              onChange={(e) =>
-                updateOptions({ height: parseInt(e.target.value) })
-              }
-              disabled={!options.use_dimensions}
-            />
-          </div>
-        </>
+        </ToggleField>
 
         <div>
           <Label htmlFor="output_format">{t('outputFormat')}</Label>

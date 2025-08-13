@@ -1,9 +1,9 @@
 import React from 'react';
 import { Label } from '@/components/ui/label';
 import { useTranslation } from 'react-i18next';
-import { Checkbox } from '@/components/ui/checkbox';
 import { SearchableDropdown } from '../SearchableDropdown';
 import { CollapsibleSection } from '../CollapsibleSection';
+import { ToggleField } from '../ToggleField';
 import type { SoraOptions } from '@/lib/soraOptions';
 
 import { materialOptions } from '@/data/materialOptions';
@@ -35,31 +35,26 @@ export const MaterialSection: React.FC<MaterialSectionProps> = ({
           />
         </div>
 
-        <div className="flex items-center space-x-2">
-          <Checkbox
-            id="use_secondary_material"
-            checked={options.use_secondary_material}
-            onCheckedChange={(checked) =>
-              updateOptions({ use_secondary_material: !!checked })
-            }
-          />
-          <Label htmlFor="use_secondary_material">
-            {t('useSecondaryMaterial')}
-          </Label>
-        </div>
-
-        <div>
-          <Label>{t('secondaryMaterial')}</Label>
-          <SearchableDropdown
-            options={materialOptions}
-            value={options.secondary_material || 'default'}
-            onValueChange={(value) =>
-              updateOptions({ secondary_material: value })
-            }
-            label="Secondary Material Options"
-            disabled={!options.use_secondary_material}
-          />
-        </div>
+        <ToggleField
+          id="use_secondary_material"
+          label={t('useSecondaryMaterial')}
+          checked={options.use_secondary_material}
+          onCheckedChange={(checked) =>
+            updateOptions({ use_secondary_material: !!checked })
+          }
+        >
+          <div>
+            <Label>{t('secondaryMaterial')}</Label>
+            <SearchableDropdown
+              options={materialOptions}
+              value={options.secondary_material || 'default'}
+              onValueChange={(value) =>
+                updateOptions({ secondary_material: value })
+              }
+              label="Secondary Material Options"
+            />
+          </div>
+        </ToggleField>
       </div>
     </CollapsibleSection>
   );
