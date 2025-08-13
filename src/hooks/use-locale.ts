@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import i18n from '@/i18n';
+import { changeLanguageAsync } from '@/i18n';
 import { useLocalStorageState } from './use-local-storage-state';
 import { LOCALE } from '@/lib/storage-keys';
 
@@ -69,7 +69,7 @@ export function useLocale() {
       setLocale(normalized);
       return;
     }
-    i18n.changeLanguage(locale);
+    changeLanguageAsync(locale);
   }, [locale, setLocale]);
 
   return [locale, setLocale] as const;

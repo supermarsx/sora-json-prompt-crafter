@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, within } from '@testing-library/react';
-import i18n from '@/i18n';
+import i18n, { changeLanguageAsync } from '@/i18n';
 import { CameraCompositionSection } from '../CameraCompositionSection';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 
@@ -266,7 +266,7 @@ describe('CameraCompositionSection', () => {
   });
 
   test('lens type dropdown localizes options when language changes', async () => {
-    await i18n.changeLanguage('es-ES');
+    await changeLanguageAsync('es-ES');
     render(
       <CameraCompositionSection
         options={{
@@ -285,11 +285,11 @@ describe('CameraCompositionSection', () => {
     expect(
       await screen.findByRole('button', { name: /gran angular 24mm/i }),
     ).toBeDefined();
-    await i18n.changeLanguage('en-US');
+    await changeLanguageAsync('en-US');
   });
 
   test('subject focus dropdown localizes options when language changes', async () => {
-    await i18n.changeLanguage('es-ES');
+    await changeLanguageAsync('es-ES');
     render(
       <CameraCompositionSection
         options={{
@@ -307,6 +307,6 @@ describe('CameraCompositionSection', () => {
     expect(
       await screen.findByRole('option', { name: /centro/i }),
     ).toBeDefined();
-    await i18n.changeLanguage('en-US');
+    await changeLanguageAsync('en-US');
   });
 });
