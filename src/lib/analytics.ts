@@ -41,7 +41,7 @@ export function trackEvent(
 
   if (typeof gtag !== 'function') {
     if (!gtagMissingLogged) {
-      console.error('Tracking Analytics: gtag function missing.');
+      console.warn('Tracking Analytics: gtag function missing.');
       gtagMissingLogged = true;
     }
     return;
