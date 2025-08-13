@@ -51,7 +51,14 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
         PreTag="span"
         CodeTag="span"
         wrapLongLines
-        customStyle={{ margin: 0, padding: 0, background: 'none' }}
+        customStyle={{
+          margin: 0,
+          padding: 0,
+          background: 'none',
+          overflowX: 'hidden',
+          whiteSpace: 'pre-wrap',
+          wordBreak: 'break-word',
+        }}
       >
         {value}
       </SyntaxHighlighter>
@@ -59,7 +66,7 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
   );
 
   return (
-    <div className="h-full overflow-y-auto" ref={containerRef}>
+    <div className="h-full overflow-y-auto overflow-x-hidden" ref={containerRef}>
       <pre className="p-6 text-sm font-mono whitespace-pre-wrap break-words leading-relaxed">
         {diffParts
           ? diffParts.map((part, idx) =>
