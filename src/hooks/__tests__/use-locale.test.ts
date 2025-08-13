@@ -16,8 +16,14 @@ jest.mock('@/lib/storage', () => ({
 }));
 
 describe('useLocale', () => {
+  const originalLanguage = navigator.language;
+
   beforeEach(() => {
     jest.clearAllMocks();
+    Object.defineProperty(window.navigator, 'language', {
+      value: originalLanguage,
+      configurable: true,
+    });
   });
 
   test('initializes state from localStorage', () => {
@@ -27,12 +33,24 @@ describe('useLocale', () => {
     expect(storage.safeGet).toHaveBeenCalledWith(LOCALE, 'en-US', false);
   });
 
+  test('auto-detects locale from navigator.language', () => {
+    (storage.safeGet as jest.Mock).mockReturnValue(undefined);
+    Object.defineProperty(window.navigator, 'language', {
+      value: 'fr-CA',
+      configurable: true,
+    });
+    const { result } = renderHook(() => useLocale());
+    expect(result.current[0]).toBe('fr-FR');
+    expect(storage.safeGet).toHaveBeenCalledWith(LOCALE, 'fr-FR', false);
+    expect(i18n.changeLanguage).toHaveBeenLastCalledWith('fr-FR');
+  });
+
   test('updates locale and persists value', () => {
     (storage.safeGet as jest.Mock).mockReturnValue('en-US');
     const { result } = renderHook(() => useLocale());
 
     act(() => {
-      result.current[1]('fr-FR');
+      result.current[1]('fr');
     });
 
     expect(i18n.changeLanguage).toHaveBeenLastCalledWith('fr-FR');
