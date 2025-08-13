@@ -20,11 +20,14 @@ try {
 }
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
+export default defineConfig(({ mode }) => {
+  const base = process.env.BASE_URL || '/';
+  return {
   server: {
     host: '::',
     port: 8080,
   },
+  base,
   plugins: [
     react(),
     VitePWA({
@@ -61,5 +64,7 @@ export default defineConfig(({ mode }) => ({
   define: {
     'import.meta.env.VITE_COMMIT_HASH': JSON.stringify(commitHash),
     'import.meta.env.VITE_COMMIT_DATE': JSON.stringify(commitDate),
+    __BASE_URL__: JSON.stringify(base),
   },
-}));
+  };
+});

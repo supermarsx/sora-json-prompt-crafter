@@ -1,5 +1,9 @@
 Object.defineProperty(globalThis, 'import', { value: {} });
 Object.defineProperty(globalThis.import, 'meta', { value: { env: {} } });
+declare global {
+  var __BASE_URL__: string;
+}
+globalThis.__BASE_URL__ = '/';
 import { jest } from '@jest/globals';
 import fs from 'fs';
 import path from 'path';
@@ -15,6 +19,8 @@ import path from 'path';
   }
   const data = JSON.parse(fs.readFileSync(file, 'utf-8'));
   return Promise.resolve({
+    ok: true,
+    status: 200,
     json: async () => data,
     clone: function () {
       return this;
@@ -28,5 +34,7 @@ import path from 'path';
 };
 
 // Initialize i18next for component tests
-import { changeLanguageAsync } from './src/i18n';
-void changeLanguageAsync('en-US');
+void (async () => {
+  const { changeLanguageAsync } = await import('./src/i18n');
+  await changeLanguageAsync('en-US');
+})();
