@@ -242,27 +242,19 @@ const Dashboard = () => {
 
   const updateOptions = (updates: Partial<SoraOptions>) => {
     setOptions((prev) => {
-      const next = { ...prev, ...updates };
-      Object.keys(updates).forEach((key) => {
-        const value = updates[key as keyof SoraOptions];
-        if (key.startsWith('use_')) {
-          if (
-            typeof value === 'boolean' &&
-            value !== prev[key as keyof SoraOptions]
-          ) {
-            trackEvent(trackingEnabled, 'section_toggle', {
-              section: key,
-              enabled: value,
-            });
-          }
-        } else if (key === 'prompt') {
-          trackEvent(trackingEnabled, 'prompt_change');
-        } else if (key === 'negative_prompt') {
-          trackEvent(trackingEnabled, 'negative_prompt_change');
-        } else {
-          trackEvent(trackingEnabled, 'input_change');
-        }
+      const changedKeys = Object.keys(updates).filter((key) => {
+        const newValue = updates[key as keyof SoraOptions];
+        return newValue !== prev[key as keyof SoraOptions];
       });
+
+      const next = { ...prev, ...updates };
+
+      if (changedKeys.length > 0) {
+        trackEvent(trackingEnabled, 'options_change', {
+          keys: changedKeys.join(','),
+        });
+      }
+
       return next;
     });
   };
