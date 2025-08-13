@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { toast } from '@/components/ui/sonner-toast';
+import { useTranslation } from 'react-i18next';
 import { DISABLE_STATS } from '@/lib/config';
 import { safeGet, safeSet } from '@/lib/storage';
 
@@ -10,6 +11,7 @@ export interface GithubStats {
 }
 
 export function useGithubStats() {
+  const { t } = useTranslation();
   const [stats, setStats] = useState<GithubStats>();
 
   useEffect(() => {
@@ -54,13 +56,13 @@ export function useGithubStats() {
         }
       } catch (err) {
         if ((err as Error).name !== 'AbortError') {
-          toast.error('Failed to load GitHub stats');
+          toast.error(t('githubStatsError'));
         }
       }
     };
     void load();
     return () => controller.abort();
-  }, []);
+  }, [t]);
 
   return stats;
 }

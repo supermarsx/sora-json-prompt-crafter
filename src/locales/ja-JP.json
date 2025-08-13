@@ -107,6 +107,7 @@
   "copyFailed": "リンクのコピーに失敗しました",
   "clipboardNotSupported": "クリップボードはサポートされていません",
   "clipboardUnsupported": "クリップボードはサポートされていません",
+  "githubStatsError": "Failed to load GitHub stats",
   "importJsonTitle": "JSONをインポート",
   "importJsonDescription": "JSONを貼り付けるか、ファイルを選択してプロンプトをインポートしてください。",
   "pasteJsonPlaceholder": "ここにJSONを貼り付け",

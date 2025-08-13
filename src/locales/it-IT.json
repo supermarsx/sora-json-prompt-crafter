@@ -107,6 +107,7 @@
   "copyFailed": "Copia link non riuscita",
   "clipboardNotSupported": "Appunti non supportati",
   "clipboardUnsupported": "Appunti non supportati",
+  "githubStatsError": "Failed to load GitHub stats",
   "importJsonTitle": "Importa JSON",
   "importJsonDescription": "Incolla il JSON o seleziona un file per importare il tuo prompt.",
   "pasteJsonPlaceholder": "Incolla qui il JSON",

@@ -107,6 +107,7 @@
   "copyFailed": "Échec de la copie du lien",
   "clipboardNotSupported": "Le presse-papiers n’est pas pris en charge",
   "clipboardUnsupported": "Le presse-papiers n’est pas pris en charge",
+  "githubStatsError": "Failed to load GitHub stats",
   "importJsonTitle": "Importer JSON",
   "importJsonDescription": "Collez du JSON ou choisissez un fichier pour importer un prompt.",
   "pasteJsonPlaceholder": "Collez du JSON ici",

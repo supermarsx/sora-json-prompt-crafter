@@ -107,6 +107,7 @@
   "copyFailed": "Не удалось скопировать ссылку",
   "clipboardNotSupported": "Буфер обмена не поддерживается",
   "clipboardUnsupported": "Буфер обмена не поддерживается",
+  "githubStatsError": "Failed to load GitHub stats",
   "importJsonTitle": "Импортировать JSON",
   "importJsonDescription": "Вставьте JSON или выберите файл, чтобы импортировать промпт.",
   "pasteJsonPlaceholder": "Вставьте JSON сюда",

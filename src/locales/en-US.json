@@ -116,6 +116,7 @@
   "copyFailed": "Failed to copy link",
   "clipboardNotSupported": "Clipboard not supported",
   "clipboardUnsupported": "Clipboard not supported",
+  "githubStatsError": "Failed to load GitHub stats",
   "importJsonTitle": "Import JSON",
   "importJsonDescription": "Paste JSON or choose a file to import your prompt.",
   "pasteJsonPlaceholder": "Paste JSON here",

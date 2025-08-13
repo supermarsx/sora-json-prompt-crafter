@@ -107,6 +107,7 @@
   "copyFailed": "Misslyckades kopiera länk",
   "clipboardNotSupported": "Urklipp stöds inte",
   "clipboardUnsupported": "Urklipp stöds inte",
+  "githubStatsError": "Failed to load GitHub stats",
   "importJsonTitle": "Importera JSON",
   "importJsonDescription": "Klistra in JSON eller välj en fil för att importera en prompt.",
   "pasteJsonPlaceholder": "Klistra in JSON här",
