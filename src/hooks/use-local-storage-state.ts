@@ -20,5 +20,25 @@ export function useLocalStorageState<T>(
     }
   }, [key, state, isString]);
 
+  useEffect(() => {
+    const onStorage = (e: StorageEvent) => {
+      if (e.storageArea !== window.localStorage || e.key !== key) return;
+      if (e.newValue === null) {
+        setState(defaultValue);
+        return;
+      }
+      try {
+        const value = isString
+          ? (e.newValue as unknown as T)
+          : (JSON.parse(e.newValue) as T);
+        setState(value);
+      } catch (err) {
+        console.warn('useLocalStorageState: failed to parse storage event', err);
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, [key, isString, defaultValue]);
+
   return [state, setState];
 }
