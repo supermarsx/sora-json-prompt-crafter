@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Dialog,
@@ -9,6 +9,8 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import HistoryItem from '@/components/history/HistoryItem';
+import { FixedSizeList as List } from 'react-window';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,14 +22,14 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import {
-  Clipboard,
   Trash2,
-  Edit,
-  Eye,
   Import as ImportIcon,
   Download,
   Check,
 } from 'lucide-react';
+const HistoryListOuter = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  (props, ref) => <div ref={ref} data-testid="history-list" {...props} />,
+);
 import { toast } from '@/components/ui/sonner-toast';
 import {
   DropdownMenu,
@@ -80,9 +82,6 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
   const [showClipboard, setShowClipboard] = useState(false);
   const [showBulkClipboard, setShowBulkClipboard] = useState(false);
   const [showBulkFile, setShowBulkFile] = useState(false);
-  const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null);
-  const [editedId, setEditedId] = useState<number | null>(null);
-  const [copiedId, setCopiedId] = useState<number | null>(null);
   const [tab, setTab] = useState('prompts');
   const [confirmClearActions, setConfirmClearActions] = useState(false);
   const [confirmDeleteActionIdx, setConfirmDeleteActionIdx] = useState<
@@ -286,124 +285,38 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                   {t('clearHistory')}
                 </Button>
               </div>
-              <ScrollArea className="h-[60vh]">
-                <div className="space-y-4 pb-2">
-                  {history.map((entry) => (
-                    <div
-                      key={entry.id}
-                      className="border p-3 rounded-md space-y-2"
-                    >
-                      <div className="text-xs text-muted-foreground flex justify-between">
-                        <span>{entry.date}</span>
+              <div className="h-[60vh]">
+                {history.length > 0 ? (
+                  <List
+                    height={Math.round(window.innerHeight * 0.6)}
+                    itemCount={history.length}
+                    itemSize={130}
+                    width="100%"
+                    className="pb-2"
+                    outerElementType={HistoryListOuter}
+                  >
+                    {({ index, style }) => (
+                      <div style={{ ...style, paddingBottom: 16 }}>
+                        <HistoryItem
+                          entry={history[index]}
+                          onEdit={onEdit}
+                          onCopy={onCopy}
+                          onDelete={(id) => {
+                            onDelete(id);
+                            toast.success(t('entryDeleted'));
+                          }}
+                          onPreview={setPreview}
+                          trackingEnabled={trackingEnabled}
+                        />
                       </div>
-                      {(() => {
-                        try {
-                          const obj = JSON.parse(entry.json);
-                          return (
-                            <div className="space-y-1 text-xs text-muted-foreground">
-                              <div className="font-medium break-words">
-                                {obj.prompt}
-                              </div>
-                            </div>
-                          );
-                        } catch {
-                          return null;
-                        }
-                      })()}
-                      <div className="flex flex-wrap gap-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => {
-                            trackEvent(trackingEnabled, 'history_edit');
-                            onEdit(entry.json);
-                            setEditedId(entry.id);
-                            setTimeout(() => {
-                              setEditedId((prev) =>
-                                prev === entry.id ? null : prev,
-                              );
-                            }, 1500);
-                          }}
-                          className={`gap-1 ${editedId === entry.id ? 'text-green-600 animate-pulse' : ''}`}
-                        >
-                          {editedId === entry.id ? (
-                            <Check className="w-4 h-4" />
-                          ) : (
-                            <Edit className="w-4 h-4" />
-                          )}{' '}
-                          {editedId === entry.id ? t('edited') : t('edit')}
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => {
-                            trackEvent(trackingEnabled, 'history_copy');
-                            onCopy(entry.json);
-                            setCopiedId(entry.id);
-                            setTimeout(() => {
-                              setCopiedId((prev) =>
-                                prev === entry.id ? null : prev,
-                              );
-                            }, 1500);
-                          }}
-                          className={`gap-1 ${copiedId === entry.id ? 'text-green-600 animate-pulse' : ''}`}
-                        >
-                          {copiedId === entry.id ? (
-                            <Check className="w-4 h-4" />
-                          ) : (
-                            <Clipboard className="w-4 h-4" />
-                          )}{' '}
-                          {copiedId === entry.id ? t('copied') : t('copy')}
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => {
-                            trackEvent(trackingEnabled, 'history_preview');
-                            setPreview(entry);
-                          }}
-                          className="gap-1"
-                        >
-                          <Eye className="w-4 h-4" /> {t('preview')}
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          onClick={() => {
-                            if (confirmDeleteId === entry.id) {
-                              trackEvent(
-                                trackingEnabled,
-                                'history_delete_confirm',
-                              );
-                              onDelete(entry.id);
-                              toast.success(t('entryDeleted'));
-                              setConfirmDeleteId(null);
-                            } else {
-                              setConfirmDeleteId(entry.id);
-                              setTimeout(() => {
-                                setConfirmDeleteId((prev) =>
-                                  prev === entry.id ? null : prev,
-                                );
-                              }, 1500);
-                            }
-                          }}
-                          className={`gap-1 ${confirmDeleteId === entry.id ? 'animate-pulse' : ''}`}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                          {confirmDeleteId === entry.id
-                            ? t('confirm')
-                            : t('delete')}
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                  {history.length === 0 && (
-                    <p className="text-center text-sm text-muted-foreground">
-                      {t('historyEmptyPrompts')}
-                    </p>
-                  )}
-                </div>
-              </ScrollArea>
+                    )}
+                  </List>
+                ) : (
+                  <p className="text-center text-sm text-muted-foreground">
+                    {t('historyEmptyPrompts')}
+                  </p>
+                )}
+              </div>
             </TabsContent>
             <TabsContent value="actions">
               <div className="flex justify-between items-center mb-2">
