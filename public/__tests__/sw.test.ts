@@ -11,6 +11,15 @@ function getLocalizedDisclaimers(): string[] {
 }
 const localizedDisclaimers = getLocalizedDisclaimers();
 
+const localesDir = path.resolve(__dirname, '../../src/locales');
+function getLocaleJson(): string[] {
+  return fs
+    .readdirSync(localesDir)
+    .filter((file) => file.endsWith('.json'))
+    .map((file) => `/locales/${file}`);
+}
+const localizedTranslations = getLocaleJson();
+
 const staticAssets = [
   '/',
   '/index.html',
@@ -21,6 +30,7 @@ const staticAssets = [
   '/apple-touch-icon.png',
   '/disclaimer.txt',
   ...localizedDisclaimers,
+  ...localizedTranslations,
   '/placeholder.svg',
   '/web-app-manifest-192x192.png',
   '/web-app-manifest-512x512.png',

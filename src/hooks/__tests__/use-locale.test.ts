@@ -58,3 +58,36 @@ describe('useLocale', () => {
     expect(result.current[0]).toBe('fr-FR');
   });
 });
+
+describe('changeLanguageAsync offline', () => {
+  test('loads translations from cache when offline', async () => {
+    jest.resetModules();
+    jest.unmock('@/i18n');
+    const translations: Record<string, unknown> = {
+      '/locales/en-US.json': { greeting: 'Hello' },
+      '/locales/es-ES.json': { greeting: 'Hola' },
+    };
+    const match = jest.fn().mockImplementation((req: RequestInfo) => {
+      const key = typeof req === 'string' ? req : req.url;
+      const data = translations[key];
+      return Promise.resolve(
+        data ? ({ json: async () => data } as Response) : undefined,
+      );
+    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (global as any).caches = {
+      match,
+      open: jest.fn().mockResolvedValue({ put: jest.fn() }),
+    };
+    const fetchMock = jest.fn().mockRejectedValue(new Error('network'));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (global as any).fetch = fetchMock;
+
+    const i18nModule = await import('@/i18n');
+    await i18nModule.changeLanguageAsync('es-ES');
+
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(match).toHaveBeenCalledWith('/locales/es-ES.json');
+    expect(i18nModule.default.t('greeting', { lng: 'es-ES' })).toBe('Hola');
+  });
+});
