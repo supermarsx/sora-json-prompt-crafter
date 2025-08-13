@@ -71,7 +71,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   const { t } = useTranslation();
   const [confirmDisableTracking, setConfirmDisableTracking] = useState(false);
   const [confirmEnableTracking, setConfirmEnableTracking] = useState(false);
-  const checkForUpdate = useUpdateCheck();
+  const { checkForUpdate } = useUpdateCheck();
 
   useEffect(() => {
     if (open) {

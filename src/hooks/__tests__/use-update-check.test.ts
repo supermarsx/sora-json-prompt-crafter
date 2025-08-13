@@ -21,9 +21,25 @@ describe('useUpdateCheck', () => {
     });
     const { result } = renderHook(() => useUpdateCheck());
     await act(async () => {
-      await result.current();
+      await result.current.checkForUpdate();
     });
     expect(getRegistration).toHaveBeenCalled();
     expect(update).toHaveBeenCalled();
+  });
+
+  it('sets updateAvailable when registration has waiting worker', async () => {
+    const update = jest.fn().mockResolvedValue(undefined);
+    const waiting = {};
+    const getRegistration = jest.fn().mockResolvedValue({ update, waiting });
+    Object.defineProperty(navigator, 'serviceWorker', {
+      configurable: true,
+      value: { getRegistration },
+    });
+    const { result } = renderHook(() => useUpdateCheck());
+    expect(result.current.updateAvailable).toBe(false);
+    await act(async () => {
+      await result.current.checkForUpdate();
+    });
+    expect(result.current.updateAvailable).toBe(true);
   });
 });

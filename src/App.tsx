@@ -23,7 +23,7 @@ const queryClient = new QueryClient({
 
 const App = () => {
   useDarkMode();
-  const checkForUpdate = useUpdateCheck();
+  const { checkForUpdate } = useUpdateCheck();
   useEffect(() => {
     checkForUpdate();
   }, [checkForUpdate]);

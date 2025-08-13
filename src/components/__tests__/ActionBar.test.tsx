@@ -76,6 +76,23 @@ jest.mock('@/components/ui/alert-dialog', () => ({
   }) => <button onClick={onClick}>{children}</button>,
 }));
 
+const toastFn = jest.fn();
+const mockCheckForUpdate = jest.fn();
+let mockUpdateAvailable = false;
+
+jest.mock('@/hooks/use-update-check', () => ({
+  __esModule: true,
+  useUpdateCheck: () => ({
+    checkForUpdate: mockCheckForUpdate,
+    updateAvailable: mockUpdateAvailable,
+  }),
+}));
+
+jest.mock('@/components/ui/use-toast', () => ({
+  __esModule: true,
+  useToast: () => ({ toast: toastFn, dismiss: jest.fn(), toasts: [] }),
+}));
+
 function createProps(
   overrides: Partial<React.ComponentProps<typeof ActionBar>> = {},
 ) {
@@ -112,6 +129,7 @@ function createProps(
 beforeEach(() => {
   jest.useFakeTimers();
   jest.clearAllMocks();
+  mockUpdateAvailable = false;
 });
 
 afterEach(() => {
@@ -211,6 +229,15 @@ describe('ActionBar', () => {
     const props = createProps({ userscriptInstalled: false });
     render(<ActionBar {...props} />);
     expect(screen.queryByRole('button', { name: /send to sora/i })).toBeNull();
+  });
+
+  test('prompts to refresh when update is available and reloads on confirm', () => {
+    mockUpdateAvailable = true;
+    const props = createProps();
+    render(<ActionBar {...props} />);
+    expect(toastFn).toHaveBeenCalled();
+    const action = toastFn.mock.calls[0][0].action;
+    expect(typeof action.props.onClick).toBe('function');
   });
 
   test('Minimize hides and restore shows bar again', () => {
