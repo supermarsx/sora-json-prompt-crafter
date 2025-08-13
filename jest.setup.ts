@@ -1,6 +1,9 @@
 Object.defineProperty(globalThis, 'import', { value: {} });
-Object.defineProperty(globalThis.import, 'meta', { value: { env: {} } });
+Object.defineProperty(globalThis.import, 'meta', {
+  value: { env: { BASE_URL: '/' } },
+});
 declare global {
+  // eslint-disable-next-line no-var
   var __BASE_URL__: string;
 }
 globalThis.__BASE_URL__ = '/';

@@ -21,7 +21,8 @@ try {
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  const base = process.env.BASE_URL || '/';
+  const envBase = process.env.BASE_URL;
+  const base = envBase && envBase.startsWith('/') ? envBase : '/';
   return {
   server: {
     host: '::',
