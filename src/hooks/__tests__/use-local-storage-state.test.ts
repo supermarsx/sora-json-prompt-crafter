@@ -4,8 +4,8 @@ import * as storage from '@/lib/storage';
 
 jest.mock('@/lib/storage', () => ({
   __esModule: true,
-  safeGet: jest.fn(),
-  safeSet: jest.fn(),
+  getJson: jest.fn(),
+  setJson: jest.fn(),
   safeRemove: jest.fn(),
 }));
 
@@ -14,64 +14,64 @@ describe('useLocalStorageState', () => {
     jest.clearAllMocks();
   });
 
-  test('initializes state from safeGet and persists string updates', () => {
-    (storage.safeGet as jest.Mock).mockReturnValue('stored');
+  test('initializes state from getJson and persists updates', () => {
+    (storage.getJson as jest.Mock).mockReturnValue('stored');
 
     const { result } = renderHook(() => useLocalStorageState('key', 'default'));
 
-    expect(storage.safeGet).toHaveBeenCalledWith('key', 'default', false);
+    expect(storage.getJson).toHaveBeenCalledWith('key', 'default');
     expect(result.current[0]).toBe('stored');
 
     act(() => {
       result.current[1]('new');
     });
 
-    expect(storage.safeSet).toHaveBeenLastCalledWith('key', 'new');
+    expect(storage.setJson).toHaveBeenLastCalledWith('key', 'new');
     expect(result.current[0]).toBe('new');
   });
 
   test('initializes and persists non-string updates', () => {
-    (storage.safeGet as jest.Mock).mockReturnValue({ a: 1 });
+    (storage.getJson as jest.Mock).mockReturnValue({ a: 1 });
     const def = { a: 0 };
 
     const { result } = renderHook(() => useLocalStorageState('obj', def));
 
-    expect(storage.safeGet).toHaveBeenCalledWith('obj', def, true);
+    expect(storage.getJson).toHaveBeenCalledWith('obj', def);
     expect(result.current[0]).toEqual({ a: 1 });
 
     act(() => {
       result.current[1]({ a: 2 });
     });
 
-    expect(storage.safeSet).toHaveBeenLastCalledWith('obj', { a: 2 }, true);
+    expect(storage.setJson).toHaveBeenLastCalledWith('obj', { a: 2 });
     expect(result.current[0]).toEqual({ a: 2 });
   });
 
   test('removes key instead of persisting default value', () => {
-    (storage.safeGet as jest.Mock).mockReturnValue('default');
+    (storage.getJson as jest.Mock).mockReturnValue('default');
 
     const { result } = renderHook(() => useLocalStorageState('key', 'default'));
 
     expect(storage.safeRemove).toHaveBeenCalledWith('key');
-    expect(storage.safeSet).not.toHaveBeenCalled();
+    expect(storage.setJson).not.toHaveBeenCalled();
 
     act(() => {
       result.current[1]('default');
     });
 
     expect(storage.safeRemove).toHaveBeenCalledWith('key');
-    expect(storage.safeSet).not.toHaveBeenCalled();
+    expect(storage.setJson).not.toHaveBeenCalled();
   });
 
   test('updates state when storage event fires for same key', () => {
-    (storage.safeGet as jest.Mock).mockReturnValue('one');
+    (storage.getJson as jest.Mock).mockReturnValue('one');
     const { result } = renderHook(() => useLocalStorageState('key', 'default'));
 
     act(() => {
       window.dispatchEvent(
         new StorageEvent('storage', {
           key: 'key',
-          newValue: 'two',
+          newValue: JSON.stringify('two'),
           storageArea: window.localStorage,
         }),
       );
@@ -81,7 +81,7 @@ describe('useLocalStorageState', () => {
   });
 
   test('cleans up storage listener on unmount', () => {
-    (storage.safeGet as jest.Mock).mockReturnValue('init');
+    (storage.getJson as jest.Mock).mockReturnValue('init');
     const addSpy = jest.spyOn(window, 'addEventListener');
     const removeSpy = jest.spyOn(window, 'removeEventListener');
 
