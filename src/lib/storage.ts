@@ -44,3 +44,24 @@ export function safeRemove(key: string): boolean {
     return false;
   }
 }
+
+export function getJson<T>(key: string, defaultValue: T | null = null): T | null {
+  try {
+    const value = localStorage.getItem(key);
+    if (value === null) return defaultValue;
+    return JSON.parse(value) as T;
+  } catch (err) {
+    console.warn('getJson failed', key, err);
+    return defaultValue;
+  }
+}
+
+export function setJson<T>(key: string, value: T): boolean {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch (err) {
+    console.warn(`setJson: failed for key "${key}"`, err);
+    return false;
+  }
+}

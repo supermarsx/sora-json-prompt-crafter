@@ -38,6 +38,8 @@ jest.mock('@/lib/storage', () => ({
   safeGet: jest.fn(),
   safeSet: jest.fn(),
   safeRemove: jest.fn(),
+  getJson: jest.fn(),
+  setJson: jest.fn(),
 }));
 
 jest.mock('../ClipboardImportModal', () => ({

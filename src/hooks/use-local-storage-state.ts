@@ -1,5 +1,5 @@
 import { useEffect, useState, Dispatch, SetStateAction } from 'react';
-import { safeGet, safeSet, safeRemove } from '@/lib/storage';
+import { getJson, setJson, safeRemove } from '@/lib/storage';
 
 /**
  * Sync a stateful value with `localStorage`.
@@ -14,11 +14,9 @@ export function useLocalStorageState<T>(
   key: string,
   defaultValue: T,
 ): [T, Dispatch<SetStateAction<T>>] {
-  const isString = typeof defaultValue === 'string';
-
   const [state, setState] = useState<T>(() => {
-    const stored = safeGet<T>(key, defaultValue, !isString);
-    return (stored as T) ?? defaultValue;
+    const stored = getJson<T>(key, defaultValue);
+    return stored ?? defaultValue;
   });
 
   useEffect(() => {
@@ -26,12 +24,8 @@ export function useLocalStorageState<T>(
       safeRemove(key);
       return;
     }
-    if (isString) {
-      safeSet(key, state as unknown as string);
-    } else {
-      safeSet(key, state, true);
-    }
-  }, [key, state, isString, defaultValue]);
+    setJson(key, state);
+  }, [key, state, defaultValue]);
 
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
@@ -41,17 +35,14 @@ export function useLocalStorageState<T>(
         return;
       }
       try {
-        const value = isString
-          ? (e.newValue as unknown as T)
-          : (JSON.parse(e.newValue) as T);
-        setState(value);
+        setState(JSON.parse(e.newValue) as T);
       } catch (err) {
         console.warn('useLocalStorageState: failed to parse storage event', err);
       }
     };
     window.addEventListener('storage', onStorage);
     return () => window.removeEventListener('storage', onStorage);
-  }, [key, isString, defaultValue]);
+  }, [key, defaultValue]);
 
   return [state, setState];
 }

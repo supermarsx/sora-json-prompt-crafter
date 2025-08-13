@@ -1,4 +1,4 @@
-import { safeGet, safeSet, safeRemove } from '../storage';
+import { safeGet, safeSet, safeRemove, getJson, setJson } from '../storage';
 
 describe('storage utils', () => {
   beforeEach(() => {
@@ -60,5 +60,34 @@ describe('storage utils', () => {
       .mockImplementation(() => {});
     expect(safeRemove('k')).toBe(true);
     expect(spy).toHaveBeenCalledWith('k');
+  });
+
+  test('getJson returns default when parsing fails', () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    localStorage.setItem('bad', '{oops');
+    expect(getJson('bad', { a: 1 })).toEqual({ a: 1 });
+    expect(warnSpy).toHaveBeenCalled();
+  });
+
+  test('getJson parses JSON when present', () => {
+    localStorage.setItem('obj', '{"a":1}');
+    expect(getJson<{ a: number }>('obj', null)).toEqual({ a: 1 });
+  });
+
+  test('setJson stringifies value before storing', () => {
+    const spy = jest
+      .spyOn(Storage.prototype, 'setItem')
+      .mockImplementation(() => {});
+    expect(setJson('obj', { a: 1 })).toBe(true);
+    expect(spy).toHaveBeenCalledWith('obj', '{"a":1}');
+  });
+
+  test('setJson logs warning when setItem fails', () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    jest.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new Error('fail');
+    });
+    expect(setJson('k', { a: 1 })).toBe(false);
+    expect(warnSpy).toHaveBeenCalled();
   });
 });
