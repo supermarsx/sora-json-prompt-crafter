@@ -56,9 +56,11 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
           padding: 0,
           background: 'none',
           overflowX: 'hidden',
+          overflowY: 'auto',
           whiteSpace: 'pre-wrap',
           wordBreak: 'break-word',
           wordWrap: 'break-word',
+          overflowWrap: 'break-word',
         }}
       >
         {value}
