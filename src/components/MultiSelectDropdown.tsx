@@ -21,6 +21,7 @@ interface MultiSelectDropdownProps {
   placeholder?: string;
   label?: string;
   getOptionLabel?: (option: string) => string;
+  disabled?: boolean;
 }
 
 export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
@@ -30,6 +31,7 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   placeholder,
   label,
   getOptionLabel,
+  disabled = false,
 }) => {
   const { t } = useTranslation();
   const placeholderText = placeholder ?? t('multiSelectPlaceholder');
@@ -81,10 +83,20 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   const displayValue =
     value.length > 0 ? value.map(formatLabel).join(', ') : placeholderText;
 
+  const handleOpenChange = (open: boolean) => {
+    if (!disabled) {
+      setIsOpen(open);
+    }
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={disabled ? false : isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="w-full justify-between">
+        <Button
+          variant="outline"
+          className="w-full justify-between"
+          disabled={disabled}
+        >
           <span className="truncate">{displayValue}</span>
           <ChevronDown className="w-4 h-4 ml-2 flex-shrink-0" />
         </Button>
@@ -102,6 +114,7 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
+              disabled={disabled}
             />
           </div>
           <ScrollArea className="h-[300px]">
@@ -112,6 +125,7 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
                     id={option}
                     checked={value.includes(option)}
                     onCheckedChange={() => toggleOption(option)}
+                    disabled={disabled}
                   />
                   <label htmlFor={option} className="text-sm cursor-pointer">
                     {formatLabel(option)}

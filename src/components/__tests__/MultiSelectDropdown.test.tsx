@@ -95,4 +95,24 @@ describe('MultiSelectDropdown', () => {
     const checkboxes = screen.getAllByRole('checkbox');
     expect((checkboxes[0] as HTMLElement).id).toBe('bar');
   });
+
+  test('does not open when disabled', () => {
+    render(
+      <MultiSelectDropdown
+        options={options}
+        value={[]}
+        onValueChange={() => {}}
+        disabled
+      />,
+    );
+
+    const trigger = screen.getByRole('button');
+    expect(trigger).toHaveProperty('disabled', true);
+
+    fireEvent.click(trigger);
+
+    expect(
+      screen.queryByPlaceholderText(i18n.t('searchOptionsPlaceholder')),
+    ).toBeNull();
+  });
 });
