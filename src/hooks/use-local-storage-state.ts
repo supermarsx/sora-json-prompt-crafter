@@ -1,6 +1,15 @@
 import { useEffect, useState, Dispatch, SetStateAction } from 'react';
-import { safeGet, safeSet } from '@/lib/storage';
+import { safeGet, safeSet, safeRemove } from '@/lib/storage';
 
+/**
+ * Sync a stateful value with `localStorage`.
+ *
+ * When the state matches `defaultValue`, the corresponding key is removed
+ * from storage to avoid persisting default values.
+ *
+ * @param key - The localStorage key
+ * @param defaultValue - Value to fall back to when nothing is stored
+ */
 export function useLocalStorageState<T>(
   key: string,
   defaultValue: T,
@@ -13,12 +22,16 @@ export function useLocalStorageState<T>(
   });
 
   useEffect(() => {
+    if (Object.is(state, defaultValue)) {
+      safeRemove(key);
+      return;
+    }
     if (isString) {
       safeSet(key, state as unknown as string);
     } else {
       safeSet(key, state, true);
     }
-  }, [key, state, isString]);
+  }, [key, state, isString, defaultValue]);
 
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
