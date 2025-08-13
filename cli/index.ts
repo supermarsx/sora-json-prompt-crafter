@@ -59,6 +59,30 @@ function buildOptionsFromFlags(
 export function runCli(argv: string[]): string {
   const args = parseArgs(argv);
 
+  if (args.help) {
+    return (
+      'Usage: sora-crafter [options]\n' +
+      '  --file <path>     Load options from JSON file\n' +
+      '  --help            Show this help message\n' +
+      '  --version         Show the package version\n'
+    );
+  }
+
+  if (args.version) {
+    const version = JSON.parse(readFileSync('package.json', 'utf8')).version;
+    return `${version}`;
+  }
+
+  const validKeys = new Set([
+    'file',
+    ...Object.keys(DEFAULT_OPTIONS),
+  ]);
+
+  const unknown = Object.keys(args).filter((k) => !validKeys.has(k));
+  if (unknown.length) {
+    throw new Error(`Unknown flag: --${unknown[0]}`);
+  }
+
   let options: SoraOptions | null = null;
 
   if (typeof args.file === 'string') {
