@@ -25,6 +25,7 @@ import {
   Shuffle,
   Eye,
   EyeOff,
+  Trash2,
 } from 'lucide-react';
 import { toast } from '@/components/ui/sonner-toast';
 import { trackEvent } from '@/lib/analytics';
@@ -221,7 +222,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   trackEvent(trackingEnabled, 'purge_cache');
                 }}
               >
-                {t('purgeCache')}
+                <Trash2 className="w-4 h-4" /> {t('purgeCache')}
               </Button>
             </div>
           </ScrollArea>
