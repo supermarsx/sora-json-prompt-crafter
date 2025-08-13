@@ -76,7 +76,11 @@ jest.mock('@/components/ui/dropdown-menu', () => ({
   }) => <button onClick={onSelect}>{children}</button>,
 }));
 
-const sampleHistory = [{ id: 1, date: 'd', json: '{"prompt":"a"}' }];
+const sampleHistory = Array.from({ length: 20 }, (_, i) => ({
+  id: i + 1,
+  date: 'd',
+  json: `{"prompt":"p${i}"}`,
+}));
 const sampleActions = [{ date: 'd', action: 'a' }];
 
 function renderPanel(
@@ -182,12 +186,22 @@ describe('HistoryPanel basic actions', () => {
     expect(onOpenChange).not.toHaveBeenCalled();
   });
 
-  test('delete and clear callbacks fire and timers reset', () => {
+  test('delete and clear callbacks fire and timers reset', async () => {
     const onDelete = jest.fn();
     const onClear = jest.fn();
     renderPanel({ onDelete, onClear });
 
-    const delBtn = screen.getByRole('button', { name: /delete/i });
+    const list = screen.getByTestId('history-list');
+    act(() => {
+      Object.defineProperty(list, 'scrollTop', {
+        configurable: true,
+        value: 0,
+        writable: true,
+      });
+      fireEvent.scroll(list);
+    });
+
+    const delBtn = screen.getAllByRole('button', { name: /delete/i })[0];
     expect(delBtn.textContent).toMatch(/delete/i);
     fireEvent.click(delBtn);
     expect(delBtn.textContent).toMatch(/confirm/i);
