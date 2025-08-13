@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocale } from '@/hooks/use-locale';
 import { Button } from '@/components/ui/button';
@@ -12,6 +12,9 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import SettingsPanel from './SettingsPanel';
+import { useUpdateCheck } from '@/hooks/use-update-check';
+import { useToast } from '@/components/ui/use-toast';
+import { ToastAction } from '@/components/ui/toast';
 import {
   Copy,
   Check,
@@ -98,6 +101,29 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   const [minimized, setMinimized] = useState(false);
   const [clearing, setClearing] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const { checkForUpdate, updateAvailable } = useUpdateCheck();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    checkForUpdate();
+  }, [checkForUpdate]);
+
+  useEffect(() => {
+    if (updateAvailable) {
+      toast({
+        title: 'Update available',
+        description: 'Refresh the page to load the latest version.',
+        action: (
+          <ToastAction
+            altText="Refresh"
+            onClick={() => window.location.reload()}
+          >
+            Refresh
+          </ToastAction>
+        ),
+      });
+    }
+  }, [updateAvailable, toast]);
   
   if (minimized) {
     return (
