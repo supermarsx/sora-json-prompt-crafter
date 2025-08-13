@@ -58,6 +58,7 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
           overflowX: 'hidden',
           whiteSpace: 'pre-wrap',
           wordBreak: 'break-word',
+          wordWrap: 'break-word',
         }}
       >
         {value}
@@ -66,7 +67,10 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
   );
 
   return (
-    <div className="h-full overflow-y-auto overflow-x-hidden" ref={containerRef}>
+    <div
+      className="h-full overflow-y-auto overflow-x-hidden"
+      ref={containerRef}
+    >
       <pre className="p-6 text-sm font-mono whitespace-pre-wrap break-words leading-relaxed">
         {diffParts
           ? diffParts.map((part, idx) =>
