@@ -33,6 +33,17 @@ const SUPPORTED_LOCALES = [
   'zh-CN',
 ] as const;
 
+/**
+ * Normalize a raw locale string to one of the application's supported locales.
+ *
+ * The comparison is case-insensitive and attempts several fallbacks:
+ * 1. direct match against `SUPPORTED_LOCALES`
+ * 2. canonical match of language and upper-cased region (e.g. `pt` → `pt-PT`)
+ * 3. partial match for the language prefix (defaults to `en-US` for English)
+ *
+ * @param lng - The locale string to normalize
+ * @returns A supported locale, defaulting to `en-US` when no match is found
+ */
 function normalizeLocale(lng: string): string {
   const lower = lng.toLowerCase();
   const exact = SUPPORTED_LOCALES.find(
@@ -55,6 +66,15 @@ function normalizeLocale(lng: string): string {
   return 'en-US';
 }
 
+/**
+ * React hook that manages the application's active locale.
+ *
+ * The initial locale is determined from `navigator.language`, normalized, and
+ * stored in `localStorage`. Subsequent updates persist to storage and trigger
+ * the i18n layer to switch languages.
+ *
+ * @returns A tuple containing the current locale and a setter function.
+ */
 export function useLocale() {
   const initialLocale = normalizeLocale(
     typeof navigator !== 'undefined' && navigator.language
