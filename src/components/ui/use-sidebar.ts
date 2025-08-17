@@ -14,6 +14,14 @@ export const SidebarContext = React.createContext<SidebarContextValue | null>(
   null,
 );
 
+/**
+ * Hook to access the current sidebar context.
+ * Depends on {@link SidebarContext} provided by a parent `SidebarProvider`.
+ * Returns an object with `state`, `open`, `setOpen`, `openMobile`, `setOpenMobile`,
+ * `isMobile`, and `toggleSidebar`.
+ *
+ * @returns {SidebarContextValue} Sidebar state and controls.
+ */
 export function useSidebar() {
   const context = React.useContext(SidebarContext);
   if (!context) {
