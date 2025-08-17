@@ -3,6 +3,7 @@ import { toast } from '@/components/ui/sonner-toast';
 import { useTranslation } from 'react-i18next';
 import { DISABLE_STATS } from '@/lib/config';
 import { safeGet, safeSet } from '@/lib/storage';
+import { GITHUB_STATS, GITHUB_STATS_TIMESTAMP } from '@/lib/storage-keys';
 
 export interface GithubStats {
   stars: number;
@@ -28,8 +29,8 @@ export function useGithubStats() {
 
   useEffect(() => {
     if (DISABLE_STATS) return;
-    const cached = safeGet<GithubStats>('githubStats', null, true);
-    const cachedTs = safeGet<number>('githubStatsTimestamp', 0, true);
+    const cached = safeGet<GithubStats>(GITHUB_STATS, null, true);
+    const cachedTs = safeGet<number>(GITHUB_STATS_TIMESTAMP, 0, true);
     if (
       cached &&
       typeof cachedTs === 'number' &&
@@ -63,8 +64,8 @@ export function useGithubStats() {
             issues: issuesData.total_count,
           };
           setStats(data);
-          safeSet('githubStats', data, true);
-          safeSet('githubStatsTimestamp', Date.now(), true);
+          safeSet(GITHUB_STATS, data, true);
+          safeSet(GITHUB_STATS_TIMESTAMP, Date.now(), true);
         }
       } catch (err) {
         if ((err as Error).name !== 'AbortError') {

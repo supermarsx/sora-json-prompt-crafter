@@ -6,7 +6,12 @@ import {
   LOGO_ENABLED,
   ACTION_LABELS_ENABLED,
   TRACKING_ENABLED,
+  TRACKING_HISTORY,
   LOCALE,
+  CURRENT_JSON,
+  JSON_HISTORY,
+  GITHUB_STATS,
+  GITHUB_STATS_TIMESTAMP,
 } from '../storage-keys';
 
 describe('constants', () => {
@@ -22,6 +27,11 @@ describe('constants', () => {
     expect(LOGO_ENABLED).toBe('logoEnabled');
     expect(ACTION_LABELS_ENABLED).toBe('actionLabelsEnabled');
     expect(TRACKING_ENABLED).toBe('trackingEnabled');
+    expect(TRACKING_HISTORY).toBe('trackingHistory');
     expect(LOCALE).toBe('locale');
+    expect(CURRENT_JSON).toBe('currentJson');
+    expect(JSON_HISTORY).toBe('jsonHistory');
+    expect(GITHUB_STATS).toBe('githubStats');
+    expect(GITHUB_STATS_TIMESTAMP).toBe('githubStatsTimestamp');
   });
 });

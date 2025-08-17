@@ -6,3 +6,7 @@ export const ACTION_LABELS_ENABLED = 'actionLabelsEnabled';
 export const TRACKING_ENABLED = 'trackingEnabled';
 export const TRACKING_HISTORY = 'trackingHistory';
 export const LOCALE = 'locale';
+export const CURRENT_JSON = 'currentJson';
+export const JSON_HISTORY = 'jsonHistory';
+export const GITHUB_STATS = 'githubStats';
+export const GITHUB_STATS_TIMESTAMP = 'githubStatsTimestamp';

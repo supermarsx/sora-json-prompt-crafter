@@ -1,5 +1,6 @@
 import { render, waitFor } from '@testing-library/react';
 import Dashboard from '../Dashboard';
+import { GITHUB_STATS, GITHUB_STATS_TIMESTAMP } from '@/lib/storage-keys';
 
 jest.mock('../HistoryPanel', () => ({ __esModule: true, default: () => null }));
 jest.mock('../ControlPanel', () => ({
@@ -60,10 +61,10 @@ afterEach(() => {
 
 test('uses cached stats when fresh', async () => {
   localStorage.setItem(
-    'githubStats',
+    GITHUB_STATS,
     JSON.stringify({ stars: 1, forks: 2, issues: 3 }),
   );
-  localStorage.setItem('githubStatsTimestamp', JSON.stringify(Date.now()));
+  localStorage.setItem(GITHUB_STATS_TIMESTAMP, JSON.stringify(Date.now()));
   const mockFetch = jest.fn();
   global.fetch = mockFetch as unknown as typeof fetch;
   const { findByText } = render(<Dashboard />);
@@ -75,11 +76,11 @@ test('uses cached stats when fresh', async () => {
 
 test('fetches stats when cache expired', async () => {
   localStorage.setItem(
-    'githubStats',
+    GITHUB_STATS,
     JSON.stringify({ stars: 1, forks: 2, issues: 3 }),
   );
   localStorage.setItem(
-    'githubStatsTimestamp',
+    GITHUB_STATS_TIMESTAMP,
     JSON.stringify(Date.now() - 7200000),
   );
   global.fetch = jest
@@ -97,7 +98,7 @@ test('fetches stats when cache expired', async () => {
   expect(await findByText('Fork 5')).toBeTruthy();
   expect(await findByText('Issues 6')).toBeTruthy();
   await waitFor(() => {
-    const cached = JSON.parse(localStorage.getItem('githubStats') || '{}');
+    const cached = JSON.parse(localStorage.getItem(GITHUB_STATS) || '{}');
     expect(cached).toEqual({ stars: 4, forks: 5, issues: 6 });
   });
 });

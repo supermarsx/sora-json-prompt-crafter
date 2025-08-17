@@ -12,6 +12,7 @@ import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import type { SoraOptions } from '@/lib/soraOptions';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { useSoraUserscript } from '@/hooks/use-sora-userscript';
+import { CURRENT_JSON, JSON_HISTORY } from '@/lib/storage-keys';
 
 let copyFn: ((json: string) => void) | null = null;
 let updateFn: ((opts: Partial<SoraOptions>) => void) | null = null;
@@ -277,7 +278,7 @@ describe('Dashboard interactions', () => {
     (trackEvent as jest.Mock).mockClear();
 
     await waitFor(() => {
-      const json = JSON.parse(localStorage.getItem('currentJson') || '{}');
+      const json = JSON.parse(localStorage.getItem(CURRENT_JSON) || '{}');
       expect(json.prompt).toBe('foo');
       expect(json.negative_prompt).toBe('bar');
     });
@@ -289,7 +290,7 @@ describe('Dashboard interactions', () => {
     });
 
     await waitFor(() => {
-      const history = JSON.parse(localStorage.getItem('jsonHistory') || '[]');
+      const history = JSON.parse(localStorage.getItem(JSON_HISTORY) || '[]');
       expect(history).toHaveLength(1);
       expect(history[0].json).toContain('foo');
     });
@@ -304,7 +305,7 @@ describe('Dashboard interactions', () => {
     });
 
     await waitFor(() => {
-      const json = JSON.parse(localStorage.getItem('currentJson') || '{}');
+      const json = JSON.parse(localStorage.getItem(CURRENT_JSON) || '{}');
       expect(json.prompt).toBe('foo');
     });
 
@@ -314,7 +315,7 @@ describe('Dashboard interactions', () => {
     });
 
     await waitFor(() => {
-      const json = JSON.parse(localStorage.getItem('currentJson') || '{}');
+      const json = JSON.parse(localStorage.getItem(CURRENT_JSON) || '{}');
       expect(json.prompt).toBe(DEFAULT_OPTIONS.prompt);
     });
 
@@ -324,7 +325,7 @@ describe('Dashboard interactions', () => {
     });
 
     await waitFor(() => {
-      const json = JSON.parse(localStorage.getItem('currentJson') || '{}');
+      const json = JSON.parse(localStorage.getItem(CURRENT_JSON) || '{}');
       expect(json.prompt).toBe('foo');
     });
   });

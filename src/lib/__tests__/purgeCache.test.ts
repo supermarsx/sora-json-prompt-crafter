@@ -1,4 +1,11 @@
 import { purgeCache } from '../purgeCache';
+import {
+  CURRENT_JSON,
+  JSON_HISTORY,
+  GITHUB_STATS,
+  GITHUB_STATS_TIMESTAMP,
+  TRACKING_HISTORY,
+} from '../storage-keys';
 
 describe('purgeCache', () => {
   beforeEach(() => {
@@ -18,11 +25,11 @@ describe('purgeCache', () => {
         ]),
       ),
     };
-    localStorage.setItem('currentJson', 'v');
-    localStorage.setItem('jsonHistory', 'v');
-    localStorage.setItem('githubStats', 'v');
-    localStorage.setItem('githubStatsTimestamp', 'v');
-    localStorage.setItem('trackingHistory', 'v');
+    localStorage.setItem(CURRENT_JSON, 'v');
+    localStorage.setItem(JSON_HISTORY, 'v');
+    localStorage.setItem(GITHUB_STATS, 'v');
+    localStorage.setItem(GITHUB_STATS_TIMESTAMP, 'v');
+    localStorage.setItem(TRACKING_HISTORY, 'v');
   });
 
   afterEach(() => {
@@ -34,7 +41,7 @@ describe('purgeCache', () => {
     await purgeCache();
     expect(caches.keys).toHaveBeenCalled();
     expect(caches.delete).toHaveBeenCalledTimes(2);
-    expect(localStorage.getItem('currentJson')).toBeNull();
+    expect(localStorage.getItem(CURRENT_JSON)).toBeNull();
     expect(navigator.serviceWorker.getRegistrations).toHaveBeenCalled();
     expect(caches.delete).toHaveBeenCalledTimes(2);
   });
