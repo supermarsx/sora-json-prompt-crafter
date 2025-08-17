@@ -20,6 +20,19 @@ export interface CustomPresetData {
   dndPresets?: Partial<typeof dndPresets>;
 }
 
+/**
+ * Merge user-supplied preset definitions into the built-in preset collections.
+ *
+ * @param data - A `CustomPresetData` object or JSON string representing custom
+ *   preset lists.
+ *
+ * @remarks
+ * - When a string is provided, it is parsed as JSON. Invalid JSON will cause a
+ *   {@link SyntaxError} to be thrown.
+ * - Each preset collection is validated to be an array of strings before
+ *   merging. Non-array values are ignored.
+ * - Duplicate entries are removed so that presets remain unique.
+ */
 export function importCustomPresets(data: string | CustomPresetData): void {
   const obj: CustomPresetData =
     typeof data === 'string' ? JSON.parse(data) : data;
@@ -95,6 +108,18 @@ export function importCustomPresets(data: string | CustomPresetData): void {
   }
 }
 
+/**
+ * Fetch custom preset definitions from a remote URL and import them.
+ *
+ * @param url - Endpoint returning JSON matching {@link CustomPresetData}.
+ *
+ * @throws {Error} If the network request fails or the HTTP status is not OK.
+ * @throws {Error} If the response body is not valid JSON.
+ * @throws {Error} If {@link importCustomPresets} throws while merging presets.
+ *
+ * @remarks The function validates the network response, parses the JSON body,
+ * and delegates merging to {@link importCustomPresets}.
+ */
 export async function loadCustomPresetsFromUrl(url: string) {
   let res: Response;
   try {
