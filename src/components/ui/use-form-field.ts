@@ -20,6 +20,12 @@ export const FormItemContext = React.createContext<FormItemContextValue>(
   {} as FormItemContextValue,
 );
 
+/**
+ * Reads the surrounding form and item contexts to derive field metadata.
+ * It uses `useFormContext` from `react-hook-form` to retrieve the current
+ * field state and generates associated element IDs for accessibility.
+ * The returned object contains these IDs alongside the field's state.
+ */
 export function useFormField() {
   const fieldContext = React.useContext(FormFieldContext);
   const itemContext = React.useContext(FormItemContext);
