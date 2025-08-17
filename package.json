@@ -4,9 +4,9 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "npm run copy-locales && vite",
-    "build": "npm run copy-locales && vite build",
-    "build:dev": "npm run copy-locales && vite build --mode development",
+    "dev": "npm run copy-locales && npm run generate-sw-assets && vite",
+    "build": "npm run copy-locales && npm run generate-sw-assets && vite build",
+    "build:dev": "npm run copy-locales && npm run generate-sw-assets && vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "jest",
@@ -14,7 +14,8 @@
     "typecheck": "tsc --noEmit",
     "format": "prettier --write .",
     "accessibility": "node scripts/accessibilityCheck.js",
-    "copy-locales": "node scripts/copyTranslations.js"
+    "copy-locales": "node scripts/copyTranslations.js",
+    "generate-sw-assets": "node scripts/generate-sw-assets.js"
   },
   "overrides": {
     "test-exclude": "^7.0.1"
