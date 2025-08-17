@@ -1,5 +1,12 @@
 type Env = Record<string, string | undefined> | undefined;
 
+/**
+ * Retrieves an environment variable by key.
+ * Checks both `import.meta.env` and `process.env` to support browser and Node contexts.
+ *
+ * @param {string} key - Environment variable name.
+ * @returns {string | undefined} Value of the environment variable, if defined.
+ */
 function getEnvVar(key: string): string | undefined {
   const metaEnv = (globalThis as { import?: { meta?: { env?: Env } } }).import
     ?.meta?.env as Env;
