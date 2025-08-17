@@ -1,3 +1,12 @@
+/**
+ * Safely retrieves a value from `localStorage`.
+ *
+ * @template T
+ * @param {string} key - Storage key to read.
+ * @param {T | null} [defaultValue=null] - Value returned when the key is missing or the read fails.
+ * @param {boolean} [parse=false] - When true, parse the stored JSON into type `T`.
+ * @returns {T | string | null} The stored value, the parsed object, or `defaultValue` on failure.
+ */
 export function safeGet<T = string>(
   key: string,
   defaultValue: T | null = null,
@@ -14,6 +23,14 @@ export function safeGet<T = string>(
   }
 }
 
+/**
+ * Safely stores a value in `localStorage`.
+ *
+ * @param {string} key - Storage key to set.
+ * @param {unknown} value - The value to store.
+ * @param {boolean} [stringify=false] - Whether to JSON stringify `value` before storing.
+ * @returns {boolean} `true` if the value was stored, otherwise `false`.
+ */
 export function safeSet(
   key: string,
   value: unknown,
@@ -35,6 +52,12 @@ export function safeSet(
   }
 }
 
+/**
+ * Safely removes a value from `localStorage`.
+ *
+ * @param {string} key - Storage key to remove.
+ * @returns {boolean} `true` if the removal succeeded, otherwise `false`.
+ */
 export function safeRemove(key: string): boolean {
   try {
     localStorage.removeItem(key);
@@ -45,6 +68,14 @@ export function safeRemove(key: string): boolean {
   }
 }
 
+/**
+ * Retrieves a JSON-parsed value from `localStorage`.
+ *
+ * @template T
+ * @param {string} key - Storage key to read.
+ * @param {T | null} [defaultValue=null] - Value returned when the key is missing or parsing fails.
+ * @returns {T | null} Parsed value or `defaultValue` on failure.
+ */
 export function getJson<T>(key: string, defaultValue: T | null = null): T | null {
   try {
     const value = localStorage.getItem(key);
@@ -56,6 +87,14 @@ export function getJson<T>(key: string, defaultValue: T | null = null): T | null
   }
 }
 
+/**
+ * Stores a value in `localStorage` after JSON stringifying it.
+ *
+ * @template T
+ * @param {string} key - Storage key to set.
+ * @param {T} value - Value to stringify and store.
+ * @returns {boolean} `true` if the value was stored, otherwise `false`.
+ */
 export function setJson<T>(key: string, value: T): boolean {
   try {
     localStorage.setItem(key, JSON.stringify(value));
