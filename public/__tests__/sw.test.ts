@@ -1,6 +1,7 @@
 import { jest } from '@jest/globals';
 import fs from 'fs';
 import path from 'path';
+import { PWA_CACHE } from '@/lib/cache-name';
 
 const disclaimerDir = path.resolve(__dirname, '../disclaimers');
 function getLocalizedDisclaimers(): string[] {
@@ -93,9 +94,7 @@ describe('service worker', () => {
     };
     await listeners.install(installEvent);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect((global as any).caches.open).toHaveBeenCalledWith(
-      'sora-prompt-cache-v2',
-    );
+    expect((global as any).caches.open).toHaveBeenCalledWith(PWA_CACHE);
     expect(cacheAddAll).toHaveBeenCalledWith(
       expect.arrayContaining([
         ...staticAssets,
@@ -166,10 +165,7 @@ describe('service worker', () => {
 
   test('deletes outdated caches on activate', async () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (global as any).caches.keys.mockResolvedValue([
-      'old-cache',
-      'sora-prompt-cache-v2',
-    ]);
+    (global as any).caches.keys.mockResolvedValue(['old-cache', PWA_CACHE]);
     await import('../sw.js');
     const waitUntil = jest.fn();
     const activateEvent = { waitUntil };

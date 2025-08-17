@@ -1,5 +1,6 @@
 import i18n, { type Resource } from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import { PWA_CACHE } from '@/lib/cache-name';
 declare const __BASE_URL__: string;
 
 // Initialize i18next without preloaded resources.
@@ -23,7 +24,7 @@ export async function changeLanguageAsync(lng: string) {
           throw new Error(`Failed to fetch ${url}: ${response.status}`);
         }
         if (typeof caches !== 'undefined') {
-          const cache = await caches.open('sora-prompt-cache-v2');
+          const cache = await caches.open(PWA_CACHE);
           cache.put(url, response.clone());
         }
       }
