@@ -3,6 +3,20 @@ import type { SoraOptions } from './soraOptions';
 import { OPTION_FLAG_MAP } from './optionFlagMap';
 import { isValidOptions } from './validateOptions';
 
+/**
+ * Parses a JSON string of saved Sora options into a typed object.
+ *
+ * The raw JSON is parsed, then sanitized by removing prototype-related keys
+ * (`__proto__`, `constructor`, `prototype`) to guard against prototype
+ * pollution. The resulting plain object is validated with `isValidOptions` and
+ * normalized: composition rule identifiers have underscores replaced with
+ * spaces and option flags are inferred from present keys. The sanitized input
+ * is merged with `DEFAULT_OPTIONS` and the derived flags to produce the final
+ * options.
+ *
+ * @param json - JSON string previously produced by the application.
+ * @returns A complete `SoraOptions` object when valid, otherwise `null`.
+ */
 export function loadOptionsFromJson(json: string): SoraOptions | null {
   try {
     const obj: Record<string, unknown> = JSON.parse(json);
