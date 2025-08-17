@@ -1,3 +1,9 @@
+/**
+ * Returns the provided date formatted as `YYYYMMDD-HHMMSS`.
+ *
+ * @param date - The date to format. Defaults to the current date and time.
+ * @returns The formatted date string.
+ */
 export function formatDateTime(date: Date = new Date()): string {
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
