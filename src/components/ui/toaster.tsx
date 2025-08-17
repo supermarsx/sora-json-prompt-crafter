@@ -8,6 +8,13 @@ import {
   ToastViewport,
 } from '@/components/ui/toast';
 
+/**
+ * Renders all queued toast notifications.
+ *
+ * Uses the `useToast` hook to retrieve pending toasts, wraps them in a
+ * `ToastProvider` for context, and includes a `ToastViewport` to manage
+ * their placement on the screen.
+ */
 export function Toaster() {
   const { toasts } = useToast();
 
