@@ -2,6 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { useTracking } from '@/hooks/use-tracking';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 
+/**
+ * Displays a fixed progress bar indicating page scroll position and fires a
+ * `ScrollBottom` analytics event once the bottom of the page is reached.
+ *
+ * @remarks
+ * Internal state:
+ * - `scrollProgress` stores the current scroll percentage.
+ * - `reported` tracks if the analytics event has already been sent.
+ *
+ * @returns JSX element rendering the progress bar.
+ */
 export const ProgressBar: React.FC = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [trackingEnabled] = useTracking();
