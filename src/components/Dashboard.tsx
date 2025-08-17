@@ -32,7 +32,7 @@ import { useActionLabels } from '@/hooks/use-action-labels';
 import { useSoraUserscript } from '@/hooks/use-sora-userscript';
 import { useActionHistory } from '@/hooks/use-action-history';
 import { useUndoRedo } from '@/hooks/use-undo-redo';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { generateJson } from '@/lib/generateJson';
 import type { SoraOptions } from '@/lib/soraOptions';
@@ -103,12 +103,15 @@ const Dashboard = () => {
   const { copy } = useClipboard();
 
   useEffect(() => {
-    const times = [3, 5, 10, 30, 60];
-    const timers = times.map((t) =>
-      setTimeout(
-        () => trackEvent(trackingEnabled, `stay_${t}min`),
-        t * 60 * 1000,
-      ),
+    const times: [number, AnalyticsEvent][] = [
+      [3, AnalyticsEvent.Stay3Min],
+      [5, AnalyticsEvent.Stay5Min],
+      [10, AnalyticsEvent.Stay10Min],
+      [30, AnalyticsEvent.Stay30Min],
+      [60, AnalyticsEvent.Stay60Min],
+    ];
+    const timers = times.map(([t, event]) =>
+      setTimeout(() => trackEvent(trackingEnabled, event), t * 60 * 1000),
     );
     return () => {
       timers.forEach(clearTimeout);
@@ -154,7 +157,7 @@ const Dashboard = () => {
       const sections = Object.keys(options).filter(
         (key) => key.startsWith('use_') && opts[key],
       );
-      trackEvent(trackingEnabled, 'copy_json', {
+      trackEvent(trackingEnabled, AnalyticsEvent.CopyJson, {
         sections: sections.join(','),
       });
       setTimeout(() => setCopied(false), 2000);
@@ -164,12 +167,12 @@ const Dashboard = () => {
   const clearJson = () => {
     setJsonString('{}');
     toast.success(t('jsonCleared'));
-    trackEvent(trackingEnabled, 'clear_json');
+    trackEvent(trackingEnabled, AnalyticsEvent.ClearJson);
   };
 
   const shareJson = () => {
     setShowShareModal(true);
-    trackEvent(trackingEnabled, 'share_button');
+    trackEvent(trackingEnabled, AnalyticsEvent.ShareButton);
   };
 
   const sendToSora = () => {
@@ -197,7 +200,7 @@ const Dashboard = () => {
       window.addEventListener('message', ackHandler);
     };
     setTimeout(start, 500);
-    trackEvent(trackingEnabled, 'send_to_sora');
+    trackEvent(trackingEnabled, AnalyticsEvent.SendToSora);
   };
 
   const importJson = (json: string) => {
@@ -207,7 +210,7 @@ const Dashboard = () => {
       setOptions((prev) => ({ ...prev, ...obj }));
       setShowImportModal(false);
       toast.success(t('jsonImported'));
-      trackEvent(trackingEnabled, 'import_button');
+      trackEvent(trackingEnabled, AnalyticsEvent.ImportButton);
     } catch {
       toast.error(t('invalidJson'));
     }
@@ -217,7 +220,7 @@ const Dashboard = () => {
     // Reset to default options
     reset(DEFAULT_OPTIONS);
     toast.success(t('settingsReset'));
-    trackEvent(trackingEnabled, 'reset_button');
+    trackEvent(trackingEnabled, AnalyticsEvent.ResetButton);
   };
 
   const regenerateJson = () => {
@@ -226,7 +229,7 @@ const Dashboard = () => {
       seed: Math.floor(Math.random() * 10000),
     }));
     toast.success(t('jsonRegenerated'));
-    trackEvent(trackingEnabled, 'regenerate_button');
+    trackEvent(trackingEnabled, AnalyticsEvent.RegenerateButton);
   };
 
   const randomizeJson = () => {
@@ -243,7 +246,7 @@ const Dashboard = () => {
 
     setOptions((prev) => ({ ...prev, ...randomOptions }));
     toast.success(t('optionsRandomized'));
-    trackEvent(trackingEnabled, 'randomize_button');
+    trackEvent(trackingEnabled, AnalyticsEvent.RandomizeButton);
   };
 
   const updateOptions = (updates: Partial<SoraOptions>) => {
@@ -256,7 +259,7 @@ const Dashboard = () => {
       const next = { ...prev, ...updates };
 
       if (changedKeys.length > 0) {
-        trackEvent(trackingEnabled, 'options_change', {
+        trackEvent(trackingEnabled, AnalyticsEvent.OptionsChange, {
           keys: changedKeys.join(','),
         });
       }
@@ -288,7 +291,7 @@ const Dashboard = () => {
         return prev; // Return previous state to avoid unsafe modification
       }
       current[lastKey] = value;
-      trackEvent(trackingEnabled, 'input_change');
+      trackEvent(trackingEnabled, AnalyticsEvent.InputChange);
       return newOptions;
     });
   };
@@ -302,7 +305,7 @@ const Dashboard = () => {
   const copyHistoryEntry = async (json: string) => {
     const success = await copy(json, t('jsonCopied'));
     if (success) {
-      trackEvent(trackingEnabled, 'history_copy');
+      trackEvent(trackingEnabled, AnalyticsEvent.HistoryCopy);
     }
   };
 
@@ -338,8 +341,8 @@ const Dashboard = () => {
       document
         .getElementById('generated-json')
         ?.scrollIntoView({ behavior: 'smooth' });
-      trackEvent(trackingEnabled, 'selected_json_prompt');
-      trackEvent(trackingEnabled, 'history_edit');
+      trackEvent(trackingEnabled, AnalyticsEvent.SelectedJsonPrompt);
+      trackEvent(trackingEnabled, AnalyticsEvent.HistoryEdit);
     } catch {
       toast.error(t('invalidJson'));
     }
@@ -352,7 +355,7 @@ const Dashboard = () => {
       json: j,
     }));
     setHistory((prev) => [...entries, ...prev].slice(0, 100));
-    trackEvent(trackingEnabled, 'history_import', { type: 'bulk' });
+    trackEvent(trackingEnabled, AnalyticsEvent.HistoryImport, { type: 'bulk' });
   };
 
   const scrollToJson = () => {
@@ -386,7 +389,9 @@ const Dashboard = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-1"
-                    onClick={() => trackEvent(trackingEnabled, 'click_sponsor')}
+                    onClick={() =>
+                      trackEvent(trackingEnabled, AnalyticsEvent.ClickSponsor)
+                    }
                   >
                     <Heart className="w-4 h-4" /> {t('sponsor')}
                   </a>
@@ -397,7 +402,9 @@ const Dashboard = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-1"
-                    onClick={() => trackEvent(trackingEnabled, 'see_github')}
+                    onClick={() =>
+                      trackEvent(trackingEnabled, AnalyticsEvent.SeeGithub)
+                    }
                   >
                     <Github className="w-4 h-4" /> {t('github')}
                   </a>
@@ -408,7 +415,9 @@ const Dashboard = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-1"
-                    onClick={() => trackEvent(trackingEnabled, 'star_github')}
+                    onClick={() =>
+                      trackEvent(trackingEnabled, AnalyticsEvent.StarGithub)
+                    }
                   >
                     <Star className="w-4 h-4" />
                     {t('star')}
@@ -421,7 +430,9 @@ const Dashboard = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-1"
-                    onClick={() => trackEvent(trackingEnabled, 'fork_github')}
+                    onClick={() =>
+                      trackEvent(trackingEnabled, AnalyticsEvent.ForkGithub)
+                    }
                   >
                     <GitFork className="w-4 h-4" />
                     {t('fork')}
@@ -434,7 +445,9 @@ const Dashboard = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-1"
-                    onClick={() => trackEvent(trackingEnabled, 'open_issues')}
+                    onClick={() =>
+                      trackEvent(trackingEnabled, AnalyticsEvent.OpenIssues)
+                    }
                   >
                     <Bug className="w-4 h-4" />
                     {t('issues')}
@@ -448,7 +461,7 @@ const Dashboard = () => {
                     rel="noopener noreferrer"
                     className="flex items-center gap-1"
                     onClick={() =>
-                      trackEvent(trackingEnabled, 'view_on_lovable')
+                      trackEvent(trackingEnabled, AnalyticsEvent.ViewOnLovable)
                     }
                   >
                     <Heart className="w-4 h-4" />
@@ -462,7 +475,10 @@ const Dashboard = () => {
                       className="flex items-center gap-1"
                       rel="noopener noreferrer"
                       onClick={() =>
-                        trackEvent(trackingEnabled, 'install_userscript')
+                        trackEvent(
+                          trackingEnabled,
+                          AnalyticsEvent.InstallUserscript,
+                        )
                       }
                     >
                       <Download className="w-4 h-4" />
@@ -484,7 +500,10 @@ const Dashboard = () => {
                         className="flex items-center gap-1"
                         rel="noopener noreferrer"
                         onClick={() =>
-                          trackEvent(trackingEnabled, 'update_userscript')
+                          trackEvent(
+                            trackingEnabled,
+                            AnalyticsEvent.UpdateUserscript,
+                          )
                         }
                       >
                         <RefreshCw className="w-4 h-4" />
@@ -499,7 +518,7 @@ const Dashboard = () => {
               <button
                 onClick={() => {
                   setShowDisclaimer(true);
-                  trackEvent(trackingEnabled, 'open_disclaimer');
+                  trackEvent(trackingEnabled, AnalyticsEvent.OpenDisclaimer);
                 }}
                 className="underline"
               >
@@ -512,7 +531,7 @@ const Dashboard = () => {
             size="icon"
             onClick={() => {
               setDarkMode(!darkMode);
-              trackEvent(trackingEnabled, 'dark_mode_toggle', {
+              trackEvent(trackingEnabled, AnalyticsEvent.DarkModeToggle, {
                 enabled: !darkMode,
               });
             }}
@@ -625,7 +644,7 @@ const Dashboard = () => {
       <Footer
         onShowDisclaimer={() => {
           setShowDisclaimer(true);
-          trackEvent(trackingEnabled, 'open_disclaimer');
+          trackEvent(trackingEnabled, AnalyticsEvent.OpenDisclaimer);
         }}
       />
       <ProgressBar />

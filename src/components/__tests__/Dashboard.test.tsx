@@ -8,7 +8,7 @@ import {
 } from '@testing-library/react';
 import Dashboard from '../Dashboard';
 import { toast } from '@/components/ui/sonner-toast';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import type { SoraOptions } from '@/lib/soraOptions';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { useSoraUserscript } from '@/hooks/use-sora-userscript';
@@ -84,10 +84,10 @@ jest.mock('@/hooks/use-sora-userscript', () => ({
   __esModule: true,
   useSoraUserscript: jest.fn(() => [true, '1.0'] as const),
 }));
-jest.mock('@/lib/analytics', () => ({
-  __esModule: true,
-  trackEvent: jest.fn(),
-}));
+jest.mock('@/lib/analytics', () => {
+  const actual = jest.requireActual('@/lib/analytics');
+  return { __esModule: true, ...actual, trackEvent: jest.fn() };
+});
 jest.mock('@/components/ui/sonner-toast', () => ({
   __esModule: true,
   toast: { success: jest.fn(), error: jest.fn() },
@@ -234,7 +234,7 @@ describe('copyHistoryEntry', () => {
     expect(toast.success).toHaveBeenCalledWith(
       'Sora JSON copied to clipboard!',
     );
-    expect(trackEvent).toHaveBeenCalledWith(true, 'history_copy');
+    expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.HistoryCopy);
   });
 });
 
@@ -444,6 +444,6 @@ describe('userscript version', () => {
     const btn = screen.getByRole('link', { name: /update userscript/i });
     expect(btn).toBeTruthy();
     fireEvent.click(btn);
-    expect(trackEvent).toHaveBeenCalledWith(true, 'update_userscript');
+    expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.UpdateUserscript);
   });
 });

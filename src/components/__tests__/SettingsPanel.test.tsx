@@ -2,10 +2,13 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import SettingsPanel from '../SettingsPanel';
 import { purgeCache } from '@/lib/purgeCache';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 
 jest.mock('@/lib/purgeCache', () => ({ purgeCache: jest.fn() }));
-jest.mock('@/lib/analytics', () => ({ trackEvent: jest.fn() }));
+jest.mock('@/lib/analytics', () => {
+  const actual = jest.requireActual('@/lib/analytics');
+  return { ...actual, trackEvent: jest.fn() };
+});
 
 jest.mock('@/components/ui/dialog', () => ({
   __esModule: true,
@@ -73,6 +76,9 @@ describe('SettingsPanel', () => {
     renderPanel();
     fireEvent.click(screen.getByText(/purge cache/i));
     expect(purgeCache).toHaveBeenCalled();
-    expect(trackEvent).toHaveBeenCalledWith(true, 'purge_cache');
+    expect(trackEvent).toHaveBeenCalledWith(
+      true,
+      AnalyticsEvent.PurgeCache,
+    );
   });
 });

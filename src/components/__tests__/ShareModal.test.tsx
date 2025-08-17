@@ -7,16 +7,16 @@ import {
 } from '@testing-library/react';
 import { ShareModal } from '../ShareModal';
 import i18n from '@/i18n';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { useTracking } from '@/hooks/use-tracking';
 import { toast } from '@/components/ui/sonner-toast';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { serializeOptions } from '@/lib/urlOptions';
 
-jest.mock('@/lib/analytics', () => ({
-  __esModule: true,
-  trackEvent: jest.fn(),
-}));
+jest.mock('@/lib/analytics', () => {
+  const actual = jest.requireActual('@/lib/analytics');
+  return { __esModule: true, ...actual, trackEvent: jest.fn() };
+});
 
 jest.mock('@/hooks/use-tracking', () => ({
   __esModule: true,
@@ -83,7 +83,7 @@ describe('ShareModal', () => {
       '_blank',
       'noopener,width=600,height=400',
     );
-    expect(trackEvent).toHaveBeenCalledWith(true, 'share_facebook');
+    expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.ShareFacebook);
   });
 
   test('shares to Twitter', () => {
@@ -101,7 +101,7 @@ describe('ShareModal', () => {
       '_blank',
       'noopener,width=600,height=400',
     );
-    expect(trackEvent).toHaveBeenCalledWith(true, 'share_twitter');
+    expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.ShareTwitter);
   });
 
   test('shares to WhatsApp', () => {
@@ -113,7 +113,7 @@ describe('ShareModal', () => {
     const url = `https://wa.me/?text=${text}`;
     fireEvent.click(screen.getByRole('button', { name: /whatsapp/i }));
     expect(openSpy).toHaveBeenCalledWith(url, '_blank', 'noopener');
-    expect(trackEvent).toHaveBeenCalledWith(true, 'share_whatsapp');
+    expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.ShareWhatsapp);
   });
 
   test('shares to Telegram', () => {
@@ -125,7 +125,7 @@ describe('ShareModal', () => {
     const url = `https://t.me/share/url?url=${encodeURIComponent(shareUrl.toString())}&text=${text}`;
     fireEvent.click(screen.getByRole('button', { name: /telegram/i }));
     expect(openSpy).toHaveBeenCalledWith(url, '_blank', 'noopener');
-    expect(trackEvent).toHaveBeenCalledWith(true, 'share_telegram');
+    expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.ShareTelegram);
   });
 
   test('copyLink works when clipboard supported', async () => {
@@ -145,7 +145,7 @@ describe('ShareModal', () => {
       expect(writeText).toHaveBeenCalledWith(shareUrl.toString()),
     );
     expect(toast.success).toHaveBeenCalledWith(i18n.t('linkCopied'));
-    expect(trackEvent).toHaveBeenCalledWith(true, 'copy_link');
+    expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.CopyLink);
     await waitFor(() =>
       expect(btn.querySelector('svg')?.getAttribute('class')).toContain(
         'animate-pulse',

@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { ToggleField } from '../ToggleField';
 import type { SoraOptions } from '@/lib/soraOptions';
 import { useResizeTracker } from '@/hooks/use-resize-tracker';
+import { AnalyticsEvent } from '@/lib/analytics';
 
 interface PromptSectionProps {
   options: SoraOptions;
@@ -20,8 +21,12 @@ export const PromptSection: React.FC<PromptSectionProps> = ({
   const { t } = useTranslation();
   const promptRef = React.useRef<HTMLTextAreaElement>(null);
   const negativeRef = React.useRef<HTMLTextAreaElement>(null);
-  useResizeTracker(promptRef, trackingEnabled, 'prompt_resize');
-  useResizeTracker(negativeRef, trackingEnabled, 'negative_prompt_resize');
+  useResizeTracker(promptRef, trackingEnabled, AnalyticsEvent.PromptResize);
+  useResizeTracker(
+    negativeRef,
+    trackingEnabled,
+    AnalyticsEvent.NegativePromptResize,
+  );
   return (
     <div className="space-y-4">
       <div>

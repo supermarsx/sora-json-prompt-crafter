@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { useTracking } from '@/hooks/use-tracking';
 import { useTranslation } from 'react-i18next';
 import {
@@ -63,7 +63,9 @@ const BulkFileImportModal: React.FC<BulkFileImportModalProps> = ({
       if (!jsons.length) throw new Error('invalid');
       onImport(jsons);
       toast.success(t('fileImported'));
-      trackEvent(trackingEnabled, 'history_import', { type: 'bulk_file' });
+      trackEvent(trackingEnabled, AnalyticsEvent.HistoryImport, {
+        type: 'bulk_file',
+      });
       setFile(null);
       onOpenChange(false);
     } catch {

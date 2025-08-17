@@ -1,5 +1,6 @@
 let trackEvent: typeof import('../analytics').trackEvent;
 import { TRACKING_HISTORY } from '../storage-keys';
+import { AnalyticsEvent } from '../analytics';
 
 describe('trackEvent', () => {
   beforeEach(async () => {
@@ -12,7 +13,7 @@ describe('trackEvent', () => {
 
   test('does nothing when tracking disabled', () => {
     const dispatchSpy = jest.spyOn(window, 'dispatchEvent');
-    trackEvent(false, 'test');
+    trackEvent(false, AnalyticsEvent.ScrollBottom);
     expect(localStorage.getItem(TRACKING_HISTORY)).toBeNull();
     expect(dispatchSpy).not.toHaveBeenCalled();
   });
@@ -24,9 +25,9 @@ describe('trackEvent', () => {
         gtag?: jest.Mock;
       }
     ).gtag = jest.fn();
-    trackEvent(true, 'scroll_bottom');
+    trackEvent(true, AnalyticsEvent.ScrollBottom);
     const stored = JSON.parse(localStorage.getItem(TRACKING_HISTORY) || '[]');
-    expect(stored[0].action).toBe('scroll_bottom');
+    expect(stored[0].action).toBe(AnalyticsEvent.ScrollBottom);
     expect(dispatchSpy).toHaveBeenCalled();
   });
 
@@ -39,7 +40,7 @@ describe('trackEvent', () => {
       throw new Error('fail');
     });
 
-    trackEvent(true, 'foo');
+    trackEvent(true, AnalyticsEvent.ScrollBottom);
 
     expect(errorSpy).toHaveBeenCalledWith(
       'Tracking History: There was an error.',
@@ -51,8 +52,8 @@ describe('trackEvent', () => {
   test('does not call gtag when missing', () => {
     const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
 
-    trackEvent(true, 'foo');
-    trackEvent(true, 'bar');
+    trackEvent(true, AnalyticsEvent.ScrollBottom);
+    trackEvent(true, AnalyticsEvent.ScrollBottom);
 
     expect(warnSpy).toHaveBeenCalledWith(
       'Tracking Analytics: gtag function missing.',
@@ -68,7 +69,7 @@ describe('trackEvent', () => {
     (window as unknown as { gtag?: jest.Mock }).gtag = gtagMock;
 
     for (let i = 0; i < 7; i++) {
-      trackEvent(true, `a${i}`);
+      trackEvent(true, AnalyticsEvent.ScrollBottom);
     }
 
     expect(gtagMock).toHaveBeenCalledTimes(6);
@@ -89,11 +90,11 @@ describe('trackEvent', () => {
 
     const gtagMock = jest.fn();
     (window as unknown as { gtag?: jest.Mock }).gtag = gtagMock;
-    trackEvent(true, 'foo');
+    trackEvent(true, AnalyticsEvent.ScrollBottom);
 
     expect(gtagMock).toHaveBeenCalledWith(
       'event',
-      'foo',
+      AnalyticsEvent.ScrollBottom,
       expect.objectContaining({ debug_mode: true }),
     );
     delete process.env.VITE_GTAG_DEBUG;
@@ -111,11 +112,11 @@ describe('trackEvent', () => {
       }
     ).gtag = jest.fn();
 
-    trackEvent(true, 'event');
+    trackEvent(true, AnalyticsEvent.ScrollBottom);
 
     const stored = JSON.parse(localStorage.getItem(TRACKING_HISTORY) || '[]');
     expect(stored.length).toBe(100);
-    expect(stored[0].action).toBe('event');
+    expect(stored[0].action).toBe(AnalyticsEvent.ScrollBottom);
   });
 
   test('logs only five errors then disables gtag', () => {
@@ -126,7 +127,7 @@ describe('trackEvent', () => {
     (window as unknown as { gtag?: jest.Mock }).gtag = gtagMock;
 
     for (let i = 0; i < 10; i++) {
-      trackEvent(true, `a${i}`);
+      trackEvent(true, AnalyticsEvent.ScrollBottom);
     }
 
     const errCount = errorSpy.mock.calls.filter(

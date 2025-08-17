@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { useTracking } from '@/hooks/use-tracking';
 import { useTranslation } from 'react-i18next';
 import {
@@ -50,7 +50,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareCaption)}`;
     window.open(url, '_blank', 'noopener,width=600,height=400');
     toast.success(t('sharedToFacebook'));
-    trackEvent(trackingEnabled, 'share_facebook');
+    trackEvent(trackingEnabled, AnalyticsEvent.ShareFacebook);
   };
 
   const shareToTwitter = () => {
@@ -58,7 +58,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     const url = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(shareUrl)}`;
     window.open(url, '_blank', 'noopener,width=600,height=400');
     toast.success(t('sharedToTwitter'));
-    trackEvent(trackingEnabled, 'share_twitter');
+    trackEvent(trackingEnabled, AnalyticsEvent.ShareTwitter);
   };
 
   const shareToWhatsApp = () => {
@@ -66,7 +66,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     const url = `https://wa.me/?text=${text}`;
     window.open(url, '_blank', 'noopener');
     toast.success(t('sharedToWhatsApp'));
-    trackEvent(trackingEnabled, 'share_whatsapp');
+    trackEvent(trackingEnabled, AnalyticsEvent.ShareWhatsapp);
   };
 
   const shareToTelegram = () => {
@@ -74,7 +74,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     const url = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${text}`;
     window.open(url, '_blank', 'noopener');
     toast.success(t('sharedToTelegram'));
-    trackEvent(trackingEnabled, 'share_telegram');
+    trackEvent(trackingEnabled, AnalyticsEvent.ShareTelegram);
   };
 
   const copyLink = async () => {
@@ -87,7 +87,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
       toast.success(t('linkCopied'));
-      trackEvent(trackingEnabled, 'copy_link');
+      trackEvent(trackingEnabled, AnalyticsEvent.CopyLink);
     } catch (err) {
       toast.error(t('copyFailed'));
     }

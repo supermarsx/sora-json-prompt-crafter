@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { useTracking } from '@/hooks/use-tracking';
 import { useTranslation } from 'react-i18next';
 import {
@@ -86,7 +86,7 @@ const ClipboardImportModal: React.FC<ClipboardImportModalProps> = ({
       onOpenChange(false);
       return;
     }
-    trackEvent(trackingEnabled, 'history_import', { type });
+    trackEvent(trackingEnabled, AnalyticsEvent.HistoryImport, { type });
     setText('');
     onOpenChange(false);
   };

@@ -1,12 +1,12 @@
 import { render } from '@testing-library/react';
 import GeneratedJson from '../GeneratedJson';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { act } from 'react';
 
-jest.mock('@/lib/analytics', () => ({
-  __esModule: true,
-  trackEvent: jest.fn(),
-}));
+jest.mock('@/lib/analytics', () => {
+  const actual = jest.requireActual('@/lib/analytics');
+  return { __esModule: true, ...actual, trackEvent: jest.fn() };
+});
 
 function setup(containerHeight = 100, scrollHeight = 200) {
   const utils = render(<GeneratedJson json='{"a":1}' trackingEnabled={true} />);
@@ -46,7 +46,7 @@ describe('GeneratedJson', () => {
       rerender(<GeneratedJson json='{"a":1,"b":2}' trackingEnabled={true} />);
     });
 
-    expect(trackEvent).toHaveBeenCalledWith(true, 'json_changed');
+    expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.JsonChanged);
     expect(div.scrollTop).toBe(202);
     const added = div.querySelectorAll('span.animate-highlight');
     expect(added.length).toBeGreaterThan(0);

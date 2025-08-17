@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocale } from '@/hooks/use-locale';
 import { Button } from '@/components/ui/button';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { cn } from '@/lib/utils';
 import {
   DropdownMenu,
@@ -131,7 +131,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         <Button
           onClick={() => {
             setMinimized(false);
-            trackEvent(trackingEnabled, 'restore_actions');
+            trackEvent(trackingEnabled, AnalyticsEvent.RestoreActions);
           }}
           variant="default"
           size="sm"
@@ -532,7 +532,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         <Button
           onClick={() => {
             onJumpToJson?.();
-            trackEvent(trackingEnabled, 'jump_to_json');
+            trackEvent(trackingEnabled, AnalyticsEvent.JumpToJson);
           }}
           variant="outline"
           size="sm"
@@ -545,7 +545,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
       <Button
         onClick={() => {
           setMinimized(true);
-          trackEvent(trackingEnabled, 'minimize_actions');
+          trackEvent(trackingEnabled, AnalyticsEvent.MinimizeActions);
         }}
         variant="ghost"
         size="icon"

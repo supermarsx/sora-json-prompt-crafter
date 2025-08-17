@@ -39,7 +39,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import ClipboardImportModal from './ClipboardImportModal';
 import BulkFileImportModal from './BulkFileImportModal';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { formatDateTime } from '@/lib/date';
 import { useTracking } from '@/hooks/use-tracking';
 import { safeGet, safeSet, safeRemove } from '@/lib/storage';
@@ -92,16 +92,16 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
 
   useEffect(() => {
     if (open) {
-      trackEvent(trackingEnabled, 'history_open');
+      trackEvent(trackingEnabled, AnalyticsEvent.HistoryOpen);
     }
   }, [open, trackingEnabled]);
 
   useEffect(() => {
     if (!open) return;
     if (tab === 'prompts') {
-      trackEvent(trackingEnabled, 'history_view_prompts');
+      trackEvent(trackingEnabled, AnalyticsEvent.HistoryViewPrompts);
     } else if (tab === 'actions') {
-      trackEvent(trackingEnabled, 'history_view_actions');
+      trackEvent(trackingEnabled, AnalyticsEvent.HistoryViewActions);
     }
   }, [tab, open, trackingEnabled]);
 
@@ -113,7 +113,9 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
     try {
       await navigator.clipboard.writeText(JSON.stringify(history, null, 2));
       toast.success(t('copiedAllHistory'));
-      trackEvent(trackingEnabled, 'history_export', { type: 'clipboard' });
+      trackEvent(trackingEnabled, AnalyticsEvent.HistoryExport, {
+        type: 'clipboard',
+      });
     } catch {
       /* ignore */
     }
@@ -131,7 +133,9 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
     a.click();
     URL.revokeObjectURL(url);
     toast.success(t('historyDownloaded'));
-    trackEvent(trackingEnabled, 'history_export', { type: 'file' });
+    trackEvent(trackingEnabled, AnalyticsEvent.HistoryExport, {
+      type: 'file',
+    });
   };
 
   const exportActions = () => {
@@ -208,7 +212,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                     <DropdownMenuContent>
                       <DropdownMenuItem
                         onSelect={() => {
-                          trackEvent(trackingEnabled, 'history_import_open', {
+                          trackEvent(trackingEnabled, AnalyticsEvent.HistoryImportOpen, {
                             type: 'clipboard',
                           });
                           setShowClipboard(true);
@@ -218,7 +222,10 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onSelect={() => {
-                          trackEvent(trackingEnabled, 'history_import_open', {
+                          trackEvent(
+                            trackingEnabled,
+                            AnalyticsEvent.HistoryImportOpen,
+                            {
                             type: 'bulk_clipboard',
                           });
                           setShowBulkClipboard(true);
@@ -228,7 +235,10 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onSelect={() => {
-                          trackEvent(trackingEnabled, 'history_import_open', {
+                          trackEvent(
+                            trackingEnabled,
+                            AnalyticsEvent.HistoryImportOpen,
+                            {
                             type: 'bulk_file',
                           });
                           setShowBulkFile(true);
@@ -252,7 +262,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                     <DropdownMenuContent>
                       <DropdownMenuItem
                         onSelect={() => {
-                          trackEvent(trackingEnabled, 'history_export_click', {
+                          trackEvent(trackingEnabled, AnalyticsEvent.HistoryExportClick, {
                             type: 'clipboard',
                           });
                           exportClipboard();
@@ -262,7 +272,10 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onSelect={() => {
-                          trackEvent(trackingEnabled, 'history_export_click', {
+                          trackEvent(
+                            trackingEnabled,
+                            AnalyticsEvent.HistoryExportClick,
+                            {
                             type: 'file',
                           });
                           exportFile();
@@ -277,7 +290,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                   variant="destructive"
                   size="sm"
                   onClick={() => {
-                    trackEvent(trackingEnabled, 'history_clear_click');
+                    trackEvent(trackingEnabled, AnalyticsEvent.HistoryClearClick);
                     setConfirmClear(true);
                   }}
                   disabled={noHistory}
@@ -397,7 +410,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
             <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
-                trackEvent(trackingEnabled, 'history_clear_confirm');
+                trackEvent(trackingEnabled, AnalyticsEvent.HistoryClearConfirm);
                 onClear();
                 setConfirmClear(false);
               }}

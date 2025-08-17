@@ -28,7 +28,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import { toast } from '@/components/ui/sonner-toast';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { purgeCache } from '@/lib/purgeCache';
 import { useUpdateCheck } from '@/hooks/use-update-check';
 
@@ -76,7 +76,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
 
   useEffect(() => {
     if (open) {
-      trackEvent(trackingEnabled, 'settings_open');
+      trackEvent(trackingEnabled, AnalyticsEvent.SettingsOpen);
       checkForUpdate();
     }
   }, [open, trackingEnabled, checkForUpdate]);
@@ -159,7 +159,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 className="w-full justify-start gap-2"
                 onClick={() => {
                   onToggleHeaderButtons();
-                  trackEvent(trackingEnabled, 'toggle_header_buttons', {
+                  trackEvent(trackingEnabled, AnalyticsEvent.ToggleHeaderButtons, {
                     enabled: !headerButtonsEnabled,
                   });
                 }}
@@ -179,7 +179,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 className="w-full justify-start gap-2"
                 onClick={() => {
                   onToggleLogo();
-                  trackEvent(trackingEnabled, 'toggle_logo', {
+                  trackEvent(trackingEnabled, AnalyticsEvent.ToggleLogo, {
                     enabled: !logoEnabled,
                   });
                 }}
@@ -199,7 +199,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 className="w-full justify-start gap-2"
                 onClick={() => {
                   onToggleActionLabels();
-                  trackEvent(trackingEnabled, 'toggle_action_labels', {
+                  trackEvent(trackingEnabled, AnalyticsEvent.ToggleActionLabels, {
                     enabled: !actionLabelsEnabled,
                   });
                 }}
@@ -219,7 +219,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 className="w-full justify-start gap-2"
                 onClick={() => {
                   purgeCache();
-                  trackEvent(trackingEnabled, 'purge_cache');
+                  trackEvent(trackingEnabled, AnalyticsEvent.PurgeCache);
                 }}
               >
                 <Trash2 className="w-4 h-4" /> {t('purgeCache')}
@@ -246,8 +246,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
               onClick={() => {
                 onToggleTracking();
                 toast.success(t('trackingDisabled'));
-                trackEvent(true, 'disable_tracking_confirm');
-                trackEvent(true, 'toggle_tracking', { enabled: false });
+                trackEvent(true, AnalyticsEvent.DisableTrackingConfirm);
+                trackEvent(true, AnalyticsEvent.ToggleTracking, { enabled: false });
                 setConfirmDisableTracking(false);
               }}
             >
@@ -274,8 +274,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
               onClick={() => {
                 onToggleTracking();
                 toast.success(t('trackingEnabled'));
-                trackEvent(true, 'enable_tracking_confirm');
-                trackEvent(true, 'toggle_tracking', { enabled: true });
+                trackEvent(true, AnalyticsEvent.EnableTrackingConfirm);
+                trackEvent(true, AnalyticsEvent.ToggleTracking, { enabled: true });
                 setConfirmEnableTracking(false);
               }}
             >

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTracking } from '@/hooks/use-tracking';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 
 export const ProgressBar: React.FC = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -16,7 +16,7 @@ export const ProgressBar: React.FC = () => {
       setScrollProgress(Math.min(Math.max(progress, 0), 100));
       if (!reported && progress >= 99) {
         if (trackingEnabled) {
-          trackEvent(true, 'scroll_bottom');
+          trackEvent(true, AnalyticsEvent.ScrollBottom);
         }
         setReported(true);
       }
