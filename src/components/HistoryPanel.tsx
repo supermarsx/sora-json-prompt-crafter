@@ -160,10 +160,10 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
     const list = safeGet<{ date: string; action: string }[]>(
       TRACKING_HISTORY,
       [],
-      true,
+      { json: true },
     );
     list.splice(idx, 1);
-    safeSet(TRACKING_HISTORY, list, true);
+    safeSet(TRACKING_HISTORY, list, { json: true });
     window.dispatchEvent(new Event('trackingHistoryUpdate'));
     toast.success(t('actionDeleted'));
   };

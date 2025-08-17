@@ -88,7 +88,7 @@ const Dashboard = () => {
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [history, setHistory] = useState<HistoryEntry[]>(() =>
-    safeGet<HistoryEntry[]>('jsonHistory', [], true),
+    safeGet<HistoryEntry[]>('jsonHistory', [], { json: true }),
   );
   const isSingleColumn = useIsSingleColumn();
   const [darkMode, setDarkMode] = useDarkMode();
@@ -116,7 +116,7 @@ const Dashboard = () => {
   }, [trackingEnabled]);
 
   useEffect(() => {
-    safeSet('jsonHistory', history, true);
+    safeSet('jsonHistory', history, { json: true });
   }, [history]);
 
   useEffect(() => {

@@ -9,12 +9,12 @@ export interface ActionEntry {
 
 export function useActionHistory() {
   const [history, setHistory] = useState<ActionEntry[]>(() => {
-    return safeGet<ActionEntry[]>(TRACKING_HISTORY, [], true);
+    return safeGet<ActionEntry[]>(TRACKING_HISTORY, [], { json: true });
   });
 
   useEffect(() => {
     const handler = () => {
-      setHistory(safeGet<ActionEntry[]>(TRACKING_HISTORY, [], true));
+      setHistory(safeGet<ActionEntry[]>(TRACKING_HISTORY, [], { json: true }));
     };
     window.addEventListener('trackingHistoryUpdate', handler);
     return () => window.removeEventListener('trackingHistoryUpdate', handler);

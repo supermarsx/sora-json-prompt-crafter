@@ -234,7 +234,7 @@ A mapping from option keys to their enabling flags (e.g., `lighting` → `use_li
 - **postMessage misuse**: Current flow filters by `event.source === openedWindow` and message `type`; **must** also check `event.origin` against an allowlist (e.g., `https://sora.chatgpt.com`) when possible. Consider including a random **nonce** in the handshake payload for CSRF‑style protection.
 - **Clipboard**: Detect and fail gracefully; do not log copied content.
 - **Analytics**: Default off when `VITE_DISABLE_ANALYTICS=true`. Even when on, events contain **no prompt data**; only action metadata is stored. Local action history should be user‑clearable.
-- **Local storage**: Wrap all accesses in try/catch (already implemented); prefer `setJson/getJson` for structured values.
+- **Local storage**: Wrap all accesses in try/catch (already implemented); prefer `safeSet`/`safeGet` with the `json` option for structured values.
 - **SW caching**: Precache only static assets and disclaimer text; avoid caching third‑party responses by default.
 
 **Compliance**

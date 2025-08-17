@@ -1,5 +1,5 @@
 import { useEffect, useState, Dispatch, SetStateAction } from 'react';
-import { getJson, setJson, safeRemove } from '@/lib/storage';
+import { safeGet, safeSet, safeRemove } from '@/lib/storage';
 
 /**
  * Sync a stateful value with `localStorage`.
@@ -15,7 +15,7 @@ export function useLocalStorageState<T>(
   defaultValue: T,
 ): [T, Dispatch<SetStateAction<T>>] {
   const [state, setState] = useState<T>(() => {
-    const stored = getJson<T>(key, defaultValue);
+    const stored = safeGet<T>(key, defaultValue, { json: true });
     return stored ?? defaultValue;
   });
 
@@ -24,7 +24,7 @@ export function useLocalStorageState<T>(
       safeRemove(key);
       return;
     }
-    setJson(key, state);
+    safeSet(key, state, { json: true });
   }, [key, state, defaultValue]);
 
   useEffect(() => {

@@ -38,8 +38,6 @@ jest.mock('@/lib/storage', () => ({
   safeGet: jest.fn(),
   safeSet: jest.fn(),
   safeRemove: jest.fn(),
-  getJson: jest.fn(),
-  setJson: jest.fn(),
 }));
 
 jest.mock('../ClipboardImportModal', () => ({
@@ -271,7 +269,7 @@ describe('HistoryPanel action history', () => {
     expect(deleteBtn.getAttribute('aria-label')).toBe(i18n.t('confirm'));
     fireEvent.click(deleteBtn);
 
-    expect(safeSet).toHaveBeenCalledWith(TRACKING_HISTORY, [], true);
+    expect(safeSet).toHaveBeenCalledWith(TRACKING_HISTORY, [], { json: true });
     expect(events).toHaveLength(1);
   });
 });

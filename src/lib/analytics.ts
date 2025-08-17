@@ -17,11 +17,11 @@ export function trackEvent(
     const list = safeGet<{ date: string; action: string }[]>(
       TRACKING_HISTORY,
       [],
-      true,
+      { json: true },
     ) as { date: string; action: string }[];
     list.unshift({ date: new Date().toLocaleString(), action: event });
     if (list.length > 100) list.length = 100;
-    if (!safeSet(TRACKING_HISTORY, list, true)) throw new Error('fail');
+    if (!safeSet(TRACKING_HISTORY, list, { json: true })) throw new Error('fail');
     window.dispatchEvent(new Event('trackingHistoryUpdate'));
   } catch {
     console.error('Tracking History: There was an error.');

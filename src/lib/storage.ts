@@ -1,12 +1,12 @@
 export function safeGet<T = string>(
   key: string,
   defaultValue: T | null = null,
-  parse = false,
+  opts: { json?: boolean } = {},
 ): T | string | null {
   try {
     const value = localStorage.getItem(key);
     if (value === null) return defaultValue;
-    if (parse) return JSON.parse(value) as T;
+    if (opts.json) return JSON.parse(value) as T;
     return value;
   } catch (err) {
     console.warn('safeGet failed', key, err);
@@ -17,16 +17,16 @@ export function safeGet<T = string>(
 export function safeSet(
   key: string,
   value: unknown,
-  stringify = false,
+  opts: { json?: boolean } = {},
 ): boolean {
-  if (!stringify && typeof value !== 'string') {
+  if (!opts.json && typeof value !== 'string') {
     console.warn(
-      `safeSet: value for key "${key}" must be a string when stringify is false`,
+      `safeSet: value for key "${key}" must be a string when json is false`,
     );
     return false;
   }
   try {
-    const data = stringify ? JSON.stringify(value) : (value as string);
+    const data = opts.json ? JSON.stringify(value) : (value as string);
     localStorage.setItem(key, data);
     return true;
   } catch (e) {
@@ -41,27 +41,6 @@ export function safeRemove(key: string): boolean {
     return true;
   } catch (e) {
     console.warn(`safeRemove: failed for key "${key}"`, e);
-    return false;
-  }
-}
-
-export function getJson<T>(key: string, defaultValue: T | null = null): T | null {
-  try {
-    const value = localStorage.getItem(key);
-    if (value === null) return defaultValue;
-    return JSON.parse(value) as T;
-  } catch (err) {
-    console.warn('getJson failed', key, err);
-    return defaultValue;
-  }
-}
-
-export function setJson<T>(key: string, value: T): boolean {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-    return true;
-  } catch (err) {
-    console.warn(`setJson: failed for key "${key}"`, err);
     return false;
   }
 }

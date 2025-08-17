@@ -16,8 +16,8 @@ export function useGithubStats() {
 
   useEffect(() => {
     if (DISABLE_STATS) return;
-    const cached = safeGet<GithubStats>('githubStats', null, true);
-    const cachedTs = safeGet<number>('githubStatsTimestamp', 0, true);
+    const cached = safeGet<GithubStats>('githubStats', null, { json: true });
+    const cachedTs = safeGet<number>('githubStatsTimestamp', 0, { json: true });
     if (
       cached &&
       typeof cachedTs === 'number' &&
@@ -51,8 +51,8 @@ export function useGithubStats() {
             issues: issuesData.total_count,
           };
           setStats(data);
-          safeSet('githubStats', data, true);
-          safeSet('githubStatsTimestamp', Date.now(), true);
+          safeSet('githubStats', data, { json: true });
+          safeSet('githubStatsTimestamp', Date.now(), { json: true });
         }
       } catch (err) {
         if ((err as Error).name !== 'AbortError') {
