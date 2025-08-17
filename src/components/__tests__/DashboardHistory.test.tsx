@@ -11,6 +11,7 @@ import { useDarkMode } from '@/hooks/use-dark-mode';
 import { useTracking } from '@/hooks/use-tracking';
 import { useActionHistory } from '@/hooks/use-action-history';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
+import { JSON_HISTORY } from '@/lib/storage-keys';
 
 let importFn: ((jsons: string[]) => void) | null = null;
 
@@ -94,7 +95,7 @@ describe('Dashboard history limit', () => {
   });
 
   test('caps history at 100 entries', async () => {
-    localStorage.setItem('jsonHistory', JSON.stringify(createEntries(95)));
+    localStorage.setItem(JSON_HISTORY, JSON.stringify(createEntries(95)));
 
     render(<Dashboard />);
 
@@ -108,7 +109,7 @@ describe('Dashboard history limit', () => {
 
     await waitFor(() => {
       expect(
-        JSON.parse(localStorage.getItem('jsonHistory') || '[]'),
+        JSON.parse(localStorage.getItem(JSON_HISTORY) || '[]'),
       ).toHaveLength(100);
     });
 
@@ -118,7 +119,7 @@ describe('Dashboard history limit', () => {
 
     await waitFor(() => {
       expect(
-        JSON.parse(localStorage.getItem('jsonHistory') || '[]'),
+        JSON.parse(localStorage.getItem(JSON_HISTORY) || '[]'),
       ).toHaveLength(100);
     });
   });

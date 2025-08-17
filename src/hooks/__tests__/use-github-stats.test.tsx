@@ -3,6 +3,7 @@ import { useGithubStats } from '../use-github-stats';
 import { toast } from '@/components/ui/sonner-toast';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '@/i18n';
+import { GITHUB_STATS, GITHUB_STATS_TIMESTAMP } from '@/lib/storage-keys';
 
 jest.mock('@/components/ui/sonner-toast', () => ({
   __esModule: true,
@@ -25,10 +26,10 @@ describe('useGithubStats', () => {
 
   test('uses cache when fresh', () => {
     localStorage.setItem(
-      'githubStats',
+      GITHUB_STATS,
       JSON.stringify({ stars: 1, forks: 2, issues: 3 }),
     );
-    localStorage.setItem('githubStatsTimestamp', JSON.stringify(Date.now()));
+    localStorage.setItem(GITHUB_STATS_TIMESTAMP, JSON.stringify(Date.now()));
     const fetchMock = jest.fn();
     global.fetch = fetchMock as unknown as typeof fetch;
     const { result } = renderHook(() => useGithubStats(), { wrapper });
@@ -38,7 +39,7 @@ describe('useGithubStats', () => {
 
   test('fetches stats when cache expired', async () => {
     localStorage.setItem(
-      'githubStatsTimestamp',
+      GITHUB_STATS_TIMESTAMP,
       JSON.stringify(Date.now() - 7200000),
     );
     global.fetch = jest

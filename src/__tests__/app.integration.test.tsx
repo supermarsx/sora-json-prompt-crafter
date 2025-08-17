@@ -7,6 +7,7 @@ import {
 } from '@testing-library/react';
 import App from '../App';
 import '@/i18n';
+import { CURRENT_JSON, JSON_HISTORY } from '@/lib/storage-keys';
 
 jest.mock('../components/Footer', () => ({
   __esModule: true,
@@ -81,11 +82,11 @@ describe('App integration flow', () => {
 
     await waitFor(() => {
       expect(
-        JSON.parse(localStorage.getItem('jsonHistory') || '[]'),
+        JSON.parse(localStorage.getItem(JSON_HISTORY) || '[]'),
       ).toHaveLength(1);
     });
 
-    const current = JSON.parse(localStorage.getItem('currentJson') || '{}');
+    const current = JSON.parse(localStorage.getItem(CURRENT_JSON) || '{}');
     expect(current.prompt).toBe('Integration test prompt');
     expect(current).toHaveProperty('style_preset');
 

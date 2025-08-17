@@ -46,6 +46,7 @@ import { useGithubStats } from '@/hooks/use-github-stats';
 import { useClipboard } from '@/hooks/use-clipboard';
 import { useTranslation } from 'react-i18next';
 import { useLocale } from '@/hooks/use-locale';
+import { CURRENT_JSON, JSON_HISTORY } from '@/lib/storage-keys';
 
 const Dashboard = () => {
   const { t } = useTranslation();
@@ -54,7 +55,7 @@ const Dashboard = () => {
     try {
       const fromUrl = getOptionsFromUrl();
       if (fromUrl) return fromUrl;
-      const stored = safeGet('currentJson');
+      const stored = safeGet(CURRENT_JSON);
       if (stored) {
         const parsed = loadOptionsFromJson(stored);
         if (parsed) return parsed;
@@ -88,7 +89,7 @@ const Dashboard = () => {
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [history, setHistory] = useState<HistoryEntry[]>(() =>
-    safeGet<HistoryEntry[]>('jsonHistory', [], true),
+    safeGet<HistoryEntry[]>(JSON_HISTORY, [], true),
   );
   const isSingleColumn = useIsSingleColumn();
   const [darkMode, setDarkMode] = useDarkMode();
@@ -119,24 +120,24 @@ const Dashboard = () => {
   }, [trackingEnabled]);
 
   useEffect(() => {
-    safeSet('jsonHistory', history, true);
+    safeSet(JSON_HISTORY, history, true);
   }, [history]);
 
   useEffect(() => {
-    safeSet('currentJson', jsonString);
+    safeSet(CURRENT_JSON, jsonString);
   }, [jsonString, trackingEnabled]);
 
   const firstLoadRef = React.useRef(true);
   useEffect(() => {
     if (firstLoadRef.current) {
       firstLoadRef.current = false;
-      const stored = safeGet('currentJson');
+      const stored = safeGet(CURRENT_JSON);
       if (stored) return;
     }
     try {
       const json = generateJson(options);
       setJsonString(json);
-      safeSet('currentJson', json);
+      safeSet(CURRENT_JSON, json);
     } catch (error) {
       console.error('Error generating JSON:', error);
       setJsonString('{}');

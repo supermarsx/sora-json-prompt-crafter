@@ -1,3 +1,11 @@
+import {
+  CURRENT_JSON,
+  JSON_HISTORY,
+  GITHUB_STATS,
+  GITHUB_STATS_TIMESTAMP,
+  TRACKING_HISTORY,
+} from './storage-keys';
+
 /**
  * Purges client-side caches and storage, unregisters service workers, and reloads the page.
  *
@@ -16,11 +24,11 @@ export async function purgeCache(): Promise<void> {
   }
 
   const lsKeys = [
-    'currentJson',
-    'jsonHistory',
-    'githubStats',
-    'githubStatsTimestamp',
-    'trackingHistory',
+    CURRENT_JSON,
+    JSON_HISTORY,
+    GITHUB_STATS,
+    GITHUB_STATS_TIMESTAMP,
+    TRACKING_HISTORY,
   ];
 
   for (const key of lsKeys) {

@@ -1,5 +1,6 @@
 import { render, act } from '@testing-library/react';
 import Dashboard from '../Dashboard';
+import { CURRENT_JSON } from '@/lib/storage-keys';
 
 let updater: (path: string, value: unknown) => void = () => {};
 
@@ -69,7 +70,7 @@ beforeEach(() => {
 });
 
 test('updateNestedOptions handles missing objects', async () => {
-  localStorage.setItem('currentJson', '{"style_preset":"bad"}');
+  localStorage.setItem(CURRENT_JSON, '{"style_preset":"bad"}');
   render(<Dashboard />);
   await act(async () => {
     updater('style_preset.category', 'cinematic');
@@ -80,12 +81,12 @@ test('updateNestedOptions handles missing objects', async () => {
 test('updateNestedOptions warns and skips __proto__ or constructor keys', async () => {
   const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
   render(<Dashboard />);
-  const before = localStorage.getItem('currentJson');
+  const before = localStorage.getItem(CURRENT_JSON);
   await act(async () => {
     updater('__proto__.foo', 'bar');
     await Promise.resolve();
   });
-  expect(localStorage.getItem('currentJson')).toBe(before);
+  expect(localStorage.getItem(CURRENT_JSON)).toBe(before);
   expect(warnSpy).toHaveBeenCalledWith(
     'Blocked unsafe property name: __proto__',
   );
@@ -94,7 +95,7 @@ test('updateNestedOptions warns and skips __proto__ or constructor keys', async 
     updater('constructor.foo', 'bar');
     await Promise.resolve();
   });
-  expect(localStorage.getItem('currentJson')).toBe(before);
+  expect(localStorage.getItem(CURRENT_JSON)).toBe(before);
   expect(warnSpy).toHaveBeenCalledWith(
     'Blocked unsafe property name: constructor',
   );
