@@ -11,6 +11,7 @@ import { useDarkMode } from '@/hooks/use-dark-mode';
 const Index = lazy(() => import('./pages/Index'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 import ErrorBoundary from './components/ErrorBoundary';
+import Loading from './components/Loading';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -38,7 +39,7 @@ const App = () => {
             <BrowserRouter
               future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
             >
-              <Suspense fallback={null}>
+              <Suspense fallback={<Loading />}>
                 <Routes>
                   <Route path="/" element={<Index />} />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
