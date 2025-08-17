@@ -1,3 +1,12 @@
+/**
+ * Purges client-side caches and storage, unregisters service workers, and reloads the page.
+ *
+ * Steps:
+ * 1. Clear all Cache Storage entries.
+ * 2. Remove relevant entries from localStorage.
+ * 3. Unregister any active service workers.
+ * 4. Reload the current page.
+ */
 export async function purgeCache(): Promise<void> {
   try {
     const keys = await caches.keys();
