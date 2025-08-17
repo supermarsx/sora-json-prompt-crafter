@@ -2,6 +2,9 @@ import { safeGet, safeSet } from './storage';
 import { MEASUREMENT_ID, GTAG_DEBUG } from './config';
 import { TRACKING_HISTORY } from './storage-keys';
 
+/**
+ * Analytics events that can be emitted by the application.
+ */
 export enum AnalyticsEvent {
   ShareFacebook = 'share_facebook',
   ShareTwitter = 'share_twitter',
@@ -68,6 +71,20 @@ let trackingFailures = 0;
 let trackingDead = false;
 let gtagMissingLogged = false;
 
+/**
+ * Record an analytics event and update local tracking history.
+ *
+ * @param enabled - When `false`, the function returns without taking action.
+ * @param event - The specific {@link AnalyticsEvent} being tracked.
+ * @param params - Optional additional data to include with the event.
+ *
+ * @remarks
+ * Side effects:
+ * - Updates the `TRACKING_HISTORY` key in storage and dispatches a
+ *   `trackingHistoryUpdate` event on `window`.
+ * - Sends the event to the global `gtag` function if available.
+ * - Logs errors and permanently disables tracking after repeated failures.
+ */
 export function trackEvent(
   enabled: boolean,
   event: AnalyticsEvent,
