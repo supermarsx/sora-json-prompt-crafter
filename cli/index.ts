@@ -56,7 +56,7 @@ function buildOptionsFromFlags(
   return { ...DEFAULT_OPTIONS, ...updates };
 }
 
-export function runCli(argv: string[]): string {
+export function runCli(argv: string[], stdinInput?: string): string {
   const args = parseArgs(argv);
 
   if (args.help) {
@@ -88,6 +88,13 @@ export function runCli(argv: string[]): string {
   if (typeof args.file === 'string') {
     try {
       const json = readFileSync(args.file, 'utf8');
+      options = loadOptionsFromJson(json);
+    } catch {
+      options = null;
+    }
+  } else if (Object.keys(args).length === 0) {
+    try {
+      const json = stdinInput ?? readFileSync(0, 'utf8');
       options = loadOptionsFromJson(json);
     } catch {
       options = null;
