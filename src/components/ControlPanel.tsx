@@ -21,6 +21,18 @@ interface ControlPanelProps {
   trackingEnabled: boolean;
 }
 
+/**
+ * Renders the collection of sections that let users craft a Sora prompt.
+ *
+ * The panel consumes the current {@link SoraOptions} state and exposes
+ * callbacks for propagating changes:
+ *
+ * - `updateOptions` applies shallow updates to top-level options.
+ * - `updateNestedOptions` targets nested paths within `SoraOptions`.
+ *
+ * Tracking can be toggled via `trackingEnabled` to record interaction
+ * analytics in supported sections.
+ */
 export const ControlPanel: React.FC<ControlPanelProps> = ({
   options,
   updateOptions,
