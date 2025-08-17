@@ -1,6 +1,17 @@
 import { useEffect } from 'react';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 
+/**
+ * Track element resize events and dispatch an analytics event when dimensions change.
+ *
+ * Utilizes `ResizeObserver` to monitor the width and height of the provided element
+ * and throttles tracking to once per second to avoid flooding analytics with rapid
+ * resize events.
+ *
+ * @param ref - React ref to the HTML element being observed.
+ * @param trackingEnabled - Whether analytics tracking is currently enabled.
+ * @param event - The analytics event identifier to send when a resize is detected.
+ */
 export function useResizeTracker(
   ref: React.RefObject<HTMLElement>,
   trackingEnabled: boolean,
