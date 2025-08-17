@@ -2,6 +2,13 @@ import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from
 import type { SoraOptions } from './soraOptions';
 import { isValidOptions } from './validateOptions';
 
+/**
+ * Serializes a {@link SoraOptions} object to a URL-safe encoded string.
+ *
+ * @param options - The options object to serialize.
+ * @returns The compressed and encoded string. Returns an empty string if
+ *   serialization fails. Errors are logged to the console.
+ */
 export function serializeOptions(options: SoraOptions): string {
   try {
     return compressToEncodedURIComponent(JSON.stringify(options));
@@ -11,6 +18,13 @@ export function serializeOptions(options: SoraOptions): string {
   }
 }
 
+/**
+ * Deserializes an encoded string produced by {@link serializeOptions}.
+ *
+ * @param encoded - The encoded options string to decode.
+ * @returns The decoded {@link SoraOptions} object, or `null` if decoding or
+ *   validation fails. Errors are logged to the console.
+ */
 export function deserializeOptions(encoded: string): SoraOptions | null {
   try {
     const json = decompressFromEncodedURIComponent(encoded);
@@ -27,6 +41,14 @@ export function deserializeOptions(encoded: string): SoraOptions | null {
   }
 }
 
+/**
+ * Extracts serialized options from a URL and returns the decoded result.
+ *
+ * @param url - The URL to parse. Defaults to `window.location.href`.
+ * @returns The decoded {@link SoraOptions} object, or `null` if the URL does
+ *   not contain valid serialized options or parsing fails. Errors are logged
+ *   to the console.
+ */
 export function getOptionsFromUrl(url: string = window.location.href): SoraOptions | null {
   try {
     const u = new URL(url);
