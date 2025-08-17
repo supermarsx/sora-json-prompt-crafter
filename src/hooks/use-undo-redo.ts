@@ -1,5 +1,13 @@
 import { Dispatch, SetStateAction, useRef, useState } from 'react';
 
+/**
+ * Tracks state changes and exposes controls to undo or redo them.
+ *
+ * @param initialValue - Starting value or lazy initializer for the state.
+ * @param limit - Maximum number of history entries to retain (defaults to 50).
+ * @returns Object containing the current `state`, a `setState` updater, and
+ * `undo`, `redo`, `reset` methods along with `canUndo`/`canRedo` flags.
+ */
 export function useUndoRedo<T>(initialValue: T | (() => T), limit = 50) {
   const init =
     typeof initialValue === 'function'
