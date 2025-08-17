@@ -1,3 +1,7 @@
+/**
+ * Immediately invoked analytics setup that conditionally loads Google Analytics
+ * and exposes a global `gtag` helper when tracking is enabled.
+ */
 export {};
 
 declare global {
@@ -19,6 +23,10 @@ declare global {
       s.src = `https://www.googletagmanager.com/gtag/js?id=${id}`;
       document.head.appendChild(s);
       window.dataLayer = window.dataLayer || [];
+      /**
+       * Pushes tracking events to the Google Analytics dataLayer.
+       * @param args Event parameters forwarded to GA.
+       */
       function gtag(...args: unknown[]) {
         window.dataLayer.push(args);
       }
