@@ -1,4 +1,5 @@
-const cacheName = 'sora-prompt-cache-v2';
+import { PWA_CACHE } from '../src/lib/cache-name.ts';
+const cacheName = PWA_CACHE;
 // Basic app shell files that are always cached
 const staticAssets = [
   '/',
