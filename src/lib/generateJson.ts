@@ -1,5 +1,11 @@
 import type { SoraOptions } from '@/lib/soraOptions';
 
+/**
+ * Remove a set of keys from the provided object.
+ *
+ * @param obj - Object from which properties should be removed.
+ * @param keys - Keys that will be deleted from the object.
+ */
 function removeProps(
   obj: Record<string, unknown>,
   keys: (keyof SoraOptions)[],
@@ -9,6 +15,13 @@ function removeProps(
   });
 }
 
+/**
+ * Remove keys from the object when a related feature is disabled.
+ *
+ * @param obj - Object potentially holding properties to remove.
+ * @param enabled - Whether the feature is enabled.
+ * @param keys - Keys to remove when the feature is disabled.
+ */
 function removeIfDisabled(
   obj: Record<string, unknown>,
   enabled: boolean,
@@ -17,6 +30,12 @@ function removeIfDisabled(
   if (!enabled) removeProps(obj, keys);
 }
 
+/**
+ * Generate a JSON string containing only the enabled Sora options.
+ *
+ * @param options - The full set of options selected by the user.
+ * @returns A formatted JSON string representing the active options.
+ */
 export function generateJson(options: SoraOptions): string {
   const cleanOptions = { ...options };
 
