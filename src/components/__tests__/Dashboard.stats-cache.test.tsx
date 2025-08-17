@@ -39,10 +39,10 @@ jest.mock('@/hooks/use-action-history', () => ({
   useActionHistory: jest.fn(() => []),
 }));
 
-jest.mock('@/lib/analytics', () => ({
-  __esModule: true,
-  trackEvent: jest.fn(),
-}));
+jest.mock('@/lib/analytics', () => {
+  const actual = jest.requireActual('@/lib/analytics');
+  return { __esModule: true, ...actual, trackEvent: jest.fn() };
+});
 
 beforeEach(() => {
   localStorage.clear();

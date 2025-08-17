@@ -72,10 +72,10 @@ jest.mock('@/hooks/use-github-stats', () => ({
   useGithubStats: jest.fn(() => ({})),
 }));
 
-jest.mock('@/lib/analytics', () => ({
-  __esModule: true,
-  trackEvent: jest.fn(),
-}));
+jest.mock('@/lib/analytics', () => {
+  const actual = jest.requireActual('@/lib/analytics');
+  return { __esModule: true, ...actual, trackEvent: jest.fn() };
+});
 jest.mock('@/components/ui/sonner-toast', () => ({
   __esModule: true,
   toast: { success: jest.fn(), error: jest.fn() },

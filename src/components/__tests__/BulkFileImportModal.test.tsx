@@ -1,14 +1,14 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import BulkFileImportModal from '../BulkFileImportModal';
 import { toast } from '@/components/ui/sonner-toast';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { useTracking } from '@/hooks/use-tracking';
 import i18n from '@/i18n';
 
-jest.mock('@/lib/analytics', () => ({
-  __esModule: true,
-  trackEvent: jest.fn(),
-}));
+jest.mock('@/lib/analytics', () => {
+  const actual = jest.requireActual('@/lib/analytics');
+  return { __esModule: true, ...actual, trackEvent: jest.fn() };
+});
 
 jest.mock('@/hooks/use-tracking', () => ({
   __esModule: true,
@@ -57,7 +57,7 @@ describe('BulkFileImportModal', () => {
     await waitFor(() =>
       expect(onImport).toHaveBeenCalledWith(['{"prompt":"test"}']),
     );
-    expect(trackEvent).toHaveBeenCalledWith(true, 'history_import', {
+    expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.HistoryImport, {
       type: 'bulk_file',
     });
     expect(toast.success).toHaveBeenCalledWith(i18n.t('fileImported'));

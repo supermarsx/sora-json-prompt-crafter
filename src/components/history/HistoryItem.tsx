@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Clipboard, Trash2, Edit, Eye, Check } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import type { HistoryEntry } from '../HistoryPanel';
 
 interface HistoryItemProps {
@@ -49,7 +49,7 @@ const HistoryItem: React.FC<HistoryItemProps> = ({
           size="sm"
           variant="outline"
           onClick={() => {
-            trackEvent(trackingEnabled, 'history_edit');
+            trackEvent(trackingEnabled, AnalyticsEvent.HistoryEdit);
             onEdit(entry.json);
             setEdited(true);
             setTimeout(() => setEdited(false), 1500);
@@ -63,7 +63,7 @@ const HistoryItem: React.FC<HistoryItemProps> = ({
           size="sm"
           variant="outline"
           onClick={() => {
-            trackEvent(trackingEnabled, 'history_copy');
+            trackEvent(trackingEnabled, AnalyticsEvent.HistoryCopy);
             onCopy(entry.json);
             setCopied(true);
             setTimeout(() => setCopied(false), 1500);
@@ -77,7 +77,7 @@ const HistoryItem: React.FC<HistoryItemProps> = ({
           size="sm"
           variant="outline"
           onClick={() => {
-            trackEvent(trackingEnabled, 'history_preview');
+            trackEvent(trackingEnabled, AnalyticsEvent.HistoryPreview);
             onPreview(entry);
           }}
           className="gap-1"
@@ -89,7 +89,7 @@ const HistoryItem: React.FC<HistoryItemProps> = ({
           variant="destructive"
           onClick={() => {
             if (confirmDelete) {
-              trackEvent(trackingEnabled, 'history_delete_confirm');
+              trackEvent(trackingEnabled, AnalyticsEvent.HistoryDeleteConfirm);
               onDelete(entry.id);
               setConfirmDelete(false);
             } else {

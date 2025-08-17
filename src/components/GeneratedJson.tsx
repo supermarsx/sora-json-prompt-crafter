@@ -3,7 +3,7 @@ import { diffChars, Change } from 'diff';
 import SyntaxHighlighter from 'react-syntax-highlighter/dist/cjs/prism-light';
 import jsonLang from 'react-syntax-highlighter/dist/cjs/languages/prism/json';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 
 SyntaxHighlighter.registerLanguage('json', jsonLang);
 
@@ -24,7 +24,7 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
     const timer = setTimeout(() => {
       setDiffParts(diff.map((p) => ({ ...p, added: false }) as Change));
     }, 2000);
-    trackEvent(trackingEnabled, 'json_changed');
+    trackEvent(trackingEnabled, AnalyticsEvent.JsonChanged);
     return () => clearTimeout(timer);
   }, [json, trackingEnabled]);
 

@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import { useRef, createElement } from 'react';
 import { useResizeTracker } from '../use-resize-tracker';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 
 class MockResizeObserver {
   public callback: ResizeObserverCallback;
@@ -27,14 +27,14 @@ class MockResizeObserver {
   static instance: MockResizeObserver | null = null;
 }
 
-jest.mock('@/lib/analytics', () => ({
-  __esModule: true,
-  trackEvent: jest.fn(),
-}));
+jest.mock('@/lib/analytics', () => {
+  const actual = jest.requireActual('@/lib/analytics');
+  return { __esModule: true, ...actual, trackEvent: jest.fn() };
+});
 
 function Test() {
   const ref = useRef<HTMLDivElement>(null);
-  useResizeTracker(ref, true, 'resize');
+  useResizeTracker(ref, true, AnalyticsEvent.PromptResize);
   return createElement('div', { ref });
 }
 
@@ -90,7 +90,7 @@ describe('useResizeTracker', () => {
   test('does nothing when ref current is null', () => {
     function NullRefTest() {
       const ref = useRef<HTMLDivElement>(null);
-      useResizeTracker(ref, true, 'resize');
+      useResizeTracker(ref, true, AnalyticsEvent.PromptResize);
       return null;
     }
 

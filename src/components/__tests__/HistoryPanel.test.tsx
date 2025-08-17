@@ -10,15 +10,15 @@ import {
 } from '@testing-library/react';
 import HistoryPanel from '../HistoryPanel';
 import { toast } from '@/components/ui/sonner-toast';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { formatDateTime } from '@/lib/date';
 import { safeGet, safeSet, safeRemove } from '@/lib/storage';
 import { TRACKING_HISTORY } from '@/lib/storage-keys';
 
-jest.mock('@/lib/analytics', () => ({
-  __esModule: true,
-  trackEvent: jest.fn(),
-}));
+jest.mock('@/lib/analytics', () => {
+  const actual = jest.requireActual('@/lib/analytics');
+  return { __esModule: true, ...actual, trackEvent: jest.fn() };
+});
 
 jest.mock('@/components/ui/sonner-toast', () => ({
   __esModule: true,
@@ -153,7 +153,7 @@ describe('HistoryPanel basic actions', () => {
     expect(toast.error).toHaveBeenCalledWith(i18n.t('clipboardUnsupported'));
     expect(trackEvent).not.toHaveBeenCalledWith(
       expect.anything(),
-      'history_export',
+      AnalyticsEvent.HistoryExport,
       expect.anything(),
     );
 

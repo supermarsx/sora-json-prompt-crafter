@@ -1,12 +1,12 @@
 import { render, act } from '@testing-library/react';
 import { ProgressBar } from '../ProgressBar';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { useTracking } from '@/hooks/use-tracking';
 
-jest.mock('@/lib/analytics', () => ({
-  __esModule: true,
-  trackEvent: jest.fn(),
-}));
+jest.mock('@/lib/analytics', () => {
+  const actual = jest.requireActual('@/lib/analytics');
+  return { __esModule: true, ...actual, trackEvent: jest.fn() };
+});
 
 jest.mock('@/hooks/use-tracking', () => ({
   __esModule: true,
@@ -65,7 +65,7 @@ describe('ProgressBar', () => {
     scrollTo(495);
     expect(getBar().style.width).toBe('99%');
     expect(trackEvent).toHaveBeenCalledTimes(1);
-    expect(trackEvent).toHaveBeenCalledWith(true, 'scroll_bottom');
+    expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.ScrollBottom);
 
     scrollTo(500);
     expect(getBar().style.width).toBe('100%');

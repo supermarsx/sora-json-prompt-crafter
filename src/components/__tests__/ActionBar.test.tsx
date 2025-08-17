@@ -1,12 +1,12 @@
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { ActionBar } from '../ActionBar';
 import { toast } from '@/components/ui/sonner-toast';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 
-jest.mock('@/lib/analytics', () => ({
-  __esModule: true,
-  trackEvent: jest.fn(),
-}));
+jest.mock('@/lib/analytics', () => {
+  const actual = jest.requireActual('@/lib/analytics');
+  return { __esModule: true, ...actual, trackEvent: jest.fn() };
+});
 
 jest.mock('@/components/ui/sonner-toast', () => ({
   __esModule: true,
@@ -210,7 +210,7 @@ describe('ActionBar', () => {
     const btn = screen.getByRole('button', { name: /jump to json/i });
     fireEvent.click(btn);
     expect(onJumpToJson).toHaveBeenCalled();
-    expect(trackEvent).toHaveBeenCalledWith(true, 'jump_to_json');
+    expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.JumpToJson);
   });
 
   test('Send to Sora button appears and calls handler', () => {

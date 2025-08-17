@@ -1,14 +1,14 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import ClipboardImportModal from '../ClipboardImportModal';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { useTracking } from '@/hooks/use-tracking';
 import { toast } from '@/components/ui/sonner-toast';
 import i18n from '@/i18n';
 
-jest.mock('@/lib/analytics', () => ({
-  __esModule: true,
-  trackEvent: jest.fn(),
-}));
+jest.mock('@/lib/analytics', () => {
+  const actual = jest.requireActual('@/lib/analytics');
+  return { __esModule: true, ...actual, trackEvent: jest.fn() };
+});
 
 jest.mock('@/hooks/use-tracking', () => ({
   __esModule: true,
@@ -46,7 +46,7 @@ describe('ClipboardImportModal', () => {
     fireEvent.click(button);
 
     expect(onImport).toHaveBeenCalledWith(['{"prompt":"test"}']);
-    expect(trackEvent).toHaveBeenCalledWith(true, 'history_import', {
+    expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.HistoryImport, {
       type: 'clipboard',
     });
     expect(onOpenChange).toHaveBeenCalledWith(false);
@@ -75,7 +75,7 @@ describe('ClipboardImportModal', () => {
       '{"prompt":"one"}',
       '{"prompt":"two"}',
     ]);
-    expect(trackEvent).toHaveBeenCalledWith(true, 'history_import', {
+    expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.HistoryImport, {
       type: 'clipboard',
     });
     expect(onOpenChange).toHaveBeenCalledWith(false);
@@ -107,7 +107,7 @@ describe('ClipboardImportModal', () => {
       '{"prompt":"one"}',
       '{"prompt":"two"}',
     ]);
-    expect(trackEvent).toHaveBeenCalledWith(true, 'history_import', {
+    expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.HistoryImport, {
       type: 'clipboard',
     });
     expect(onOpenChange).toHaveBeenCalledWith(false);

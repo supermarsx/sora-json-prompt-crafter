@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 
 export function useResizeTracker(
   ref: React.RefObject<HTMLElement>,
   trackingEnabled: boolean,
-  event: string,
+  event: AnalyticsEvent,
 ) {
   useEffect(() => {
     const el = ref.current;

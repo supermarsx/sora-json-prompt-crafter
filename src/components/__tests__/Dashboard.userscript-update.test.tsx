@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import Dashboard from '../Dashboard';
 import { USERSCRIPT_VERSION } from '@/version';
-import { trackEvent } from '@/lib/analytics';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { useSoraUserscript } from '@/hooks/use-sora-userscript';
 
 jest.mock('../HistoryPanel', () => ({ __esModule: true, default: () => null }));
@@ -50,10 +50,10 @@ jest.mock('@/hooks/use-github-stats', () => ({
   useGithubStats: jest.fn(() => ({})),
 }));
 
-jest.mock('@/lib/analytics', () => ({
-  __esModule: true,
-  trackEvent: jest.fn(),
-}));
+jest.mock('@/lib/analytics', () => {
+  const actual = jest.requireActual('@/lib/analytics');
+  return { __esModule: true, ...actual, trackEvent: jest.fn() };
+});
 
 jest.mock('@/components/ui/sonner-toast', () => ({
   __esModule: true,
@@ -82,7 +82,7 @@ describe('Dashboard userscript update button', () => {
     const btn = screen.getByRole('link', { name: /update userscript/i });
     expect(btn).toBeTruthy();
     fireEvent.click(btn);
-    expect(trackEvent).toHaveBeenCalledWith(true, 'update_userscript');
+    expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.UpdateUserscript);
   });
 
   test('hides update button when version matches', () => {
