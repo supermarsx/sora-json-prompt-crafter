@@ -29,6 +29,17 @@ const extraShape = {
   dnd_item_type: z.string(),
 } as const;
 
+/**
+ * Generates a Zod schema that mirrors the runtime type of the provided value.
+ *
+ * This helper is used to build a validation schema for {@link SoraOptions}
+ * by inspecting the default option values and creating an equivalent
+ * {@link z.ZodTypeAny} instance for each. It supports primitives, arrays,
+ * objects and `null` values.
+ *
+ * @param value - The example value used to determine the schema type.
+ * @returns A Zod schema capable of validating values of the same type as `value`.
+ */
 function schemaFor(value: unknown): z.ZodTypeAny {
   if (typeof value === 'string') return z.string();
   if (typeof value === 'number') return z.number();
@@ -58,6 +69,16 @@ Object.entries(extraShape).forEach(([k, s]) => {
 export const partialOptionsSchema = z.object(shape).partial().strict();
 export type PartialSoraOptions = z.infer<typeof partialOptionsSchema>;
 
+/**
+ * Validates whether the supplied object adheres to the
+ * {@link partialOptionsSchema} structure.
+ *
+ * The function acts as a type guard, allowing callers to narrow the type of
+ * `obj` to `Partial<SoraOptions>` when the schema validation succeeds.
+ *
+ * @param obj - The value to validate against `partialOptionsSchema`.
+ * @returns `true` if `obj` is a valid `Partial<SoraOptions>`, otherwise `false`.
+ */
 export function isValidOptions(obj: unknown): obj is Partial<SoraOptions> {
   return partialOptionsSchema.safeParse(obj).success;
 }
