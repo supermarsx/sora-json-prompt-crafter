@@ -1,5 +1,9 @@
 import { useCallback, useState } from 'react';
 
+/**
+ * Checks the service worker for updates and tracks availability.
+ * `updateAvailable` starts as `false` and becomes `true` when a waiting worker exists.
+ */
 export function useUpdateCheck() {
   const [updateAvailable, setUpdateAvailable] = useState(false);
 
