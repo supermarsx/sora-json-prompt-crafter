@@ -21,6 +21,11 @@ const actionTypes = {
 
 let count = 0;
 
+/**
+ * Generates an incrementing identifier for a toast.
+ *
+ * @returns Unique toast ID.
+ */
 function genId() {
   count = (count + 1) % Number.MAX_SAFE_INTEGER;
   return count.toString();
@@ -52,6 +57,12 @@ export interface State {
 
 const toastTimeouts = new Map<string, ReturnType<typeof setTimeout>>();
 
+/**
+ * Queues a toast for removal after the configured delay.
+ *
+ * @param toastId - Identifier of the toast to remove.
+ * @returns void
+ */
 const addToRemoveQueue = (toastId: string) => {
   if (toastTimeouts.has(toastId)) {
     return;
@@ -68,6 +79,13 @@ const addToRemoveQueue = (toastId: string) => {
   toastTimeouts.set(toastId, timeout);
 };
 
+/**
+ * Handles toast state transitions based on dispatched actions.
+ *
+ * @param state - Current toast state.
+ * @param action - Action describing the state change.
+ * @returns Updated toast state.
+ */
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case 'ADD_TOAST':
@@ -127,6 +145,12 @@ const listeners: Array<(state: State) => void> = [];
 
 let memoryState: State = { toasts: [] };
 
+/**
+ * Updates the toast state and notifies subscribers.
+ *
+ * @param action - Action to dispatch.
+ * @returns void
+ */
 function dispatch(action: Action) {
   memoryState = reducer(memoryState, action);
   listeners.forEach((listener) => {
@@ -136,6 +160,12 @@ function dispatch(action: Action) {
 
 type Toast = Omit<ToasterToast, 'id'>;
 
+/**
+ * Creates a new toast and returns helper functions.
+ *
+ * @param props - Toast properties.
+ * @returns Object with the toast id and update/dismiss helpers.
+ */
 function toast({ ...props }: Toast) {
   const id = genId();
 
@@ -165,6 +195,11 @@ function toast({ ...props }: Toast) {
   };
 }
 
+/**
+ * Hook exposing toast state and helper functions.
+ *
+ * @returns Current toast state with creation and dismiss helpers.
+ */
 function useToast() {
   const [state, setState] = React.useState<State>(memoryState);
 
