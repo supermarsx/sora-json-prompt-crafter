@@ -24,6 +24,20 @@ interface MultiSelectDropdownProps {
   disabled?: boolean;
 }
 
+/**
+ * Renders a dropdown that allows selecting multiple options with search and
+ * prioritization of certain values. Selected options are displayed in a button
+ * that opens a dialog for managing the selection.
+ *
+ * @param options - List of available option strings.
+ * @param value - Currently selected option values.
+ * @param onValueChange - Callback invoked with the updated selection array.
+ * @param placeholder - Text shown when no options are selected.
+ * @param label - Dialog title displayed above the options list.
+ * @param getOptionLabel - Optional formatter for displaying option labels.
+ * @param disabled - When true, disables interaction with the dropdown.
+ * @returns React component rendering a searchable multi-select dropdown.
+ */
 export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   options,
   value,
@@ -62,6 +76,13 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
     );
   }, [sortedOptions, searchQuery]);
 
+  /**
+   * Formats an option for display, capitalizing words or using a custom label
+   * formatter when provided.
+   *
+   * @param option - Raw option value.
+   * @returns Human-friendly label for the option.
+   */
   const formatLabel = (option: string) => {
     if (getOptionLabel) return getOptionLabel(option);
     return option
@@ -70,6 +91,12 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
       .join(' ');
   };
 
+  /**
+   * Toggles the presence of an option in the current selection and triggers the
+   * `onValueChange` callback with the new array of values.
+   *
+   * @param option - Option value to add or remove.
+   */
   const toggleOption = (option: string) => {
     let newValues: string[];
     if (value.includes(option)) {
@@ -83,6 +110,12 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   const displayValue =
     value.length > 0 ? value.map(formatLabel).join(', ') : placeholderText;
 
+  /**
+   * Handles dialog open state changes while respecting the disabled state of
+   * the dropdown.
+   *
+   * @param open - Desired open state of the dialog.
+   */
   const handleOpenChange = (open: boolean) => {
     if (!disabled) {
       setIsOpen(open);
