@@ -64,6 +64,22 @@ interface HistoryPanelProps {
   onImport: (jsons: string[]) => void;
 }
 
+/**
+ * Renders a dialog for browsing and managing stored prompt history and recent
+ * user actions. Provides import/export functionality, previews, and the ability
+ * to restore or remove entries.
+ *
+ * @param open - Whether the history panel dialog is visible.
+ * @param onOpenChange - Callback invoked when the open state changes.
+ * @param history - List of previously saved prompt entries.
+ * @param actionHistory - List of recent user actions tracked locally.
+ * @param onDelete - Removes a prompt entry by its identifier.
+ * @param onClear - Clears all prompt history entries.
+ * @param onCopy - Copies a prompt JSON string to the clipboard.
+ * @param onEdit - Loads a prompt JSON into the editor for modification.
+ * @param onImport - Imports prompt JSON strings from external sources.
+ * @returns Modal dialog UI for managing history and actions.
+ */
 export const HistoryPanel: React.FC<HistoryPanelProps> = ({
   open,
   onOpenChange,
@@ -105,6 +121,10 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
     }
   }, [tab, open, trackingEnabled]);
 
+  /**
+   * Copies the entire prompt history to the system clipboard.
+   * Shows a toast message and records an analytics event on success.
+   */
   const exportClipboard = async () => {
     if (!('clipboard' in navigator)) {
       toast.error(t('clipboardUnsupported'));
@@ -121,6 +141,10 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
     }
   };
 
+  /**
+   * Downloads the prompt history as a JSON file using a timestamped filename.
+   * Records an analytics event for the file export action.
+   */
   const exportFile = () => {
     const data = JSON.stringify(history, null, 2);
     const blob = new Blob([data], { type: 'application/json' });
@@ -138,6 +162,10 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
     });
   };
 
+  /**
+   * Downloads the recent action history as a JSON file.
+   * The file name includes a timestamp to avoid collisions.
+   */
   const exportActions = () => {
     const data = JSON.stringify(actionHistory, null, 2);
     const blob = new Blob([data], { type: 'application/json' });
@@ -152,14 +180,25 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
     toast.success(t('actionsDownloaded'));
   };
 
+  /**
+   * Clears all stored action history and notifies listeners of the update.
+   */
   const clearActions = () => {
     safeRemove(TRACKING_HISTORY);
     window.dispatchEvent(new Event('trackingHistoryUpdate'));
     toast.success(t('actionsCleared'));
   };
 
+  /**
+   * Opens the confirmation dialog to clear all tracked actions.
+   */
   const requestClearActions = () => setConfirmClearActions(true);
 
+  /**
+   * Removes a single action from storage at the specified index.
+   *
+   * @param idx - Index of the action to delete.
+   */
   const deleteAction = (idx: number) => {
     const list = safeGet<{ date: string; action: string }[]>(
       TRACKING_HISTORY,
@@ -172,6 +211,12 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
     toast.success(t('actionDeleted'));
   };
 
+  /**
+   * Initiates a confirmation sequence for deleting an action. If the same index
+   * is requested twice within a short timeframe, the action is deleted.
+   *
+   * @param idx - Index of the action to remove.
+   */
   const requestDeleteAction = (idx: number) => {
     if (confirmDeleteActionIdx === idx) {
       deleteAction(idx);
