@@ -120,7 +120,7 @@ afterEach(() => {
 describe('HistoryPanel basic actions', () => {
   test('exports to clipboard and file', async () => {
     renderPanel();
-    const exportBtn = screen.getByRole('button', { name: /export/i });
+    const exportBtn = screen.getByRole('button', { name: /^export$/i });
     fireEvent.mouseDown(exportBtn);
     fireEvent.click(exportBtn);
     fireEvent.click(screen.getByText(/copy all to clipboard/i));
@@ -145,7 +145,7 @@ describe('HistoryPanel basic actions', () => {
     renderPanel();
     (trackEvent as jest.Mock).mockClear();
 
-    const exportBtn = screen.getByRole('button', { name: /export/i });
+    const exportBtn = screen.getByRole('button', { name: /^export$/i });
     fireEvent.mouseDown(exportBtn);
     fireEvent.click(exportBtn);
     fireEvent.click(screen.getByText(/copy all to clipboard/i));
@@ -176,7 +176,7 @@ describe('HistoryPanel basic actions', () => {
     renderPanel({ onOpenChange });
     (trackEvent as jest.Mock).mockClear();
 
-    const exportBtn = screen.getByRole('button', { name: /export/i });
+    const exportBtn = screen.getByRole('button', { name: /^export$/i });
     fireEvent.mouseDown(exportBtn);
     fireEvent.click(exportBtn);
     fireEvent.click(screen.getByText(/copy all to clipboard/i));

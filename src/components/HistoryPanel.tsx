@@ -42,7 +42,13 @@ import BulkFileImportModal from './BulkFileImportModal';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { formatDateTime } from '@/lib/date';
 import { useTracking } from '@/hooks/use-tracking';
-import { safeGet, safeSet, safeRemove } from '@/lib/storage';
+import {
+  safeGet,
+  safeSet,
+  safeRemove,
+  exportAppData,
+  importAppData,
+} from '@/lib/storage';
 import { TRACKING_HISTORY } from '@/lib/storage-keys';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 
@@ -181,6 +187,49 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
   };
 
   /**
+   * Downloads all stored application data as a JSON file.
+   */
+  const exportDataFile = () => {
+    const blob = new Blob([JSON.stringify(exportAppData(), null, 2)], {
+      type: 'application/json',
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const datetime = formatDateTime();
+    const rand = Math.random().toString(16).slice(2, 8);
+    a.href = url;
+    a.download = `sora-data-${datetime}-${rand}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success(t('dataExported', { defaultValue: 'Data exported' }));
+    trackEvent(trackingEnabled, AnalyticsEvent.DataExport);
+  };
+
+  /**
+   * Restores application data from a JSON file selected by the user.
+   */
+  const importDataFile = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'application/json';
+    input.onchange = async () => {
+      const file = input.files?.[0];
+      if (!file) return;
+      try {
+        const text = await file.text();
+        importAppData(JSON.parse(text));
+        toast.success(t('dataImported', { defaultValue: 'Data imported' }));
+        trackEvent(trackingEnabled, AnalyticsEvent.DataImport);
+      } catch {
+        toast.error(
+          t('invalidDataFile', { defaultValue: 'Invalid data file' }),
+        );
+      }
+    };
+    input.click();
+  };
+
+  /**
    * Clears all stored action history and notifies listeners of the update.
    */
   const clearActions = () => {
@@ -304,35 +353,53 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                         <Download className="w-4 h-4" /> {t('export')}
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem
-                        onSelect={() => {
-                          trackEvent(trackingEnabled, AnalyticsEvent.HistoryExportClick, {
-                            type: 'clipboard',
-                          });
-                          exportClipboard();
-                        }}
-                      >
-                        {t('copyAllToClipboard')}
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onSelect={() => {
-                          trackEvent(
-                            trackingEnabled,
-                            AnalyticsEvent.HistoryExportClick,
-                            {
-                            type: 'file',
-                          });
-                          exportFile();
-                        }}
-                      >
-                        {t('downloadJson')}
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
+                  <DropdownMenuContent>
+                    <DropdownMenuItem
+                      onSelect={() => {
+                        trackEvent(trackingEnabled, AnalyticsEvent.HistoryExportClick, {
+                          type: 'clipboard',
+                        });
+                        exportClipboard();
+                      }}
+                    >
+                      {t('copyAllToClipboard')}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={() => {
+                        trackEvent(
+                          trackingEnabled,
+                          AnalyticsEvent.HistoryExportClick,
+                          {
+                          type: 'file',
+                        });
+                        exportFile();
+                      }}
+                    >
+                      {t('downloadJson')}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
                 <Button
-                  variant="destructive"
+                  variant="outline"
+                  size="sm"
+                  className="gap-1"
+                  onClick={importDataFile}
+                >
+                  <ImportIcon className="w-4 h-4" />
+                  {t('importData', { defaultValue: 'Import data' })}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="gap-1"
+                  onClick={exportDataFile}
+                >
+                  <Download className="w-4 h-4" />
+                  {t('exportData', { defaultValue: 'Export data' })}
+                </Button>
+              </div>
+              <Button
+                variant="destructive"
                   size="sm"
                   onClick={() => {
                     trackEvent(trackingEnabled, AnalyticsEvent.HistoryClearClick);

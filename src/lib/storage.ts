@@ -1,3 +1,14 @@
+import {
+  ACTION_LABELS_ENABLED,
+  CURRENT_JSON,
+  DARK_MODE,
+  HEADER_BUTTONS_ENABLED,
+  JSON_HISTORY,
+  LOCALE,
+  LOGO_ENABLED,
+  SORA_TOOLS_ENABLED,
+  TRACKING_ENABLED,
+} from './storage-keys';
 /**
  * Safely retrieves a value from `localStorage`.
  *
@@ -102,5 +113,49 @@ export function setJson<T>(key: string, value: T): boolean {
   } catch (err) {
     console.warn(`setJson: failed for key "${key}"`, err);
     return false;
+  }
+}
+
+const PREFERENCE_KEYS = [
+  DARK_MODE,
+  SORA_TOOLS_ENABLED,
+  HEADER_BUTTONS_ENABLED,
+  LOGO_ENABLED,
+  ACTION_LABELS_ENABLED,
+  TRACKING_ENABLED,
+  LOCALE,
+];
+
+export interface AppData {
+  currentJson: string | null;
+  jsonHistory: unknown[];
+  preferences: Record<string, unknown>;
+}
+
+export function exportAppData(): AppData {
+  const preferences: Record<string, unknown> = {};
+  for (const key of PREFERENCE_KEYS) {
+    const value = getJson<unknown>(key);
+    if (value !== null) preferences[key] = value;
+  }
+  return {
+    currentJson: safeGet<string>(CURRENT_JSON, null) as string | null,
+    jsonHistory: getJson<unknown[]>(JSON_HISTORY, []) ?? [],
+    preferences,
+  };
+}
+
+export function importAppData(data: AppData) {
+  if (!data || typeof data !== 'object') return;
+  if (typeof data.currentJson === 'string') {
+    safeSet(CURRENT_JSON, data.currentJson);
+  }
+  if (Array.isArray(data.jsonHistory)) {
+    setJson(JSON_HISTORY, data.jsonHistory);
+  }
+  if (data.preferences && typeof data.preferences === 'object') {
+    for (const [key, value] of Object.entries(data.preferences)) {
+      setJson(key, value);
+    }
   }
 }
