@@ -67,16 +67,15 @@ interface ActionBarProps {
   onJumpToJson?: () => void;
 }
 /**
- * Displays a floating toolbar for performing prompt actions such as undo, redo,
- * copy, clear, share and language selection. Additional controls handle history,
- * optional Sora integrations and collapsing the bar into a single restore button.
+ * Renders a floating toolbar providing prompt controls such as undo/redo,
+ * copy, clear, share, import, history access and language selection. Optional
+ * buttons can send prompts to Sora, jump to the JSON preview or open settings.
+ * Internal handlers manage collapsing the bar into a single restore button.
  *
- * Props provide callbacks for each action button along with feature flags that
- * toggle the presence of optional controls like sending to Sora or jumping to the
- * generated JSON preview.
- *
- * @returns A fixed-position element rendering the action buttons or, when
- * minimized, a small button that restores the toolbar.
+ * @param props Callbacks and feature flags controlling which actions appear
+ * and how they behave.
+ * @returns Fixed-position toolbar or, when minimized, a small button that
+ * restores the full action bar.
  */
 export const ActionBar: React.FC<ActionBarProps> = ({
   onUndo,
