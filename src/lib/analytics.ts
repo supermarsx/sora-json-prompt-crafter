@@ -57,6 +57,8 @@ export enum AnalyticsEvent {
   HistoryViewPrompts = 'history_view_prompts',
   HistoryViewActions = 'history_view_actions',
   HistoryExport = 'history_export',
+  DataExport = 'data_export',
+  DataImport = 'data_import',
   HistoryImportOpen = 'history_import_open',
   HistoryExportClick = 'history_export_click',
   HistoryClearClick = 'history_clear_click',
