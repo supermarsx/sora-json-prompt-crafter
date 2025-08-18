@@ -50,10 +50,12 @@ describe('ShareModal', () => {
     (toast.success as jest.Mock).mockClear();
     (toast.error as jest.Mock).mockClear();
     (trackEvent as jest.Mock).mockClear();
+    delete (navigator as { share?: unknown }).share;
   });
 
   afterEach(() => {
     openSpy.mockRestore();
+    delete (navigator as { share?: unknown }).share;
   });
 
   test('does not render when closed', () => {
@@ -126,6 +128,42 @@ describe('ShareModal', () => {
     fireEvent.click(screen.getByRole('button', { name: /telegram/i }));
     expect(openSpy).toHaveBeenCalledWith(url, '_blank', 'noopener');
     expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.ShareTelegram);
+  });
+
+  test('uses native share when available', async () => {
+    const shareMock = jest.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'share', {
+      configurable: true,
+      value: shareMock,
+    });
+    renderModal();
+    expect(screen.queryByRole('button', { name: /facebook/i })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: /share…/i }));
+    const shareUrl = new URL(window.location.href);
+    shareUrl.searchParams.set('ref', 'share');
+    shareUrl.hash = serializeOptions(DEFAULT_OPTIONS);
+    await waitFor(() =>
+      expect(shareMock).toHaveBeenCalledWith({
+        title: i18n.t('shareTitle'),
+        text: i18n.t('shareCaption'),
+        url: shareUrl.toString(),
+      }),
+    );
+    expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.ShareNative);
+  });
+
+  test('falls back to platform buttons when native share fails', async () => {
+    const shareMock = jest.fn().mockRejectedValue(new Error('fail'));
+    Object.defineProperty(navigator, 'share', {
+      configurable: true,
+      value: shareMock,
+    });
+    renderModal();
+    fireEvent.click(screen.getByRole('button', { name: /share…/i }));
+    await waitFor(() => expect(shareMock).toHaveBeenCalled());
+    await screen.findByRole('button', { name: /facebook/i });
+    expect(trackEvent).not.toHaveBeenCalled();
+    expect(toast.error).toHaveBeenCalledWith(i18n.t('somethingWentWrong'));
   });
 
   test('copyLink works when clipboard supported', async () => {
