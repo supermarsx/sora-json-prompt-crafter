@@ -30,6 +30,17 @@ interface ShareModalProps {
   options: SoraOptions;
 }
 
+/**
+ * Modal that exposes multiple sharing options for a generated prompt.
+ * Users can copy a link to their configuration or open prefilled shares for
+ * social platforms.
+ *
+ * @param {object} props - Component props.
+ * @param {boolean} props.isOpen - Controls the open state of the dialog.
+ * @param {() => void} props.onClose - Callback invoked when the modal closes.
+ * @param {string} props.jsonContent - JSON representation included in shares.
+ * @param {SoraOptions} props.options - Options serialized into the share URL.
+ */
 export const ShareModal: React.FC<ShareModalProps> = ({
   isOpen,
   onClose,
@@ -46,6 +57,10 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     url.hash = serializeOptions(options);
     return url.toString();
   }, [options]);
+  /**
+   * Opens a new Facebook share dialog containing the caption and URL.
+   * Displays a success toast and records the action for analytics.
+   */
   const shareToFacebook = () => {
     const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareCaption)}`;
     window.open(url, '_blank', 'noopener,width=600,height=400');
@@ -53,6 +68,10 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     trackEvent(trackingEnabled, AnalyticsEvent.ShareFacebook);
   };
 
+  /**
+   * Shares the caption and URL on Twitter/X in a new window.
+   * Provides user feedback via toast and tracks the event.
+   */
   const shareToTwitter = () => {
     const text = encodeURIComponent(`${shareCaption} #SoraAI #AIGeneration`);
     const url = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(shareUrl)}`;
@@ -61,6 +80,10 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     trackEvent(trackingEnabled, AnalyticsEvent.ShareTwitter);
   };
 
+  /**
+   * Launches WhatsApp with a message containing caption, JSON, and link.
+   * Opens in a new tab and logs the share for analytics purposes.
+   */
   const shareToWhatsApp = () => {
     const text = encodeURIComponent(`${shareCaption}\n\n${jsonContent}\n${shareUrl}`);
     const url = `https://wa.me/?text=${text}`;
@@ -69,6 +92,10 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     trackEvent(trackingEnabled, AnalyticsEvent.ShareWhatsapp);
   };
 
+  /**
+   * Opens a Telegram share window prefilled with caption and JSON content.
+   * Shows a toast confirmation and records analytics for the share.
+   */
   const shareToTelegram = () => {
     const text = encodeURIComponent(`${shareCaption}\n\n${jsonContent}`);
     const url = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${text}`;
@@ -77,6 +104,11 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     trackEvent(trackingEnabled, AnalyticsEvent.ShareTelegram);
   };
 
+  /**
+   * Copies the share URL to the user's clipboard, updates UI state, and
+   * triggers analytics tracking. Displays error toasts on failure or if the
+   * Clipboard API is unsupported.
+   */
   const copyLink = async () => {
     if (!('clipboard' in navigator)) {
       toast.error(t('clipboardUnsupported'));
