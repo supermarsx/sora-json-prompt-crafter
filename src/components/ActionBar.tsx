@@ -66,7 +66,18 @@ interface ActionBarProps {
   showJumpToJson?: boolean;
   onJumpToJson?: () => void;
 }
-
+/**
+ * Displays a floating toolbar for performing prompt actions such as undo, redo,
+ * copy, clear, share and language selection. Additional controls handle history,
+ * optional Sora integrations and collapsing the bar into a single restore button.
+ *
+ * Props provide callbacks for each action button along with feature flags that
+ * toggle the presence of optional controls like sending to Sora or jumping to the
+ * generated JSON preview.
+ *
+ * @returns A fixed-position element rendering the action buttons or, when
+ * minimized, a small button that restores the toolbar.
+ */
 export const ActionBar: React.FC<ActionBarProps> = ({
   onUndo,
   onRedo,
@@ -124,15 +135,30 @@ export const ActionBar: React.FC<ActionBarProps> = ({
       });
     }
   }, [updateAvailable, toast]);
-  
+
+  /**
+   * Collapses the action bar to a single restore button and records the
+   * associated analytics event.
+   */
+  const handleMinimize = () => {
+    setMinimized(true);
+    trackEvent(trackingEnabled, AnalyticsEvent.MinimizeActions);
+  };
+
+  /**
+   * Restores the full action bar from a minimized state and records the
+   * corresponding analytics event.
+   */
+  const handleRestore = () => {
+    setMinimized(false);
+    trackEvent(trackingEnabled, AnalyticsEvent.RestoreActions);
+  };
+
   if (minimized) {
     return (
       <div className="fixed bottom-4 right-4 z-50">
         <Button
-          onClick={() => {
-            setMinimized(false);
-            trackEvent(trackingEnabled, AnalyticsEvent.RestoreActions);
-          }}
+          onClick={handleRestore}
           variant="default"
           size="sm"
           className="gap-1"
@@ -543,10 +569,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         </Button>
       )}
       <Button
-        onClick={() => {
-          setMinimized(true);
-          trackEvent(trackingEnabled, AnalyticsEvent.MinimizeActions);
-        }}
+        onClick={handleMinimize}
         variant="ghost"
         size="icon"
         className="ml-auto"
@@ -572,7 +595,6 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         actionLabelsEnabled={actionLabelsEnabled}
         onToggleActionLabels={onToggleActionLabels}
       />
-
     </div>
   );
 };
