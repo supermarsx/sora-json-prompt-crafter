@@ -10,6 +10,7 @@ export enum AnalyticsEvent {
   ShareTwitter = 'share_twitter',
   ShareWhatsapp = 'share_whatsapp',
   ShareTelegram = 'share_telegram',
+  ShareNative = 'share_native',
   CopyLink = 'copy_link',
   HistoryEdit = 'history_edit',
   HistoryCopy = 'history_copy',

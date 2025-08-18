@@ -13,11 +13,11 @@ import { Button } from '@/components/ui/button';
 import {
   Facebook,
   Twitter,
-  Instagram,
   MessageCircle,
   Send,
   Copy,
   Check,
+  Share2,
 } from 'lucide-react';
 import { toast } from '@/components/ui/sonner-toast';
 import type { SoraOptions } from '@/lib/soraOptions';
@@ -51,6 +51,10 @@ export const ShareModal: React.FC<ShareModalProps> = ({
   const [trackingEnabled] = useTracking();
   const { t } = useTranslation();
   const shareCaption = t('shareCaption');
+  const shareTitle = t('shareTitle');
+  const [nativeShareAvailable, setNativeShareAvailable] = useState(
+    typeof navigator !== 'undefined' && typeof navigator.share === 'function',
+  );
   const shareUrl = useMemo(() => {
     const url = new URL(window.location.href);
     url.searchParams.set('ref', 'share');
@@ -125,6 +129,18 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     }
   };
 
+  const shareNative = async () => {
+    try {
+      await navigator.share({ title: shareTitle, text: shareCaption, url: shareUrl });
+      trackEvent(trackingEnabled, AnalyticsEvent.ShareNative);
+    } catch (err) {
+      if ((err as Error).name !== 'AbortError') {
+        toast.error(t('somethingWentWrong'));
+        setNativeShareAvailable(false);
+      }
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
@@ -132,24 +148,37 @@ export const ShareModal: React.FC<ShareModalProps> = ({
           <DialogTitle>{t('shareTitle')}</DialogTitle>
           <DialogDescription>{t('shareDescription')}</DialogDescription>
         </DialogHeader>
-        <div className="grid grid-cols-2 gap-4 py-4">
-          <Button onClick={shareToFacebook} variant="outline" className="gap-2">
-            <Facebook className="w-4 h-4 text-blue-600" />
-            {t('shareFacebook')}
-          </Button>
-          <Button onClick={shareToTwitter} variant="outline" className="gap-2">
-            <Twitter className="w-4 h-4 text-blue-400" />
-            {t('shareTwitter')}
-          </Button>
-          <Button onClick={shareToWhatsApp} variant="outline" className="gap-2">
-            <MessageCircle className="w-4 h-4 text-green-600" />
-            {t('shareWhatsApp')}
-          </Button>
-          <Button onClick={shareToTelegram} variant="outline" className="gap-2">
-            <Send className="w-4 h-4 text-blue-500" />
-            {t('shareTelegram')}
-          </Button>
-        </div>
+        {nativeShareAvailable ? (
+          <div className="py-4">
+            <Button
+              onClick={shareNative}
+              variant="outline"
+              className="w-full gap-2"
+            >
+              <Share2 className="w-4 h-4" />
+              {t('share')}…
+            </Button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 gap-4 py-4">
+            <Button onClick={shareToFacebook} variant="outline" className="gap-2">
+              <Facebook className="w-4 h-4 text-blue-600" />
+              {t('shareFacebook')}
+            </Button>
+            <Button onClick={shareToTwitter} variant="outline" className="gap-2">
+              <Twitter className="w-4 h-4 text-blue-400" />
+              {t('shareTwitter')}
+            </Button>
+            <Button onClick={shareToWhatsApp} variant="outline" className="gap-2">
+              <MessageCircle className="w-4 h-4 text-green-600" />
+              {t('shareWhatsApp')}
+            </Button>
+            <Button onClick={shareToTelegram} variant="outline" className="gap-2">
+              <Send className="w-4 h-4 text-blue-500" />
+              {t('shareTelegram')}
+            </Button>
+          </div>
+        )}
         <div className="flex justify-center pt-4 border-t">
           <Button onClick={copyLink} variant="default" className="w-full gap-2">
             {copied ? (
