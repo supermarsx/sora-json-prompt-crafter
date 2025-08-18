@@ -221,7 +221,7 @@ A mapping from option keys to their enabling flags (e.g., `lighting` → `use_li
 **Build & Tooling**
 - Vite config injects commit hash/date into build (`VITE_COMMIT_*`) and **defines** `__BASE_URL__` for runtime fetches.
 - PWA via `vite-plugin-pwa` (optional), component tagging plugin for telemetry labels.
-- Node **>=22** required in `package.json` (note: Dockerfile currently uses Node 20 – see follow‑ups).
+- Node **>=22** required in `package.json`; Dockerfile uses Node 22 to match engines.
 - Scripts: dev/build/preview, lint/format/typecheck, test/coverage, accessibility check, copy locales.
 
 ---
@@ -274,7 +274,7 @@ A mapping from option keys to their enabling flags (e.g., `lighting` → `use_li
 - `npm run build` → `dist/` with PWA assets. `npm run coverage` to refresh badge.
 
 **Docker**
-- Multi‑stage build (Node 20 Alpine) that serves `dist/` with `serve` at port **8080**. _Action_: align Node version with engines.
+- Multi‑stage build (Node 22 Alpine) that serves `dist/` with `serve` at port **8080**.
 
 **Environment variables** (`.env`)
 - `VITE_MEASUREMENT_ID` (GA); `VITE_DISABLE_ANALYTICS` (true/false); `VITE_DISABLE_STATS`; `VITE_DISCLAIMER_URL` (may include `{locale}`); `VITE_GTAG_DEBUG`.
@@ -284,7 +284,7 @@ A mapping from option keys to their enabling flags (e.g., `lighting` → `use_li
 ## 11) Open issues & follow‑ups
 
 1) **Origin allowlist & nonce** in cross‑tab messaging to harden the Sora injection flow.
-2) **Synchronize Node versions** (engines ≥22 vs Docker Node 20).
+2) **Synchronize Node versions** (engines ≥22 and Docker Node 22).
 3) Consider **virtualized diff** (e.g., react‑window) for very large JSON.
 4) Expand **e2e testing** (Cypress/Playwright) to cover PWA install/update, import flows, and send‑to‑Sora handshake end‑to‑end.
 5) Add **CSP meta** (e.g., `default-src 'self'`) in `index.html` with necessary allowances for GA (if enabled).
