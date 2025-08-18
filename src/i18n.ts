@@ -3,6 +3,37 @@ import { initReactI18next } from 'react-i18next';
 import { PWA_CACHE } from '@/lib/cache-name';
 declare const __BASE_URL__: string;
 
+// Supported translation files shipped with the application.
+const SUPPORTED_LOCALES = [
+  'bn-IN',
+  'da-DK',
+  'de-AT',
+  'de-DE',
+  'el-GR',
+  'en-GB',
+  'en-PR',
+  'en-US',
+  'es-AR',
+  'es-ES',
+  'es-MX',
+  'et-EE',
+  'fi-FI',
+  'fr-BE',
+  'fr-FR',
+  'it-IT',
+  'ja-JP',
+  'ko-KR',
+  'ne-NP',
+  'pt-BR',
+  'pt-PT',
+  'ro-RO',
+  'ru-RU',
+  'sv-SE',
+  'th-TH',
+  'uk-UA',
+  'zh-CN',
+];
+
 // Initialize i18next without preloaded resources.
 
 i18n.use(initReactI18next).init({
@@ -37,7 +68,31 @@ export async function changeLanguageAsync(lng: string) {
   return i18n.changeLanguage(lng);
 }
 
-// Load the default language initially.
-void changeLanguageAsync('en-US');
+function detectLocale(): string {
+  if (typeof navigator === 'undefined') {
+    return 'en-US';
+  }
+  const candidates: string[] = [];
+  if (navigator.language) {
+    candidates.push(navigator.language);
+  }
+  if (navigator.languages) {
+    candidates.push(...navigator.languages);
+  }
+  for (const lang of candidates) {
+    if (SUPPORTED_LOCALES.includes(lang)) {
+      return lang;
+    }
+    const base = lang.split('-')[0];
+    const match = SUPPORTED_LOCALES.find((l) => l.startsWith(base));
+    if (match) {
+      return match;
+    }
+  }
+  return 'en-US';
+}
+
+// Load the detected language initially.
+void changeLanguageAsync(detectLocale());
 
 export default i18n;
