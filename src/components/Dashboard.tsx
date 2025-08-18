@@ -48,9 +48,20 @@ import { useTranslation } from 'react-i18next';
 import { useLocale } from '@/hooks/use-locale';
 import { CURRENT_JSON, JSON_HISTORY } from '@/lib/storage-keys';
 
+/**
+ * Main dashboard view orchestrating option state, JSON generation and UI panels.
+ * Initializes options, reacts to user interactions, and renders the prompt
+ * crafting interface along with history, sharing and auxiliary controls.
+ */
 const Dashboard = () => {
   const { t } = useTranslation();
   useLocale();
+  /**
+   * Initialize Sora options from the URL or local storage.
+   * Falls back to default options if no saved state is found or parsing fails.
+   *
+   * @returns {SoraOptions} Resolved starting options for the app.
+   */
   const initializeOptions = () => {
     try {
       const fromUrl = getOptionsFromUrl();
@@ -144,6 +155,11 @@ const Dashboard = () => {
     }
   }, [options]);
 
+  /**
+   * Copy the generated JSON string to the clipboard and persist it in history.
+   *
+   * Side effects: updates `copied` and `history` state and logs analytics.
+   */
   const copyToClipboard = async () => {
     const success = await copy(jsonString, t('jsonCopied'));
     if (success) {
@@ -165,17 +181,33 @@ const Dashboard = () => {
     }
   };
 
+  /**
+   * Clear the current JSON output and notify the user.
+   *
+   * Side effects: resets `jsonString`, shows a toast, and tracks analytics.
+   */
   const clearJson = () => {
     setJsonString('{}');
     toast.success(t('jsonCleared'));
     trackEvent(trackingEnabled, AnalyticsEvent.ClearJson);
   };
 
+  /**
+   * Open the share modal for the current JSON content.
+   *
+   * Side effects: toggles modal state and logs analytics.
+   */
   const shareJson = () => {
     setShowShareModal(true);
     trackEvent(trackingEnabled, AnalyticsEvent.ShareButton);
   };
 
+  /**
+   * Open the Sora site in a new window and repeatedly post the JSON payload
+   * until an acknowledgement is received.
+   *
+   * Side effects: opens a window, sets timers/listeners, and logs analytics.
+   */
   const sendToSora = () => {
     const win = window.open('https://sora.chatgpt.com', '_blank', 'noopener');
     if (!win) return;
@@ -204,6 +236,12 @@ const Dashboard = () => {
     trackEvent(trackingEnabled, AnalyticsEvent.SendToSora);
   };
 
+  /**
+   * Import options from a JSON string and merge them into the current state.
+   *
+   * @param {string} json - Stringified options to import.
+   * Side effects: updates options, closes modal, shows toast, and tracks analytics.
+   */
   const importJson = (json: string) => {
     try {
       const obj = JSON.parse(json);
@@ -217,6 +255,11 @@ const Dashboard = () => {
     }
   };
 
+  /**
+    * Reset options to their default values.
+    *
+    * Side effects: resets state, shows toast, and logs analytics.
+    */
   const resetJson = () => {
     // Reset to default options
     reset(DEFAULT_OPTIONS);
@@ -224,6 +267,11 @@ const Dashboard = () => {
     trackEvent(trackingEnabled, AnalyticsEvent.ResetButton);
   };
 
+  /**
+   * Generate a new random seed to refresh the JSON output.
+   *
+   * Side effects: updates `seed`, shows toast, and tracks analytics.
+   */
   const regenerateJson = () => {
     setOptions((prev) => ({
       ...prev,
@@ -233,6 +281,11 @@ const Dashboard = () => {
     trackEvent(trackingEnabled, AnalyticsEvent.RegenerateButton);
   };
 
+  /**
+   * Apply a random assortment of option values for experimentation.
+   *
+   * Side effects: mutates option state with random values, shows toast, and logs analytics.
+   */
   const randomizeJson = () => {
     const randomOptions: Partial<SoraOptions> = {
       seed: Math.floor(Math.random() * 10000),
@@ -250,6 +303,12 @@ const Dashboard = () => {
     trackEvent(trackingEnabled, AnalyticsEvent.RandomizeButton);
   };
 
+  /**
+   * Shallow merge updates into the options state and track changed keys.
+   *
+   * @param {Partial<SoraOptions>} updates - Option fields to update.
+   * Side effects: updates options state and logs analytics for changes.
+   */
   const updateOptions = (updates: Partial<SoraOptions>) => {
     setOptions((prev) => {
       const changedKeys = Object.keys(updates).filter((key) => {
@@ -269,6 +328,13 @@ const Dashboard = () => {
     });
   };
 
+  /**
+   * Update a nested option value using a dot-separated path.
+   *
+   * @param {string} path - Dot notation path to the option.
+   * @param {unknown} value - New value to assign.
+   * Side effects: updates options state and logs input change.
+   */
   const updateNestedOptions = (path: string, value: unknown) => {
     setOptions((prev) => {
       const newOptions = { ...prev };
@@ -297,12 +363,29 @@ const Dashboard = () => {
     });
   };
 
+  /**
+   * Remove a history entry.
+   *
+   * @param {number} id - Identifier of the entry to remove.
+   * Side effects: updates history state.
+   */
   const deleteHistoryEntry = (id: number) => {
     setHistory((prev) => prev.filter((e) => e.id !== id));
   };
 
+  /**
+   * Clear all stored history entries.
+   *
+   * Side effects: resets history state.
+   */
   const clearHistory = () => setHistory([]);
 
+  /**
+   * Copy a JSON history entry to the clipboard.
+   *
+   * @param {string} json - JSON string to copy.
+   * Side effects: logs analytics when successful.
+   */
   const copyHistoryEntry = async (json: string) => {
     const success = await copy(json, t('jsonCopied'));
     if (success) {
@@ -310,6 +393,12 @@ const Dashboard = () => {
     }
   };
 
+  /**
+   * Load a history JSON entry into the editor, enabling relevant sections.
+   *
+   * @param {string} json - JSON string representing options to load.
+   * Side effects: updates options, scrolls view, and logs analytics.
+   */
   const editHistoryEntry = (json: string) => {
     try {
       const obj = JSON.parse(json);
@@ -349,6 +438,12 @@ const Dashboard = () => {
     }
   };
 
+  /**
+   * Import multiple JSON strings into the history list.
+   *
+   * @param {string[]} jsons - Array of JSON strings to add.
+   * Side effects: updates history state and logs analytics.
+   */
   const importHistoryEntries = (jsons: string[]) => {
     const entries = jsons.map((j) => ({
       id: Date.now() + Math.random(),
@@ -359,6 +454,9 @@ const Dashboard = () => {
     trackEvent(trackingEnabled, AnalyticsEvent.HistoryImport, { type: 'bulk' });
   };
 
+  /**
+   * Scroll the page to the generated JSON section.
+   */
   const scrollToJson = () => {
     document
       .getElementById('generated-json')
