@@ -5,6 +5,14 @@ interface FooterProps {
   onShowDisclaimer: () => void;
 }
 
+/**
+ * Application footer containing the link to the GitHub source, a button to
+ * trigger the disclaimer dialog, and version information derived from the
+ * current commit hash and date.
+ *
+ * @param onShowDisclaimer - Callback fired when the disclaimer button is
+ * clicked.
+ */
 const Footer: React.FC<FooterProps> = ({ onShowDisclaimer }) => {
   const { t } = useTranslation();
   const commit = import.meta.env.VITE_COMMIT_HASH;
