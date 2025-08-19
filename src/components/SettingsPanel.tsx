@@ -51,6 +51,30 @@ interface SettingsPanelProps {
   onToggleActionLabels: () => void;
 }
 
+/**
+ * Settings dialog offering a variety of configuration actions for the app.
+ * Provides import, reset, regenerate, randomize and cache purge actions as
+ * well as toggles for analytics tracking, Sora tools, header buttons, logo and
+ * action labels. Internal state tracks confirmation dialogs when enabling or
+ * disabling tracking.
+ *
+ * @param open - Controls whether the dialog is visible.
+ * @param onOpenChange - Callback fired when dialog open state changes.
+ * @param onImport - Invoked to import settings from a file.
+ * @param onReset - Handler to reset all options.
+ * @param onRegenerate - Handler to regenerate the JSON output.
+ * @param onRandomize - Handler to randomize current options.
+ * @param trackingEnabled - Current analytics tracking status.
+ * @param onToggleTracking - Toggles analytics tracking.
+ * @param soraToolsEnabled - Whether Sora tools are enabled.
+ * @param onToggleSoraTools - Toggles Sora tools visibility.
+ * @param headerButtonsEnabled - Whether header buttons are shown.
+ * @param onToggleHeaderButtons - Toggles header button visibility.
+ * @param logoEnabled - Whether the logo is displayed.
+ * @param onToggleLogo - Toggles logo visibility.
+ * @param actionLabelsEnabled - Whether action buttons display text labels.
+ * @param onToggleActionLabels - Toggles action button labels.
+ */
 export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   open,
   onOpenChange,
