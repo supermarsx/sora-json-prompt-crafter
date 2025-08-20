@@ -51,19 +51,16 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
         PreTag="span"
         CodeTag="span"
         wrapLongLines
-        codeTagProps={{
-          style: {
-            whiteSpace: 'pre-wrap',
-            wordBreak: 'break-word',
-            overflowWrap: 'anywhere',
-          },
-        }}
         customStyle={{
           margin: 0,
           padding: 0,
           background: 'none',
           overflowX: 'hidden',
           overflowY: 'auto',
+          whiteSpace: 'pre-wrap',
+          wordBreak: 'break-word',
+          wordWrap: 'break-word',
+          overflowWrap: 'break-word',
         }}
       >
         {value}
