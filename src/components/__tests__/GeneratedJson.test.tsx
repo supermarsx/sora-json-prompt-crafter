@@ -51,11 +51,11 @@ describe('GeneratedJson', () => {
     const added = div.querySelectorAll('span.animate-highlight');
     expect(added.length).toBeGreaterThan(0);
     expect(added[0].textContent).toBe(',"b":2');
-    const token = div.querySelector('pre span span');
+    const token = div.querySelector('pre span span span');
     expect(token).toBeTruthy();
     const style = token?.getAttribute('style') || '';
     expect(style).toBeTruthy();
-    expect(style).toContain('word-wrap: break-word');
+    expect(style).toContain('word-break: break-word');
 
     act(() => {
       jest.advanceTimersByTime(2000);
