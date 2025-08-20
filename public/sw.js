@@ -31,18 +31,28 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  if (
+    request.method !== 'GET' ||
+    new URL(request.url).origin !== self.location.origin
+  ) {
+    return;
+  }
   event.respondWith(
     (async () => {
-      const cached = await caches.match(event.request);
+      const cached = await caches.match(request);
       if (cached) return cached;
       try {
-        return await fetch(event.request);
+        return await fetch(request);
       } catch {
-        if (event.request.mode === 'navigate') {
+        if (request.mode === 'navigate') {
           const fallback = await caches.match('/index.html');
           if (fallback) return fallback;
         }
-        return Response.error();
+        return new Response('Service Unavailable', {
+          status: 503,
+          headers: { 'Content-Type': 'text/plain' },
+        });
       }
     })(),
   );
