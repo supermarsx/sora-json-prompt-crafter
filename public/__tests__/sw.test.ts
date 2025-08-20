@@ -58,12 +58,24 @@ describe('service worker', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (global as any).fetch = jest.fn();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (global as any).Response = (globalThis as any).Response = class {
+      body: unknown;
+      status: number;
+      headers: Record<string, string>;
+      constructor(body: unknown, init: { status: number; headers?: Record<string, string> }) {
+        this.body = body;
+        this.status = init.status;
+        this.headers = init.headers ?? {};
+      }
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (global as any).self = {
       addEventListener: (name: string, cb: (event: unknown) => unknown) => {
         listeners[name] = cb;
       },
       skipWaiting: jest.fn(),
       clients: { claim: jest.fn() },
+      location: { origin: 'http://localhost' },
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (global as any).clients = (global as any).self.clients;
@@ -116,7 +128,10 @@ describe('service worker', () => {
     (global as any).caches.match.mockResolvedValueOnce(cachedResponse);
     let responded: Promise<Response> | undefined;
     const event = {
-      request: { url: '/index.html' } as unknown as Request,
+      request: {
+        url: 'http://localhost/index.html',
+        method: 'GET',
+      } as unknown as Request,
       respondWith: (p: Promise<Response>) => {
         responded = p;
       },
@@ -137,7 +152,10 @@ describe('service worker', () => {
     (global as any).fetch.mockResolvedValue(networkResponse);
     let responded: Promise<Response> | undefined;
     const event = {
-      request: { url: '/index.html' } as unknown as Request,
+      request: {
+        url: 'http://localhost/index.html',
+        method: 'GET',
+      } as unknown as Request,
       respondWith: (p: Promise<Response>) => {
         responded = p;
       },
@@ -147,6 +165,81 @@ describe('service worker', () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect((global as any).fetch).toHaveBeenCalledWith(event.request);
     expect(result).toBe(networkResponse);
+  });
+
+  test('returns cached index.html when network fails during navigation', async () => {
+    await import('../sw.js');
+    const cachedIndex = { body: 'index' } as unknown as Response;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (global as any).caches.match.mockImplementation(async (req: unknown) => {
+      return req === '/index.html' ? cachedIndex : undefined;
+    });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (global as any).fetch.mockRejectedValue(new Error('offline'));
+    let responded: Promise<Response> | undefined;
+    const event = {
+      request: {
+        url: 'http://localhost/not-cached',
+        mode: 'navigate',
+        method: 'GET',
+      } as unknown as Request,
+      respondWith: (p: Promise<Response>) => {
+        responded = p;
+      },
+    };
+    listeners.fetch(event);
+    const result = await responded;
+    expect(result).toBe(cachedIndex);
+  });
+
+  test('returns 503 when network fails for non-navigation request', async () => {
+    await import('../sw.js');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (global as any).caches.match.mockResolvedValueOnce(undefined);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (global as any).fetch.mockRejectedValue(new Error('offline'));
+    let responded: Promise<Response> | undefined;
+    const event = {
+      request: {
+        url: 'http://localhost/asset.js',
+        mode: 'no-cors',
+        method: 'GET',
+      } as unknown as Request,
+      respondWith: (p: Promise<Response>) => {
+        responded = p;
+      },
+    };
+    listeners.fetch(event);
+    const result = await responded;
+    expect(result.status).toBe(503);
+  });
+
+  test('ignores non-GET requests', async () => {
+    await import('../sw.js');
+    const respondWith = jest.fn();
+    const event = {
+      request: {
+        url: 'http://localhost/submit',
+        method: 'POST',
+      } as unknown as Request,
+      respondWith,
+    };
+    listeners.fetch(event);
+    expect(respondWith).not.toHaveBeenCalled();
+  });
+
+  test('ignores cross-origin requests', async () => {
+    await import('../sw.js');
+    const respondWith = jest.fn();
+    const event = {
+      request: {
+        url: 'https://example.com/style.css',
+        method: 'GET',
+      } as unknown as Request,
+      respondWith,
+    };
+    listeners.fetch(event);
+    expect(respondWith).not.toHaveBeenCalled();
   });
 
   test('claims clients on activate', async () => {
