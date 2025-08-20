@@ -21,7 +21,9 @@ use directly with Sora. The app has a privacy-first approach where everything is
 browser, no prompt data is shared or tracked. Dark mode is used as default for those of us that
 go "my eyes!" when there's bright white lights.
 
-[![Go to Lovable](https://img.shields.io/badge/Demo-at%20%F0%9F%92%96%20Lovable-white?style=for-the-badge&logo=lovable)](https://sora-json-prompt-crafter.lovable.app)
+[![Demo at Lovable](https://img.shields.io/badge/Demo-at%20%F0%9F%92%96%20Lovable-white?style=for-the-badge&logo=lovable)](https://sora-json-prompt-crafter.lovable.app)
+
+[![Latest commit at Lovable](https://img.shields.io/badge/LATEST%20COMMIT-at%20%F0%9F%92%96%20Lovable-orange?style=for-the-badge&logo=lovable)](https://preview--sora-json-prompt-crafter.lovable.app)
 
 ## Features
 
