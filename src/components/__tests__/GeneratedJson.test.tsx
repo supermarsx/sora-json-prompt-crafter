@@ -55,7 +55,8 @@ describe('GeneratedJson', () => {
     expect(token).toBeTruthy();
     const style = token?.getAttribute('style') || '';
     expect(style).toBeTruthy();
-    expect(style).toContain('word-wrap: break-word');
+    expect(style).toContain('word-break: break-all');
+    expect(style).toContain('overflow-wrap: anywhere');
 
     act(() => {
       jest.advanceTimersByTime(2000);
