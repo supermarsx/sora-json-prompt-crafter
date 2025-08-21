@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { changeLanguageAsync } from '@/i18n';
 import { useLocalStorageState } from './use-local-storage-state';
 import { LOCALE } from '@/lib/storage-keys';
+import { preloadFlags } from '@/lib/flagPreloader';
 
 const SUPPORTED_LOCALES = [
   'bn-IN',
@@ -91,6 +92,11 @@ export function useLocale() {
     }
     changeLanguageAsync(locale);
   }, [locale, setLocale]);
+
+  // Preload flag assets once when the hook is first used in a session.
+  useEffect(() => {
+    preloadFlags();
+  }, []);
 
   return [locale, setLocale] as const;
 }

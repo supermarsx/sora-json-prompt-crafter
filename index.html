@@ -17,14 +17,47 @@
     />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta
-      name="twitter:image"
-      content="https://lovable.dev/opengraph-image-p98pqg.png"
-    />
-    <script>
-      try {
-        const locale = localStorage.getItem('locale') || 'en';
+      <meta name="twitter:site" content="@lovable_dev" />
+      <meta
+        name="twitter:image"
+        content="https://lovable.dev/opengraph-image-p98pqg.png"
+      />
+      <!-- Preload locale flag assets -->
+      <link rel="preload" href="/flags/bn-IN.svg" as="image" />
+      <link rel="preload" href="/flags/br.svg" as="image" />
+      <link rel="preload" href="/flags/cn.svg" as="image" />
+      <link rel="preload" href="/flags/da-DK.svg" as="image" />
+      <link rel="preload" href="/flags/de-AT.svg" as="image" />
+      <link rel="preload" href="/flags/de-DE.svg" as="image" />
+      <link rel="preload" href="/flags/de.svg" as="image" />
+      <link rel="preload" href="/flags/el-GR.svg" as="image" />
+      <link rel="preload" href="/flags/en-GB.svg" as="image" />
+      <link rel="preload" href="/flags/en-PR.svg" as="image" />
+      <link rel="preload" href="/flags/en-US.svg" as="image" />
+      <link rel="preload" href="/flags/es-AR.svg" as="image" />
+      <link rel="preload" href="/flags/es-ES.svg" as="image" />
+      <link rel="preload" href="/flags/es-MX.svg" as="image" />
+      <link rel="preload" href="/flags/et-EE.svg" as="image" />
+      <link rel="preload" href="/flags/fi-FI.svg" as="image" />
+      <link rel="preload" href="/flags/fr-BE.svg" as="image" />
+      <link rel="preload" href="/flags/fr-FR.svg" as="image" />
+      <link rel="preload" href="/flags/fr.svg" as="image" />
+      <link rel="preload" href="/flags/it-IT.svg" as="image" />
+      <link rel="preload" href="/flags/ja-JP.svg" as="image" />
+      <link rel="preload" href="/flags/jp.svg" as="image" />
+      <link rel="preload" href="/flags/ko-KR.svg" as="image" />
+      <link rel="preload" href="/flags/ne-NP.svg" as="image" />
+      <link rel="preload" href="/flags/pt-BR.svg" as="image" />
+      <link rel="preload" href="/flags/pt-PT.svg" as="image" />
+      <link rel="preload" href="/flags/ro-RO.svg" as="image" />
+      <link rel="preload" href="/flags/ru-RU.svg" as="image" />
+      <link rel="preload" href="/flags/sv-SE.svg" as="image" />
+      <link rel="preload" href="/flags/th-TH.svg" as="image" />
+      <link rel="preload" href="/flags/uk-UA.svg" as="image" />
+      <link rel="preload" href="/flags/zh-CN.svg" as="image" />
+      <script>
+        try {
+          const locale = localStorage.getItem('locale') || 'en';
         document.documentElement.lang = locale;
       } catch {
         document.documentElement.lang = 'en';
