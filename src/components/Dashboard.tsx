@@ -133,18 +133,12 @@ const Dashboard = () => {
   const { copy } = useClipboard();
 
   useEffect(() => {
-    const times: [number, AnalyticsEvent][] = [
-      [3, AnalyticsEvent.Stay3Min],
-      [5, AnalyticsEvent.Stay5Min],
-      [10, AnalyticsEvent.Stay10Min],
-      [30, AnalyticsEvent.Stay30Min],
-      [60, AnalyticsEvent.Stay60Min],
-    ];
-    const timers = times.map(([t, event]) =>
-      setTimeout(() => trackEvent(trackingEnabled, event), t * 60 * 1000),
+    const timer = setTimeout(
+      () => trackEvent(trackingEnabled, AnalyticsEvent.Stay3Min),
+      3 * 60 * 1000,
     );
     return () => {
-      timers.forEach(clearTimeout);
+      clearTimeout(timer);
     };
   }, [trackingEnabled]);
 
