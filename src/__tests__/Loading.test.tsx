@@ -6,5 +6,6 @@ describe('Loading', () => {
     render(<Loading />);
     expect(screen.getByRole('status')).toBeTruthy();
     expect(await screen.findByText('Loading...')).toBeTruthy();
+    expect(screen.getByRole('progressbar')).toBeTruthy();
   });
 });

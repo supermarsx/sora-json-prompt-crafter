@@ -90,6 +90,10 @@ export default {
           '0%': { backgroundColor: 'rgba(253, 224, 71, 0.4)' },
           '100%': { backgroundColor: 'transparent' },
         },
+        'loading-bar': {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -97,6 +101,7 @@ export default {
         rainbow: 'rainbow 10s linear infinite',
         'rainbow-dark': 'rainbow-dark 10s linear infinite',
         highlight: 'highlight 2s ease-in-out',
+        'loading-bar': 'loading-bar 1s ease-in-out infinite',
       },
     },
   },
