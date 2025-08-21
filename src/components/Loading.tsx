@@ -16,9 +16,9 @@ const Loading: React.FC = () => {
       className="flex h-screen w-screen flex-col items-center justify-center transition-opacity duration-50"
       role="status"
     >
-      <div className="flex items-center">
+      <div className="flex items-center justify-center gap-3">
         <Loader2 className="h-10 w-10 animate-spin bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent" />
-        <span className="ml-3 text-lg font-medium">{t('loading')}</span>
+        <span className="text-lg font-medium">{t('loading')}</span>
       </div>
       <div
         className="mt-4 h-1 w-48 overflow-hidden rounded bg-muted"
