@@ -12,3 +12,5 @@ export const GITHUB_STATS = 'githubStats';
 export const GITHUB_STATS_TIMESTAMP = 'githubStatsTimestamp';
 export const JSON_COPY_COUNT = 'jsonCopyCount';
 export const JSON_COPY_MILESTONES = 'jsonCopyMilestones';
+export const APP_RELOAD_COUNT = 'appReloadCount';
+export const APP_RELOAD_MILESTONES = 'appReloadMilestones';
