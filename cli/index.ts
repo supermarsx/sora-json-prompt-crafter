@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { generateJson } from '../src/lib/generateJson.ts';
 import { loadOptionsFromJson } from '../src/lib/loadOptionsFromJson.ts';
 import { DEFAULT_OPTIONS } from '../src/lib/defaultOptions.ts';
@@ -16,6 +16,18 @@ function parseArgs(argv: string[]): Record<string, string | boolean> {
   const args: Record<string, string | boolean> = {};
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
+    if (arg === '--minify') {
+      args.minify = true;
+      continue;
+    }
+    if (arg === '--output') {
+      const next = argv[i + 1];
+      if (next && !next.startsWith('--')) {
+        args.output = next;
+        i++;
+      }
+      continue;
+    }
     if (arg.startsWith('--')) {
       const key = arg.slice(2);
       const next = argv[i + 1];
@@ -42,7 +54,7 @@ function buildOptionsFromFlags(
   const updates: Partial<SoraOptions> = {};
 
   Object.entries(values).forEach(([key, value]) => {
-    if (key === 'file') return;
+    if (key === 'file' || key === 'output' || key === 'minify') return;
     const typedKey = key as keyof SoraOptions;
     const defaultVal = DEFAULT_OPTIONS[typedKey];
     if (defaultVal === undefined) return;
@@ -85,6 +97,8 @@ export function runCli(argv: string[], stdinInput?: string): string {
     return (
       'Usage: sora-crafter [options]\n' +
       '  --file <path>     Load options from JSON file\n' +
+      '  --output <path>   Write output JSON to file\n' +
+      '  --minify          Minify JSON output\n' +
       '  --help            Show this help message\n' +
       '  --version         Show the package version\n'
     );
@@ -97,6 +111,8 @@ export function runCli(argv: string[], stdinInput?: string): string {
 
   const validKeys = new Set([
     'file',
+    'output',
+    'minify',
     ...Object.keys(DEFAULT_OPTIONS),
   ]);
 
@@ -127,7 +143,16 @@ export function runCli(argv: string[], stdinInput?: string): string {
     options = buildOptionsFromFlags(args);
   }
 
-  return generateJson(options);
+  let json = generateJson(options);
+  if (args.minify) {
+    json = JSON.stringify(JSON.parse(json));
+  }
+  if (typeof args.output === 'string') {
+    writeFileSync(args.output, json);
+    return '';
+  }
+
+  return json;
 }
 
 if (process.argv[1]?.includes('cli/index')) {

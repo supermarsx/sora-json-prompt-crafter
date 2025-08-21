@@ -93,6 +93,18 @@ Load options from a JSON file instead:
 npx ts-node cli/index.ts --file options.json
 ```
 
+Write the output to a file with `--output`:
+
+```sh
+npx ts-node cli/index.ts --prompt "A castle at dawn" --output out.json
+```
+
+Generate compact JSON with `--minify`:
+
+```sh
+npx ts-node cli/index.ts --prompt "A castle at dawn" --minify
+```
+
 When installed from npm, the CLI is exposed as `sora-crafter`:
 
 ```sh
