@@ -39,6 +39,16 @@ const qualityOptions = [
   'defective',
 ];
 
+/**
+ * Section for adjusting fundamental generation parameters such as seed,
+ * quality, and guidance settings.
+ *
+ * @param props - Component props.
+ * @param props.options - Current Sora options.
+ * @param props.updateOptions - Function to update the options state.
+ * @param props.isEnabled - Whether this section is active.
+ * @param props.onToggle - Handler to enable or disable the section.
+ */
 export const CoreSettingsSection: React.FC<CoreSettingsSectionProps> = ({
   options,
   updateOptions,

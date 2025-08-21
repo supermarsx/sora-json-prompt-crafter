@@ -18,6 +18,13 @@ interface SettingsLocationSectionProps {
   updateOptions: (updates: Partial<SoraOptions>) => void;
 }
 
+/**
+ * Section for configuring environmental and location-based settings.
+ *
+ * @param props - Component props.
+ * @param props.options - Current Sora options.
+ * @param props.updateOptions - Function to update the options state.
+ */
 export const SettingsLocationSection: React.FC<
   SettingsLocationSectionProps
 > = ({ options, updateOptions }) => {

@@ -19,12 +19,26 @@ interface StyleSectionProps {
   updateOptions: (updates: Partial<SoraOptions>) => void;
 }
 
+/**
+ * Section for selecting and enabling preset artistic styles.
+ *
+ * @param props - Component props.
+ * @param props.options - Current Sora options.
+ * @param props.updateNestedOptions - Setter for nested style preset fields.
+ * @param props.updateOptions - Updates top-level option flags.
+ */
 export const StyleSection: React.FC<StyleSectionProps> = ({
   options,
   updateNestedOptions,
   updateOptions,
 }) => {
   const { t } = useTranslation();
+  /**
+   * Converts a style value into a human-readable label.
+   *
+   * @param value - Raw style preset value.
+   * @returns Capitalized label for display.
+   */
   const formatLabel = (value: string) => {
     return value
       .split(' ')

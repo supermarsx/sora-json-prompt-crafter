@@ -11,6 +11,13 @@ interface LightingSectionProps {
   updateOptions: (updates: Partial<SoraOptions>) => void;
 }
 
+/**
+ * Section for selecting lighting presets to influence scene illumination.
+ *
+ * @param props - Component props.
+ * @param props.options - Current Sora options.
+ * @param props.updateOptions - Callback to update the options state.
+ */
 export const LightingSection: React.FC<LightingSectionProps> = ({
   options,
   updateOptions,

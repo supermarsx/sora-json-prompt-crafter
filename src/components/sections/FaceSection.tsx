@@ -19,6 +19,13 @@ interface FaceSectionProps {
   updateOptions: (updates: Partial<SoraOptions>) => void;
 }
 
+/**
+ * Section for managing facial features, gender, makeup, and mood.
+ *
+ * @param props - Component props.
+ * @param props.options - Current Sora options.
+ * @param props.updateOptions - Function to update the options state.
+ */
 export const FaceSection: React.FC<FaceSectionProps> = ({
   options,
   updateOptions,
