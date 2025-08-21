@@ -9,7 +9,7 @@ function parse(json: string) {
 
 describe('generateJson', () => {
   test('removes mapped options when their flags are false', () => {
-    const base: any = { ...DEFAULT_OPTIONS };
+    const base: SoraOptions = { ...DEFAULT_OPTIONS };
 
     // Enable all feature flags
     Object.keys(base).forEach((key) => {
