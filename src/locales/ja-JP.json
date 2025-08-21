@@ -870,5 +870,10 @@
   "jsonPreviewTitle": "JSON Preview",
   "jsonPreviewDescription": "Preview the generated JSON output.",
   "importFromClipboard": "Import from Clipboard",
-  "bulkImportFromClipboard": "Bulk Import from Clipboard"
+  "bulkImportFromClipboard": "Bulk Import from Clipboard",
+  "dataExported": "データをエクスポートしました",
+  "dataImported": "データをインポートしました",
+  "invalidDataFile": "無効なデータファイル",
+  "exportData": "データをエクスポート",
+  "importData": "データをインポート"
 }
