@@ -6,6 +6,12 @@ import { DEFAULT_OPTIONS } from '../src/lib/defaultOptions.ts';
 import { OPTION_FLAG_MAP } from '../src/lib/optionFlagMap.ts';
 import type { SoraOptions } from '../src/lib/soraOptions.ts';
 
+/**
+ * Parse command-line arguments into a key-value map.
+ *
+ * @param argv - Arguments provided to the CLI.
+ * @returns Object mapping flag names to their values or boolean presence.
+ */
 function parseArgs(argv: string[]): Record<string, string | boolean> {
   const args: Record<string, string | boolean> = {};
   for (let i = 0; i < argv.length; i++) {
@@ -24,6 +30,12 @@ function parseArgs(argv: string[]): Record<string, string | boolean> {
   return args;
 }
 
+/**
+ * Construct a complete options object from CLI flag values.
+ *
+ * @param values - Flag values supplied on the command line.
+ * @returns Options merged with defaults and inferred enable flags.
+ */
 function buildOptionsFromFlags(
   values: Record<string, string | boolean>,
 ): SoraOptions {
@@ -56,6 +68,16 @@ function buildOptionsFromFlags(
   return { ...DEFAULT_OPTIONS, ...updates };
 }
 
+/**
+ * Entry point for the CLI.
+ *
+ * Parses flags, loads options from JSON input or file,
+ * and outputs the generated JSON string.
+ *
+ * @param argv - CLI arguments excluding the node executable and script path.
+ * @param stdinInput - Optional JSON string supplied via stdin (used in tests).
+ * @returns Generated JSON string of active Sora options.
+ */
 export function runCli(argv: string[], stdinInput?: string): string {
   const args = parseArgs(argv);
 
