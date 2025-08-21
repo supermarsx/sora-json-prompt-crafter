@@ -175,6 +175,7 @@ describe('ShareModal', () => {
     });
     renderModal();
     const btn = screen.getByRole('button', { name: /copy link/i });
+    expect(btn.getAttribute('title')).toBe(i18n.t('copyLink'));
     fireEvent.click(btn);
     const shareUrl = new URL(window.location.href);
     shareUrl.searchParams.set('ref', 'share');

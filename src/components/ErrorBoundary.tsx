@@ -51,7 +51,11 @@ class ErrorBoundary extends Component<Props, State> {
             <p className="text-sm text-muted-foreground">
               {this.state.error?.message || i18n.t('unexpectedError')}
             </p>
-            <Button onClick={this.handleReset} className="gap-2">
+            <Button
+              onClick={this.handleReset}
+              className="gap-2"
+              title={i18n.t('tryAgain')}
+            >
               <RefreshCw className="w-4 h-4" />
               {i18n.t('tryAgain')}
             </Button>

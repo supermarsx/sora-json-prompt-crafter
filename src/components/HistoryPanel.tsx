@@ -316,7 +316,12 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                 <div className="flex gap-2">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline" size="sm" className="gap-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="gap-1"
+                        title={t('import')}
+                      >
                         <ImportIcon className="w-4 h-4" /> {t('import')}
                       </Button>
                     </DropdownMenuTrigger>
@@ -366,6 +371,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                         size="sm"
                         className="gap-1"
                         disabled={noHistory}
+                        title={t('export')}
                       >
                         <Download className="w-4 h-4" /> {t('export')}
                       </Button>
@@ -401,6 +407,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                   size="sm"
                   className="gap-1"
                   onClick={importDataFile}
+                  title={t('importData', { defaultValue: 'Import data' })}
                 >
                   <ImportIcon className="w-4 h-4" />
                   {t('importData', { defaultValue: 'Import data' })}
@@ -410,6 +417,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                   size="sm"
                   className="gap-1"
                   onClick={exportDataFile}
+                  title={t('exportData', { defaultValue: 'Export data' })}
                 >
                   <Download className="w-4 h-4" />
                   {t('exportData', { defaultValue: 'Export data' })}
@@ -417,15 +425,16 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
               </div>
               <Button
                 variant="destructive"
-                  size="sm"
-                  onClick={() => {
-                    trackEvent(trackingEnabled, AnalyticsEvent.HistoryClearClick);
-                    setConfirmClear(true);
-                  }}
-                  disabled={noHistory}
-                >
-                  {t('clearHistory')}
-                </Button>
+                size="sm"
+                onClick={() => {
+                  trackEvent(trackingEnabled, AnalyticsEvent.HistoryClearClick);
+                  setConfirmClear(true);
+                }}
+                disabled={noHistory}
+                title={t('clearHistory')}
+              >
+                {t('clearHistory')}
+              </Button>
               </div>
               <div className="h-[60vh]">
                 {history.length > 0 ? (
@@ -472,6 +481,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                     className="gap-1"
                     onClick={exportActions}
                     disabled={noActions}
+                    title={t('export')}
                   >
                     <Download className="w-4 h-4" /> {t('export')}
                   </Button>
@@ -480,6 +490,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                     variant="destructive"
                     onClick={requestClearActions}
                     disabled={noActions}
+                    title={t('clearActions')}
                   >
                     {t('clearActions')}
                   </Button>
@@ -501,6 +512,11 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                           className={`p-0 w-3.5 h-3.5 ${confirmDeleteActionIdx === idx ? 'text-destructive animate-pulse' : ''}`}
                           onClick={() => requestDeleteAction(idx)}
                           aria-label={
+                            confirmDeleteActionIdx === idx
+                              ? t('confirm')
+                              : t('delete')
+                          }
+                          title={
                             confirmDeleteActionIdx === idx
                               ? t('confirm')
                               : t('delete')

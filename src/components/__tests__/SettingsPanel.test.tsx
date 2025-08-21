@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import SettingsPanel from '../SettingsPanel';
 import { purgeCache } from '@/lib/purgeCache';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
+import i18n from '@/i18n';
 
 jest.mock('@/lib/purgeCache', () => ({ purgeCache: jest.fn() }));
 jest.mock('@/lib/analytics', () => {
@@ -22,8 +23,8 @@ jest.mock('@/components/ui/dialog', () => ({
 
 jest.mock('@/components/ui/button', () => ({
   __esModule: true,
-  Button: ({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) => (
-    <button onClick={onClick}>{children}</button>
+  Button: ({ children, ...props }: { children: React.ReactNode } & React.ComponentProps<'button'>) => (
+    <button {...props}>{children}</button>
   ),
 }));
 
@@ -74,7 +75,9 @@ function renderPanel(overrides: Partial<React.ComponentProps<typeof SettingsPane
 describe('SettingsPanel', () => {
   test('purge cache button triggers utility', () => {
     renderPanel();
-    fireEvent.click(screen.getByText(/purge cache/i));
+    const purgeBtn = screen.getByRole('button', { name: /purge cache/i });
+    expect(purgeBtn.getAttribute('title')).toBe(i18n.t('purgeCache'));
+    fireEvent.click(purgeBtn);
     expect(purgeCache).toHaveBeenCalled();
     expect(trackEvent).toHaveBeenCalledWith(
       true,

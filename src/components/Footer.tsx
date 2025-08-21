@@ -30,7 +30,11 @@ const Footer: React.FC<FooterProps> = ({ onShowDisclaimer }) => {
         >
           {t('githubSource')}
         </a>{' '}
-        <button onClick={onShowDisclaimer} className="underline ml-2">
+        <button
+          onClick={onShowDisclaimer}
+          className="underline ml-2"
+          title={t('disclaimer')}
+        >
           {t('disclaimer')}
         </button>
       </p>

@@ -45,6 +45,7 @@ export const CollapsibleSection: React.FC<CollapsibleSectionProps> = ({
           className="flex items-center justify-between w-full text-left"
           aria-expanded={isOpen}
           aria-controls={contentId}
+          title={title}
         >
           <h3 className="font-semibold text-lg">{title}</h3>
           {isOpen ? (

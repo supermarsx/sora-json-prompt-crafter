@@ -161,6 +161,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           variant="default"
           size="sm"
           className="gap-1"
+          title={t('actions')}
         >
           {t('actions')}
           <ChevronUp className="w-4 h-4" />
@@ -177,6 +178,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           variant="outline"
           size="sm"
           className={cn({ 'gap-2': actionLabelsEnabled })}
+          title={t('sendToSora')}
         >
           <Send className="w-4 h-4" />
           {actionLabelsEnabled && t('sendToSora')}
@@ -188,6 +190,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         size="sm"
         disabled={!canUndo}
         className={cn({ 'gap-2': actionLabelsEnabled })}
+        title={t('undo')}
       >
         <Undo2 className="w-4 h-4" />
         {actionLabelsEnabled && t('undo')}
@@ -198,6 +201,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         size="sm"
         disabled={!canRedo}
         className={cn({ 'gap-2': actionLabelsEnabled })}
+        title={t('redo')}
       >
         <Redo2 className="w-4 h-4" />
         {actionLabelsEnabled && t('redo')}
@@ -207,6 +211,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         variant="outline"
         size="sm"
         className={cn({ 'gap-2': actionLabelsEnabled })}
+        title={t('copy')}
       >
         {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
         {actionLabelsEnabled && t('copy')}
@@ -220,6 +225,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         variant="outline"
         size="sm"
         className={cn({ 'gap-2': actionLabelsEnabled })}
+        title={t('clear')}
       >
         <Trash2 className={`w-4 h-4 ${clearing ? 'animate-spin' : ''}`} />
         {actionLabelsEnabled && t('clear')}
@@ -229,6 +235,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         variant="outline"
         size="sm"
         className={cn({ 'gap-2': actionLabelsEnabled })}
+        title={t('share')}
       >
         <Share className="w-4 h-4" />
         {actionLabelsEnabled && t('share')}
@@ -238,6 +245,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         variant="outline"
         size="sm"
         className={cn({ 'gap-2': actionLabelsEnabled })}
+        title={t('manage')}
       >
         <Cog className="w-4 h-4" /> {actionLabelsEnabled && t('manage')}
       </Button>
@@ -247,6 +255,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
             variant="outline"
             size="sm"
             className={cn({ 'gap-2': actionLabelsEnabled })}
+            title={t('language')}
           >
             <Languages className="w-4 h-4" />
             {actionLabelsEnabled && t('language')}
@@ -549,6 +558,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         variant="outline"
         size="sm"
         className={cn({ 'gap-2': actionLabelsEnabled })}
+        title={t('history')}
       >
         <History className="w-4 h-4" />
         {actionLabelsEnabled && t('history')}
@@ -562,6 +572,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
           variant="outline"
           size="sm"
           className={cn({ 'gap-2': actionLabelsEnabled })}
+          title={t('jumpToJson')}
         >
           <MoveDown className="w-4 h-4" />
           {actionLabelsEnabled && t('jumpToJson')}

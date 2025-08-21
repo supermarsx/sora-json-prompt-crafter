@@ -55,6 +55,7 @@ const HistoryItem: React.FC<HistoryItemProps> = ({
             setTimeout(() => setEdited(false), 1500);
           }}
           className={`gap-1 ${edited ? 'text-green-600 animate-pulse' : ''}`}
+          title={edited ? t('edited') : t('edit')}
         >
           {edited ? <Check className="w-4 h-4" /> : <Edit className="w-4 h-4" />}{' '}
           {edited ? t('edited') : t('edit')}
@@ -69,6 +70,7 @@ const HistoryItem: React.FC<HistoryItemProps> = ({
             setTimeout(() => setCopied(false), 1500);
           }}
           className={`gap-1 ${copied ? 'text-green-600 animate-pulse' : ''}`}
+          title={copied ? t('copied') : t('copy')}
         >
           {copied ? <Check className="w-4 h-4" /> : <Clipboard className="w-4 h-4" />}{' '}
           {copied ? t('copied') : t('copy')}
@@ -81,6 +83,7 @@ const HistoryItem: React.FC<HistoryItemProps> = ({
             onPreview(entry);
           }}
           className="gap-1"
+          title={t('preview')}
         >
           <Eye className="w-4 h-4" /> {t('preview')}
         </Button>
@@ -98,6 +101,7 @@ const HistoryItem: React.FC<HistoryItemProps> = ({
             }
           }}
           className={`gap-1 ${confirmDelete ? 'animate-pulse' : ''}`}
+          title={confirmDelete ? t('confirm') : t('delete')}
         >
           <Trash2 className="w-4 h-4" />
           {confirmDelete ? t('confirm') : t('delete')}

@@ -53,7 +53,9 @@ describe('BulkFileImportModal', () => {
     fireEvent.change(input, {
       target: { files: [file] },
     });
-    fireEvent.click(screen.getByRole('button', { name: /import/i }));
+    const button = screen.getByRole('button', { name: /import/i });
+    expect(button.getAttribute('title')).toBe(i18n.t('import'));
+    fireEvent.click(button);
     await waitFor(() =>
       expect(onImport).toHaveBeenCalledWith(['{"prompt":"test"}']),
     );
@@ -87,7 +89,9 @@ describe('BulkFileImportModal', () => {
     fireEvent.change(input, {
       target: { files: [file] },
     });
-    fireEvent.click(screen.getByRole('button', { name: /import/i }));
+    const button = screen.getByRole('button', { name: /import/i });
+    expect(button.getAttribute('title')).toBe(i18n.t('import'));
+    fireEvent.click(button);
     await waitFor(() =>
       expect(toast.error).toHaveBeenCalledWith(i18n.t('failedImportFile')),
     );
@@ -107,7 +111,9 @@ describe('BulkFileImportModal', () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: /import/i }));
+    const button = screen.getByRole('button', { name: /import/i });
+    expect(button.getAttribute('title')).toBe(i18n.t('import'));
+    fireEvent.click(button);
 
     expect(toast.error).toHaveBeenCalledWith(i18n.t('pleaseSelectFile'));
     expect(onImport).not.toHaveBeenCalled();
