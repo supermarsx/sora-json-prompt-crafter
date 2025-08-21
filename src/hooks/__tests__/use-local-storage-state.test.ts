@@ -7,6 +7,8 @@ jest.mock('@/lib/storage', () => ({
   getJson: jest.fn(),
   setJson: jest.fn(),
   safeRemove: jest.fn(),
+  safeGet: jest.fn(),
+  safeSet: jest.fn(),
 }));
 
 describe('useLocalStorageState', () => {
@@ -78,6 +80,44 @@ describe('useLocalStorageState', () => {
     });
 
     expect(result.current[0]).toBe('two');
+  });
+
+  test('uses custom serialize and deserialize callbacks', () => {
+    (storage.safeGet as jest.Mock).mockReturnValue('ser:hello');
+
+    const serialize = jest.fn((v: string) => `ser:${v}`);
+    const deserialize = jest.fn((v: string) => v.replace('ser:', ''));
+
+    const { result } = renderHook(() =>
+      useLocalStorageState('key', 'default', { serialize, deserialize }),
+    );
+
+    expect(storage.getJson).not.toHaveBeenCalled();
+    expect(storage.setJson).not.toHaveBeenCalled();
+    expect(storage.safeGet).toHaveBeenCalledWith('key', null);
+    expect(deserialize).toHaveBeenCalledWith('ser:hello');
+    expect(result.current[0]).toBe('hello');
+
+    act(() => {
+      result.current[1]('world');
+    });
+
+    expect(serialize).toHaveBeenCalledWith('world');
+    expect(storage.safeSet).toHaveBeenLastCalledWith('key', 'ser:world');
+    expect(result.current[0]).toBe('world');
+
+    act(() => {
+      window.dispatchEvent(
+        new StorageEvent('storage', {
+          key: 'key',
+          newValue: 'ser:event',
+          storageArea: window.localStorage,
+        }),
+      );
+    });
+
+    expect(deserialize).toHaveBeenLastCalledWith('ser:event');
+    expect(result.current[0]).toBe('event');
   });
 
   test('cleans up storage listener on unmount', () => {
