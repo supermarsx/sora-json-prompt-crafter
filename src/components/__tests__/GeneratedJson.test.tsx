@@ -27,6 +27,7 @@ describe('GeneratedJson', () => {
   beforeEach(() => {
     jest.useFakeTimers();
     (trackEvent as jest.Mock).mockClear();
+    localStorage.clear();
   });
 
   afterEach(() => {
