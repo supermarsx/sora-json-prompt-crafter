@@ -22,6 +22,18 @@ interface ImportModalProps {
   onImport: (json: string) => void;
 }
 
+/**
+ * Modal for importing JSON prompt options via manual input, URL fetch, or file upload.
+ *
+ * @param {ImportModalProps} props - Component props.
+ * @param {boolean} props.isOpen - Whether the dialog is displayed.
+ * @param {() => void} props.onClose - Callback when the dialog is closed.
+ * @param {(json: string) => void} props.onImport - Called with a validated JSON string.
+ *
+ * @remarks
+ * Displays toast notifications on validation failure or blocked requests and
+ * emits an analytics event when importing from a URL.
+ */
 export const ImportModal: React.FC<ImportModalProps> = ({
   isOpen,
   onClose,
