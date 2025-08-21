@@ -8,6 +8,7 @@ import {
 import { ShareModal } from '../ShareModal';
 import i18n from '@/i18n';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
+import { SHARE_COUNT, SHARE_MILESTONES } from '@/lib/storage-keys';
 import { useTracking } from '@/hooks/use-tracking';
 import { toast } from '@/components/ui/sonner-toast';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
@@ -50,6 +51,7 @@ describe('ShareModal', () => {
     (toast.success as jest.Mock).mockClear();
     (toast.error as jest.Mock).mockClear();
     (trackEvent as jest.Mock).mockClear();
+    localStorage.clear();
     delete (navigator as { share?: unknown }).share;
   });
 
@@ -111,7 +113,9 @@ describe('ShareModal', () => {
     const shareUrl = new URL(window.location.href);
     shareUrl.searchParams.set('ref', 'share');
     shareUrl.hash = serializeOptions(DEFAULT_OPTIONS);
-    const text = encodeURIComponent(`${i18n.t('shareCaption')}\n\nmyjson\n${shareUrl.toString()}`);
+    const text = encodeURIComponent(
+      `${i18n.t('shareCaption')}\n\nmyjson\n${shareUrl.toString()}`,
+    );
     const url = `https://wa.me/?text=${text}`;
     fireEvent.click(screen.getByRole('button', { name: /whatsapp/i }));
     expect(openSpy).toHaveBeenCalledWith(url, '_blank', 'noopener');
@@ -128,6 +132,30 @@ describe('ShareModal', () => {
     fireEvent.click(screen.getByRole('button', { name: /telegram/i }));
     expect(openSpy).toHaveBeenCalledWith(url, '_blank', 'noopener');
     expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.ShareTelegram);
+  });
+
+  test('increments share counter and emits milestones', () => {
+    localStorage.setItem(SHARE_COUNT, '4');
+    localStorage.setItem(SHARE_MILESTONES, '[]');
+    renderModal();
+    fireEvent.click(screen.getByRole('button', { name: /facebook/i }));
+    expect(JSON.parse(localStorage.getItem(SHARE_COUNT) || '0')).toBe(5);
+    let calls = (trackEvent as jest.Mock).mock.calls.filter(
+      (c) => c[1] === AnalyticsEvent.Share5,
+    );
+    expect(calls.length).toBe(1);
+    expect(JSON.parse(localStorage.getItem(SHARE_MILESTONES) || '[]')).toEqual([
+      5,
+    ]);
+    (trackEvent as jest.Mock).mockClear();
+    fireEvent.click(screen.getByRole('button', { name: /facebook/i }));
+    calls = (trackEvent as jest.Mock).mock.calls.filter(
+      (c) => c[1] === AnalyticsEvent.Share5,
+    );
+    expect(calls.length).toBe(0);
+    expect(JSON.parse(localStorage.getItem(SHARE_MILESTONES) || '[]')).toEqual([
+      5,
+    ]);
   });
 
   test('uses native share when available', async () => {

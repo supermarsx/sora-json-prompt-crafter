@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
+import { AnalyticsEvent } from '@/lib/analytics';
+import { trackShare } from '@/lib/share-counter';
 import { useTracking } from '@/hooks/use-tracking';
 import { useTranslation } from 'react-i18next';
 import {
@@ -69,7 +70,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareCaption)}`;
     window.open(url, '_blank', 'noopener,width=600,height=400');
     toast.success(t('sharedToFacebook'));
-    trackEvent(trackingEnabled, AnalyticsEvent.ShareFacebook);
+    trackShare(trackingEnabled, AnalyticsEvent.ShareFacebook);
   };
 
   /**
@@ -81,7 +82,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     const url = `https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(shareUrl)}`;
     window.open(url, '_blank', 'noopener,width=600,height=400');
     toast.success(t('sharedToTwitter'));
-    trackEvent(trackingEnabled, AnalyticsEvent.ShareTwitter);
+    trackShare(trackingEnabled, AnalyticsEvent.ShareTwitter);
   };
 
   /**
@@ -89,11 +90,13 @@ export const ShareModal: React.FC<ShareModalProps> = ({
    * Opens in a new tab and logs the share for analytics purposes.
    */
   const shareToWhatsApp = () => {
-    const text = encodeURIComponent(`${shareCaption}\n\n${jsonContent}\n${shareUrl}`);
+    const text = encodeURIComponent(
+      `${shareCaption}\n\n${jsonContent}\n${shareUrl}`,
+    );
     const url = `https://wa.me/?text=${text}`;
     window.open(url, '_blank', 'noopener');
     toast.success(t('sharedToWhatsApp'));
-    trackEvent(trackingEnabled, AnalyticsEvent.ShareWhatsapp);
+    trackShare(trackingEnabled, AnalyticsEvent.ShareWhatsapp);
   };
 
   /**
@@ -105,7 +108,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     const url = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${text}`;
     window.open(url, '_blank', 'noopener');
     toast.success(t('sharedToTelegram'));
-    trackEvent(trackingEnabled, AnalyticsEvent.ShareTelegram);
+    trackShare(trackingEnabled, AnalyticsEvent.ShareTelegram);
   };
 
   /**
@@ -123,7 +126,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
       toast.success(t('linkCopied'));
-      trackEvent(trackingEnabled, AnalyticsEvent.CopyLink);
+      trackShare(trackingEnabled, AnalyticsEvent.CopyLink);
     } catch (err) {
       toast.error(t('copyFailed'));
     }
@@ -131,8 +134,12 @@ export const ShareModal: React.FC<ShareModalProps> = ({
 
   const shareNative = async () => {
     try {
-      await navigator.share({ title: shareTitle, text: shareCaption, url: shareUrl });
-      trackEvent(trackingEnabled, AnalyticsEvent.ShareNative);
+      await navigator.share({
+        title: shareTitle,
+        text: shareCaption,
+        url: shareUrl,
+      });
+      trackShare(trackingEnabled, AnalyticsEvent.ShareNative);
     } catch (err) {
       if ((err as Error).name !== 'AbortError') {
         toast.error(t('somethingWentWrong'));

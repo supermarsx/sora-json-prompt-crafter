@@ -33,6 +33,7 @@ import { useSoraUserscript } from '@/hooks/use-sora-userscript';
 import { useActionHistory } from '@/hooks/use-action-history';
 import { useUndoRedo } from '@/hooks/use-undo-redo';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
+import { trackShare } from '@/lib/share-counter';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { generateJson } from '@/lib/generateJson';
 import type { SoraOptions } from '@/lib/soraOptions';
@@ -190,12 +191,12 @@ const Dashboard = () => {
         sections: sections.join(','),
       });
       try {
-        const count = (safeGet<number>(JSON_COPY_COUNT, 0, true) as number) ?? 0;
+        const count =
+          (safeGet<number>(JSON_COPY_COUNT, 0, true) as number) ?? 0;
         const newCount = count + 1;
         safeSet(JSON_COPY_COUNT, newCount, true);
-        const milestones = (
-          safeGet<number[]>(JSON_COPY_MILESTONES, [], true) as number[]
-        ) ?? [];
+        const milestones =
+          (safeGet<number[]>(JSON_COPY_MILESTONES, [], true) as number[]) ?? [];
         for (const [threshold, event] of COPY_MILESTONES) {
           if (newCount >= threshold && !milestones.includes(threshold)) {
             trackEvent(trackingEnabled, event);
@@ -228,7 +229,7 @@ const Dashboard = () => {
    */
   const shareJson = () => {
     setShowShareModal(true);
-    trackEvent(trackingEnabled, AnalyticsEvent.ShareButton);
+    trackShare(trackingEnabled, AnalyticsEvent.ShareButton);
   };
 
   /**
@@ -285,10 +286,10 @@ const Dashboard = () => {
   };
 
   /**
-    * Reset options to their default values.
-    *
-    * Side effects: resets state, shows toast, and logs analytics.
-    */
+   * Reset options to their default values.
+   *
+   * Side effects: resets state, shows toast, and logs analytics.
+   */
   const resetJson = () => {
     // Reset to default options
     reset(DEFAULT_OPTIONS);
