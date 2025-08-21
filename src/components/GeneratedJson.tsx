@@ -51,15 +51,19 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
         PreTag="span"
         CodeTag="span"
         wrapLongLines
+        codeTagProps={{
+          style: {
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word',
+            overflowWrap: 'anywhere',
+          },
+        }}
         customStyle={{
           margin: 0,
           padding: 0,
           background: 'none',
           overflowX: 'hidden',
           overflowY: 'auto',
-          whiteSpace: 'pre-wrap',
-          wordBreak: 'break-all',
-          overflowWrap: 'anywhere',
         }}
       >
         {value}
@@ -72,7 +76,7 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
       className="h-full overflow-y-auto overflow-x-hidden"
       ref={containerRef}
     >
-      <pre className="p-6 text-sm font-mono whitespace-pre-wrap break-all leading-relaxed">
+      <pre className="p-6 text-sm font-mono whitespace-pre-wrap break-words leading-relaxed">
         {diffParts
           ? diffParts.map((part, idx) =>
               renderHighlighted(part.value, Boolean(part.added), idx),
