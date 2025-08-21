@@ -3,6 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { useLocale } from '@/hooks/use-locale';
 import { Button } from '@/components/ui/button';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
+import { safeGet, safeSet } from '@/lib/storage';
+import {
+  UNDO_COUNT,
+  UNDO_MILESTONES,
+  REDO_COUNT,
+  REDO_MILESTONES,
+} from '@/lib/storage-keys';
 import { cn } from '@/lib/utils';
 import {
   DropdownMenu,
@@ -36,6 +43,20 @@ import {
   ChevronUp,
   MoveDown,
 } from 'lucide-react';
+
+const UNDO_MILESTONE_EVENTS: [number, AnalyticsEvent][] = [
+  [100, AnalyticsEvent.Undo100],
+  [500, AnalyticsEvent.Undo500],
+  [1000, AnalyticsEvent.Undo1000],
+  [10000, AnalyticsEvent.Undo10000],
+];
+
+const REDO_MILESTONE_EVENTS: [number, AnalyticsEvent][] = [
+  [100, AnalyticsEvent.Redo100],
+  [500, AnalyticsEvent.Redo500],
+  [1000, AnalyticsEvent.Redo1000],
+  [10000, AnalyticsEvent.Redo10000],
+];
 
 interface ActionBarProps {
   onUndo: () => void;
@@ -185,7 +206,26 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         </Button>
       )}
       <Button
-        onClick={onUndo}
+        onClick={() => {
+          onUndo();
+          trackEvent(trackingEnabled, AnalyticsEvent.UndoButton);
+          try {
+            const count = (safeGet<number>(UNDO_COUNT, 0, true) as number) ?? 0;
+            const newCount = count + 1;
+            safeSet(UNDO_COUNT, newCount, true);
+            const milestones =
+              (safeGet<number[]>(UNDO_MILESTONES, [], true) as number[]) ?? [];
+            for (const [threshold, event] of UNDO_MILESTONE_EVENTS) {
+              if (newCount >= threshold && !milestones.includes(threshold)) {
+                trackEvent(trackingEnabled, event);
+                milestones.push(threshold);
+              }
+            }
+            safeSet(UNDO_MILESTONES, milestones, true);
+          } catch {
+            console.error('Undo counter: There was an error.');
+          }
+        }}
         variant="outline"
         size="sm"
         disabled={!canUndo}
@@ -196,7 +236,26 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         {actionLabelsEnabled && t('undo')}
       </Button>
       <Button
-        onClick={onRedo}
+        onClick={() => {
+          onRedo();
+          trackEvent(trackingEnabled, AnalyticsEvent.RedoButton);
+          try {
+            const count = (safeGet<number>(REDO_COUNT, 0, true) as number) ?? 0;
+            const newCount = count + 1;
+            safeSet(REDO_COUNT, newCount, true);
+            const milestones =
+              (safeGet<number[]>(REDO_MILESTONES, [], true) as number[]) ?? [];
+            for (const [threshold, event] of REDO_MILESTONE_EVENTS) {
+              if (newCount >= threshold && !milestones.includes(threshold)) {
+                trackEvent(trackingEnabled, event);
+                milestones.push(threshold);
+              }
+            }
+            safeSet(REDO_MILESTONES, milestones, true);
+          } catch {
+            console.error('Redo counter: There was an error.');
+          }
+        }}
         variant="outline"
         size="sm"
         disabled={!canRedo}
