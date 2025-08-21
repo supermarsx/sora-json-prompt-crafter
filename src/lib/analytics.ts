@@ -84,6 +84,21 @@ export enum AnalyticsEvent {
   CopyJson2000 = 'copy_json_2000',
   CopyJson5000 = 'copy_json_5000',
   CopyJson10000 = 'copy_json_10000',
+  Time5Min = 'time_5min',
+  Time10Min = 'time_10min',
+  Time30Min = 'time_30min',
+  Time1Hour = 'time_1h',
+  Time3Hour = 'time_3h',
+  Time8Hour = 'time_8h',
+  Time12Hour = 'time_12h',
+  Time2Day = 'time_2d',
+  Time4Day = 'time_4d',
+  Time7Day = 'time_7d',
+  Time2Week = 'time_2w',
+  Time4Week = 'time_4w',
+  Time2Month = 'time_2m',
+  Time4Month = 'time_4m',
+  Time8Month = 'time_8m',
 }
 
 let trackingFailures = 0;
