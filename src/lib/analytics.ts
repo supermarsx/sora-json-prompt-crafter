@@ -62,6 +62,7 @@ export enum AnalyticsEvent {
   HistoryExport = 'history_export',
   DataExport = 'data_export',
   DataImport = 'data_import',
+  ImportFromUrl = 'import_from_url',
   HistoryImportOpen = 'history_import_open',
   HistoryExportClick = 'history_export_click',
   HistoryClearClick = 'history_clear_click',
