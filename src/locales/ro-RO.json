@@ -881,5 +881,7 @@
   "invalidDataFile": "Fișier de date invalid",
   "exportData": "Exportă date",
   "importData": "Importă date",
-  "loading": "Încărcare..."
+  "loading": "Încărcare...",
+  "showQrCode": "Show QR Code",
+  "hideQrCode": "Hide QR Code"
 }

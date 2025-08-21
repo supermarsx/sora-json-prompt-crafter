@@ -881,5 +881,7 @@
   "invalidDataFile": "Недопустимый файл данных",
   "exportData": "Экспорт данных",
   "importData": "Импорт данных",
-  "loading": "Загрузка ..."
+  "loading": "Загрузка ...",
+  "showQrCode": "Show QR Code",
+  "hideQrCode": "Hide QR Code"
 }

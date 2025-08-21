@@ -881,5 +881,7 @@
   "invalidDataFile": "Ugyldig datafil",
   "exportData": "Eksporter data",
   "importData": "Importer data",
-  "loading": "Indlæser ..."
+  "loading": "Indlæser ...",
+  "showQrCode": "Show QR Code",
+  "hideQrCode": "Hide QR Code"
 }

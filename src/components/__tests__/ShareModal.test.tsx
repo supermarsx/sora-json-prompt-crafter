@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   render,
   screen,
@@ -13,6 +14,12 @@ import { useTracking } from '@/hooks/use-tracking';
 import { toast } from '@/components/ui/sonner-toast';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { serializeOptions } from '@/lib/urlOptions';
+import { QRCodeSVG } from 'qrcode.react';
+
+jest.mock('qrcode.react', () => ({
+  __esModule: true,
+  QRCodeSVG: jest.fn((props) => <div data-testid="share-qr-code" {...props} />),
+}));
 
 jest.mock('@/lib/analytics', () => {
   const actual = jest.requireActual('@/lib/analytics');
@@ -53,6 +60,7 @@ describe('ShareModal', () => {
     (trackEvent as jest.Mock).mockClear();
     localStorage.clear();
     delete (navigator as { share?: unknown }).share;
+    (QRCodeSVG as jest.Mock).mockClear();
   });
 
   afterEach(() => {
@@ -192,6 +200,21 @@ describe('ShareModal', () => {
     await screen.findByRole('button', { name: /facebook/i });
     expect(trackEvent).not.toHaveBeenCalled();
     expect(toast.error).toHaveBeenCalledWith(i18n.t('somethingWentWrong'));
+  });
+
+  test('renders QR code with share URL when toggled', () => {
+    renderModal();
+    fireEvent.click(screen.getByRole('button', { name: /show qr code/i }));
+    const shareUrl = new URL(window.location.href);
+    shareUrl.searchParams.set('ref', 'share');
+    shareUrl.hash = serializeOptions(DEFAULT_OPTIONS);
+    expect(QRCodeSVG).toHaveBeenCalledWith(
+      expect.objectContaining({ value: shareUrl.toString() }),
+      {}
+    );
+    expect(screen.getByTestId('share-qr-code')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: /hide qr code/i }));
+    expect(screen.queryByTestId('share-qr-code')).toBeNull();
   });
 
   test('copyLink works when clipboard supported', async () => {

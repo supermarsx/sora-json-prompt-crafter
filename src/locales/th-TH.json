@@ -881,5 +881,7 @@
   "invalidDataFile": "ไฟล์ข้อมูลไม่ถูกต้อง",
   "exportData": "ส่งออกข้อมูล",
   "importData": "นำเข้าข้อมูล",
-  "loading": "กำลังโหลด ..."
+  "loading": "กำลังโหลด ...",
+  "showQrCode": "Show QR Code",
+  "hideQrCode": "Hide QR Code"
 }

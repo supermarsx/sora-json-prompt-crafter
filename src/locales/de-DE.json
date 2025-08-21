@@ -881,5 +881,7 @@
   "invalidDataFile": "Ungültige Datendatei",
   "exportData": "Daten exportieren",
   "importData": "Daten importieren",
-  "loading": "Laden..."
+  "loading": "Laden...",
+  "showQrCode": "Show QR Code",
+  "hideQrCode": "Hide QR Code"
 }
