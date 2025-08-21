@@ -21,6 +21,18 @@ interface BulkFileImportModalProps {
   onImport: (jsons: string[]) => void;
 }
 
+/**
+ * Modal dialog for importing one or more JSON prompts from a selected file.
+ *
+ * @param {BulkFileImportModalProps} props - Component props.
+ * @param {boolean} props.open - Whether the dialog is visible.
+ * @param {(open: boolean) => void} props.onOpenChange - Change handler for dialog visibility.
+ * @param {(jsons: string[]) => void} props.onImport - Invoked with validated JSON strings.
+ *
+ * @remarks
+ * Shows toast notifications for success or failure and sends an analytics event
+ * when imports complete.
+ */
 const BulkFileImportModal: React.FC<BulkFileImportModalProps> = ({
   open,
   onOpenChange,

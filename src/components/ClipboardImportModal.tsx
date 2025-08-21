@@ -22,6 +22,20 @@ interface ClipboardImportModalProps {
   title: string;
 }
 
+/**
+ * Modal dialog for importing JSON prompt configurations from clipboard text.
+ * Automatically attempts to read clipboard contents when opened.
+ *
+ * @param {ClipboardImportModalProps} props - Component props.
+ * @param {boolean} props.open - Whether the dialog is visible.
+ * @param {(open: boolean) => void} props.onOpenChange - Change handler for dialog visibility.
+ * @param {(jsons: string[]) => void} props.onImport - Called with validated JSON strings.
+ * @param {string} props.title - Title displayed in the dialog header.
+ *
+ * @remarks
+ * Reads from the system clipboard, shows toast errors for invalid input or
+ * unsupported clipboard access, and emits analytics events for history imports.
+ */
 const ClipboardImportModal: React.FC<ClipboardImportModalProps> = ({
   open,
   onOpenChange,
