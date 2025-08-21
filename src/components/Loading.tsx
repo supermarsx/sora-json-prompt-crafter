@@ -13,11 +13,22 @@ const Loading: React.FC = () => {
 
   return (
     <div
-      className="flex h-screen w-screen items-center justify-center transition-opacity duration-50"
+      className="flex h-screen w-screen flex-col items-center justify-center transition-opacity duration-50"
       role="status"
     >
-      <Loader2 className="h-10 w-10 animate-spin bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent" />
-      <span className="ml-3 text-lg font-medium">{t('loading')}</span>
+      <div className="flex items-center">
+        <Loader2 className="h-10 w-10 animate-spin bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent" />
+        <span className="ml-3 text-lg font-medium">{t('loading')}</span>
+      </div>
+      <div
+        className="mt-4 h-1 w-48 overflow-hidden rounded bg-muted"
+        role="progressbar"
+        aria-label="loading progress"
+        aria-valuemin={0}
+        aria-valuemax={100}
+      >
+        <div className="h-full w-1/3 animate-loading-bar bg-gradient-to-r from-purple-500 to-pink-500" />
+      </div>
     </div>
   );
 };
