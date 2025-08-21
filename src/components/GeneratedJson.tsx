@@ -25,6 +25,19 @@ const CHANGE_MILESTONES: [number, AnalyticsEvent][] = [
   [100000, AnalyticsEvent.JsonChanged100000],
 ];
 
+/**
+ * Displays the generated JSON output with diff-based highlighting.
+ *
+ * The component keeps track of the previous JSON and highlights newly added
+ * segments for a short period. It auto-scrolls to keep the latest content in
+ * view when at the top or bottom of the container and optionally records JSON
+ * change events for analytics.
+ *
+ * @param json - The JSON string to render and diff against the previous value.
+ * @param trackingEnabled - Whether analytics tracking events should be sent.
+ * @returns JSX structure containing a scrollable `<div>` with highlighted JSON
+ * within a `<pre>` element.
+ */
 const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const prevRef = useRef(json);
