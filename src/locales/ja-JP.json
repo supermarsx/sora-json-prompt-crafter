@@ -881,5 +881,7 @@
   "invalidDataFile": "無効なデータファイル",
   "exportData": "データをエクスポート",
   "importData": "データをインポート",
-  "loading": "読み込み..."
+  "loading": "読み込み...",
+  "showQrCode": "Show QR Code",
+  "hideQrCode": "Hide QR Code"
 }

@@ -881,5 +881,7 @@
   "invalidDataFile": "Ogiltig datafil",
   "exportData": "Exportera data",
   "importData": "Importera data",
-  "loading": "Belastning..."
+  "loading": "Belastning...",
+  "showQrCode": "Show QR Code",
+  "hideQrCode": "Hide QR Code"
 }

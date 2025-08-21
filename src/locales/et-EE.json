@@ -881,5 +881,7 @@
   "invalidDataFile": "Vigane andmefail",
   "exportData": "Ekspordi andmed",
   "importData": "Impordi andmed",
-  "loading": "Laadimine ..."
+  "loading": "Laadimine ...",
+  "showQrCode": "Show QR Code",
+  "hideQrCode": "Hide QR Code"
 }

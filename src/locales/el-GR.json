@@ -881,5 +881,7 @@
   "invalidDataFile": "Μη έγκυρο αρχείο δεδομένων",
   "exportData": "Εξαγωγή δεδομένων",
   "importData": "Εισαγωγή δεδομένων",
-  "loading": "Φόρτωση..."
+  "loading": "Φόρτωση...",
+  "showQrCode": "Show QR Code",
+  "hideQrCode": "Hide QR Code"
 }

@@ -881,5 +881,7 @@
   "invalidDataFile": "无效的数据文件",
   "exportData": "导出数据",
   "importData": "导入数据",
-  "loading": "Loading..."
+  "loading": "Loading...",
+  "showQrCode": "Show QR Code",
+  "hideQrCode": "Hide QR Code"
 }

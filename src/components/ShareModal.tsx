@@ -19,7 +19,9 @@ import {
   Copy,
   Check,
   Share2,
+  QrCode,
 } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
 import { toast } from '@/components/ui/sonner-toast';
 import type { SoraOptions } from '@/lib/soraOptions';
 import { serializeOptions } from '@/lib/urlOptions';
@@ -49,6 +51,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
   options,
 }) => {
   const [copied, setCopied] = useState(false);
+  const [showQr, setShowQr] = useState(false);
   const [trackingEnabled] = useTracking();
   const { t } = useTranslation();
   const shareCaption = t('shareCaption');
@@ -207,7 +210,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
             </Button>
           </div>
         )}
-        <div className="flex justify-center pt-4 border-t">
+        <div className="flex flex-col items-center gap-4 pt-4 border-t">
           <Button
             onClick={copyLink}
             variant="default"
@@ -221,6 +224,16 @@ export const ShareModal: React.FC<ShareModalProps> = ({
             )}
             {t('copyLink')}
           </Button>
+          <Button
+            onClick={() => setShowQr((prev) => !prev)}
+            variant="outline"
+            className="w-full gap-2"
+            title={showQr ? t('hideQrCode') : t('showQrCode')}
+          >
+            <QrCode className="w-4 h-4" />
+            {showQr ? t('hideQrCode') : t('showQrCode')}
+          </Button>
+          {showQr && <QRCodeSVG value={shareUrl} data-testid="share-qr-code" />}
         </div>
       </DialogContent>
     </Dialog>

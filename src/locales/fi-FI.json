@@ -881,5 +881,7 @@
   "invalidDataFile": "Virheellinen tietotiedosto",
   "exportData": "Vie tiedot",
   "importData": "Tuo tiedot",
-  "loading": "Lataus ..."
+  "loading": "Lataus ...",
+  "showQrCode": "Show QR Code",
+  "hideQrCode": "Hide QR Code"
 }

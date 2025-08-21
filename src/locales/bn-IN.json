@@ -881,5 +881,7 @@
   "invalidDataFile": "অবৈধ ডাটা ফাইল",
   "exportData": "ডাটা এক্সপোর্ট করুন",
   "importData": "ডাটা আমদানি করুন",
-  "loading": "লোড হচ্ছে ..."
+  "loading": "লোড হচ্ছে ...",
+  "showQrCode": "Show QR Code",
+  "hideQrCode": "Hide QR Code"
 }

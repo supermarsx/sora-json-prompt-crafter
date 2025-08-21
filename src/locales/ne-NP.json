@@ -881,5 +881,7 @@
   "invalidDataFile": "अवैध डेटा फाइल",
   "exportData": "डेटा निर्यात गर्नुहोस्",
   "importData": "डेटा आयात गर्नुहोस्",
-  "loading": "लोड गर्दै ..."
+  "loading": "लोड गर्दै ...",
+  "showQrCode": "Show QR Code",
+  "hideQrCode": "Hide QR Code"
 }
