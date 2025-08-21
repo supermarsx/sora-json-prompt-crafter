@@ -14,6 +14,8 @@
   "regenerate": "Сгенерировать заново",
   "randomize": "Случайно",
   "purgeCache": "Purge Cache",
+  "purgeCacheTitle": "Purge cache?",
+  "purgeCacheConfirm": "Purge",
   "undo": "Отменить",
   "redo": "Повторить",
   "enableTracking": "Включить отслеживание",

@@ -14,6 +14,8 @@
   "regenerate": "Luo uudelleen",
   "randomize": "Satunnaista",
   "purgeCache": "Purge Cache",
+  "purgeCacheTitle": "Purge cache?",
+  "purgeCacheConfirm": "Purge",
   "undo": "Kumoa",
   "redo": "Tee uudelleen",
   "enableTracking": "Ota seuranta käyttöön",

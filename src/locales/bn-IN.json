@@ -14,6 +14,8 @@
   "regenerate": "পুনরায় তৈরি করুন",
   "randomize": "এলোমেলো করুন",
   "purgeCache": "Purge Cache",
+  "purgeCacheTitle": "Purge cache?",
+  "purgeCacheConfirm": "Purge",
   "undo": "আনডু",
   "redo": "রিডু",
   "enableTracking": "ট্র্যাকিং সক্রিয় করুন",

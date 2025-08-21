@@ -97,6 +97,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   onToggleActionLabels,
 }) => {
   const { t } = useTranslation();
+  const [confirmPurgeCache, setConfirmPurgeCache] = useState(false);
   const [confirmDisableTracking, setConfirmDisableTracking] = useState(false);
   const [confirmEnableTracking, setConfirmEnableTracking] = useState(false);
   const { checkForUpdate } = useUpdateCheck();
@@ -319,8 +320,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 variant="outline"
                 className="w-full justify-start gap-2"
                 onClick={() => {
-                  purgeCache();
-                  trackEvent(trackingEnabled, AnalyticsEvent.PurgeCache);
+                  setConfirmPurgeCache(true);
                 }}
                 title={t('purgeCache')}
               >
@@ -330,6 +330,29 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
           </ScrollArea>
         </DialogContent>
       </Dialog>
+
+      <AlertDialog
+        open={confirmPurgeCache}
+        onOpenChange={setConfirmPurgeCache}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('purgeCacheTitle')}</AlertDialogTitle>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                purgeCache();
+                trackEvent(trackingEnabled, AnalyticsEvent.PurgeCache);
+                setConfirmPurgeCache(false);
+              }}
+            >
+              {t('purgeCacheConfirm')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <AlertDialog
         open={confirmDisableTracking}

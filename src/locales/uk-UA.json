@@ -14,6 +14,8 @@
   "regenerate": "Згенерувати знову",
   "randomize": "Випадково",
   "purgeCache": "Purge Cache",
+  "purgeCacheTitle": "Purge cache?",
+  "purgeCacheConfirm": "Purge",
   "undo": "Скасувати",
   "redo": "Повторити",
   "enableTracking": "Увімкнути відстеження",

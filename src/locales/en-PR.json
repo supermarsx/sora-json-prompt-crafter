@@ -14,6 +14,8 @@
   "regenerate": "Raise Again",
   "randomize": "Yo‑ho Shuffle",
   "purgeCache": "Purge Cache",
+  "purgeCacheTitle": "Purge cache?",
+  "purgeCacheConfirm": "Purge",
   "undo": "Belay That",
   "redo": "Do 'er Again",
   "enableTracking": "Set Sails fer Trackin'",

@@ -14,6 +14,8 @@
   "regenerate": "Rigenera",
   "randomize": "Casualizza",
   "purgeCache": "Purge Cache",
+  "purgeCacheTitle": "Purge cache?",
+  "purgeCacheConfirm": "Purge",
   "undo": "Annulla",
   "redo": "Ripeti",
   "enableTracking": "Abilita tracciamento",

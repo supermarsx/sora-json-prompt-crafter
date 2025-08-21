@@ -14,6 +14,8 @@
   "regenerate": "Generer igen",
   "randomize": "Tilfældiggør",
   "purgeCache": "Purge Cache",
+  "purgeCacheTitle": "Purge cache?",
+  "purgeCacheConfirm": "Purge",
   "undo": "Fortryd",
   "redo": "Gentag",
   "enableTracking": "Aktivér sporing",
