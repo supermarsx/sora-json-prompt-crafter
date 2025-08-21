@@ -870,5 +870,10 @@
   "jsonPreviewTitle": "JSON Preview",
   "jsonPreviewDescription": "Preview the generated JSON output.",
   "importFromClipboard": "Import from Clipboard",
-  "bulkImportFromClipboard": "Bulk Import from Clipboard"
+  "bulkImportFromClipboard": "Bulk Import from Clipboard",
+  "dataExported": "Données exportées",
+  "dataImported": "Données importées",
+  "invalidDataFile": "Fichier de données invalide",
+  "exportData": "Exporter les données",
+  "importData": "Importer des données"
 }

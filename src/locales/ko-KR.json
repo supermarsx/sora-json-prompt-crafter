@@ -870,5 +870,10 @@
   "jsonPreviewTitle": "JSON Preview",
   "jsonPreviewDescription": "Preview the generated JSON output.",
   "importFromClipboard": "Import from Clipboard",
-  "bulkImportFromClipboard": "Bulk Import from Clipboard"
+  "bulkImportFromClipboard": "Bulk Import from Clipboard",
+  "dataExported": "데이터가 내보내졌습니다",
+  "dataImported": "데이터가 가져와졌습니다",
+  "invalidDataFile": "잘못된 데이터 파일",
+  "exportData": "데이터 내보내기",
+  "importData": "데이터 가져오기"
 }

@@ -870,5 +870,10 @@
   "jsonPreviewTitle": "JSON Preview",
   "jsonPreviewDescription": "Preview the generated JSON output.",
   "importFromClipboard": "Import from Clipboard",
-  "bulkImportFromClipboard": "Bulk Import from Clipboard"
+  "bulkImportFromClipboard": "Bulk Import from Clipboard",
+  "dataExported": "डेटा निर्यात गरियो",
+  "dataImported": "डेटा आयात गरियो",
+  "invalidDataFile": "अवैध डेटा फाइल",
+  "exportData": "डेटा निर्यात गर्नुहोस्",
+  "importData": "डेटा आयात गर्नुहोस्"
 }

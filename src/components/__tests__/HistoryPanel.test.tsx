@@ -222,6 +222,16 @@ describe('HistoryPanel basic actions', () => {
     expect(onClear).toHaveBeenCalled();
     expect(screen.queryByText(/clear history\?/i)).toBeNull();
   });
+
+  test('does not render data import/export buttons', () => {
+    renderPanel();
+    expect(
+      screen.queryByRole('button', { name: /import data/i }),
+    ).toBeNull();
+    expect(
+      screen.queryByRole('button', { name: /export data/i }),
+    ).toBeNull();
+  });
 });
 
 describe('HistoryPanel action history', () => {

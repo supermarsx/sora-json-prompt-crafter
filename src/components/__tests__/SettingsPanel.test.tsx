@@ -1,15 +1,29 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import SettingsPanel from '../SettingsPanel';
 import { purgeCache } from '@/lib/purgeCache';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import i18n from '@/i18n';
+import { toast } from '@/components/ui/sonner-toast';
+import { exportAppData, importAppData } from '@/lib/storage';
 
 jest.mock('@/lib/purgeCache', () => ({ purgeCache: jest.fn() }));
 jest.mock('@/lib/analytics', () => {
   const actual = jest.requireActual('@/lib/analytics');
   return { ...actual, trackEvent: jest.fn() };
 });
+jest.mock('@/lib/storage', () => ({
+  exportAppData: jest.fn(() => ({})),
+  importAppData: jest.fn(),
+}));
+jest.mock('@/components/ui/sonner-toast', () => ({
+  __esModule: true,
+  toast: { success: jest.fn(), error: jest.fn() },
+}));
+jest.mock('@/lib/date', () => ({
+  __esModule: true,
+  formatDateTime: jest.fn(() => '20240101-000000'),
+}));
 
 jest.mock('@/components/ui/dialog', () => ({
   __esModule: true,
@@ -83,5 +97,48 @@ describe('SettingsPanel', () => {
       true,
       AnalyticsEvent.PurgeCache,
     );
+  });
+
+  test('export and import data buttons work', async () => {
+    (exportAppData as jest.Mock).mockReturnValue({ a: 1 });
+    Object.assign(URL, {
+      createObjectURL: jest.fn(() => 'blob:url'),
+      revokeObjectURL: jest.fn(),
+    });
+    const file = { text: jest.fn().mockResolvedValue('{"b":2}') };
+    const input = {
+      type: '',
+      accept: '',
+      files: [file],
+      click: jest.fn(),
+      onchange: null as null | (() => void),
+    } as unknown as HTMLInputElement;
+    const originalCreate = document.createElement.bind(document);
+    jest
+      .spyOn(document, 'createElement')
+      .mockImplementation((tag: string, opts?: ElementCreationOptions) =>
+        tag === 'input' ? (input as HTMLElement) : originalCreate(tag, opts),
+      );
+    renderPanel();
+
+    const exportBtn = screen.getByRole('button', { name: /export data/i });
+    expect(exportBtn.getAttribute('title')).toBe(i18n.t('exportData'));
+    fireEvent.click(exportBtn);
+    expect(exportAppData).toHaveBeenCalled();
+    expect(URL.createObjectURL).toHaveBeenCalled();
+    expect(toast.success).toHaveBeenCalledWith(i18n.t('dataExported'));
+    expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.DataExport);
+
+    (input.click as jest.Mock).mockImplementation(() => {
+      if (input.onchange) {
+        input.onchange(new Event('change'));
+      }
+    });
+    const importBtn = screen.getByRole('button', { name: /import data/i });
+    expect(importBtn.getAttribute('title')).toBe(i18n.t('importData'));
+    fireEvent.click(importBtn);
+    await waitFor(() => expect(importAppData).toHaveBeenCalledWith({ b: 2 }));
+    expect(toast.success).toHaveBeenCalledWith(i18n.t('dataImported'));
+    expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.DataImport);
   });
 });

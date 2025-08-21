@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import {
   Import as ImportIcon,
+  Download,
   RotateCcw,
   RefreshCw,
   Shuffle,
@@ -31,6 +32,8 @@ import { toast } from '@/components/ui/sonner-toast';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { purgeCache } from '@/lib/purgeCache';
 import { useUpdateCheck } from '@/hooks/use-update-check';
+import { exportAppData, importAppData } from '@/lib/storage';
+import { formatDateTime } from '@/lib/date';
 
 interface SettingsPanelProps {
   open: boolean;
@@ -104,6 +107,41 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       checkForUpdate();
     }
   }, [open, trackingEnabled, checkForUpdate]);
+
+  const exportDataFile = () => {
+    const blob = new Blob([JSON.stringify(exportAppData(), null, 2)], {
+      type: 'application/json',
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const datetime = formatDateTime();
+    const rand = Math.random().toString(16).slice(2, 8);
+    a.href = url;
+    a.download = `sora-data-${datetime}-${rand}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success(t('dataExported', { defaultValue: 'Data exported' }));
+    trackEvent(trackingEnabled, AnalyticsEvent.DataExport);
+  };
+
+  const importDataFile = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'application/json';
+    input.onchange = async () => {
+      const file = input.files?.[0];
+      if (!file) return;
+      try {
+        const text = await file.text();
+        importAppData(JSON.parse(text));
+        toast.success(t('dataImported', { defaultValue: 'Data imported' }));
+        trackEvent(trackingEnabled, AnalyticsEvent.DataImport);
+      } catch {
+        toast.error(t('invalidDataFile', { defaultValue: 'Invalid data file' }));
+      }
+    };
+    input.click();
+  };
 
   return (
     <>
@@ -258,6 +296,24 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     <Eye className="w-4 h-4" /> {t('showLabels')}
                   </>
                 )}
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full justify-start gap-2"
+                onClick={exportDataFile}
+                title={t('exportData', { defaultValue: 'Export data' })}
+              >
+                <Download className="w-4 h-4" />
+                {t('exportData', { defaultValue: 'Export data' })}
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full justify-start gap-2"
+                onClick={importDataFile}
+                title={t('importData', { defaultValue: 'Import data' })}
+              >
+                <ImportIcon className="w-4 h-4" />
+                {t('importData', { defaultValue: 'Import data' })}
               </Button>
               <Button
                 variant="outline"

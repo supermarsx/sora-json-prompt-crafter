@@ -870,5 +870,10 @@
   "jsonPreviewTitle": "JSON Preview",
   "jsonPreviewDescription": "Preview the generated JSON output.",
   "importFromClipboard": "Import from Clipboard",
-  "bulkImportFromClipboard": "Bulk Import from Clipboard"
+  "bulkImportFromClipboard": "Bulk Import from Clipboard",
+  "dataExported": "Date exportate",
+  "dataImported": "Date importate",
+  "invalidDataFile": "Fișier de date invalid",
+  "exportData": "Exportă date",
+  "importData": "Importă date"
 }
