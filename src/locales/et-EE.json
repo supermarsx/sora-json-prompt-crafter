@@ -14,6 +14,8 @@
   "regenerate": "Genereeri uuesti",
   "randomize": "Juhuslikusta",
   "purgeCache": "Purge Cache",
+  "purgeCacheTitle": "Purge cache?",
+  "purgeCacheConfirm": "Purge",
   "undo": "Võta tagasi",
   "redo": "Tee uuesti",
   "enableTracking": "Luba jälgimine",

@@ -14,6 +14,8 @@
   "regenerate": "재생성",
   "randomize": "무작위화",
   "purgeCache": "Purge Cache",
+  "purgeCacheTitle": "Purge cache?",
+  "purgeCacheConfirm": "Purge",
   "undo": "실행 취소",
   "redo": "다시 실행",
   "enableTracking": "추적 활성화",

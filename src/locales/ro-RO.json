@@ -14,6 +14,8 @@
   "regenerate": "Regenerare",
   "randomize": "Randomizează",
   "purgeCache": "Purge Cache",
+  "purgeCacheTitle": "Purge cache?",
+  "purgeCacheConfirm": "Purge",
   "undo": "Anulează",
   "redo": "Refă",
   "enableTracking": "Activează urmărire",

@@ -63,6 +63,10 @@ jest.mock('@/components/ui/alert-dialog', () => ({
   AlertDialogCancel: ({ children }: { children: React.ReactNode }) => <button>{children}</button>,
 }));
 
+beforeEach(() => {
+  jest.clearAllMocks();
+});
+
 function renderPanel(overrides: Partial<React.ComponentProps<typeof SettingsPanel>> = {}) {
   const props = {
     open: true,
@@ -87,11 +91,15 @@ function renderPanel(overrides: Partial<React.ComponentProps<typeof SettingsPane
 }
 
 describe('SettingsPanel', () => {
-  test('purge cache button triggers utility', () => {
+  test('purge cache requires confirmation', () => {
     renderPanel();
     const purgeBtn = screen.getByRole('button', { name: /purge cache/i });
     expect(purgeBtn.getAttribute('title')).toBe(i18n.t('purgeCache'));
     fireEvent.click(purgeBtn);
+    const confirmBtn = screen.getByRole('button', {
+      name: i18n.t('purgeCacheConfirm'),
+    });
+    fireEvent.click(confirmBtn);
     expect(purgeCache).toHaveBeenCalled();
     expect(trackEvent).toHaveBeenCalledWith(
       true,

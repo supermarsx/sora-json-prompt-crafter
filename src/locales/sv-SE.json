@@ -14,6 +14,8 @@
   "regenerate": "Regenerera",
   "randomize": "Slumpa",
   "purgeCache": "Purge Cache",
+  "purgeCacheTitle": "Purge cache?",
+  "purgeCacheConfirm": "Purge",
   "undo": "Ångra",
   "redo": "Gör om",
   "enableTracking": "Aktivera spårning",
