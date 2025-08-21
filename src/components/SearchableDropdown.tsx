@@ -88,6 +88,7 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
           variant="outline"
           className="w-full justify-between"
           disabled={disabled}
+          title={value ? formatLabel(value) : placeholderText}
         >
           <span className="truncate">
             {value ? formatLabel(value) : placeholderText}
@@ -120,6 +121,7 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
                   className="w-full justify-start text-left h-auto py-2 px-3"
                   onClick={() => handleSelect(option)}
                   disabled={disabled}
+                  title={formatLabel(option)}
                 >
                   <span className="break-words">{formatLabel(option)}</span>
                 </Button>

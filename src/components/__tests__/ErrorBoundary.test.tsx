@@ -36,6 +36,7 @@ describe('ErrorBoundary', () => {
     );
 
     const button = screen.getByRole('button', { name: i18n.t('tryAgain') });
+    expect(button.getAttribute('title')).toBe(i18n.t('tryAgain'));
     fireEvent.click(button);
 
     expect(screen.queryByText(i18n.t('somethingWentWrong'))).toBeNull();

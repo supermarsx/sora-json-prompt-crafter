@@ -118,6 +118,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 variant="outline"
                 className="w-full justify-start gap-2"
                 onClick={onImport}
+                title={t('import')}
               >
                 <ImportIcon className="w-4 h-4" /> {t('import')}
               </Button>
@@ -125,6 +126,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 variant="outline"
                 className="w-full justify-start gap-2"
                 onClick={onReset}
+                title={t('reset')}
               >
                 <RotateCcw className="w-4 h-4" /> {t('reset')}
               </Button>
@@ -132,6 +134,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 variant="outline"
                 className="w-full justify-start gap-2"
                 onClick={onRegenerate}
+                title={t('regenerate')}
               >
                 <RefreshCw className="w-4 h-4" /> {t('regenerate')}
               </Button>
@@ -139,6 +142,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 variant="outline"
                 className="w-full justify-start gap-2"
                 onClick={onRandomize}
+                title={t('randomize')}
               >
                 <Shuffle className="w-4 h-4" /> {t('randomize')}
               </Button>
@@ -152,6 +156,11 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     setConfirmEnableTracking(true);
                   }
                 }}
+                title={
+                  trackingEnabled
+                    ? t('disableTracking')
+                    : t('enableTracking')
+                }
               >
                 {trackingEnabled ? (
                   <>
@@ -167,6 +176,9 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 variant="outline"
                 className="w-full justify-start gap-2 hidden"
                 onClick={onToggleSoraTools}
+                title={
+                  soraToolsEnabled ? 'Hide Sora Integration' : 'Show Sora Integration'
+                }
               >
                 {soraToolsEnabled ? (
                   <>
@@ -187,6 +199,11 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     enabled: !headerButtonsEnabled,
                   });
                 }}
+                title={
+                  headerButtonsEnabled
+                    ? t('hideHeaderButtons')
+                    : t('showHeaderButtons')
+                }
               >
                 {headerButtonsEnabled ? (
                   <>
@@ -207,6 +224,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     enabled: !logoEnabled,
                   });
                 }}
+                title={logoEnabled ? t('hideLogo') : t('showLogo')}
               >
                 {logoEnabled ? (
                   <>
@@ -227,6 +245,9 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     enabled: !actionLabelsEnabled,
                   });
                 }}
+                title={
+                  actionLabelsEnabled ? t('shortenButtons') : t('showLabels')
+                }
               >
                 {actionLabelsEnabled ? (
                   <>
@@ -245,6 +266,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   purgeCache();
                   trackEvent(trackingEnabled, AnalyticsEvent.PurgeCache);
                 }}
+                title={t('purgeCache')}
               >
                 <Trash2 className="w-4 h-4" /> {t('purgeCache')}
               </Button>

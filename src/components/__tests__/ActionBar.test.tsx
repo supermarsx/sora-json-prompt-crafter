@@ -2,6 +2,7 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import { ActionBar } from '../ActionBar';
 import { toast } from '@/components/ui/sonner-toast';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
+import i18n from '@/i18n';
 
 jest.mock('@/lib/analytics', () => {
   const actual = jest.requireActual('@/lib/analytics');
@@ -140,7 +141,9 @@ describe('ActionBar', () => {
   test('Copy calls onCopy', () => {
     const props = createProps();
     const { unmount } = render(<ActionBar {...props} />);
-    fireEvent.click(screen.getByRole('button', { name: /copy/i }));
+    const copyBtn = screen.getByRole('button', { name: /copy/i });
+    expect(copyBtn.getAttribute('title')).toBe(i18n.t('copy'));
+    fireEvent.click(copyBtn);
     expect(props.onCopy).toHaveBeenCalled();
   });
 

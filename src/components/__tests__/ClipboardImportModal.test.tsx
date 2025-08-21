@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import ClipboardImportModal from '../ClipboardImportModal';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
+import i18n from '@/i18n';
 import { useTracking } from '@/hooks/use-tracking';
 import { toast } from '@/components/ui/sonner-toast';
 import i18n from '@/i18n';
@@ -43,6 +44,7 @@ describe('ClipboardImportModal', () => {
     const textarea = screen.getByPlaceholderText(/paste json/i);
     fireEvent.change(textarea, { target: { value: '{"prompt":"test"}' } });
     const button = screen.getByRole('button', { name: /import/i });
+    expect(button.getAttribute('title')).toBe(i18n.t('import'));
     fireEvent.click(button);
 
     expect(onImport).toHaveBeenCalledWith(['{"prompt":"test"}']);
@@ -69,6 +71,7 @@ describe('ClipboardImportModal', () => {
       target: { value: arrayText },
     });
     const button = screen.getByRole('button', { name: /import/i });
+    expect(button.getAttribute('title')).toBe(i18n.t('import'));
     fireEvent.click(button);
 
     expect(onImport).toHaveBeenCalledWith([
@@ -101,6 +104,7 @@ describe('ClipboardImportModal', () => {
       target: { value: objectArrayText },
     });
     const button = screen.getByRole('button', { name: /import/i });
+    expect(button.getAttribute('title')).toBe(i18n.t('import'));
     fireEvent.click(button);
 
     expect(onImport).toHaveBeenCalledWith([
@@ -127,6 +131,7 @@ describe('ClipboardImportModal', () => {
     const textarea = screen.getByPlaceholderText(/paste json/i);
     fireEvent.change(textarea, { target: { value: '{bad json' } });
     const button = screen.getByRole('button', { name: /import/i });
+    expect(button.getAttribute('title')).toBe(i18n.t('import'));
     fireEvent.click(button);
 
     expect(toast.error).toHaveBeenCalledWith(i18n.t('invalidJson'));

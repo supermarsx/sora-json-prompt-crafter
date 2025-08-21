@@ -107,10 +107,16 @@ const ClipboardImportModal: React.FC<ClipboardImportModalProps> = ({
           className="my-4"
         />
         <DialogFooter>
-          <Button variant="secondary" onClick={() => onOpenChange(false)}>
+          <Button
+            variant="secondary"
+            onClick={() => onOpenChange(false)}
+            title={t('cancel')}
+          >
             {t('cancel')}
           </Button>
-          <Button onClick={handleImport}>{t('import')}</Button>
+          <Button onClick={handleImport} title={t('import')}>
+            {t('import')}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -88,10 +88,16 @@ const BulkFileImportModal: React.FC<BulkFileImportModalProps> = ({
           onChange={(e) => setFile(e.target.files?.[0] || null)}
         />
         <DialogFooter>
-          <Button variant="secondary" onClick={() => onOpenChange(false)}>
+          <Button
+            variant="secondary"
+            onClick={() => onOpenChange(false)}
+            title={t('cancel')}
+          >
             {t('cancel')}
           </Button>
-          <Button onClick={handleImport}>{t('import')}</Button>
+          <Button onClick={handleImport} title={t('import')}>
+            {t('import')}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

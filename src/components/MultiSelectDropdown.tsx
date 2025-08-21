@@ -129,6 +129,7 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
           variant="outline"
           className="w-full justify-between"
           disabled={disabled}
+          title={displayValue}
         >
           <span className="truncate">{displayValue}</span>
           <ChevronDown className="w-4 h-4 ml-2 flex-shrink-0" />

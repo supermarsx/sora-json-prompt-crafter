@@ -64,10 +64,16 @@ export const ImportModal: React.FC<ImportModalProps> = ({
           <Input type="file" accept=".json" onChange={handleFile} />
         </div>
         <DialogFooter>
-          <Button variant="secondary" onClick={onClose}>
+          <Button
+            variant="secondary"
+            onClick={onClose}
+            title={t('cancel')}
+          >
             {t('cancel')}
           </Button>
-          <Button onClick={handleImport}>{t('import')}</Button>
+          <Button onClick={handleImport} title={t('import')}>
+            {t('import')}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

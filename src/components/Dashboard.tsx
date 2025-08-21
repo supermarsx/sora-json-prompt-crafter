@@ -491,6 +491,7 @@ const Dashboard = () => {
                     onClick={() =>
                       trackEvent(trackingEnabled, AnalyticsEvent.ClickSponsor)
                     }
+                    title={t('sponsor')}
                   >
                     <Heart className="w-4 h-4" /> {t('sponsor')}
                   </a>
@@ -504,6 +505,7 @@ const Dashboard = () => {
                     onClick={() =>
                       trackEvent(trackingEnabled, AnalyticsEvent.SeeGithub)
                     }
+                    title={t('github')}
                   >
                     <Github className="w-4 h-4" /> {t('github')}
                   </a>
@@ -517,6 +519,7 @@ const Dashboard = () => {
                     onClick={() =>
                       trackEvent(trackingEnabled, AnalyticsEvent.StarGithub)
                     }
+                    title={t('star')}
                   >
                     <Star className="w-4 h-4" />
                     {t('star')}
@@ -532,6 +535,7 @@ const Dashboard = () => {
                     onClick={() =>
                       trackEvent(trackingEnabled, AnalyticsEvent.ForkGithub)
                     }
+                    title={t('fork')}
                   >
                     <GitFork className="w-4 h-4" />
                     {t('fork')}
@@ -547,6 +551,7 @@ const Dashboard = () => {
                     onClick={() =>
                       trackEvent(trackingEnabled, AnalyticsEvent.OpenIssues)
                     }
+                    title={t('issues')}
                   >
                     <Bug className="w-4 h-4" />
                     {t('issues')}
@@ -562,6 +567,7 @@ const Dashboard = () => {
                     onClick={() =>
                       trackEvent(trackingEnabled, AnalyticsEvent.ViewOnLovable)
                     }
+                    title={t('viewOnLovable')}
                   >
                     <Heart className="w-4 h-4" />
                     {t('viewOnLovable')}
@@ -579,6 +585,7 @@ const Dashboard = () => {
                           AnalyticsEvent.InstallUserscript,
                         )
                       }
+                      title={t('installUserscript')}
                     >
                       <Download className="w-4 h-4" />
                       {t('installUserscript')}
@@ -604,6 +611,7 @@ const Dashboard = () => {
                             AnalyticsEvent.UpdateUserscript,
                           )
                         }
+                        title={t('updateUserscript')}
                       >
                         <RefreshCw className="w-4 h-4" />
                         {t('updateUserscript')}
@@ -620,6 +628,7 @@ const Dashboard = () => {
                   trackEvent(trackingEnabled, AnalyticsEvent.OpenDisclaimer);
                 }}
                 className="underline"
+                title={t('fullDisclaimer')}
               >
                 {t('fullDisclaimer')}
               </button>
@@ -635,6 +644,7 @@ const Dashboard = () => {
               });
             }}
             aria-label="Toggle dark mode"
+            title="Toggle dark mode"
           >
             {darkMode ? (
               <Sun className="w-5 h-5" />

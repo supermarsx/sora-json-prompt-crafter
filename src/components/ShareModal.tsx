@@ -154,6 +154,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
               onClick={shareNative}
               variant="outline"
               className="w-full gap-2"
+              title={t('share')}
             >
               <Share2 className="w-4 h-4" />
               {t('share')}…
@@ -161,26 +162,51 @@ export const ShareModal: React.FC<ShareModalProps> = ({
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-4 py-4">
-            <Button onClick={shareToFacebook} variant="outline" className="gap-2">
+            <Button
+              onClick={shareToFacebook}
+              variant="outline"
+              className="gap-2"
+              title={t('shareFacebook')}
+            >
               <Facebook className="w-4 h-4 text-blue-600" />
               {t('shareFacebook')}
             </Button>
-            <Button onClick={shareToTwitter} variant="outline" className="gap-2">
+            <Button
+              onClick={shareToTwitter}
+              variant="outline"
+              className="gap-2"
+              title={t('shareTwitter')}
+            >
               <Twitter className="w-4 h-4 text-blue-400" />
               {t('shareTwitter')}
             </Button>
-            <Button onClick={shareToWhatsApp} variant="outline" className="gap-2">
+            <Button
+              onClick={shareToWhatsApp}
+              variant="outline"
+              className="gap-2"
+              title={t('shareWhatsApp')}
+            >
               <MessageCircle className="w-4 h-4 text-green-600" />
               {t('shareWhatsApp')}
             </Button>
-            <Button onClick={shareToTelegram} variant="outline" className="gap-2">
+            <Button
+              onClick={shareToTelegram}
+              variant="outline"
+              className="gap-2"
+              title={t('shareTelegram')}
+            >
               <Send className="w-4 h-4 text-blue-500" />
               {t('shareTelegram')}
             </Button>
           </div>
         )}
         <div className="flex justify-center pt-4 border-t">
-          <Button onClick={copyLink} variant="default" className="w-full gap-2">
+          <Button
+            onClick={copyLink}
+            variant="default"
+            className="w-full gap-2"
+            title={t('copyLink')}
+          >
             {copied ? (
               <Check className="w-4 h-4 animate-pulse" />
             ) : (
