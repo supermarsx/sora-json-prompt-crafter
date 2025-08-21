@@ -46,7 +46,25 @@ import { useGithubStats } from '@/hooks/use-github-stats';
 import { useClipboard } from '@/hooks/use-clipboard';
 import { useTranslation } from 'react-i18next';
 import { useLocale } from '@/hooks/use-locale';
-import { CURRENT_JSON, JSON_HISTORY } from '@/lib/storage-keys';
+import {
+  CURRENT_JSON,
+  JSON_HISTORY,
+  JSON_COPY_COUNT,
+  JSON_COPY_MILESTONES,
+} from '@/lib/storage-keys';
+
+const COPY_MILESTONES: [number, AnalyticsEvent][] = [
+  [10, AnalyticsEvent.CopyJson10],
+  [25, AnalyticsEvent.CopyJson25],
+  [50, AnalyticsEvent.CopyJson50],
+  [100, AnalyticsEvent.CopyJson100],
+  [200, AnalyticsEvent.CopyJson200],
+  [500, AnalyticsEvent.CopyJson500],
+  [1000, AnalyticsEvent.CopyJson1000],
+  [2000, AnalyticsEvent.CopyJson2000],
+  [5000, AnalyticsEvent.CopyJson5000],
+  [10000, AnalyticsEvent.CopyJson10000],
+];
 
 /**
  * Main dashboard view orchestrating option state, JSON generation and UI panels.
@@ -177,6 +195,23 @@ const Dashboard = () => {
       trackEvent(trackingEnabled, AnalyticsEvent.CopyJson, {
         sections: sections.join(','),
       });
+      try {
+        const count = (safeGet<number>(JSON_COPY_COUNT, 0, true) as number) ?? 0;
+        const newCount = count + 1;
+        safeSet(JSON_COPY_COUNT, newCount, true);
+        const milestones = (
+          safeGet<number[]>(JSON_COPY_MILESTONES, [], true) as number[]
+        ) ?? [];
+        for (const [threshold, event] of COPY_MILESTONES) {
+          if (newCount >= threshold && !milestones.includes(threshold)) {
+            trackEvent(trackingEnabled, event);
+            milestones.push(threshold);
+          }
+        }
+        safeSet(JSON_COPY_MILESTONES, milestones, true);
+      } catch {
+        console.error('Copy counter: There was an error.');
+      }
       setTimeout(() => setCopied(false), 2000);
     }
   };
