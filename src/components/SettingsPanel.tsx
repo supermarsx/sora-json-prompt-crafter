@@ -37,12 +37,19 @@ import { useUpdateCheck } from '@/hooks/use-update-check';
 import { exportAppData, importAppData, safeGet } from '@/lib/storage';
 import { formatDateTime } from '@/lib/date';
 import {
+  JSON_COPY_COUNT,
   JSON_COPY_MILESTONES,
+  JSON_CHANGE_COUNT,
   JSON_CHANGE_MILESTONES,
+  SHARE_COUNT,
   SHARE_MILESTONES,
+  UNDO_COUNT,
   UNDO_MILESTONES,
+  REDO_COUNT,
   REDO_MILESTONES,
+  APP_RELOAD_COUNT,
   APP_RELOAD_MILESTONES,
+  TOTAL_SECONDS,
   TIME_MILESTONES,
 } from '@/lib/storage-keys';
 import { cn } from '@/lib/utils';
@@ -158,56 +165,87 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     input.click();
   };
 
+  const TIER_NAMES = [
+    'Hermes',
+    'Ares',
+    'Apollo',
+    'Artemis',
+    'Hephaestus',
+    'Dionysus',
+    'Demeter',
+    'Aphrodite',
+    'Athena',
+    'Hera',
+    'Poseidon',
+    'Hades',
+    'Cronus',
+    'Rhea',
+    'Uranus',
+    'Zeus',
+  ];
+
   const milestoneCategories = [
     {
       key: JSON_COPY_MILESTONES,
+      countKey: JSON_COPY_COUNT,
       label: t('copy'),
       thresholds: [10, 25, 50, 100, 200, 500, 1000, 2000, 5000, 10000].map(
-        (n) => ({ value: n, label: String(n) }),
+        (n, idx) => ({ value: n, label: String(n), tier: TIER_NAMES[idx] }),
       ),
     },
     {
       key: SHARE_MILESTONES,
+      countKey: SHARE_COUNT,
       label: t('share'),
-      thresholds: [5, 10, 50, 100, 1000, 10000].map((n) => ({
+      thresholds: [5, 10, 50, 100, 1000, 10000].map((n, idx) => ({
         value: n,
         label: String(n),
+        tier: TIER_NAMES[idx],
       })),
     },
     {
       key: JSON_CHANGE_MILESTONES,
+      countKey: JSON_CHANGE_COUNT,
       label: 'Changes',
-      thresholds: [250, 1500, 10000, 25000, 100000].map((n) => ({
+      thresholds: [250, 1500, 10000, 25000, 100000].map((n, idx) => ({
         value: n,
         label: String(n),
+        tier: TIER_NAMES[idx],
       })),
     },
     {
       key: UNDO_MILESTONES,
+      countKey: UNDO_COUNT,
       label: t('undo'),
-      thresholds: [100, 500, 1000, 10000].map((n) => ({
+      thresholds: [100, 500, 1000, 10000].map((n, idx) => ({
         value: n,
         label: String(n),
+        tier: TIER_NAMES[idx],
       })),
     },
     {
       key: REDO_MILESTONES,
+      countKey: REDO_COUNT,
       label: t('redo'),
-      thresholds: [100, 500, 1000, 10000].map((n) => ({
+      thresholds: [100, 500, 1000, 10000].map((n, idx) => ({
         value: n,
         label: String(n),
+        tier: TIER_NAMES[idx],
       })),
     },
     {
       key: APP_RELOAD_MILESTONES,
+      countKey: APP_RELOAD_COUNT,
       label: 'Reloads',
-      thresholds: [10, 30, 70, 100, 500, 1000].map((n) => ({
+      thresholds: [10, 30, 70, 100, 500, 1000].map((n, idx) => ({
         value: n,
         label: String(n),
+        tier: TIER_NAMES[idx],
       })),
     },
     {
       key: TIME_MILESTONES,
+      countKey: TOTAL_SECONDS,
       label: 'Time',
       thresholds: (
         [
@@ -227,7 +265,11 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
           [120 * 24 * 60 * 60, '4m'],
           [240 * 24 * 60 * 60, '8m'],
         ] as [number, string][]
-      ).map(([value, label]) => ({ value, label })),
+      ).map(([value, label], idx) => ({
+        value,
+        label,
+        tier: TIER_NAMES[idx],
+      })),
     },
   ];
 
@@ -445,13 +487,28 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   {milestoneCategories.map((cat) => {
                     const achieved =
                       (safeGet<number[]>(cat.key, [], true) as number[]) ?? [];
+                    const count =
+                      (safeGet<number>(cat.countKey, 0, true) as number) ?? 0;
+                    const next = cat.thresholds.find((th) => th.value > count);
+                    const remaining = next ? next.value - count : 0;
                     return (
-                      <div
-                        key={cat.key}
-                        className="flex items-center justify-between"
-                      >
-                        <span className="text-sm font-medium">{cat.label}</span>
-                        <div className="flex gap-1">
+                      <div key={cat.key} className="space-y-1">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium">
+                            {cat.label}
+                          </span>
+                          <span className="text-xs text-muted-foreground">
+                            {next
+                              ? `${count} - ${remaining} to ${next.tier}`
+                              : `${count} - Max tier`}
+                          </span>
+                        </div>
+                        <div
+                          className={cn(
+                            'flex gap-1',
+                            cat.key === TIME_MILESTONES && 'flex-wrap max-w-[200px]'
+                          )}
+                        >
                           {cat.thresholds.map((th) => (
                             <Medal
                               key={th.value}
@@ -461,7 +518,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                                   ? 'text-yellow-500'
                                   : 'text-gray-300',
                               )}
-                              title={th.label}
+                              title={`${th.label} - ${th.tier}`}
                             />
                           ))}
                         </div>
