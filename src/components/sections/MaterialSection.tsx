@@ -12,6 +12,13 @@ interface MaterialSectionProps {
   updateOptions: (updates: Partial<SoraOptions>) => void;
 }
 
+/**
+ * Section for specifying primary and secondary materials for objects.
+ *
+ * @param props - Component props.
+ * @param props.options - Current Sora options.
+ * @param props.updateOptions - Callback to update the options state.
+ */
 export const MaterialSection: React.FC<MaterialSectionProps> = ({
   options,
   updateOptions,

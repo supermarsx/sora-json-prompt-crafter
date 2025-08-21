@@ -11,6 +11,13 @@ interface ColorGradingSectionProps {
   updateOptions: (updates: Partial<SoraOptions>) => void;
 }
 
+/**
+ * Section for selecting overall color grading presets.
+ *
+ * @param props - Component props.
+ * @param props.options - Current Sora options.
+ * @param props.updateOptions - Callback to update the options state.
+ */
 export const ColorGradingSection: React.FC<ColorGradingSectionProps> = ({
   options,
   updateOptions,

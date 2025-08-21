@@ -19,6 +19,15 @@ interface EnhancementsSectionProps {
   onToggle: (enabled: boolean) => void;
 }
 
+/**
+ * Section for optional output enhancements and safety filters.
+ *
+ * @param props - Component props.
+ * @param props.options - Current Sora options.
+ * @param props.updateOptions - Function to update the options state.
+ * @param props.isEnabled - Whether the section is active.
+ * @param props.onToggle - Handler to enable or disable the section.
+ */
 export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
   options,
   updateOptions,
@@ -26,6 +35,11 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
   onToggle,
 }) => {
   const { t } = useTranslation();
+  /**
+   * Maps the dropdown value to a valid safety filter option.
+   *
+   * @param value - Selected safety filter option text.
+   */
   const handleSafetyFilterChange = (value: string) => {
     // Map string values to the expected type
     let safetyFilter: SoraOptions['safety_filter'];

@@ -20,6 +20,15 @@ interface DimensionsFormatSectionProps {
   onToggle: (enabled: boolean) => void;
 }
 
+/**
+ * Section for choosing output dimensions and file format settings.
+ *
+ * @param props - Component props.
+ * @param props.options - Current Sora options.
+ * @param props.updateOptions - Function to update the options state.
+ * @param props.isEnabled - Whether the section is enabled.
+ * @param props.onToggle - Toggle handler to enable or disable the section.
+ */
 export const DimensionsFormatSection: React.FC<
   DimensionsFormatSectionProps
 > = ({ options, updateOptions, isEnabled, onToggle }) => {

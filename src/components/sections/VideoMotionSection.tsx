@@ -22,6 +22,16 @@ interface VideoMotionSectionProps {
   onToggle: (enabled: boolean) => void;
 }
 
+/**
+ * Section for configuring video-specific motion settings such as duration,
+ * frame rate, and camera movement.
+ *
+ * @param props - Component props.
+ * @param props.options - Current Sora options.
+ * @param props.updateOptions - Updates the options state.
+ * @param props.isEnabled - Whether the section is enabled.
+ * @param props.onToggle - Toggle handler for enabling or disabling the section.
+ */
 export const VideoMotionSection: React.FC<VideoMotionSectionProps> = ({
   options,
   updateOptions,

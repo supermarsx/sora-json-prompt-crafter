@@ -13,6 +13,14 @@ interface PromptSectionProps {
   trackingEnabled: boolean;
 }
 
+/**
+ * Section for entering the main prompt and optional negative prompt text.
+ *
+ * @param props - Component props.
+ * @param props.options - Current Sora options.
+ * @param props.updateOptions - Function to update option values.
+ * @param props.trackingEnabled - Whether analytics tracking is enabled.
+ */
 export const PromptSection: React.FC<PromptSectionProps> = ({
   options,
   updateOptions,

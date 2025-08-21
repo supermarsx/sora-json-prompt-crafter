@@ -23,6 +23,16 @@ interface DnDSectionProps {
   onToggle: (enabled: boolean) => void;
 }
 
+/**
+ * Section for configuring Dungeons & Dragons themed options such as race,
+ * class, and environment.
+ *
+ * @param props - Component props.
+ * @param props.options - Current Sora options.
+ * @param props.updateOptions - Callback to update the options state.
+ * @param props.isEnabled - Whether the section is enabled.
+ * @param props.onToggle - Handler for enabling or disabling the section.
+ */
 export const DnDSection: React.FC<DnDSectionProps> = ({
   options,
   updateOptions,

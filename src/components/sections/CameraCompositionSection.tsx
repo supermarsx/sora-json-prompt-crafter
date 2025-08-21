@@ -35,10 +35,24 @@ interface CameraCompositionSectionProps {
   onToggle: (enabled: boolean) => void;
 }
 
+/**
+ * Section for configuring camera positioning and composition rules.
+ *
+ * @param props - Component props.
+ * @param props.options - Current Sora options object.
+ * @param props.updateOptions - Callback to update the options state.
+ * @param props.isEnabled - Whether this section is active.
+ * @param props.onToggle - Handler invoked when the section is toggled.
+ */
 export const CameraCompositionSection: React.FC<
   CameraCompositionSectionProps
 > = ({ options, updateOptions, isEnabled, onToggle }) => {
   const { t } = useTranslation();
+  /**
+   * Updates the set of composition rules selected by the user.
+   *
+   * @param selectedRules - The chosen composition rule identifiers.
+   */
   const handleCompositionRulesChange = (selectedRules: string[]) => {
     updateOptions({ composition_rules: selectedRules });
   };
