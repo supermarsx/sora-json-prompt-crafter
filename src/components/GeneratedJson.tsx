@@ -4,6 +4,11 @@ import SyntaxHighlighter from 'react-syntax-highlighter/dist/cjs/prism-light';
 import jsonLang from 'react-syntax-highlighter/dist/cjs/languages/prism/json';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
+import { safeGet, safeSet } from '@/lib/storage';
+import {
+  JSON_CHANGE_COUNT,
+  JSON_CHANGE_MILESTONES,
+} from '@/lib/storage-keys';
 
 SyntaxHighlighter.registerLanguage('json', jsonLang);
 
@@ -11,6 +16,14 @@ interface Props {
   json: string;
   trackingEnabled: boolean;
 }
+
+const CHANGE_MILESTONES: [number, AnalyticsEvent][] = [
+  [250, AnalyticsEvent.JsonChanged250],
+  [1500, AnalyticsEvent.JsonChanged1500],
+  [10000, AnalyticsEvent.JsonChanged10000],
+  [25000, AnalyticsEvent.JsonChanged25000],
+  [100000, AnalyticsEvent.JsonChanged100000],
+];
 
 const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -24,6 +37,23 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
     const timer = setTimeout(() => {
       setDiffParts(diff.map((p) => ({ ...p, added: false }) as Change));
     }, 2000);
+    try {
+      const count =
+        (safeGet<number>(JSON_CHANGE_COUNT, 0, true) as number) ?? 0;
+      const newCount = count + 1;
+      safeSet(JSON_CHANGE_COUNT, newCount, true);
+      const milestones =
+        (safeGet<number[]>(JSON_CHANGE_MILESTONES, [], true) as number[]) ?? [];
+      for (const [threshold, event] of CHANGE_MILESTONES) {
+        if (newCount >= threshold && !milestones.includes(threshold)) {
+          trackEvent(trackingEnabled, event);
+          milestones.push(threshold);
+        }
+      }
+      safeSet(JSON_CHANGE_MILESTONES, milestones, true);
+    } catch {
+      console.error('Change counter: There was an error.');
+    }
     trackEvent(trackingEnabled, AnalyticsEvent.JsonChanged);
     return () => clearTimeout(timer);
   }, [json, trackingEnabled]);
