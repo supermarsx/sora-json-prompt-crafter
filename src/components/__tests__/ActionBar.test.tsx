@@ -2,6 +2,12 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import { ActionBar } from '../ActionBar';
 import { toast } from '@/components/ui/sonner-toast';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
+import {
+  UNDO_COUNT,
+  UNDO_MILESTONES,
+  REDO_COUNT,
+  REDO_MILESTONES,
+} from '@/lib/storage-keys';
 import i18n from '@/i18n';
 
 jest.mock('@/lib/analytics', () => {
@@ -254,5 +260,63 @@ describe('ActionBar', () => {
     const restore = screen.getByRole('button', { name: /actions/i });
     fireEvent.click(restore);
     expect(screen.getByRole('button', { name: /copy/i })).toBeTruthy();
+  });
+
+  test('undo counter persists and milestone triggers once', () => {
+    localStorage.setItem(UNDO_COUNT, '99');
+    localStorage.setItem(UNDO_MILESTONES, '[]');
+    (trackEvent as jest.Mock).mockClear();
+    const props = createProps();
+    const { unmount } = render(<ActionBar {...props} />);
+    const undoBtn = screen.getByRole('button', { name: /undo/i });
+    fireEvent.click(undoBtn);
+    expect(JSON.parse(localStorage.getItem(UNDO_COUNT) || '0')).toBe(100);
+    let calls = (trackEvent as jest.Mock).mock.calls.filter(
+      (c) => c[1] === AnalyticsEvent.Undo100,
+    );
+    expect(calls.length).toBe(1);
+    expect(JSON.parse(localStorage.getItem(UNDO_MILESTONES) || '[]')).toEqual([
+      100,
+    ]);
+    unmount();
+    render(<ActionBar {...props} />);
+    fireEvent.click(screen.getByRole('button', { name: /undo/i }));
+    expect(JSON.parse(localStorage.getItem(UNDO_COUNT) || '0')).toBe(101);
+    calls = (trackEvent as jest.Mock).mock.calls.filter(
+      (c) => c[1] === AnalyticsEvent.Undo100,
+    );
+    expect(calls.length).toBe(1);
+    expect(JSON.parse(localStorage.getItem(UNDO_MILESTONES) || '[]')).toEqual([
+      100,
+    ]);
+  });
+
+  test('redo counter persists and milestone triggers once', () => {
+    localStorage.setItem(REDO_COUNT, '99');
+    localStorage.setItem(REDO_MILESTONES, '[]');
+    (trackEvent as jest.Mock).mockClear();
+    const props = createProps();
+    const { unmount } = render(<ActionBar {...props} />);
+    const redoBtn = screen.getByRole('button', { name: /redo/i });
+    fireEvent.click(redoBtn);
+    expect(JSON.parse(localStorage.getItem(REDO_COUNT) || '0')).toBe(100);
+    let calls = (trackEvent as jest.Mock).mock.calls.filter(
+      (c) => c[1] === AnalyticsEvent.Redo100,
+    );
+    expect(calls.length).toBe(1);
+    expect(JSON.parse(localStorage.getItem(REDO_MILESTONES) || '[]')).toEqual([
+      100,
+    ]);
+    unmount();
+    render(<ActionBar {...props} />);
+    fireEvent.click(screen.getByRole('button', { name: /redo/i }));
+    expect(JSON.parse(localStorage.getItem(REDO_COUNT) || '0')).toBe(101);
+    calls = (trackEvent as jest.Mock).mock.calls.filter(
+      (c) => c[1] === AnalyticsEvent.Redo100,
+    );
+    expect(calls.length).toBe(1);
+    expect(JSON.parse(localStorage.getItem(REDO_MILESTONES) || '[]')).toEqual([
+      100,
+    ]);
   });
 });
