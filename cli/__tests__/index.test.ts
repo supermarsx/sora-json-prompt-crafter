@@ -42,3 +42,17 @@ test('reads options from stdin when no flags are given', () => {
   expect(obj.prompt).toBe('stdin');
   expect(obj.width).toBe(321);
 });
+
+test('writes output to file when --output is provided', () => {
+  const file = join(tmpdir(), 'cli-output.json');
+  const out = runCli(['--prompt', 'file test', '--output', file]);
+  expect(out).toBe('');
+  const obj = JSON.parse(fs.readFileSync(file, 'utf8'));
+  expect(obj.prompt).toBe('file test');
+});
+
+test('minifies JSON when --minify is set', () => {
+  const out = runCli(['--prompt', 'mini', '--minify']);
+  const parsed = JSON.parse(out);
+  expect(out).toBe(JSON.stringify(parsed));
+});
