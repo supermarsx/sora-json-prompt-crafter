@@ -875,5 +875,6 @@
   "dataImported": "Date importate",
   "invalidDataFile": "Fișier de date invalid",
   "exportData": "Exportă date",
-  "importData": "Importă date"
+  "importData": "Importă date",
+  "loading": "Încărcare..."
 }

@@ -875,5 +875,6 @@
   "dataImported": "データをインポートしました",
   "invalidDataFile": "無効なデータファイル",
   "exportData": "データをエクスポート",
-  "importData": "データをインポート"
+  "importData": "データをインポート",
+  "loading": "読み込み..."
 }

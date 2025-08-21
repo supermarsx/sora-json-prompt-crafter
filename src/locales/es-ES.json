@@ -882,5 +882,6 @@
   "dataImported": "Datos importados",
   "invalidDataFile": "Archivo de datos inválido",
   "exportData": "Exportar datos",
-  "importData": "Importar datos"
+  "importData": "Importar datos",
+  "loading": "Cargando..."
 }

@@ -875,5 +875,6 @@
   "dataImported": "Data imported",
   "invalidDataFile": "Invalid data file",
   "exportData": "Export Data",
-  "importData": "Import Data"
+  "importData": "Import Data",
+  "loading": "Loading..."
 }

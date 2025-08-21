@@ -875,5 +875,6 @@
   "dataImported": "数据已导入",
   "invalidDataFile": "无效的数据文件",
   "exportData": "导出数据",
-  "importData": "导入数据"
+  "importData": "导入数据",
+  "loading": "Loading..."
 }

@@ -875,5 +875,6 @@
   "dataImported": "Data importeret",
   "invalidDataFile": "Ugyldig datafil",
   "exportData": "Eksporter data",
-  "importData": "Importer data"
+  "importData": "Importer data",
+  "loading": "Indlæser ..."
 }

@@ -875,5 +875,6 @@
   "dataImported": "डेटा आयात गरियो",
   "invalidDataFile": "अवैध डेटा फाइल",
   "exportData": "डेटा निर्यात गर्नुहोस्",
-  "importData": "डेटा आयात गर्नुहोस्"
+  "importData": "डेटा आयात गर्नुहोस्",
+  "loading": "लोड गर्दै ..."
 }
