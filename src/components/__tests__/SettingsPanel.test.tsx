@@ -15,6 +15,7 @@ jest.mock('@/lib/analytics', () => {
 jest.mock('@/lib/storage', () => ({
   exportAppData: jest.fn(() => ({})),
   importAppData: jest.fn(),
+  safeGet: jest.fn(() => []),
 }));
 jest.mock('@/components/ui/sonner-toast', () => ({
   __esModule: true,
@@ -91,8 +92,8 @@ function renderPanel(overrides: Partial<React.ComponentProps<typeof SettingsPane
 }
 
 describe('SettingsPanel', () => {
-  test('purge cache requires confirmation', () => {
-    renderPanel();
+  test('purge cache requires confirmation', async () => {
+    renderPanel({ defaultTab: 'general' });
     const purgeBtn = screen.getByRole('button', { name: /purge cache/i });
     expect(purgeBtn.getAttribute('title')).toBe(i18n.t('purgeCache'));
     fireEvent.click(purgeBtn);
@@ -127,7 +128,7 @@ describe('SettingsPanel', () => {
       .mockImplementation((tag: string, opts?: ElementCreationOptions) =>
         tag === 'input' ? (input as HTMLElement) : originalCreate(tag, opts),
       );
-    renderPanel();
+    renderPanel({ defaultTab: 'general' });
 
     const exportBtn = screen.getByRole('button', { name: /export data/i });
     expect(exportBtn.getAttribute('title')).toBe(i18n.t('exportData'));

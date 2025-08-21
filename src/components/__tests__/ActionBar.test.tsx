@@ -23,6 +23,26 @@ jest.mock('@/components/ui/sonner-toast', () => ({
   },
 }));
 
+jest.mock('../SettingsPanel', () => ({
+  __esModule: true,
+  default: ({
+    open,
+    onToggleTracking,
+    trackingEnabled,
+  }: {
+    open: boolean;
+    onToggleTracking: () => void;
+    trackingEnabled: boolean;
+  }) =>
+    open ? (
+      <div>
+        <button onClick={onToggleTracking}>
+          {trackingEnabled ? 'Disable Tracking' : 'Enable Tracking'}
+        </button>
+      </div>
+    ) : null,
+}));
+
 jest.mock('@/components/ui/dropdown-menu', () => ({
   __esModule: true,
   DropdownMenu: ({ children }: { children: React.ReactNode }) => (
@@ -190,26 +210,22 @@ describe('ActionBar', () => {
     expect(getIconClass()).not.toContain('animate-spin');
   });
 
-  test('Settings disable/enable tracking confirms and toggles', () => {
+  test('Settings disable/enable tracking confirms and toggles', async () => {
     const props = createProps();
     const { unmount } = render(<ActionBar {...props} />);
-    fireEvent.click(screen.getByText(/settings/i));
+    fireEvent.pointerDown(screen.getByText(/manage/i));
+    fireEvent.click(screen.getByText(/manage/i));
     fireEvent.click(screen.getByText(/disable tracking/i));
-    expect(screen.getByText(/disable tracking\?/i)).toBeTruthy();
-    fireEvent.click(screen.getByText(/^disable$/i));
     expect(props.onToggleTracking).toHaveBeenCalledTimes(1);
-    expect(toast.success).toHaveBeenCalledWith('Tracking disabled');
 
     unmount();
 
     const props2 = createProps({ trackingEnabled: false });
     render(<ActionBar {...props2} />);
-    fireEvent.click(screen.getByText(/settings/i));
+    fireEvent.pointerDown(screen.getByText(/manage/i));
+    fireEvent.click(screen.getByText(/manage/i));
     fireEvent.click(screen.getByText(/enable tracking/i));
-    expect(screen.getByText(/enable tracking\?/i)).toBeTruthy();
-    fireEvent.click(screen.getByText(/^enable$/i));
     expect(props2.onToggleTracking).toHaveBeenCalledTimes(1);
-    expect(toast.success).toHaveBeenCalledWith('Tracking enabled');
   });
 
   test('Jump to JSON appears and triggers event', () => {
