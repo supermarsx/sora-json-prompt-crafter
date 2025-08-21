@@ -10,3 +10,5 @@ export const CURRENT_JSON = 'currentJson';
 export const JSON_HISTORY = 'jsonHistory';
 export const GITHUB_STATS = 'githubStats';
 export const GITHUB_STATS_TIMESTAMP = 'githubStatsTimestamp';
+export const JSON_COPY_COUNT = 'jsonCopyCount';
+export const JSON_COPY_MILESTONES = 'jsonCopyMilestones';

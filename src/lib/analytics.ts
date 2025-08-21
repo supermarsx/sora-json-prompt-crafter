@@ -68,6 +68,16 @@ export enum AnalyticsEvent {
   JumpToJson = 'jump_to_json',
   MinimizeActions = 'minimize_actions',
   JsonChanged = 'json_changed',
+  CopyJson10 = 'copy_json_10',
+  CopyJson25 = 'copy_json_25',
+  CopyJson50 = 'copy_json_50',
+  CopyJson100 = 'copy_json_100',
+  CopyJson200 = 'copy_json_200',
+  CopyJson500 = 'copy_json_500',
+  CopyJson1000 = 'copy_json_1000',
+  CopyJson2000 = 'copy_json_2000',
+  CopyJson5000 = 'copy_json_5000',
+  CopyJson10000 = 'copy_json_10000',
 }
 
 let trackingFailures = 0;
