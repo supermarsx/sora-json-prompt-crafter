@@ -875,5 +875,6 @@
   "dataImported": "Andmed imporditud",
   "invalidDataFile": "Vigane andmefail",
   "exportData": "Ekspordi andmed",
-  "importData": "Impordi andmed"
+  "importData": "Impordi andmed",
+  "loading": "Laadimine ..."
 }

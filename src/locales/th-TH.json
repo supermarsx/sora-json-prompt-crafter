@@ -875,5 +875,6 @@
   "dataImported": "นำเข้าข้อมูลแล้ว",
   "invalidDataFile": "ไฟล์ข้อมูลไม่ถูกต้อง",
   "exportData": "ส่งออกข้อมูล",
-  "importData": "นำเข้าข้อมูล"
+  "importData": "นำเข้าข้อมูล",
+  "loading": "กำลังโหลด ..."
 }

@@ -49,6 +49,7 @@
   "star": "Star",
   "fork": "Fork",
   "issues": "Issues",
+  "loading": "Loading...",
   "agreeToDisclaimer": "By using this tool you agree by the",
   "jsonCopied": "Sora JSON copied to clipboard!",
   "jsonCleared": "JSON cleared!",

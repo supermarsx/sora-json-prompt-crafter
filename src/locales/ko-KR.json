@@ -875,5 +875,6 @@
   "dataImported": "데이터가 가져와졌습니다",
   "invalidDataFile": "잘못된 데이터 파일",
   "exportData": "데이터 내보내기",
-  "importData": "데이터 가져오기"
+  "importData": "데이터 가져오기",
+  "loading": "로딩 ..."
 }

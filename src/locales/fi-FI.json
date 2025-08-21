@@ -875,5 +875,6 @@
   "dataImported": "Tiedot tuotu",
   "invalidDataFile": "Virheellinen tietotiedosto",
   "exportData": "Vie tiedot",
-  "importData": "Tuo tiedot"
+  "importData": "Tuo tiedot",
+  "loading": "Lataus ..."
 }

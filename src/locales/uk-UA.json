@@ -875,5 +875,6 @@
   "dataImported": "Дані імпортовано",
   "invalidDataFile": "Неприпустимий файл даних",
   "exportData": "Експорт даних",
-  "importData": "Імпорт даних"
+  "importData": "Імпорт даних",
+  "loading": "Завантаження ..."
 }
