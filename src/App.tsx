@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useEffect, lazy, Suspense } from 'react';
 import { useUpdateCheck } from '@/hooks/use-update-check';
 import { useDarkMode } from '@/hooks/use-dark-mode';
+import { useTotalTime } from '@/hooks/use-total-time';
 const Index = lazy(() => import('./pages/Index'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 import ErrorBoundary from './components/ErrorBoundary';
@@ -24,6 +25,7 @@ const queryClient = new QueryClient({
 
 const App = () => {
   useDarkMode();
+  useTotalTime();
   const { checkForUpdate } = useUpdateCheck();
   useEffect(() => {
     checkForUpdate();
