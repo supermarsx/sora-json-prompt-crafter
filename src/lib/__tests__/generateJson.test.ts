@@ -1,11 +1,44 @@
 import { generateJson } from '../generateJson';
 import { DEFAULT_OPTIONS } from '../defaultOptions';
+import { OPTION_FLAG_MAP } from '../optionFlagMap';
+import type { SoraOptions } from '../soraOptions';
 
 function parse(json: string) {
   return JSON.parse(json) as Record<string, unknown>;
 }
 
 describe('generateJson', () => {
+  test('removes mapped options when their flags are false', () => {
+    const base: any = { ...DEFAULT_OPTIONS };
+
+    // Enable all feature flags
+    Object.keys(base).forEach((key) => {
+      if (key.startsWith('use_')) {
+        base[key] = true;
+      }
+    });
+
+    // Ensure each option has a truthy value so it appears when enabled
+    Object.keys(OPTION_FLAG_MAP).forEach((optionKey) => {
+      if (typeof base[optionKey] === 'boolean') {
+        base[optionKey] = true;
+      } else if (base[optionKey] === undefined) {
+        base[optionKey] = 'test';
+      }
+    });
+
+    const enabled = parse(generateJson(base));
+    Object.keys(OPTION_FLAG_MAP).forEach((key) => {
+      expect(enabled[key]).toBeDefined();
+    });
+
+    Object.entries(OPTION_FLAG_MAP).forEach(([optionKey, flagKey]) => {
+      const opts = { ...base, [flagKey]: false } as SoraOptions;
+      const obj = parse(generateJson(opts));
+      expect(obj[optionKey]).toBeUndefined();
+    });
+  });
+
   test('includes negative_prompt when enabled', () => {
     const opts = { ...DEFAULT_OPTIONS, use_negative_prompt: true };
     const obj = parse(generateJson(opts));
