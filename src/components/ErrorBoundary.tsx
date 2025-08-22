@@ -3,6 +3,11 @@ import i18n from '@/i18n';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { RefreshCw, AlertCircle } from 'lucide-react';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from '@/components/ui/tooltip';
 
 interface Props {
   children: ReactNode;
@@ -51,14 +56,15 @@ class ErrorBoundary extends Component<Props, State> {
             <p className="text-sm text-muted-foreground">
               {this.state.error?.message || i18n.t('unexpectedError')}
             </p>
-            <Button
-              onClick={this.handleReset}
-              className="gap-2"
-              title={i18n.t('tryAgain')}
-            >
-              <RefreshCw className="w-4 h-4" />
-              {i18n.t('tryAgain')}
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button onClick={this.handleReset} className="gap-2">
+                  <RefreshCw className="w-4 h-4" />
+                  {i18n.t('tryAgain')}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>{i18n.t('tryAgain')}</TooltipContent>
+            </Tooltip>
           </CardContent>
         </Card>
       );

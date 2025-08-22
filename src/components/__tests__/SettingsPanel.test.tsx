@@ -95,7 +95,6 @@ describe('SettingsPanel', () => {
   test('purge cache requires confirmation', async () => {
     renderPanel({ defaultTab: 'general' });
     const purgeBtn = screen.getByRole('button', { name: /purge cache/i });
-    expect(purgeBtn.getAttribute('title')).toBe(i18n.t('purgeCache'));
     fireEvent.click(purgeBtn);
     const confirmBtn = screen.getByRole('button', {
       name: i18n.t('purgeCacheConfirm'),
@@ -131,7 +130,6 @@ describe('SettingsPanel', () => {
     renderPanel({ defaultTab: 'general' });
 
     const exportBtn = screen.getByRole('button', { name: /export data/i });
-    expect(exportBtn.getAttribute('title')).toBe(i18n.t('exportData'));
     fireEvent.click(exportBtn);
     expect(exportAppData).toHaveBeenCalled();
     expect(URL.createObjectURL).toHaveBeenCalled();
@@ -144,7 +142,6 @@ describe('SettingsPanel', () => {
       }
     });
     const importBtn = screen.getByRole('button', { name: /import data/i });
-    expect(importBtn.getAttribute('title')).toBe(i18n.t('importData'));
     fireEvent.click(importBtn);
     await waitFor(() => expect(importAppData).toHaveBeenCalledWith({ b: 2 }));
     expect(toast.success).toHaveBeenCalledWith(i18n.t('dataImported'));

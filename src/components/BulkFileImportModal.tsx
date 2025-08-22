@@ -14,6 +14,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/sonner-toast';
 import { isValidOptions } from '@/lib/validateOptions';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from '@/components/ui/tooltip';
 
 interface BulkFileImportModalProps {
   open: boolean;
@@ -100,16 +105,25 @@ const BulkFileImportModal: React.FC<BulkFileImportModalProps> = ({
           onChange={(e) => setFile(e.target.files?.[0] || null)}
         />
         <DialogFooter>
-          <Button
-            variant="secondary"
-            onClick={() => onOpenChange(false)}
-            title={t('cancel')}
-          >
-            {t('cancel')}
-          </Button>
-          <Button onClick={handleImport} title={t('import')}>
-            {t('import')}
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="secondary"
+                onClick={() => onOpenChange(false)}
+              >
+                {t('cancel')}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{t('cancel')}</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button onClick={handleImport}>
+                {t('import')}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{t('import')}</TooltipContent>
+          </Tooltip>
         </DialogFooter>
       </DialogContent>
     </Dialog>

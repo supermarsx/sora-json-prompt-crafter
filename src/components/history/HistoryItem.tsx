@@ -4,6 +4,11 @@ import { Clipboard, Trash2, Edit, Eye, Check } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import type { HistoryEntry } from '../HistoryPanel';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from '@/components/ui/tooltip';
 
 interface HistoryItemProps {
   entry: HistoryEntry;
@@ -45,67 +50,85 @@ const HistoryItem: React.FC<HistoryItemProps> = ({
         }
       })()}
       <div className="flex flex-wrap gap-2">
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={() => {
-            trackEvent(trackingEnabled, AnalyticsEvent.HistoryEdit);
-            onEdit(entry.json);
-            setEdited(true);
-            setTimeout(() => setEdited(false), 1500);
-          }}
-          className={`gap-1 ${edited ? 'text-green-600 animate-pulse' : ''}`}
-          title={edited ? t('edited') : t('edit')}
-        >
-          {edited ? <Check className="w-4 h-4" /> : <Edit className="w-4 h-4" />}{' '}
-          {edited ? t('edited') : t('edit')}
-        </Button>
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={() => {
-            trackEvent(trackingEnabled, AnalyticsEvent.HistoryCopy);
-            onCopy(entry.json);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 1500);
-          }}
-          className={`gap-1 ${copied ? 'text-green-600 animate-pulse' : ''}`}
-          title={copied ? t('copied') : t('copy')}
-        >
-          {copied ? <Check className="w-4 h-4" /> : <Clipboard className="w-4 h-4" />}{' '}
-          {copied ? t('copied') : t('copy')}
-        </Button>
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={() => {
-            trackEvent(trackingEnabled, AnalyticsEvent.HistoryPreview);
-            onPreview(entry);
-          }}
-          className="gap-1"
-          title={t('preview')}
-        >
-          <Eye className="w-4 h-4" /> {t('preview')}
-        </Button>
-        <Button
-          size="sm"
-          variant="destructive"
-          onClick={() => {
-            if (confirmDelete) {
-              trackEvent(trackingEnabled, AnalyticsEvent.HistoryDeleteConfirm);
-              onDelete(entry.id);
-              setConfirmDelete(false);
-            } else {
-              setConfirmDelete(true);
-              setTimeout(() => setConfirmDelete(false), 1500);
-            }
-          }}
-          className={`gap-1 ${confirmDelete ? 'animate-pulse' : ''}`}
-          title={confirmDelete ? t('confirm') : t('delete')}
-        >
-          <Trash2 className="w-4 h-4" />
-          {confirmDelete ? t('confirm') : t('delete')}
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => {
+                trackEvent(trackingEnabled, AnalyticsEvent.HistoryEdit);
+                onEdit(entry.json);
+                setEdited(true);
+                setTimeout(() => setEdited(false), 1500);
+              }}
+              className={`gap-1 ${edited ? 'text-green-600 animate-pulse' : ''}`}
+            >
+              {edited ? <Check className="w-4 h-4" /> : <Edit className="w-4 h-4" />}{' '}
+              {edited ? t('edited') : t('edit')}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>{edited ? t('edited') : t('edit')}</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => {
+                trackEvent(trackingEnabled, AnalyticsEvent.HistoryCopy);
+                onCopy(entry.json);
+                setCopied(true);
+                setTimeout(() => setCopied(false), 1500);
+              }}
+              className={`gap-1 ${copied ? 'text-green-600 animate-pulse' : ''}`}
+            >
+              {copied ? <Check className="w-4 h-4" /> : <Clipboard className="w-4 h-4" />}{' '}
+              {copied ? t('copied') : t('copy')}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>{copied ? t('copied') : t('copy')}</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => {
+                trackEvent(trackingEnabled, AnalyticsEvent.HistoryPreview);
+                onPreview(entry);
+              }}
+              className="gap-1"
+            >
+              <Eye className="w-4 h-4" /> {t('preview')}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>{t('preview')}</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              size="sm"
+              variant="destructive"
+              onClick={() => {
+                if (confirmDelete) {
+                  trackEvent(trackingEnabled, AnalyticsEvent.HistoryDeleteConfirm);
+                  onDelete(entry.id);
+                  setConfirmDelete(false);
+                } else {
+                  setConfirmDelete(true);
+                  setTimeout(() => setConfirmDelete(false), 1500);
+                }
+              }}
+              className={`gap-1 ${confirmDelete ? 'animate-pulse' : ''}`}
+            >
+              <Trash2 className="w-4 h-4" />
+              {confirmDelete ? t('confirm') : t('delete')}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            {confirmDelete ? t('confirm') : t('delete')}
+          </TooltipContent>
+        </Tooltip>
       </div>
     </div>
   );

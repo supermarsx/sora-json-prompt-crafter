@@ -15,6 +15,11 @@ import { toast } from '@/components/ui/sonner-toast';
 import { isValidOptions } from '@/lib/validateOptions';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { useTracking } from '@/hooks/use-tracking';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from '@/components/ui/tooltip';
 
 interface ImportModalProps {
   isOpen: boolean;
@@ -101,9 +106,14 @@ export const ImportModal: React.FC<ImportModalProps> = ({
               placeholder={t('urlPlaceholder')}
               className="flex-1"
             />
-            <Button onClick={handleFetch} title={t('fetch')}>
-              {t('fetch')}
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button onClick={handleFetch}>
+                  {t('fetch')}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>{t('fetch')}</TooltipContent>
+            </Tooltip>
           </div>
           <Textarea
             value={text}
@@ -113,16 +123,22 @@ export const ImportModal: React.FC<ImportModalProps> = ({
           <Input type="file" accept=".json" onChange={handleFile} />
         </div>
         <DialogFooter>
-          <Button
-            variant="secondary"
-            onClick={onClose}
-            title={t('cancel')}
-          >
-            {t('cancel')}
-          </Button>
-          <Button onClick={handleImport} title={t('import')}>
-            {t('import')}
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="secondary" onClick={onClose}>
+                {t('cancel')}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{t('cancel')}</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button onClick={handleImport}>
+                {t('import')}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{t('import')}</TooltipContent>
+          </Tooltip>
         </DialogFooter>
       </DialogContent>
     </Dialog>

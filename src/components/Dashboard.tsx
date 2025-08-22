@@ -38,6 +38,11 @@ import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { generateJson } from '@/lib/generateJson';
 import type { SoraOptions } from '@/lib/soraOptions';
 import { loadOptionsFromJson } from '@/lib/loadOptionsFromJson';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from '@/components/ui/tooltip';
 import { OPTION_FLAG_MAP } from '@/lib/optionFlagMap';
 import { isValidOptions } from '@/lib/validateOptions';
 import { safeGet, safeSet } from '@/lib/storage';
@@ -513,176 +518,211 @@ const Dashboard = () => {
             <p className="text-muted-foreground select-none">{t('tagline')}</p>
             {headerButtonsEnabled && (
               <div className="flex flex-wrap items-center gap-2 mt-2">
-                <Button asChild variant="outline" size="sm" className="gap-1">
-                  <a
-                    href="https://github.com/sponsors/supermarsx"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1"
-                    onClick={() =>
-                      trackEvent(trackingEnabled, AnalyticsEvent.ClickSponsor)
-                    }
-                    title={t('sponsor')}
-                  >
-                    <Heart className="w-4 h-4" /> {t('sponsor')}
-                  </a>
-                </Button>
-                <Button asChild variant="outline" size="sm" className="gap-1">
-                  <a
-                    href="https://github.com/supermarsx/sora-json-prompt-crafter"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1"
-                    onClick={() =>
-                      trackEvent(trackingEnabled, AnalyticsEvent.SeeGithub)
-                    }
-                    title={t('github')}
-                  >
-                    <Github className="w-4 h-4" /> {t('github')}
-                  </a>
-                </Button>
-                <Button asChild variant="outline" size="sm" className="gap-1">
-                  <a
-                    href="https://github.com/supermarsx/sora-json-prompt-crafter"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1"
-                    onClick={() =>
-                      trackEvent(trackingEnabled, AnalyticsEvent.StarGithub)
-                    }
-                    title={t('star')}
-                  >
-                    <Star className="w-4 h-4" />
-                    {t('star')}
-                    {githubStats?.stars ? ` ${githubStats.stars}` : ''}
-                  </a>
-                </Button>
-                <Button asChild variant="outline" size="sm" className="gap-1">
-                  <a
-                    href="https://github.com/supermarsx/sora-json-prompt-crafter/fork"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1"
-                    onClick={() =>
-                      trackEvent(trackingEnabled, AnalyticsEvent.ForkGithub)
-                    }
-                    title={t('fork')}
-                  >
-                    <GitFork className="w-4 h-4" />
-                    {t('fork')}
-                    {githubStats?.forks ? ` ${githubStats.forks}` : ''}
-                  </a>
-                </Button>
-                <Button asChild variant="outline" size="sm" className="gap-1">
-                  <a
-                    href="https://github.com/supermarsx/sora-json-prompt-crafter/issues/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1"
-                    onClick={() =>
-                      trackEvent(trackingEnabled, AnalyticsEvent.OpenIssues)
-                    }
-                    title={t('issues')}
-                  >
-                    <Bug className="w-4 h-4" />
-                    {t('issues')}
-                    {githubStats?.issues ? ` ${githubStats.issues}` : ''}
-                  </a>
-                </Button>
-                <Button asChild variant="outline" size="sm" className="gap-1">
-                  <a
-                    href="https://lovable.dev/projects/385b40c5-6b5e-49fc-9f0a-e6a0f9a36181"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1"
-                    onClick={() =>
-                      trackEvent(trackingEnabled, AnalyticsEvent.ViewOnLovable)
-                    }
-                    title={t('viewOnLovable')}
-                  >
-                    <Heart className="w-4 h-4" />
-                    {t('viewOnLovable')}
-                  </a>
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button asChild variant="outline" size="sm" className="gap-1">
+                      <a
+                        href="https://github.com/sponsors/supermarsx"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1"
+                        onClick={() =>
+                          trackEvent(trackingEnabled, AnalyticsEvent.ClickSponsor)
+                        }
+                      >
+                        <Heart className="w-4 h-4" /> {t('sponsor')}
+                      </a>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>{t('sponsor')}</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button asChild variant="outline" size="sm" className="gap-1">
+                      <a
+                        href="https://github.com/supermarsx/sora-json-prompt-crafter"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1"
+                        onClick={() =>
+                          trackEvent(trackingEnabled, AnalyticsEvent.SeeGithub)
+                        }
+                      >
+                        <Github className="w-4 h-4" /> {t('github')}
+                      </a>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>{t('github')}</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button asChild variant="outline" size="sm" className="gap-1">
+                      <a
+                        href="https://github.com/supermarsx/sora-json-prompt-crafter"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1"
+                        onClick={() =>
+                          trackEvent(trackingEnabled, AnalyticsEvent.StarGithub)
+                        }
+                      >
+                        <Star className="w-4 h-4" />
+                        {t('star')}
+                        {githubStats?.stars ? ` ${githubStats.stars}` : ''}
+                      </a>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>{t('star')}</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button asChild variant="outline" size="sm" className="gap-1">
+                      <a
+                        href="https://github.com/supermarsx/sora-json-prompt-crafter/fork"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1"
+                        onClick={() =>
+                          trackEvent(trackingEnabled, AnalyticsEvent.ForkGithub)
+                        }
+                      >
+                        <GitFork className="w-4 h-4" />
+                        {t('fork')}
+                        {githubStats?.forks ? ` ${githubStats.forks}` : ''}
+                      </a>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>{t('fork')}</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button asChild variant="outline" size="sm" className="gap-1">
+                      <a
+                        href="https://github.com/supermarsx/sora-json-prompt-crafter/issues/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1"
+                        onClick={() =>
+                          trackEvent(trackingEnabled, AnalyticsEvent.OpenIssues)
+                        }
+                      >
+                        <Bug className="w-4 h-4" />
+                        {t('issues')}
+                        {githubStats?.issues ? ` ${githubStats.issues}` : ''}
+                      </a>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>{t('issues')}</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button asChild variant="outline" size="sm" className="gap-1">
+                      <a
+                        href="https://lovable.dev/projects/385b40c5-6b5e-49fc-9f0a-e6a0f9a36181"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1"
+                        onClick={() =>
+                          trackEvent(trackingEnabled, AnalyticsEvent.ViewOnLovable)
+                        }
+                      >
+                        <Heart className="w-4 h-4" />
+                        {t('viewOnLovable')}
+                      </a>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>{t('viewOnLovable')}</TooltipContent>
+                </Tooltip>
                 {soraToolsEnabled && !userscriptInstalled && (
-                  <Button asChild variant="outline" size="sm" className="gap-1">
-                    <a
-                      href="/sora-userscript.user.js"
-                      className="flex items-center gap-1"
-                      rel="noopener noreferrer"
-                      onClick={() =>
-                        trackEvent(
-                          trackingEnabled,
-                          AnalyticsEvent.InstallUserscript,
-                        )
-                      }
-                      title={t('installUserscript')}
-                    >
-                      <Download className="w-4 h-4" />
-                      {t('installUserscript')}
-                    </a>
-                  </Button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button asChild variant="outline" size="sm" className="gap-1">
+                        <a
+                          href="/sora-userscript.user.js"
+                          className="flex items-center gap-1"
+                          rel="noopener noreferrer"
+                          onClick={() =>
+                            trackEvent(
+                              trackingEnabled,
+                              AnalyticsEvent.InstallUserscript,
+                            )
+                          }
+                        >
+                          <Download className="w-4 h-4" />
+                          {t('installUserscript')}
+                        </a>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>{t('installUserscript')}</TooltipContent>
+                  </Tooltip>
                 )}
                 {soraToolsEnabled &&
                   userscriptInstalled &&
                   userscriptVersion !== USERSCRIPT_VERSION && (
-                    <Button
-                      asChild
-                      variant="outline"
-                      size="sm"
-                      className="gap-1"
-                    >
-                      <a
-                        href="/sora-userscript.user.js"
-                        className="flex items-center gap-1"
-                        rel="noopener noreferrer"
-                        onClick={() =>
-                          trackEvent(
-                            trackingEnabled,
-                            AnalyticsEvent.UpdateUserscript,
-                          )
-                        }
-                        title={t('updateUserscript')}
-                      >
-                        <RefreshCw className="w-4 h-4" />
-                        {t('updateUserscript')}
-                      </a>
-                    </Button>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button asChild variant="outline" size="sm" className="gap-1">
+                          <a
+                            href="/sora-userscript.user.js"
+                            className="flex items-center gap-1"
+                            rel="noopener noreferrer"
+                            onClick={() =>
+                              trackEvent(
+                                trackingEnabled,
+                                AnalyticsEvent.UpdateUserscript,
+                              )
+                            }
+                          >
+                            <RefreshCw className="w-4 h-4" />
+                            {t('updateUserscript')}
+                          </a>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>{t('updateUserscript')}</TooltipContent>
+                    </Tooltip>
                   )}
               </div>
             )}
             <p className="text-xs mt-2 text-muted-foreground">
               {t('agreeToDisclaimer')}{' '}
-              <button
-                onClick={() => {
-                  setShowDisclaimer(true);
-                  trackEvent(trackingEnabled, AnalyticsEvent.OpenDisclaimer);
-                }}
-                className="underline"
-                title={t('fullDisclaimer')}
-              >
-                {t('fullDisclaimer')}
-              </button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={() => {
+                      setShowDisclaimer(true);
+                      trackEvent(trackingEnabled, AnalyticsEvent.OpenDisclaimer);
+                    }}
+                    className="underline"
+                  >
+                    {t('fullDisclaimer')}
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>{t('fullDisclaimer')}</TooltipContent>
+              </Tooltip>
             </p>
           </div>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => {
-              setDarkMode(!darkMode);
-              trackEvent(trackingEnabled, AnalyticsEvent.DarkModeToggle, {
-                enabled: !darkMode,
-              });
-            }}
-            aria-label="Toggle dark mode"
-            title="Toggle dark mode"
-          >
-            {darkMode ? (
-              <Sun className="w-5 h-5" />
-            ) : (
-              <Moon className="w-5 h-5" />
-            )}
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => {
+                  setDarkMode(!darkMode);
+                  trackEvent(trackingEnabled, AnalyticsEvent.DarkModeToggle, {
+                    enabled: !darkMode,
+                  });
+                }}
+                aria-label="Toggle dark mode"
+              >
+                {darkMode ? (
+                  <Sun className="w-5 h-5" />
+                ) : (
+                  <Moon className="w-5 h-5" />
+                )}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Toggle dark mode</TooltipContent>
+          </Tooltip>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-6 flex-1">

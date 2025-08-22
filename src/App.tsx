@@ -35,7 +35,7 @@ const App = () => {
     <I18nextProvider i18n={i18n}>
       <ErrorBoundary>
         <QueryClientProvider client={queryClient}>
-          <TooltipProvider>
+          <TooltipProvider delayDuration={5000}>
             <Toaster />
             <Sonner />
             <BrowserRouter

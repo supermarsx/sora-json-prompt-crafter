@@ -9,6 +9,19 @@ globalThis.__BASE_URL__ = '/';
 import { jest } from '@jest/globals';
 import fs from 'fs';
 import path from 'path';
+import React from 'react';
+import { TooltipProvider } from '@/components/ui/tooltip';
+
+jest.mock('@testing-library/react', () => {
+  const actual = jest.requireActual('@testing-library/react');
+  const wrapper = ({ children }: { children: React.ReactNode }) =>
+    React.createElement(TooltipProvider, { delayDuration: 0 }, children);
+  return {
+    ...actual,
+    render: (ui: React.ReactElement, options?: Parameters<typeof actual.render>[1]) =>
+      actual.render(ui, { wrapper, ...options }),
+  };
+});
 
 // Provide minimal fetch and Cache API stubs for tests
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

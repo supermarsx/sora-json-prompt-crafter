@@ -25,6 +25,11 @@ import { QRCodeSVG } from 'qrcode.react';
 import { toast } from '@/components/ui/sonner-toast';
 import type { SoraOptions } from '@/lib/soraOptions';
 import { serializeOptions } from '@/lib/urlOptions';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from '@/components/ui/tooltip';
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -160,79 +165,109 @@ export const ShareModal: React.FC<ShareModalProps> = ({
         </DialogHeader>
         {nativeShareAvailable ? (
           <div className="py-4">
-            <Button
-              onClick={shareNative}
-              variant="outline"
-              className="w-full gap-2"
-              title={t('share')}
-            >
-              <Share2 className="w-4 h-4" />
-              {t('share')}…
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={shareNative}
+                  variant="outline"
+                  className="w-full gap-2"
+                >
+                  <Share2 className="w-4 h-4" />
+                  {t('share')}…
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>{t('share')}</TooltipContent>
+            </Tooltip>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-4 py-4">
-            <Button
-              onClick={shareToFacebook}
-              variant="outline"
-              className="gap-2"
-              title={t('shareFacebook')}
-            >
-              <Facebook className="w-4 h-4 text-blue-600" />
-              {t('shareFacebook')}
-            </Button>
-            <Button
-              onClick={shareToTwitter}
-              variant="outline"
-              className="gap-2"
-              title={t('shareTwitter')}
-            >
-              <Twitter className="w-4 h-4 text-blue-400" />
-              {t('shareTwitter')}
-            </Button>
-            <Button
-              onClick={shareToWhatsApp}
-              variant="outline"
-              className="gap-2"
-              title={t('shareWhatsApp')}
-            >
-              <MessageCircle className="w-4 h-4 text-green-600" />
-              {t('shareWhatsApp')}
-            </Button>
-            <Button
-              onClick={shareToTelegram}
-              variant="outline"
-              className="gap-2"
-              title={t('shareTelegram')}
-            >
-              <Send className="w-4 h-4 text-blue-500" />
-              {t('shareTelegram')}
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={shareToFacebook}
+                  variant="outline"
+                  className="gap-2"
+                >
+                  <Facebook className="w-4 h-4 text-blue-600" />
+                  {t('shareFacebook')}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>{t('shareFacebook')}</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={shareToTwitter}
+                  variant="outline"
+                  className="gap-2"
+                >
+                  <Twitter className="w-4 h-4 text-blue-400" />
+                  {t('shareTwitter')}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>{t('shareTwitter')}</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={shareToWhatsApp}
+                  variant="outline"
+                  className="gap-2"
+                >
+                  <MessageCircle className="w-4 h-4 text-green-600" />
+                  {t('shareWhatsApp')}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>{t('shareWhatsApp')}</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={shareToTelegram}
+                  variant="outline"
+                  className="gap-2"
+                >
+                  <Send className="w-4 h-4 text-blue-500" />
+                  {t('shareTelegram')}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>{t('shareTelegram')}</TooltipContent>
+            </Tooltip>
           </div>
         )}
         <div className="flex flex-col items-center gap-4 pt-4 border-t">
-          <Button
-            onClick={copyLink}
-            variant="default"
-            className="w-full gap-2"
-            title={t('copyLink')}
-          >
-            {copied ? (
-              <Check className="w-4 h-4 animate-pulse" />
-            ) : (
-              <Copy className="w-4 h-4" />
-            )}
-            {t('copyLink')}
-          </Button>
-          <Button
-            onClick={() => setShowQr((prev) => !prev)}
-            variant="outline"
-            className="w-full gap-2"
-            title={showQr ? t('hideQrCode') : t('showQrCode')}
-          >
-            <QrCode className="w-4 h-4" />
-            {showQr ? t('hideQrCode') : t('showQrCode')}
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                onClick={copyLink}
+                variant="default"
+                className="w-full gap-2"
+              >
+                {copied ? (
+                  <Check className="w-4 h-4 animate-pulse" />
+                ) : (
+                  <Copy className="w-4 h-4" />
+                )}
+                {t('copyLink')}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{t('copyLink')}</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                onClick={() => setShowQr((prev) => !prev)}
+                variant="outline"
+                className="w-full gap-2"
+              >
+                <QrCode className="w-4 h-4" />
+                {showQr ? t('hideQrCode') : t('showQrCode')}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              {showQr ? t('hideQrCode') : t('showQrCode')}
+            </TooltipContent>
+          </Tooltip>
           {showQr && <QRCodeSVG value={shareUrl} data-testid="share-qr-code" />}
         </div>
       </DialogContent>

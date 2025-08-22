@@ -15,6 +15,7 @@ import { toast } from '@/components/ui/sonner-toast';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { serializeOptions } from '@/lib/urlOptions';
 import { QRCodeSVG } from 'qrcode.react';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 jest.mock('qrcode.react', () => ({
   __esModule: true,
@@ -41,12 +42,14 @@ jest.mock('@/components/ui/sonner-toast', () => ({
 
 function renderModal() {
   return render(
-    <ShareModal
-      isOpen={true}
-      onClose={() => {}}
-      jsonContent="myjson"
-      options={DEFAULT_OPTIONS}
-    />,
+    <TooltipProvider>
+      <ShareModal
+        isOpen={true}
+        onClose={() => {}}
+        jsonContent="myjson"
+        options={DEFAULT_OPTIONS}
+      />
+    </TooltipProvider>,
   );
 }
 
@@ -70,12 +73,14 @@ describe('ShareModal', () => {
 
   test('does not render when closed', () => {
     render(
-      <ShareModal
-        isOpen={false}
-        onClose={() => {}}
-        jsonContent="myjson"
-        options={DEFAULT_OPTIONS}
-      />,
+      <TooltipProvider>
+        <ShareModal
+          isOpen={false}
+          onClose={() => {}}
+          jsonContent="myjson"
+          options={DEFAULT_OPTIONS}
+        />
+      </TooltipProvider>,
     );
     expect(screen.queryByText(/Share your JSON prompt/i)).toBeNull();
     expect(openSpy).not.toHaveBeenCalled();
@@ -226,7 +231,6 @@ describe('ShareModal', () => {
     });
     renderModal();
     const btn = screen.getByRole('button', { name: /copy link/i });
-    expect(btn.getAttribute('title')).toBe(i18n.t('copyLink'));
     fireEvent.click(btn);
     const shareUrl = new URL(window.location.href);
     shareUrl.searchParams.set('ref', 'share');
