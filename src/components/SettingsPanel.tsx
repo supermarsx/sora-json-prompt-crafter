@@ -9,6 +9,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -510,16 +511,19 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                           )}
                         >
                           {cat.thresholds.map((th) => (
-                            <Medal
-                              key={th.value}
-                              className={cn(
-                                'w-4 h-4',
-                                achieved.includes(th.value)
-                                  ? 'text-yellow-500'
-                                  : 'text-gray-300',
-                              )}
-                              title={`${th.label} - ${th.tier}`}
-                            />
+                            <Tooltip key={th.value}>
+                              <TooltipTrigger asChild>
+                                <Medal
+                                  className={cn(
+                                    'w-4 h-4',
+                                    achieved.includes(th.value)
+                                      ? 'text-yellow-500'
+                                      : 'text-gray-300',
+                                  )}
+                                />
+                              </TooltipTrigger>
+                              <TooltipContent>{th.tier}</TooltipContent>
+                            </Tooltip>
                           ))}
                         </div>
                       </div>
