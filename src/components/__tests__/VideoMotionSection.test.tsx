@@ -79,7 +79,11 @@ describe('VideoMotionSection', () => {
 
   test('extended motion strength toggle adjusts slider max', () => {
     const updateOptions = jest.fn();
-    const options = { ...DEFAULT_OPTIONS, extended_motion_strength: false };
+    const options = {
+      ...DEFAULT_OPTIONS,
+      extended_motion_strength: false,
+      use_motion_strength: true,
+    };
     const { rerender } = render(
       <VideoMotionSection
         options={options}
@@ -97,7 +101,11 @@ describe('VideoMotionSection', () => {
       extended_motion_strength: true,
     });
 
-    const enabledOptions = { ...options, extended_motion_strength: true };
+    const enabledOptions = {
+      ...options,
+      extended_motion_strength: true,
+      use_motion_strength: true,
+    };
     rerender(
       <VideoMotionSection
         options={enabledOptions}

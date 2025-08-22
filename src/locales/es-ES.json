@@ -892,5 +892,11 @@
   "importData": "Importar datos",
   "loading": "Cargando...",
   "showQrCode": "Show QR Code",
-  "hideQrCode": "Hide QR Code"
+  "hideQrCode": "Hide QR Code",
+  "useYear": "Use Year",
+  "useShotType": "Use Shot Type",
+  "useSubjectFocus": "Use Subject Focus",
+  "useOutputFormat": "Use Output Format",
+  "useDynamicRange": "Use Dynamic Range",
+  "useMotionStrength": "Use Motion Strength"
 }

@@ -40,9 +40,12 @@ describe('DimensionsFormatSection', () => {
       />,
     );
     const comboboxes = screen.getAllByRole('combobox');
+    const ratioLabels = i18n.t('aspectRatioLabels', {
+      returnObjects: true,
+    }) as Record<string, string>;
     fireEvent.click(comboboxes[0]);
     fireEvent.click(
-      screen.getByRole('option', { name: i18n.t('aspectRatioLabels.4:3') })
+      screen.getByRole('option', { name: ratioLabels['4:3'] })
     );
     expect(updateOptions).toHaveBeenCalledWith({ aspect_ratio: '4:3' });
 
@@ -62,6 +65,8 @@ describe('DimensionsFormatSection', () => {
           use_dimensions_format: true,
           output_format: 'png',
           dynamic_range: 'SDR',
+          use_output_format: true,
+          use_dynamic_range: true,
         }}
         updateOptions={updateOptions}
         isEnabled={true}
