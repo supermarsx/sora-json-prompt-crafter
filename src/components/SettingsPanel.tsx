@@ -528,7 +528,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                         <div
                           className={cn(
                             'flex gap-1',
-                            cat.key === TIME_MILESTONES && 'flex-wrap max-w-[200px]'
+                            cat.key === TIME_MILESTONES &&
+                              'flex-wrap max-w-[200px] gap-2 mt-1'
                           )}
                         >
                           {cat.thresholds.map((th) => (
