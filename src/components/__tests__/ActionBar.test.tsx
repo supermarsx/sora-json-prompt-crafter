@@ -9,6 +9,7 @@ import {
   REDO_MILESTONES,
 } from '@/lib/storage-keys';
 import i18n from '@/i18n';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 jest.mock('@/lib/analytics', () => {
   const actual = jest.requireActual('@/lib/analytics');
@@ -164,18 +165,23 @@ afterEach(() => {
 });
 
 describe('ActionBar', () => {
+  const renderActionBar = (props: ReturnType<typeof createProps>) =>
+    render(
+      <TooltipProvider>
+        <ActionBar {...props} />
+      </TooltipProvider>,
+    );
   test('Copy calls onCopy', () => {
     const props = createProps();
-    const { unmount } = render(<ActionBar {...props} />);
+    const { unmount } = renderActionBar(props);
     const copyBtn = screen.getByRole('button', { name: /copy/i });
-    expect(copyBtn.getAttribute('title')).toBe(i18n.t('copy'));
     fireEvent.click(copyBtn);
     expect(props.onCopy).toHaveBeenCalled();
   });
 
   test('Undo and redo buttons call handlers', () => {
     const props = createProps();
-    render(<ActionBar {...props} />);
+    renderActionBar(props);
     fireEvent.click(screen.getByRole('button', { name: /undo/i }));
     expect(props.onUndo).toHaveBeenCalled();
     fireEvent.click(screen.getByRole('button', { name: /redo/i }));
@@ -184,7 +190,7 @@ describe('ActionBar', () => {
 
   test('undo/redo disabled states', () => {
     const props = createProps({ canUndo: false, canRedo: false });
-    render(<ActionBar {...props} />);
+    renderActionBar(props);
     const undoBtn = screen.getByRole('button', { name: /undo/i });
     const redoBtn = screen.getByRole('button', { name: /redo/i });
     expect(undoBtn.getAttribute('disabled')).not.toBeNull();
@@ -193,7 +199,7 @@ describe('ActionBar', () => {
 
   test('Clear spins then resets', () => {
     const props = createProps();
-    const { container } = render(<ActionBar {...props} />);
+    const { container } = renderActionBar(props);
     const btn = screen.getByRole('button', { name: /clear/i });
     const getIconClass = () =>
       btn.querySelector('svg')?.getAttribute('class') ?? '';
@@ -212,7 +218,7 @@ describe('ActionBar', () => {
 
   test('Settings disable/enable tracking confirms and toggles', async () => {
     const props = createProps();
-    const { unmount } = render(<ActionBar {...props} />);
+    const { unmount } = renderActionBar(props);
     fireEvent.pointerDown(screen.getByText(/manage/i));
     fireEvent.click(screen.getByText(/manage/i));
     fireEvent.click(screen.getByText(/disable tracking/i));
@@ -221,7 +227,7 @@ describe('ActionBar', () => {
     unmount();
 
     const props2 = createProps({ trackingEnabled: false });
-    render(<ActionBar {...props2} />);
+    renderActionBar(props2);
     fireEvent.pointerDown(screen.getByText(/manage/i));
     fireEvent.click(screen.getByText(/manage/i));
     fireEvent.click(screen.getByText(/enable tracking/i));
@@ -231,7 +237,7 @@ describe('ActionBar', () => {
   test('Jump to JSON appears and triggers event', () => {
     const onJumpToJson = jest.fn();
     const props = createProps({ showJumpToJson: true, onJumpToJson });
-    render(<ActionBar {...props} />);
+    renderActionBar(props);
     const btn = screen.getByRole('button', { name: /jump to json/i });
     fireEvent.click(btn);
     expect(onJumpToJson).toHaveBeenCalled();
@@ -245,21 +251,21 @@ describe('ActionBar', () => {
       soraToolsEnabled: true,
       userscriptInstalled: true,
     });
-    render(<ActionBar {...props} />);
+    renderActionBar(props);
     fireEvent.click(screen.getByRole('button', { name: /send to sora/i }));
     expect(onSend).toHaveBeenCalled();
   });
 
   test('Send to Sora button hidden when script missing', () => {
     const props = createProps({ userscriptInstalled: false });
-    render(<ActionBar {...props} />);
+    renderActionBar(props);
     expect(screen.queryByRole('button', { name: /send to sora/i })).toBeNull();
   });
 
   test('prompts to refresh when update is available and reloads on confirm', () => {
     mockUpdateAvailable = true;
     const props = createProps();
-    render(<ActionBar {...props} />);
+    renderActionBar(props);
     expect(toastFn).toHaveBeenCalled();
     const action = toastFn.mock.calls[0][0].action;
     expect(typeof action.props.onClick).toBe('function');
@@ -267,7 +273,7 @@ describe('ActionBar', () => {
 
   test('Minimize hides and restore shows bar again', () => {
     const props = createProps();
-    const { container } = render(<ActionBar {...props} />);
+    const { container } = renderActionBar(props);
     const minimize = container.querySelector(
       'button.ml-auto',
     ) as HTMLButtonElement;
@@ -283,7 +289,7 @@ describe('ActionBar', () => {
     localStorage.setItem(UNDO_MILESTONES, '[]');
     (trackEvent as jest.Mock).mockClear();
     const props = createProps();
-    const { unmount } = render(<ActionBar {...props} />);
+    const { unmount } = renderActionBar(props);
     const undoBtn = screen.getByRole('button', { name: /undo/i });
     fireEvent.click(undoBtn);
     expect(JSON.parse(localStorage.getItem(UNDO_COUNT) || '0')).toBe(100);
@@ -295,7 +301,7 @@ describe('ActionBar', () => {
       100,
     ]);
     unmount();
-    render(<ActionBar {...props} />);
+    renderActionBar(props);
     fireEvent.click(screen.getByRole('button', { name: /undo/i }));
     expect(JSON.parse(localStorage.getItem(UNDO_COUNT) || '0')).toBe(101);
     calls = (trackEvent as jest.Mock).mock.calls.filter(
@@ -312,7 +318,7 @@ describe('ActionBar', () => {
     localStorage.setItem(REDO_MILESTONES, '[]');
     (trackEvent as jest.Mock).mockClear();
     const props = createProps();
-    const { unmount } = render(<ActionBar {...props} />);
+    const { unmount } = renderActionBar(props);
     const redoBtn = screen.getByRole('button', { name: /redo/i });
     fireEvent.click(redoBtn);
     expect(JSON.parse(localStorage.getItem(REDO_COUNT) || '0')).toBe(100);
@@ -324,7 +330,7 @@ describe('ActionBar', () => {
       100,
     ]);
     unmount();
-    render(<ActionBar {...props} />);
+    renderActionBar(props);
     fireEvent.click(screen.getByRole('button', { name: /redo/i }));
     expect(JSON.parse(localStorage.getItem(REDO_COUNT) || '0')).toBe(101);
     calls = (trackEvent as jest.Mock).mock.calls.filter(

@@ -17,6 +17,11 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from '@/components/ui/tooltip';
 
 import SettingsPanel from './SettingsPanel';
 import { useUpdateCheck } from '@/hooks/use-update-check';
@@ -178,16 +183,20 @@ const { toast: notify } = useToast();
   if (minimized) {
     return (
       <div className="fixed bottom-4 right-4 z-50">
-        <Button
-          onClick={handleRestore}
-          variant="default"
-          size="sm"
-          className="gap-1"
-          title={t('actions')}
-        >
-          {t('actions')}
-          <ChevronUp className="w-4 h-4" />
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              onClick={handleRestore}
+              variant="default"
+              size="sm"
+              className="gap-1"
+            >
+              {t('actions')}
+              <ChevronUp className="w-4 h-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>{t('actions')}</TooltipContent>
+        </Tooltip>
       </div>
     );
   }
@@ -195,134 +204,166 @@ const { toast: notify } = useToast();
   return (
     <div className="fixed bottom-4 right-4 z-50 bg-card border rounded-md shadow-lg p-3 flex flex-wrap items-center gap-2">
       {soraToolsEnabled && userscriptInstalled && (
-        <Button
-          onClick={onSendToSora}
-          variant="outline"
-          size="sm"
-          className={cn({ 'gap-2': actionLabelsEnabled })}
-          title={t('sendToSora')}
-        >
-          <Send className="w-4 h-4" />
-          {actionLabelsEnabled && t('sendToSora')}
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              onClick={onSendToSora}
+              variant="outline"
+              size="sm"
+              className={cn({ 'gap-2': actionLabelsEnabled })}
+            >
+              <Send className="w-4 h-4" />
+              {actionLabelsEnabled && t('sendToSora')}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>{t('sendToSora')}</TooltipContent>
+        </Tooltip>
       )}
-      <Button
-        onClick={() => {
-          onUndo();
-          trackEvent(trackingEnabled, AnalyticsEvent.UndoButton);
-          try {
-            const count = (safeGet<number>(UNDO_COUNT, 0, true) as number) ?? 0;
-            const newCount = count + 1;
-            safeSet(UNDO_COUNT, newCount, true);
-            const milestones =
-              (safeGet<number[]>(UNDO_MILESTONES, [], true) as number[]) ?? [];
-            for (const [threshold, event] of UNDO_MILESTONE_EVENTS) {
-              if (newCount >= threshold && !milestones.includes(threshold)) {
-                trackEvent(trackingEnabled, event);
-                toast.success(t('milestoneReached', { threshold }));
-                milestones.push(threshold);
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            onClick={() => {
+              onUndo();
+              trackEvent(trackingEnabled, AnalyticsEvent.UndoButton);
+              try {
+                const count = (safeGet<number>(UNDO_COUNT, 0, true) as number) ?? 0;
+                const newCount = count + 1;
+                safeSet(UNDO_COUNT, newCount, true);
+                const milestones =
+                  (safeGet<number[]>(UNDO_MILESTONES, [], true) as number[]) ?? [];
+                for (const [threshold, event] of UNDO_MILESTONE_EVENTS) {
+                  if (newCount >= threshold && !milestones.includes(threshold)) {
+                    trackEvent(trackingEnabled, event);
+                    toast.success(t('milestoneReached', { threshold }));
+                    milestones.push(threshold);
+                  }
+                }
+                safeSet(UNDO_MILESTONES, milestones, true);
+              } catch {
+                console.error('Undo counter: There was an error.');
               }
-            }
-            safeSet(UNDO_MILESTONES, milestones, true);
-          } catch {
-            console.error('Undo counter: There was an error.');
-          }
-        }}
-        variant="outline"
-        size="sm"
-        disabled={!canUndo}
-        className={cn({ 'gap-2': actionLabelsEnabled })}
-        title={t('undo')}
-      >
-        <Undo2 className="w-4 h-4" />
-        {actionLabelsEnabled && t('undo')}
-      </Button>
-      <Button
-        onClick={() => {
-          onRedo();
-          trackEvent(trackingEnabled, AnalyticsEvent.RedoButton);
-          try {
-            const count = (safeGet<number>(REDO_COUNT, 0, true) as number) ?? 0;
-            const newCount = count + 1;
-            safeSet(REDO_COUNT, newCount, true);
-            const milestones =
-              (safeGet<number[]>(REDO_MILESTONES, [], true) as number[]) ?? [];
-            for (const [threshold, event] of REDO_MILESTONE_EVENTS) {
-              if (newCount >= threshold && !milestones.includes(threshold)) {
-                trackEvent(trackingEnabled, event);
-                toast.success(t('milestoneReached', { threshold }));
-                milestones.push(threshold);
+            }}
+            variant="outline"
+            size="sm"
+            disabled={!canUndo}
+            className={cn({ 'gap-2': actionLabelsEnabled })}
+          >
+            <Undo2 className="w-4 h-4" />
+            {actionLabelsEnabled && t('undo')}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>{t('undo')}</TooltipContent>
+      </Tooltip>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            onClick={() => {
+              onRedo();
+              trackEvent(trackingEnabled, AnalyticsEvent.RedoButton);
+              try {
+                const count = (safeGet<number>(REDO_COUNT, 0, true) as number) ?? 0;
+                const newCount = count + 1;
+                safeSet(REDO_COUNT, newCount, true);
+                const milestones =
+                  (safeGet<number[]>(REDO_MILESTONES, [], true) as number[]) ?? [];
+                for (const [threshold, event] of REDO_MILESTONE_EVENTS) {
+                  if (newCount >= threshold && !milestones.includes(threshold)) {
+                    trackEvent(trackingEnabled, event);
+                    toast.success(t('milestoneReached', { threshold }));
+                    milestones.push(threshold);
+                  }
+                }
+                safeSet(REDO_MILESTONES, milestones, true);
+              } catch {
+                console.error('Redo counter: There was an error.');
               }
-            }
-            safeSet(REDO_MILESTONES, milestones, true);
-          } catch {
-            console.error('Redo counter: There was an error.');
-          }
-        }}
-        variant="outline"
-        size="sm"
-        disabled={!canRedo}
-        className={cn({ 'gap-2': actionLabelsEnabled })}
-        title={t('redo')}
-      >
-        <Redo2 className="w-4 h-4" />
-        {actionLabelsEnabled && t('redo')}
-      </Button>
-      <Button
-        onClick={onCopy}
-        variant="outline"
-        size="sm"
-        className={cn({ 'gap-2': actionLabelsEnabled })}
-        title={t('copy')}
-      >
-        {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-        {actionLabelsEnabled && t('copy')}
-      </Button>
-      <Button
-        onClick={() => {
+            }}
+            variant="outline"
+            size="sm"
+            disabled={!canRedo}
+            className={cn({ 'gap-2': actionLabelsEnabled })}
+          >
+            <Redo2 className="w-4 h-4" />
+            {actionLabelsEnabled && t('redo')}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>{t('redo')}</TooltipContent>
+      </Tooltip>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            onClick={onCopy}
+            variant="outline"
+            size="sm"
+            className={cn({ 'gap-2': actionLabelsEnabled })}
+          >
+            {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+            {actionLabelsEnabled && t('copy')}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>{t('copy')}</TooltipContent>
+      </Tooltip>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            onClick={() => {
           setClearing(true);
           onClear();
           setTimeout(() => setClearing(false), 500);
         }}
-        variant="outline"
-        size="sm"
-        className={cn({ 'gap-2': actionLabelsEnabled })}
-        title={t('clear')}
-      >
-        <Trash2 className={`w-4 h-4 ${clearing ? 'animate-spin' : ''}`} />
-        {actionLabelsEnabled && t('clear')}
-      </Button>
-      <Button
-        onClick={onShare}
-        variant="outline"
-        size="sm"
-        className={cn({ 'gap-2': actionLabelsEnabled })}
-        title={t('share')}
-      >
-        <Share className="w-4 h-4" />
-        {actionLabelsEnabled && t('share')}
-      </Button>
-      <Button
-        onClick={() => setShowSettings(true)}
-        variant="outline"
-        size="sm"
-        className={cn({ 'gap-2': actionLabelsEnabled })}
-        title={t('manage')}
-      >
-        <Cog className="w-4 h-4" /> {actionLabelsEnabled && t('manage')}
-      </Button>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
             variant="outline"
             size="sm"
             className={cn({ 'gap-2': actionLabelsEnabled })}
-            title={t('language')}
           >
-            <Languages className="w-4 h-4" />
-            {actionLabelsEnabled && t('language')}
+            <Trash2 className={`w-4 h-4 ${clearing ? 'animate-spin' : ''}`} />
+            {actionLabelsEnabled && t('clear')}
           </Button>
-        </DropdownMenuTrigger>
+        </TooltipTrigger>
+        <TooltipContent>{t('clear')}</TooltipContent>
+      </Tooltip>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            onClick={onShare}
+            variant="outline"
+            size="sm"
+            className={cn({ 'gap-2': actionLabelsEnabled })}
+          >
+            <Share className="w-4 h-4" />
+            {actionLabelsEnabled && t('share')}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>{t('share')}</TooltipContent>
+      </Tooltip>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            onClick={() => setShowSettings(true)}
+            variant="outline"
+            size="sm"
+            className={cn({ 'gap-2': actionLabelsEnabled })}
+          >
+            <Cog className="w-4 h-4" /> {actionLabelsEnabled && t('manage')}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>{t('manage')}</TooltipContent>
+      </Tooltip>
+      <DropdownMenu>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                size="sm"
+                className={cn({ 'gap-2': actionLabelsEnabled })}
+              >
+                <Languages className="w-4 h-4" />
+                {actionLabelsEnabled && t('language')}
+              </Button>
+            </DropdownMenuTrigger>
+          </TooltipTrigger>
+          <TooltipContent>{t('language')}</TooltipContent>
+        </Tooltip>
         <DropdownMenuContent className="max-h-screen sm:max-h-[50vh] overflow-y-auto">
           <DropdownMenuItem
             onSelect={() => setLocale('en-US')}
@@ -615,30 +656,38 @@ const { toast: notify } = useToast();
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      <Button
-        onClick={onHistory}
-        variant="outline"
-        size="sm"
-        className={cn({ 'gap-2': actionLabelsEnabled })}
-        title={t('history')}
-      >
-        <History className="w-4 h-4" />
-        {actionLabelsEnabled && t('history')}
-      </Button>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            onClick={onHistory}
+            variant="outline"
+            size="sm"
+            className={cn({ 'gap-2': actionLabelsEnabled })}
+          >
+            <History className="w-4 h-4" />
+            {actionLabelsEnabled && t('history')}
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>{t('history')}</TooltipContent>
+      </Tooltip>
       {showJumpToJson && (
-        <Button
-          onClick={() => {
-            onJumpToJson?.();
-            trackEvent(trackingEnabled, AnalyticsEvent.JumpToJson);
-          }}
-          variant="outline"
-          size="sm"
-          className={cn({ 'gap-2': actionLabelsEnabled })}
-          title={t('jumpToJson')}
-        >
-          <MoveDown className="w-4 h-4" />
-          {actionLabelsEnabled && t('jumpToJson')}
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              onClick={() => {
+                onJumpToJson?.();
+                trackEvent(trackingEnabled, AnalyticsEvent.JumpToJson);
+              }}
+              variant="outline"
+              size="sm"
+              className={cn({ 'gap-2': actionLabelsEnabled })}
+            >
+              <MoveDown className="w-4 h-4" />
+              {actionLabelsEnabled && t('jumpToJson')}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>{t('jumpToJson')}</TooltipContent>
+        </Tooltip>
       )}
       <Button
         onClick={handleMinimize}

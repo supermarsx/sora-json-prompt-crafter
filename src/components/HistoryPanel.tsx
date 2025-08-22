@@ -27,6 +27,11 @@ import {
   Download,
   Check,
 } from 'lucide-react';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from '@/components/ui/tooltip';
 const HistoryListOuter = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   (props, ref) => <div ref={ref} data-testid="history-list" {...props} />,
 );
@@ -262,16 +267,20 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
               <div className="mb-4 flex justify-between items-center gap-2">
                 <div className="flex gap-2">
                   <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="gap-1"
-                        title={t('import')}
-                      >
-                        <ImportIcon className="w-4 h-4" /> {t('import')}
-                      </Button>
-                    </DropdownMenuTrigger>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="gap-1"
+                          >
+                            <ImportIcon className="w-4 h-4" /> {t('import')}
+                          </Button>
+                        </DropdownMenuTrigger>
+                      </TooltipTrigger>
+                      <TooltipContent>{t('import')}</TooltipContent>
+                    </Tooltip>
                     <DropdownMenuContent>
                       <DropdownMenuItem
                         onSelect={() => {
@@ -312,17 +321,21 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                     </DropdownMenuContent>
                   </DropdownMenu>
                   <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="gap-1"
-                        disabled={noHistory}
-                        title={t('export')}
-                      >
-                        <Download className="w-4 h-4" /> {t('export')}
-                      </Button>
-                    </DropdownMenuTrigger>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="gap-1"
+                            disabled={noHistory}
+                          >
+                            <Download className="w-4 h-4" /> {t('export')}
+                          </Button>
+                        </DropdownMenuTrigger>
+                      </TooltipTrigger>
+                      <TooltipContent>{t('export')}</TooltipContent>
+                    </Tooltip>
                   <DropdownMenuContent>
                     <DropdownMenuItem
                       onSelect={() => {
@@ -350,18 +363,22 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
-              <Button
-                variant="destructive"
-                size="sm"
-                onClick={() => {
-                  trackEvent(trackingEnabled, AnalyticsEvent.HistoryClearClick);
-                  setConfirmClear(true);
-                }}
-                disabled={noHistory}
-                title={t('clearHistory')}
-              >
-                {t('clearHistory')}
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => {
+                      trackEvent(trackingEnabled, AnalyticsEvent.HistoryClearClick);
+                      setConfirmClear(true);
+                    }}
+                    disabled={noHistory}
+                  >
+                    {t('clearHistory')}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>{t('clearHistory')}</TooltipContent>
+              </Tooltip>
               </div>
               <div className="h-[60vh]">
                 {history.length > 0 ? (
@@ -402,25 +419,33 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                   {t('latestActionsIntro')}
                 </p>
                 <div className="flex gap-2">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="gap-1"
-                    onClick={exportActions}
-                    disabled={noActions}
-                    title={t('export')}
-                  >
-                    <Download className="w-4 h-4" /> {t('export')}
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="destructive"
-                    onClick={requestClearActions}
-                    disabled={noActions}
-                    title={t('clearActions')}
-                  >
-                    {t('clearActions')}
-                  </Button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="gap-1"
+                        onClick={exportActions}
+                        disabled={noActions}
+                      >
+                        <Download className="w-4 h-4" /> {t('export')}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>{t('export')}</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        onClick={requestClearActions}
+                        disabled={noActions}
+                      >
+                        {t('clearActions')}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>{t('clearActions')}</TooltipContent>
+                  </Tooltip>
                 </div>
               </div>
               <ScrollArea className="h-[60vh]">
@@ -433,28 +458,32 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                       <span>{a.date}</span>
                       <span className="flex items-center gap-2">
                         {a.action}
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          className={`p-0 w-3.5 h-3.5 ${confirmDeleteActionIdx === idx ? 'text-destructive animate-pulse' : ''}`}
-                          onClick={() => requestDeleteAction(idx)}
-                          aria-label={
-                            confirmDeleteActionIdx === idx
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              className={`p-0 w-3.5 h-3.5 ${confirmDeleteActionIdx === idx ? 'text-destructive animate-pulse' : ''}`}
+                              onClick={() => requestDeleteAction(idx)}
+                              aria-label={
+                                confirmDeleteActionIdx === idx
+                                  ? t('confirm')
+                                  : t('delete')
+                              }
+                            >
+                              {confirmDeleteActionIdx === idx ? (
+                                <Check className="w-3.5 h-3.5" />
+                              ) : (
+                                <Trash2 className="w-3.5 h-3.5" />
+                              )}
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            {confirmDeleteActionIdx === idx
                               ? t('confirm')
-                              : t('delete')
-                          }
-                          title={
-                            confirmDeleteActionIdx === idx
-                              ? t('confirm')
-                              : t('delete')
-                          }
-                        >
-                          {confirmDeleteActionIdx === idx ? (
-                            <Check className="w-3.5 h-3.5" />
-                          ) : (
-                            <Trash2 className="w-3.5 h-3.5" />
-                          )}
-                        </Button>
+                              : t('delete')}
+                          </TooltipContent>
+                        </Tooltip>
                       </span>
                     </div>
                   ))}

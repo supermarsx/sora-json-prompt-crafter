@@ -14,6 +14,7 @@ import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { formatDateTime } from '@/lib/date';
 import { safeGet, safeSet, safeRemove } from '@/lib/storage';
 import { TRACKING_HISTORY } from '@/lib/storage-keys';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 jest.mock('@/lib/analytics', () => {
   const actual = jest.requireActual('@/lib/analytics');
@@ -97,7 +98,11 @@ function renderPanel(
     onEdit: jest.fn(),
     onImport: jest.fn(),
   };
-  return render(<HistoryPanel {...defaultProps} {...props} />);
+  return render(
+    <TooltipProvider>
+      <HistoryPanel {...defaultProps} {...props} />
+    </TooltipProvider>,
+  );
 }
 
 beforeEach(() => {
@@ -121,7 +126,6 @@ describe('HistoryPanel basic actions', () => {
   test('exports to clipboard and file', async () => {
     renderPanel();
     const exportBtn = screen.getByRole('button', { name: /^export$/i });
-    expect(exportBtn.getAttribute('title')).toBe(i18n.t('export'));
     fireEvent.mouseDown(exportBtn);
     fireEvent.click(exportBtn);
     fireEvent.click(screen.getByText(/copy all to clipboard/i));
@@ -147,7 +151,6 @@ describe('HistoryPanel basic actions', () => {
     (trackEvent as jest.Mock).mockClear();
 
     const exportBtn = screen.getByRole('button', { name: /^export$/i });
-    expect(exportBtn.getAttribute('title')).toBe(i18n.t('export'));
     fireEvent.mouseDown(exportBtn);
     fireEvent.click(exportBtn);
     fireEvent.click(screen.getByText(/copy all to clipboard/i));
@@ -278,11 +281,7 @@ describe('HistoryPanel action history', () => {
     const deleteBtn = within(entry).getByRole('button', {
       name: i18n.t('delete'),
     });
-    expect(deleteBtn.getAttribute('aria-label')).toBe(i18n.t('delete'));
-    expect(deleteBtn.getAttribute('title')).toBe(i18n.t('delete'));
     fireEvent.click(deleteBtn);
-    expect(deleteBtn.getAttribute('aria-label')).toBe(i18n.t('confirm'));
-    expect(deleteBtn.getAttribute('title')).toBe(i18n.t('confirm'));
     fireEvent.click(deleteBtn);
 
     expect(safeSet).toHaveBeenCalledWith(TRACKING_HISTORY, [], true);

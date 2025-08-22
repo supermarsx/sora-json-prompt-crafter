@@ -13,6 +13,11 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ChevronDown, Search } from 'lucide-react';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from '@/components/ui/tooltip';
 
 interface MultiSelectDropdownProps {
   options: readonly string[];
@@ -124,17 +129,21 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
 
   return (
     <Dialog open={disabled ? false : isOpen} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          className="w-full justify-between"
-          disabled={disabled}
-          title={displayValue}
-        >
-          <span className="truncate">{displayValue}</span>
-          <ChevronDown className="w-4 h-4 ml-2 flex-shrink-0" />
-        </Button>
-      </DialogTrigger>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <DialogTrigger asChild>
+            <Button
+              variant="outline"
+              className="w-full justify-between"
+              disabled={disabled}
+            >
+              <span className="truncate">{displayValue}</span>
+              <ChevronDown className="w-4 h-4 ml-2 flex-shrink-0" />
+            </Button>
+          </DialogTrigger>
+        </TooltipTrigger>
+        <TooltipContent>{displayValue}</TooltipContent>
+      </Tooltip>
       <DialogContent className="max-w-md max-h-[80vh]">
         <DialogHeader>
           <DialogTitle>{labelText}</DialogTitle>

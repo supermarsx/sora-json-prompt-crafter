@@ -297,231 +297,287 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
             <TabsContent value="manage">
               <ScrollArea className="max-h-[70vh]">
                 <div className="space-y-2 py-2">
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start gap-2"
-                    onClick={onImport}
-                    title={t('import')}
-                  >
-                    <ImportIcon className="w-4 h-4" /> {t('import')}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start gap-2"
-                    onClick={onReset}
-                    title={t('reset')}
-                  >
-                    <RotateCcw className="w-4 h-4" /> {t('reset')}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start gap-2"
-                    onClick={onRegenerate}
-                    title={t('regenerate')}
-                  >
-                    <RefreshCw className="w-4 h-4" /> {t('regenerate')}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start gap-2"
-                    onClick={onRandomize}
-                    title={t('randomize')}
-                  >
-                    <Shuffle className="w-4 h-4" /> {t('randomize')}
-                  </Button>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
+                        onClick={onImport}
+                      >
+                        <ImportIcon className="w-4 h-4" /> {t('import')}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>{t('import')}</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
+                        onClick={onReset}
+                      >
+                        <RotateCcw className="w-4 h-4" /> {t('reset')}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>{t('reset')}</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
+                        onClick={onRegenerate}
+                      >
+                        <RefreshCw className="w-4 h-4" /> {t('regenerate')}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>{t('regenerate')}</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
+                        onClick={onRandomize}
+                      >
+                        <Shuffle className="w-4 h-4" /> {t('randomize')}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>{t('randomize')}</TooltipContent>
+                  </Tooltip>
                 </div>
               </ScrollArea>
             </TabsContent>
             <TabsContent value="general">
               <ScrollArea className="max-h-[70vh]">
                 <div className="space-y-2 py-2">
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start gap-2"
-                    onClick={() => {
-                      if (trackingEnabled) {
-                        setConfirmDisableTracking(true);
-                      } else {
-                        setConfirmEnableTracking(true);
-                      }
-                    }}
-                    title={
-                      trackingEnabled
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
+                        onClick={() => {
+                          if (trackingEnabled) {
+                            setConfirmDisableTracking(true);
+                          } else {
+                            setConfirmEnableTracking(true);
+                          }
+                        }}
+                      >
+                        {trackingEnabled ? (
+                          <>
+                            <EyeOff className="w-4 h-4" /> {t('disableTracking')}
+                          </>
+                        ) : (
+                          <>
+                            <Eye className="w-4 h-4" /> {t('enableTracking')}
+                          </>
+                        )}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {trackingEnabled
                         ? t('disableTracking')
-                        : t('enableTracking')
-                    }
-                  >
-                    {trackingEnabled ? (
-                      <>
-                        <EyeOff className="w-4 h-4" /> {t('disableTracking')}
-                      </>
-                    ) : (
-                      <>
-                        <Eye className="w-4 h-4" /> {t('enableTracking')}
-                      </>
-                    )}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start gap-2 hidden"
-                    onClick={() => {
-                      try {
-                        onToggleSoraTools();
-                        toast.success(
-                          !soraToolsEnabled
-                            ? 'Sora integration enabled'
-                            : 'Sora integration disabled',
-                        );
-                      } catch {
-                        toast.error('Failed to toggle Sora integration');
-                      }
-                    }}
-                    title={
-                      soraToolsEnabled
+                        : t('enableTracking')}
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2 hidden"
+                        onClick={() => {
+                          try {
+                            onToggleSoraTools();
+                            toast.success(
+                              !soraToolsEnabled
+                                ? 'Sora integration enabled'
+                                : 'Sora integration disabled',
+                            );
+                          } catch {
+                            toast.error('Failed to toggle Sora integration');
+                          }
+                        }}
+                      >
+                        {soraToolsEnabled ? (
+                          <>
+                            <EyeOff className="w-4 h-4" /> Hide Sora Integration
+                          </>
+                        ) : (
+                          <>
+                            <Eye className="w-4 h-4" /> Show Sora Integration
+                          </>
+                        )}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {soraToolsEnabled
                         ? 'Hide Sora Integration'
-                        : 'Show Sora Integration'
-                    }
-                  >
-                    {soraToolsEnabled ? (
-                      <>
-                        <EyeOff className="w-4 h-4" /> Hide Sora Integration
-                      </>
-                    ) : (
-                      <>
-                        <Eye className="w-4 h-4" /> Show Sora Integration
-                      </>
-                    )}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start gap-2"
-                    onClick={() => {
-                      try {
-                        onToggleHeaderButtons();
-                        toast.success(
-                          !headerButtonsEnabled
-                            ? t('showHeaderButtons')
-                            : t('hideHeaderButtons'),
-                        );
-                        trackEvent(
-                          trackingEnabled,
-                          AnalyticsEvent.ToggleHeaderButtons,
-                          {
-                            enabled: !headerButtonsEnabled,
-                          },
-                        );
-                      } catch {
-                        toast.error('Failed to toggle header buttons');
-                      }
-                    }}
-                    title={
-                      headerButtonsEnabled
+                        : 'Show Sora Integration'}
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
+                        onClick={() => {
+                          try {
+                            onToggleHeaderButtons();
+                            toast.success(
+                              !headerButtonsEnabled
+                                ? t('showHeaderButtons')
+                                : t('hideHeaderButtons'),
+                            );
+                            trackEvent(
+                              trackingEnabled,
+                              AnalyticsEvent.ToggleHeaderButtons,
+                              {
+                                enabled: !headerButtonsEnabled,
+                              },
+                            );
+                          } catch {
+                            toast.error('Failed to toggle header buttons');
+                          }
+                        }}
+                      >
+                        {headerButtonsEnabled ? (
+                          <>
+                            <EyeOff className="w-4 h-4" /> {t('hideHeaderButtons')}
+                          </>
+                        ) : (
+                          <>
+                            <Eye className="w-4 h-4" /> {t('showHeaderButtons')}
+                          </>
+                        )}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {headerButtonsEnabled
                         ? t('hideHeaderButtons')
-                        : t('showHeaderButtons')
-                    }
-                  >
-                    {headerButtonsEnabled ? (
-                      <>
-                        <EyeOff className="w-4 h-4" /> {t('hideHeaderButtons')}
-                      </>
-                    ) : (
-                      <>
-                        <Eye className="w-4 h-4" /> {t('showHeaderButtons')}
-                      </>
-                    )}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start gap-2"
-                    onClick={() => {
-                      try {
-                        onToggleLogo();
-                        toast.success(
-                          !logoEnabled ? t('showLogo') : t('hideLogo'),
-                        );
-                        trackEvent(trackingEnabled, AnalyticsEvent.ToggleLogo, {
-                          enabled: !logoEnabled,
-                        });
-                      } catch {
-                        toast.error('Failed to toggle logo');
-                      }
-                    }}
-                    title={logoEnabled ? t('hideLogo') : t('showLogo')}
-                  >
-                    {logoEnabled ? (
-                      <>
-                        <EyeOff className="w-4 h-4" /> {t('hideLogo')}
-                      </>
-                    ) : (
-                      <>
-                        <Eye className="w-4 h-4" /> {t('showLogo')}
-                      </>
-                    )}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start gap-2"
-                    onClick={() => {
-                      try {
-                        onToggleActionLabels();
-                        toast.success(
-                          !actionLabelsEnabled
-                            ? t('showLabels')
-                            : t('shortenButtons'),
-                        );
-                        trackEvent(
-                          trackingEnabled,
-                          AnalyticsEvent.ToggleActionLabels,
-                          {
-                            enabled: !actionLabelsEnabled,
-                          },
-                        );
-                      } catch {
-                        toast.error('Failed to toggle action labels');
-                      }
-                    }}
-                    title={
-                      actionLabelsEnabled ? t('shortenButtons') : t('showLabels')
-                    }
-                  >
-                    {actionLabelsEnabled ? (
-                      <>
-                        <EyeOff className="w-4 h-4" /> {t('shortenButtons')}
-                      </>
-                    ) : (
-                      <>
-                        <Eye className="w-4 h-4" /> {t('showLabels')}
-                      </>
-                    )}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start gap-2"
-                    onClick={exportDataFile}
-                    title={t('exportData', { defaultValue: 'Export data' })}
-                  >
-                    <Download className="w-4 h-4" />
-                    {t('exportData', { defaultValue: 'Export data' })}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start gap-2"
-                    onClick={importDataFile}
-                    title={t('importData', { defaultValue: 'Import data' })}
-                  >
-                    <ImportIcon className="w-4 h-4" />
-                    {t('importData', { defaultValue: 'Import data' })}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start gap-2"
-                    onClick={() => {
-                      setConfirmPurgeCache(true);
-                    }}
-                    title={t('purgeCache')}
-                  >
-                    <Trash2 className="w-4 h-4" /> {t('purgeCache')}
-                  </Button>
+                        : t('showHeaderButtons')}
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
+                        onClick={() => {
+                          try {
+                            onToggleLogo();
+                            toast.success(
+                              !logoEnabled ? t('showLogo') : t('hideLogo'),
+                            );
+                            trackEvent(trackingEnabled, AnalyticsEvent.ToggleLogo, {
+                              enabled: !logoEnabled,
+                            });
+                          } catch {
+                            toast.error('Failed to toggle logo');
+                          }
+                        }}
+                      >
+                        {logoEnabled ? (
+                          <>
+                            <EyeOff className="w-4 h-4" /> {t('hideLogo')}
+                          </>
+                        ) : (
+                          <>
+                            <Eye className="w-4 h-4" /> {t('showLogo')}
+                          </>
+                        )}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {logoEnabled ? t('hideLogo') : t('showLogo')}
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
+                        onClick={() => {
+                          try {
+                            onToggleActionLabels();
+                            toast.success(
+                              !actionLabelsEnabled
+                                ? t('showLabels')
+                                : t('shortenButtons'),
+                            );
+                            trackEvent(
+                              trackingEnabled,
+                              AnalyticsEvent.ToggleActionLabels,
+                              {
+                                enabled: !actionLabelsEnabled,
+                              },
+                            );
+                          } catch {
+                            toast.error('Failed to toggle action labels');
+                          }
+                        }}
+                      >
+                        {actionLabelsEnabled ? (
+                          <>
+                            <EyeOff className="w-4 h-4" /> {t('shortenButtons')}
+                          </>
+                        ) : (
+                          <>
+                            <Eye className="w-4 h-4" /> {t('showLabels')}
+                          </>
+                        )}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {actionLabelsEnabled
+                        ? t('shortenButtons')
+                        : t('showLabels')}
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
+                        onClick={exportDataFile}
+                      >
+                        <Download className="w-4 h-4" />
+                        {t('exportData', { defaultValue: 'Export data' })}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {t('exportData', { defaultValue: 'Export data' })}
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
+                        onClick={importDataFile}
+                      >
+                        <ImportIcon className="w-4 h-4" />
+                        {t('importData', { defaultValue: 'Import data' })}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {t('importData', { defaultValue: 'Import data' })}
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
+                        onClick={() => {
+                          setConfirmPurgeCache(true);
+                        }}
+                      >
+                        <Trash2 className="w-4 h-4" /> {t('purgeCache')}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>{t('purgeCache')}</TooltipContent>
+                  </Tooltip>
                 </div>
               </ScrollArea>
             </TabsContent>
@@ -569,7 +625,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                           )}
                         >
                           {cat.thresholds.map((th) => (
-                            <Tooltip key={th.value}>
+                            <Tooltip key={th.value} delayDuration={0}>
                               <TooltipTrigger asChild>
                                 <Medal
                                   className={cn(

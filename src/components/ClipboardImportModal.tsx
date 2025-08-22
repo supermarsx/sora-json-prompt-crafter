@@ -14,6 +14,11 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/components/ui/sonner-toast';
 import { isValidOptions } from '@/lib/validateOptions';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from '@/components/ui/tooltip';
 
 interface ClipboardImportModalProps {
   open: boolean;
@@ -121,16 +126,25 @@ const ClipboardImportModal: React.FC<ClipboardImportModalProps> = ({
           className="my-4"
         />
         <DialogFooter>
-          <Button
-            variant="secondary"
-            onClick={() => onOpenChange(false)}
-            title={t('cancel')}
-          >
-            {t('cancel')}
-          </Button>
-          <Button onClick={handleImport} title={t('import')}>
-            {t('import')}
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="secondary"
+                onClick={() => onOpenChange(false)}
+              >
+                {t('cancel')}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{t('cancel')}</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button onClick={handleImport}>
+                {t('import')}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{t('import')}</TooltipContent>
+          </Tooltip>
         </DialogFooter>
       </DialogContent>
     </Dialog>

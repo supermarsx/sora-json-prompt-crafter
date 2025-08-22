@@ -1,5 +1,10 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from '@/components/ui/tooltip';
 
 interface FooterProps {
   onShowDisclaimer: () => void;
@@ -30,13 +35,17 @@ const Footer: React.FC<FooterProps> = ({ onShowDisclaimer }) => {
         >
           {t('githubSource')}
         </a>{' '}
-        <button
-          onClick={onShowDisclaimer}
-          className="underline ml-2"
-          title={t('disclaimer')}
-        >
-          {t('disclaimer')}
-        </button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              onClick={onShowDisclaimer}
+              className="underline ml-2"
+            >
+              {t('disclaimer')}
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>{t('disclaimer')}</TooltipContent>
+        </Tooltip>
       </p>
       <p className="mt-2 text-xs">{t('versionInfo', { commit, date })}</p>
       {/* Tracking scripts moved to index.html */}

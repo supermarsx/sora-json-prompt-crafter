@@ -12,6 +12,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ChevronDown, Search } from 'lucide-react';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from '@/components/ui/tooltip';
 
 interface SearchableDropdownProps {
   options: readonly string[];
@@ -83,19 +88,25 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !disabled && setIsOpen(open)}>
-      <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          className="w-full justify-between"
-          disabled={disabled}
-          title={value ? formatLabel(value) : placeholderText}
-        >
-          <span className="truncate">
-            {value ? formatLabel(value) : placeholderText}
-          </span>
-          <ChevronDown className="w-4 h-4 ml-2 flex-shrink-0" />
-        </Button>
-      </DialogTrigger>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <DialogTrigger asChild>
+            <Button
+              variant="outline"
+              className="w-full justify-between"
+              disabled={disabled}
+            >
+              <span className="truncate">
+                {value ? formatLabel(value) : placeholderText}
+              </span>
+              <ChevronDown className="w-4 h-4 ml-2 flex-shrink-0" />
+            </Button>
+          </DialogTrigger>
+        </TooltipTrigger>
+        <TooltipContent>
+          {value ? formatLabel(value) : placeholderText}
+        </TooltipContent>
+      </Tooltip>
       <DialogContent className="max-w-md max-h-[80vh]">
         <DialogHeader>
           <DialogTitle>{labelText}</DialogTitle>
@@ -115,16 +126,19 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
           <ScrollArea className="h-[300px]">
             <div className="space-y-1">
               {filteredOptions.map((option) => (
-                <Button
-                  key={option}
-                  variant={value === option ? 'default' : 'ghost'}
-                  className="w-full justify-start text-left h-auto py-2 px-3"
-                  onClick={() => handleSelect(option)}
-                  disabled={disabled}
-                  title={formatLabel(option)}
-                >
-                  <span className="break-words">{formatLabel(option)}</span>
-                </Button>
+                <Tooltip key={option}>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={value === option ? 'default' : 'ghost'}
+                      className="w-full justify-start text-left h-auto py-2 px-3"
+                      onClick={() => handleSelect(option)}
+                      disabled={disabled}
+                    >
+                      <span className="break-words">{formatLabel(option)}</span>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>{formatLabel(option)}</TooltipContent>
+                </Tooltip>
               ))}
             </div>
           </ScrollArea>

@@ -54,7 +54,6 @@ describe('Footer', () => {
     const onShowDisclaimer = jest.fn();
     render(<Footer onShowDisclaimer={onShowDisclaimer} />);
     const button = screen.getByRole('button', { name: i18n.t('disclaimer') });
-    expect(button.getAttribute('title')).toBe(i18n.t('disclaimer'));
     fireEvent.click(button);
     expect(onShowDisclaimer).toHaveBeenCalledTimes(1);
   });
