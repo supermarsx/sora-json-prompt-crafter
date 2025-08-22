@@ -364,7 +364,18 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   <Button
                     variant="outline"
                     className="w-full justify-start gap-2 hidden"
-                    onClick={onToggleSoraTools}
+                    onClick={() => {
+                      try {
+                        onToggleSoraTools();
+                        toast.success(
+                          !soraToolsEnabled
+                            ? 'Sora integration enabled'
+                            : 'Sora integration disabled',
+                        );
+                      } catch {
+                        toast.error('Failed to toggle Sora integration');
+                      }
+                    }}
                     title={
                       soraToolsEnabled
                         ? 'Hide Sora Integration'
@@ -385,14 +396,23 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     variant="outline"
                     className="w-full justify-start gap-2"
                     onClick={() => {
-                      onToggleHeaderButtons();
-                      trackEvent(
-                        trackingEnabled,
-                        AnalyticsEvent.ToggleHeaderButtons,
-                        {
-                          enabled: !headerButtonsEnabled,
-                        },
-                      );
+                      try {
+                        onToggleHeaderButtons();
+                        toast.success(
+                          !headerButtonsEnabled
+                            ? t('showHeaderButtons')
+                            : t('hideHeaderButtons'),
+                        );
+                        trackEvent(
+                          trackingEnabled,
+                          AnalyticsEvent.ToggleHeaderButtons,
+                          {
+                            enabled: !headerButtonsEnabled,
+                          },
+                        );
+                      } catch {
+                        toast.error('Failed to toggle header buttons');
+                      }
                     }}
                     title={
                       headerButtonsEnabled
@@ -414,10 +434,17 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     variant="outline"
                     className="w-full justify-start gap-2"
                     onClick={() => {
-                      onToggleLogo();
-                      trackEvent(trackingEnabled, AnalyticsEvent.ToggleLogo, {
-                        enabled: !logoEnabled,
-                      });
+                      try {
+                        onToggleLogo();
+                        toast.success(
+                          !logoEnabled ? t('showLogo') : t('hideLogo'),
+                        );
+                        trackEvent(trackingEnabled, AnalyticsEvent.ToggleLogo, {
+                          enabled: !logoEnabled,
+                        });
+                      } catch {
+                        toast.error('Failed to toggle logo');
+                      }
                     }}
                     title={logoEnabled ? t('hideLogo') : t('showLogo')}
                   >
@@ -435,14 +462,23 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     variant="outline"
                     className="w-full justify-start gap-2"
                     onClick={() => {
-                      onToggleActionLabels();
-                      trackEvent(
-                        trackingEnabled,
-                        AnalyticsEvent.ToggleActionLabels,
-                        {
-                          enabled: !actionLabelsEnabled,
-                        },
-                      );
+                      try {
+                        onToggleActionLabels();
+                        toast.success(
+                          !actionLabelsEnabled
+                            ? t('showLabels')
+                            : t('shortenButtons'),
+                        );
+                        trackEvent(
+                          trackingEnabled,
+                          AnalyticsEvent.ToggleActionLabels,
+                          {
+                            enabled: !actionLabelsEnabled,
+                          },
+                        );
+                      } catch {
+                        toast.error('Failed to toggle action labels');
+                      }
                     }}
                     title={
                       actionLabelsEnabled ? t('shortenButtons') : t('showLabels')
@@ -596,11 +632,15 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
             <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
-                onToggleTracking();
-                toast.success(t('trackingDisabled'));
-                trackEvent(true, AnalyticsEvent.DisableTrackingConfirm);
-                trackEvent(true, AnalyticsEvent.ToggleTracking, { enabled: false });
-                setConfirmDisableTracking(false);
+                try {
+                  onToggleTracking();
+                  toast.success(t('trackingDisabled'));
+                  trackEvent(true, AnalyticsEvent.DisableTrackingConfirm);
+                  trackEvent(true, AnalyticsEvent.ToggleTracking, { enabled: false });
+                  setConfirmDisableTracking(false);
+                } catch {
+                  toast.error('Failed to toggle tracking');
+                }
               }}
             >
               {t('disableTrackingConfirm')}
@@ -624,11 +664,15 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
             <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
-                onToggleTracking();
-                toast.success(t('trackingEnabled'));
-                trackEvent(true, AnalyticsEvent.EnableTrackingConfirm);
-                trackEvent(true, AnalyticsEvent.ToggleTracking, { enabled: true });
-                setConfirmEnableTracking(false);
+                try {
+                  onToggleTracking();
+                  toast.success(t('trackingEnabled'));
+                  trackEvent(true, AnalyticsEvent.EnableTrackingConfirm);
+                  trackEvent(true, AnalyticsEvent.ToggleTracking, { enabled: true });
+                  setConfirmEnableTracking(false);
+                } catch {
+                  toast.error('Failed to toggle tracking');
+                }
               }}
             >
               {t('enableTrackingConfirm')}
