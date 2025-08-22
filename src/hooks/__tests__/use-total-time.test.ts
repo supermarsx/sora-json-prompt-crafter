@@ -2,6 +2,7 @@ import { renderHook, act } from '@testing-library/react';
 import { useTotalTime } from '../use-total-time';
 import { TOTAL_SECONDS, TIME_MILESTONES } from '@/lib/storage-keys';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
+import { toast } from '@/components/ui/sonner-toast';
 
 jest.mock('../use-tracking', () => ({
   __esModule: true,
@@ -13,10 +14,15 @@ jest.mock('@/lib/analytics', () => {
   return { __esModule: true, ...actual, trackEvent: jest.fn() };
 });
 
+jest.mock('@/components/ui/sonner-toast', () => ({
+  toast: { success: jest.fn() },
+}));
+
 describe('useTotalTime', () => {
   beforeEach(() => {
     localStorage.clear();
     (trackEvent as jest.Mock).mockClear();
+    (toast.success as jest.Mock).mockClear();
     jest.useFakeTimers();
   });
 

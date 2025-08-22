@@ -20,6 +20,7 @@ import {
 
 import SettingsPanel from './SettingsPanel';
 import { useUpdateCheck } from '@/hooks/use-update-check';
+import { toast } from '@/components/ui/sonner-toast';
 import { useToast } from '@/components/ui/use-toast';
 import { ToastAction } from '@/components/ui/toast';
 import {
@@ -133,7 +134,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   const [clearing, setClearing] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const { checkForUpdate, updateAvailable } = useUpdateCheck();
-  const { toast } = useToast();
+const { toast: notify } = useToast();
 
   useEffect(() => {
     checkForUpdate();
@@ -141,7 +142,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
 
   useEffect(() => {
     if (updateAvailable) {
-      toast({
+      notify({
         title: 'Update available',
         description: 'Refresh the page to load the latest version.',
         action: (
@@ -154,7 +155,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
         ),
       });
     }
-  }, [updateAvailable, toast]);
+  }, [updateAvailable, notify]);
 
   /**
    * Collapses the action bar to a single restore button and records the
@@ -218,6 +219,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
             for (const [threshold, event] of UNDO_MILESTONE_EVENTS) {
               if (newCount >= threshold && !milestones.includes(threshold)) {
                 trackEvent(trackingEnabled, event);
+                toast.success(t('milestoneReached', { threshold }));
                 milestones.push(threshold);
               }
             }
@@ -248,6 +250,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
             for (const [threshold, event] of REDO_MILESTONE_EVENTS) {
               if (newCount >= threshold && !milestones.includes(threshold)) {
                 trackEvent(trackingEnabled, event);
+                toast.success(t('milestoneReached', { threshold }));
                 milestones.push(threshold);
               }
             }

@@ -11,6 +11,8 @@ import {
   APP_RELOAD_MILESTONES,
   TRACKING_ENABLED,
 } from '@/lib/storage-keys';
+import { toast } from '@/components/ui/sonner-toast';
+import i18n from '@/i18n';
 
 const RELOAD_MILESTONES: [number, AnalyticsEvent][] = [
   [10, AnalyticsEvent.AppReload10],
@@ -32,6 +34,7 @@ try {
   for (const [threshold, event] of RELOAD_MILESTONES) {
     if (newCount >= threshold && !milestones.includes(threshold)) {
       trackEvent(trackingEnabled, event);
+      toast.success(i18n.t('milestoneReached', { threshold }));
       milestones.push(threshold);
     }
   }

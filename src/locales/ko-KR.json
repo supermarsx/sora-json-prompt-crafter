@@ -11,6 +11,7 @@
   "manage": "Manage",
   "general": "General",
   "milestones": "Milestones",
+  "milestoneReached": "Milestone {{threshold}} reached!",
   "import": "가져오기",
   "reset": "초기화",
   "regenerate": "재생성",

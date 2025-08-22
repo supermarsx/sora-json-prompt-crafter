@@ -11,6 +11,7 @@
   "manage": "Manage",
   "general": "General",
   "milestones": "Milestones",
+  "milestoneReached": "Milestone {{threshold}} reached!",
   "import": "Импорт",
   "reset": "Сброс",
   "regenerate": "Сгенерировать заново",

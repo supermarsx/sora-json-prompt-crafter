@@ -11,6 +11,7 @@
   "manage": "Manage",
   "general": "General",
   "milestones": "Milestones",
+  "milestoneReached": "Milestone {{threshold}} reached!",
   "import": "导入",
   "reset": "重置",
   "regenerate": "重新生成",

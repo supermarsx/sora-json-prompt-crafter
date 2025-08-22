@@ -3,6 +3,8 @@ import { safeGet, safeSet } from '@/lib/storage';
 import { TOTAL_SECONDS, TIME_MILESTONES } from '@/lib/storage-keys';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { useTracking } from './use-tracking';
+import { toast } from '@/components/ui/sonner-toast';
+import i18n from '@/i18n';
 
 const THRESHOLDS: [number, AnalyticsEvent][] = [
   [5 * 60, AnalyticsEvent.Time5Min],
@@ -46,6 +48,7 @@ export function useTotalTime() {
         for (const [threshold, event] of THRESHOLDS) {
           if (total >= threshold && !milestones.includes(threshold)) {
             trackEvent(trackingEnabled, event);
+            toast.success(i18n.t('milestoneReached', { threshold }));
             milestones.push(threshold);
           }
         }

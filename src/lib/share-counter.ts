@@ -1,6 +1,8 @@
 import { safeGet, safeSet } from './storage';
 import { trackEvent, AnalyticsEvent } from './analytics';
 import { SHARE_COUNT, SHARE_MILESTONES } from './storage-keys';
+import { toast } from '@/components/ui/sonner-toast';
+import i18n from '@/i18n';
 
 const SHARE_MILESTONE_EVENTS: [number, AnalyticsEvent][] = [
   [5, AnalyticsEvent.Share5],
@@ -26,6 +28,7 @@ export function trackShare(enabled: boolean, event: AnalyticsEvent) {
     for (const [threshold, milestoneEvent] of SHARE_MILESTONE_EVENTS) {
       if (newCount >= threshold && !milestones.includes(threshold)) {
         trackEvent(enabled, milestoneEvent);
+        toast.success(i18n.t('milestoneReached', { threshold }));
         milestones.push(threshold);
       }
     }

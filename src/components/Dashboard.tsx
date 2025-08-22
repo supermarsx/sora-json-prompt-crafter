@@ -200,6 +200,7 @@ const Dashboard = () => {
         for (const [threshold, event] of COPY_MILESTONES) {
           if (newCount >= threshold && !milestones.includes(threshold)) {
             trackEvent(trackingEnabled, event);
+            toast.success(t('milestoneReached', { threshold }));
             milestones.push(threshold);
           }
         }
