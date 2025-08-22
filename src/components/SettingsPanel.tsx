@@ -604,7 +604,9 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     const current = [...cat.thresholds]
                       .reverse()
                       .find((th) => rawCount >= th.value);
-                    const currentTier = current ? current.tier : 'None';
+                    const currentTier = current
+                      ? current.tier
+                      : t('commonerTier', { defaultValue: 'Commoner' });
                     const nextTier = next ? next.tier : 'Max';
                     const message = `You did ${count} ${cat.unit}, you're currently at ${currentTier} level, reach ${nextTier} level by doing ${remaining} more.`;
                     return (

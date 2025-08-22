@@ -899,5 +899,6 @@
   "useSubjectFocus": "Use Subject Focus",
   "useOutputFormat": "Use Output Format",
   "useDynamicRange": "Use Dynamic Range",
-  "useMotionStrength": "Use Motion Strength"
+  "useMotionStrength": "Use Motion Strength",
+  "commonerTier": "Commoner"
 }
