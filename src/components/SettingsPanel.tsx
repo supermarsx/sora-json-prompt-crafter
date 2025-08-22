@@ -190,6 +190,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       key: JSON_COPY_MILESTONES,
       countKey: JSON_COPY_COUNT,
       label: t('copy'),
+      unit: 'copies',
       thresholds: [10, 25, 50, 100, 200, 500, 1000, 2000, 5000, 10000].map(
         (n, idx) => ({ value: n, label: String(n), tier: TIER_NAMES[idx] }),
       ),
@@ -198,6 +199,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       key: SHARE_MILESTONES,
       countKey: SHARE_COUNT,
       label: t('share'),
+      unit: 'shares',
       thresholds: [5, 10, 50, 100, 1000, 10000].map((n, idx) => ({
         value: n,
         label: String(n),
@@ -208,6 +210,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       key: JSON_CHANGE_MILESTONES,
       countKey: JSON_CHANGE_COUNT,
       label: 'Changes',
+      unit: 'changes',
       thresholds: [250, 1500, 10000, 25000, 100000].map((n, idx) => ({
         value: n,
         label: String(n),
@@ -218,6 +221,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       key: UNDO_MILESTONES,
       countKey: UNDO_COUNT,
       label: t('undo'),
+      unit: 'undos',
       thresholds: [100, 500, 1000, 10000].map((n, idx) => ({
         value: n,
         label: String(n),
@@ -228,6 +232,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       key: REDO_MILESTONES,
       countKey: REDO_COUNT,
       label: t('redo'),
+      unit: 'redos',
       thresholds: [100, 500, 1000, 10000].map((n, idx) => ({
         value: n,
         label: String(n),
@@ -238,6 +243,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       key: APP_RELOAD_MILESTONES,
       countKey: APP_RELOAD_COUNT,
       label: 'Reloads',
+      unit: 'reloads',
       thresholds: [10, 30, 70, 100, 500, 1000].map((n, idx) => ({
         value: n,
         label: String(n),
@@ -248,6 +254,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       key: TIME_MILESTONES,
       countKey: TOTAL_SECONDS,
       label: 'Time',
+      unit: 'minutes',
       thresholds: (
         [
           [5 * 60, '5m'],
@@ -488,10 +495,26 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   {milestoneCategories.map((cat) => {
                     const achieved =
                       (safeGet<number[]>(cat.key, [], true) as number[]) ?? [];
-                    const count =
+                    const rawCount =
                       (safeGet<number>(cat.countKey, 0, true) as number) ?? 0;
-                    const next = cat.thresholds.find((th) => th.value > count);
-                    const remaining = next ? next.value - count : 0;
+                    const count =
+                      cat.unit === 'minutes'
+                        ? Math.floor(rawCount / 60)
+                        : rawCount;
+                    const next = cat.thresholds.find(
+                      (th) => th.value > rawCount,
+                    );
+                    const remainingRaw = next ? next.value - rawCount : 0;
+                    const remaining =
+                      cat.unit === 'minutes'
+                        ? Math.ceil(remainingRaw / 60)
+                        : remainingRaw;
+                    const current = [...cat.thresholds]
+                      .reverse()
+                      .find((th) => rawCount >= th.value);
+                    const currentTier = current ? current.tier : 'None';
+                    const nextTier = next ? next.tier : 'Max';
+                    const message = `You did ${count} ${cat.unit}, you're currently at ${currentTier} level, reach ${nextTier} level by doing ${remaining} more.`;
                     return (
                       <div key={cat.key} className="space-y-1">
                         <div className="flex items-center justify-between">
@@ -499,9 +522,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                             {cat.label}
                           </span>
                           <span className="text-xs text-muted-foreground">
-                            {next
-                              ? `${count} - ${remaining} to ${next.tier}`
-                              : `${count} - Max tier`}
+                            {message}
                           </span>
                         </div>
                         <div
