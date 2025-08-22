@@ -106,21 +106,30 @@ export const VideoMotionSection: React.FC<VideoMotionSectionProps> = ({
           </Label>
         </div>
 
-        <div>
-          <Label htmlFor="motion_strength">
-            {t('motionStrengthLabel', { value: options.motion_strength })}
-          </Label>
-          <Slider
-            value={[options.motion_strength]}
-            onValueChange={(value) =>
-              updateOptions({ motion_strength: value[0] })
-            }
-            max={options.extended_motion_strength ? 10 : 1}
-            min={0}
-            step={0.1}
-            className="mt-2"
-          />
-        </div>
+        <ToggleField
+          id="use_motion_strength"
+          label={t('useMotionStrength')}
+          checked={options.use_motion_strength}
+          onCheckedChange={(checked) =>
+            updateOptions({ use_motion_strength: !!checked })
+          }
+        >
+          <div>
+            <Label htmlFor="motion_strength">
+              {t('motionStrengthLabel', { value: options.motion_strength })}
+            </Label>
+            <Slider
+              value={[options.motion_strength]}
+              onValueChange={(value) =>
+                updateOptions({ motion_strength: value[0] })
+              }
+              max={options.extended_motion_strength ? 10 : 1}
+              min={0}
+              step={0.1}
+              className="mt-2"
+            />
+          </div>
+        </ToggleField>
 
         <div>
           <Label htmlFor="camera_motion">{t('cameraMotion')}</Label>

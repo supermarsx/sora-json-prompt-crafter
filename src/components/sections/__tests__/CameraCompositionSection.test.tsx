@@ -295,6 +295,7 @@ describe('CameraCompositionSection', () => {
         options={{
           ...DEFAULT_OPTIONS,
           use_camera_composition: true,
+          use_subject_focus: true,
         }}
         updateOptions={() => {}}
         isEnabled={true}

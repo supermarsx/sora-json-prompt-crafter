@@ -37,17 +37,28 @@ export const SettingsLocationSection: React.FC<
       onToggle={(enabled) => updateOptions({ use_settings_location: enabled })}
     >
       <div className="grid grid-cols-1 gap-4">
-        <div>
-          <Label htmlFor="year">{t('year')}</Label>
-          <Input
-            id="year"
-            type="number"
-            value={options.year}
-            onChange={(e) => updateOptions({ year: parseInt(e.target.value) })}
-            min="1800"
-            max="2100"
-          />
-        </div>
+        <ToggleField
+          id="use_year"
+          label={t('useYear')}
+          checked={options.use_year}
+          onCheckedChange={(checked) =>
+            updateOptions({ use_year: !!checked })
+          }
+        >
+          <div>
+            <Label htmlFor="year">{t('year')}</Label>
+            <Input
+              id="year"
+              type="number"
+              value={options.year}
+              onChange={(e) =>
+                updateOptions({ year: parseInt(e.target.value) })
+              }
+              min="1800"
+              max="2100"
+            />
+          </div>
+        </ToggleField>
 
         <ToggleField
           id="use_environment"

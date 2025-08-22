@@ -44,16 +44,34 @@ export function generateJson(options: SoraOptions): string {
     removeProps(cleanOptions, ['width', 'height']);
   }
 
+  if (!options.use_dimensions_format) {
+    removeProps(cleanOptions, [
+      'width',
+      'height',
+      'aspect_ratio',
+      'quality',
+      'output_format',
+      'dynamic_range',
+    ]);
+  }
+
   if (!options.use_material) {
     removeProps(cleanOptions, ['secondary_material']);
   }
 
   if (!options.use_camera_composition) {
-    removeProps(cleanOptions, ['lens_type']);
+    removeProps(cleanOptions, ['lens_type', 'shot_type', 'subject_focus']);
   }
 
   if (!options.use_motion_animation) {
-    removeProps(cleanOptions, ['duration_seconds']);
+    removeProps(cleanOptions, [
+      'duration_seconds',
+      'motion_strength',
+      'camera_motion',
+      'motion_direction',
+      'fps',
+      'frame_interpolation',
+    ]);
   }
 
   if (!options.use_enhancement_safety) {
@@ -71,8 +89,10 @@ export function generateJson(options: SoraOptions): string {
       'time_of_year',
       'season',
       'atmosphere_mood',
+      'year',
     ]);
   }
+
 
   if (!options.use_dnd_section) {
     removeProps(cleanOptions, [

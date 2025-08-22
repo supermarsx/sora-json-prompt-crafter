@@ -100,18 +100,27 @@ export const CameraCompositionSection: React.FC<
           </div>
         </ToggleField>
 
-        <div>
-          <Label>{t('shotType')}</Label>
-          <SearchableDropdown
-            options={shotTypeOptions}
-            value={options.shot_type}
-            onValueChange={(value) => updateOptions({ shot_type: value })}
-            label="Shot Type"
-            getOptionLabel={(opt) =>
-              translateOption(opt, cameraOptionTranslations.shotType, t)
-            }
-          />
-        </div>
+        <ToggleField
+          id="use_shot_type"
+          label={t('useShotType')}
+          checked={options.use_shot_type}
+          onCheckedChange={(checked) =>
+            updateOptions({ use_shot_type: !!checked })
+          }
+        >
+          <div>
+            <Label>{t('shotType')}</Label>
+            <SearchableDropdown
+              options={shotTypeOptions}
+              value={options.shot_type}
+              onValueChange={(value) => updateOptions({ shot_type: value })}
+              label="Shot Type"
+              getOptionLabel={(opt) =>
+                translateOption(opt, cameraOptionTranslations.shotType, t)
+              }
+            />
+          </div>
+        </ToggleField>
 
         <ToggleField
           id="use_camera_angle"
@@ -137,30 +146,39 @@ export const CameraCompositionSection: React.FC<
           </div>
         </ToggleField>
 
-        <div>
-          <Label htmlFor="subject_focus">{t('subjectFocus')}</Label>
-          <Select
-            value={options.subject_focus}
-            onValueChange={(value: SubjectFocusOption) =>
-              updateOptions({ subject_focus: value })
-            }
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {subjectFocusOptions.map((focus) => (
-                <SelectItem key={focus} value={focus}>
-                  {translateOption(
-                    focus,
-                    cameraOptionTranslations.subjectFocus,
-                    t,
-                  )}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <ToggleField
+          id="use_subject_focus"
+          label={t('useSubjectFocus')}
+          checked={options.use_subject_focus}
+          onCheckedChange={(checked) =>
+            updateOptions({ use_subject_focus: !!checked })
+          }
+        >
+          <div>
+            <Label htmlFor="subject_focus">{t('subjectFocus')}</Label>
+            <Select
+              value={options.subject_focus}
+              onValueChange={(value: SubjectFocusOption) =>
+                updateOptions({ subject_focus: value })
+              }
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {subjectFocusOptions.map((focus) => (
+                  <SelectItem key={focus} value={focus}>
+                    {translateOption(
+                      focus,
+                      cameraOptionTranslations.subjectFocus,
+                      t,
+                    )}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </ToggleField>
 
         <div>
           <Label>{t('compositionRules')}</Label>

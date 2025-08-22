@@ -150,7 +150,13 @@ export interface SoraOptions {
   use_dof: boolean;
   use_blur_style: boolean;
   use_camera_composition: boolean;
+  use_shot_type: boolean;
+  use_subject_focus: boolean;
   extended_motion_strength: boolean;
+  use_motion_strength: boolean;
   extended_fps: boolean;
   use_duration: boolean;
+  use_output_format: boolean;
+  use_dynamic_range: boolean;
+  use_year: boolean;
 }

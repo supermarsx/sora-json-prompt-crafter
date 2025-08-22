@@ -61,6 +61,8 @@ describe('generateJson', () => {
     expect(obj.height).toBeUndefined();
     expect(obj.aspect_ratio).toBeUndefined();
     expect(obj.output_format).toBeUndefined();
+    expect(obj.dynamic_range).toBeUndefined();
+    expect(obj.quality).toBeUndefined();
   });
 
   test('keeps aspect ratio when dimensions disabled but format enabled', () => {
@@ -73,6 +75,16 @@ describe('generateJson', () => {
     expect(obj.width).toBeUndefined();
     expect(obj.height).toBeUndefined();
     expect(obj.aspect_ratio).toBeDefined();
+  });
+
+  test('includes quality when dimensions format enabled', () => {
+    const opts = {
+      ...DEFAULT_OPTIONS,
+      use_dimensions_format: true,
+      use_core_settings: false,
+    };
+    const obj = parse(generateJson(opts));
+    expect(obj.quality).toBeDefined();
   });
 
   test('removes style_preset when toggled off', () => {
@@ -107,6 +119,7 @@ describe('generateJson', () => {
       secondary_material: 'wood',
       use_motion_animation: true,
       use_duration: true,
+      use_motion_strength: true,
     };
     const obj = parse(generateJson(opts));
     expect(obj.made_out_of).toBeDefined();

@@ -3,13 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { CollapsibleSection } from '../CollapsibleSection';
 import type { SoraOptions } from '@/lib/soraOptions';
 
@@ -20,24 +13,6 @@ interface CoreSettingsSectionProps {
   onToggle: (enabled: boolean) => void;
 }
 
-const qualityOptions = [
-  'maximum',
-  'ultra',
-  'excellent',
-  'high',
-  'good',
-  'standard',
-  'draft',
-  'medium',
-  'moderate',
-  'minimum',
-  'low',
-  'below standard',
-  'bad',
-  'poor',
-  'unacceptable',
-  'defective',
-];
 
 /**
  * Section for adjusting fundamental generation parameters such as seed,
@@ -79,26 +54,6 @@ export const CoreSettingsSection: React.FC<CoreSettingsSectionProps> = ({
           />
         </div>
 
-        <div>
-          <Label htmlFor="quality">{t('quality')}</Label>
-          <Select
-            value={options.quality}
-            onValueChange={(value) =>
-              updateOptions({ quality: value as SoraOptions['quality'] })
-            }
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {qualityOptions.map((quality) => (
-                <SelectItem key={quality} value={quality}>
-                  {t(`qualityOptions.${quality}`)}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
 
         <div>
           <Label>{t('stepsLabel', { count: options.steps })}</Label>

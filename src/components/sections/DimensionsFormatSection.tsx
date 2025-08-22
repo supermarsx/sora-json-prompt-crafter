@@ -52,6 +52,9 @@ export const DimensionsFormatSection: React.FC<
     'defective',
   ];
   const aspectRatios = ['16:9', '21:9', '4:3', '1:1', '9:16'];
+  const aspectRatioLabels = t('aspectRatioLabels', {
+    returnObjects: true,
+  }) as Record<string, string>;
 
   return (
     <CollapsibleSection
@@ -75,7 +78,7 @@ export const DimensionsFormatSection: React.FC<
             <SelectContent>
               {aspectRatios.map((ratio) => (
                 <SelectItem key={ratio} value={ratio}>
-                  {t(`aspectRatioLabels.${ratio}`)}
+                  {aspectRatioLabels[ratio] || ratio}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -137,42 +140,60 @@ export const DimensionsFormatSection: React.FC<
           </div>
         </ToggleField>
 
-        <div>
-          <Label htmlFor="output_format">{t('outputFormat')}</Label>
-          <Select
-            value={options.output_format}
-            onValueChange={(value: 'png' | 'jpg' | 'webp') =>
-              updateOptions({ output_format: value })
-            }
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="png">PNG</SelectItem>
-              <SelectItem value="jpg">JPG</SelectItem>
-              <SelectItem value="webp">WebP</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        <ToggleField
+          id="use_output_format"
+          label={t('useOutputFormat')}
+          checked={options.use_output_format}
+          onCheckedChange={(checked) =>
+            updateOptions({ use_output_format: !!checked })
+          }
+        >
+          <div>
+            <Label htmlFor="output_format">{t('outputFormat')}</Label>
+            <Select
+              value={options.output_format}
+              onValueChange={(value: 'png' | 'jpg' | 'webp') =>
+                updateOptions({ output_format: value })
+              }
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="png">PNG</SelectItem>
+                <SelectItem value="jpg">JPG</SelectItem>
+                <SelectItem value="webp">WebP</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </ToggleField>
 
-        <div>
-          <Label htmlFor="dynamic_range">{t('dynamicRange')}</Label>
-          <Select
-            value={options.dynamic_range}
-            onValueChange={(value: 'SDR' | 'HDR') =>
-              updateOptions({ dynamic_range: value })
-            }
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="SDR">SDR</SelectItem>
-              <SelectItem value="HDR">HDR</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        <ToggleField
+          id="use_dynamic_range"
+          label={t('useDynamicRange')}
+          checked={options.use_dynamic_range}
+          onCheckedChange={(checked) =>
+            updateOptions({ use_dynamic_range: !!checked })
+          }
+        >
+          <div>
+            <Label htmlFor="dynamic_range">{t('dynamicRange')}</Label>
+            <Select
+              value={options.dynamic_range}
+              onValueChange={(value: 'SDR' | 'HDR') =>
+                updateOptions({ dynamic_range: value })
+              }
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="SDR">SDR</SelectItem>
+                <SelectItem value="HDR">HDR</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </ToggleField>
       </div>
     </CollapsibleSection>
   );
