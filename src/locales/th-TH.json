@@ -11,6 +11,7 @@
   "manage": "Manage",
   "general": "General",
   "milestones": "Milestones",
+  "milestoneReached": "Milestone {{threshold}} reached!",
   "import": "นำเข้า",
   "reset": "รีเซ็ต",
   "regenerate": "สร้างใหม่",

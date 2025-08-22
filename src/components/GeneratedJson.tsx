@@ -9,6 +9,8 @@ import {
   JSON_CHANGE_COUNT,
   JSON_CHANGE_MILESTONES,
 } from '@/lib/storage-keys';
+import { toast } from '@/components/ui/sonner-toast';
+import { useTranslation } from 'react-i18next';
 
 SyntaxHighlighter.registerLanguage('json', jsonLang);
 
@@ -42,6 +44,7 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const prevRef = useRef(json);
   const [diffParts, setDiffParts] = useState<Change[] | null>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const diff = diffChars(prevRef.current, json).filter((p) => !p.removed);
@@ -60,6 +63,7 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
       for (const [threshold, event] of CHANGE_MILESTONES) {
         if (newCount >= threshold && !milestones.includes(threshold)) {
           trackEvent(trackingEnabled, event);
+          toast.success(t('milestoneReached', { threshold }));
           milestones.push(threshold);
         }
       }
@@ -69,7 +73,7 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
     }
     trackEvent(trackingEnabled, AnalyticsEvent.JsonChanged);
     return () => clearTimeout(timer);
-  }, [json, trackingEnabled]);
+  }, [json, trackingEnabled, t]);
 
   useEffect(() => {
     const container = containerRef.current;

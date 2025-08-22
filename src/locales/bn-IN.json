@@ -11,6 +11,7 @@
   "manage": "Manage",
   "general": "General",
   "milestones": "Milestones",
+  "milestoneReached": "Milestone {{threshold}} reached!",
   "import": "আমদানি",
   "reset": "রিসেট",
   "regenerate": "পুনরায় তৈরি করুন",
