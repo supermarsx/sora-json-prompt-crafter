@@ -46,6 +46,8 @@
   "showLabels": "लेबल देखाउनुहोस्",
   "hideLabels": "लेबल लुकाउनुहोस्",
   "shortenButtons": "बटन छोट्याउनुहोस्",
+  "coreLabelsOnly": "Core Labels Only",
+  "showAllLabels": "Show All Labels",
   "language": "भाषा",
   "appName": "Sora JSON प्रम्प्ट क्राफ्टर",
   "tagline": "Sora को उत्पादन सेटिङहरू कन्फिगर गरेर उत्कृष्ट एआई सामग्रीका लागि उपयुक्त JSON प्रम्प्ट प्राप्त गर्नुहोस्।",

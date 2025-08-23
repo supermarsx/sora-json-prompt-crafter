@@ -46,6 +46,8 @@
   "showLabels": "Arată etichete",
   "hideLabels": "Ascunde etichete",
   "shortenButtons": "Scurtează butoane",
+  "coreLabelsOnly": "Core Labels Only",
+  "showAllLabels": "Show All Labels",
   "language": "Limbă",
   "appName": "Generator JSON Prompt Sora",
   "tagline": "Configurează setările de generare ale Sora și obține promptul JSON perfect pentru a crea conținut AI uimitor.",

@@ -5,6 +5,7 @@ import {
   HEADER_BUTTONS_ENABLED,
   LOGO_ENABLED,
   ACTION_LABELS_ENABLED,
+  CORE_ACTION_LABELS_ONLY,
   TRACKING_ENABLED,
   TRACKING_HISTORY,
   LOCALE,
@@ -26,6 +27,7 @@ describe('constants', () => {
     expect(HEADER_BUTTONS_ENABLED).toBe('headerButtonsEnabled');
     expect(LOGO_ENABLED).toBe('logoEnabled');
     expect(ACTION_LABELS_ENABLED).toBe('actionLabelsEnabled');
+    expect(CORE_ACTION_LABELS_ONLY).toBe('coreActionLabelsOnly');
     expect(TRACKING_ENABLED).toBe('trackingEnabled');
     expect(TRACKING_HISTORY).toBe('trackingHistory');
     expect(LOCALE).toBe('locale');

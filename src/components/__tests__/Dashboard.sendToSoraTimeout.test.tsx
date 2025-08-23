@@ -59,6 +59,10 @@ jest.mock('@/hooks/use-action-labels', () => ({
   __esModule: true,
   useActionLabels: jest.fn(() => [false, jest.fn()] as const),
 }));
+jest.mock('@/hooks/use-core-action-labels', () => ({
+  __esModule: true,
+  useCoreActionLabels: jest.fn(() => [false, jest.fn()] as const),
+}));
 jest.mock('@/hooks/use-sora-userscript', () => ({
   __esModule: true,
   useSoraUserscript: jest.fn(() => [true, '1.0'] as const),

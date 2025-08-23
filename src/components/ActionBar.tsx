@@ -89,6 +89,8 @@ interface ActionBarProps {
   onToggleLogo: () => void;
   actionLabelsEnabled: boolean;
   onToggleActionLabels: () => void;
+  coreActionLabelsOnly: boolean;
+  onToggleCoreActionLabels: () => void;
   copied: boolean;
   showJumpToJson?: boolean;
   onJumpToJson?: () => void;
@@ -129,6 +131,8 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   onToggleLogo,
   actionLabelsEnabled,
   onToggleActionLabels,
+  coreActionLabelsOnly,
+  onToggleCoreActionLabels,
   copied,
   showJumpToJson,
   onJumpToJson,
@@ -341,9 +345,10 @@ const { toast: notify } = useToast();
             onClick={() => setShowSettings(true)}
             variant="outline"
             size="sm"
-            className={cn({ 'gap-2': actionLabelsEnabled })}
+            className={cn({ 'gap-2': actionLabelsEnabled && !coreActionLabelsOnly })}
           >
-            <Cog className="w-4 h-4" /> {actionLabelsEnabled && t('manage')}
+            <Cog className="w-4 h-4" />
+            {actionLabelsEnabled && !coreActionLabelsOnly && t('manage')}
           </Button>
         </TooltipTrigger>
         <TooltipContent>{t('manage')}</TooltipContent>
@@ -355,10 +360,10 @@ const { toast: notify } = useToast();
               <Button
                 variant="outline"
                 size="sm"
-                className={cn({ 'gap-2': actionLabelsEnabled })}
+                className={cn({ 'gap-2': actionLabelsEnabled && !coreActionLabelsOnly })}
               >
                 <Languages className="w-4 h-4" />
-                {actionLabelsEnabled && t('language')}
+                {actionLabelsEnabled && !coreActionLabelsOnly && t('language')}
               </Button>
             </DropdownMenuTrigger>
           </TooltipTrigger>
@@ -662,10 +667,10 @@ const { toast: notify } = useToast();
             onClick={onHistory}
             variant="outline"
             size="sm"
-            className={cn({ 'gap-2': actionLabelsEnabled })}
+            className={cn({ 'gap-2': actionLabelsEnabled && !coreActionLabelsOnly })}
           >
             <History className="w-4 h-4" />
-            {actionLabelsEnabled && t('history')}
+            {actionLabelsEnabled && !coreActionLabelsOnly && t('history')}
           </Button>
         </TooltipTrigger>
         <TooltipContent>{t('history')}</TooltipContent>
@@ -680,10 +685,10 @@ const { toast: notify } = useToast();
               }}
               variant="outline"
               size="sm"
-              className={cn({ 'gap-2': actionLabelsEnabled })}
+              className={cn({ 'gap-2': actionLabelsEnabled && !coreActionLabelsOnly })}
             >
               <MoveDown className="w-4 h-4" />
-              {actionLabelsEnabled && t('jumpToJson')}
+              {actionLabelsEnabled && !coreActionLabelsOnly && t('jumpToJson')}
             </Button>
           </TooltipTrigger>
           <TooltipContent>{t('jumpToJson')}</TooltipContent>
@@ -715,6 +720,8 @@ const { toast: notify } = useToast();
         onToggleLogo={onToggleLogo}
         actionLabelsEnabled={actionLabelsEnabled}
         onToggleActionLabels={onToggleActionLabels}
+        coreActionLabelsOnly={coreActionLabelsOnly}
+        onToggleCoreActionLabels={onToggleCoreActionLabels}
       />
     </div>
   );

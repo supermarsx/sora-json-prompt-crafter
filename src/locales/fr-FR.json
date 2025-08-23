@@ -46,6 +46,8 @@
   "showLabels": "Afficher les étiquettes",
   "hideLabels": "Masquer les étiquettes",
   "shortenButtons": "Raccourcir les boutons",
+  "coreLabelsOnly": "Core Labels Only",
+  "showAllLabels": "Show All Labels",
   "language": "Langue",
   "appName": "Générateur d'invites JSON Sora",
   "tagline": "Configurez les paramètres de génération de Sora et obtenez l'invite JSON parfaite pour créer un contenu IA époustouflant.",

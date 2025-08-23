@@ -46,6 +46,8 @@
   "showLabels": "Vis etiketter",
   "hideLabels": "Skjul etiketter",
   "shortenButtons": "Forkort knapper",
+  "coreLabelsOnly": "Core Labels Only",
+  "showAllLabels": "Show All Labels",
   "language": "Sprog",
   "appName": "Sora JSON Prompt Crafter",
   "tagline": "Konfigurer Soras genereringsindstillinger og få den perfekte JSON‑prompt til fantastisk AI‑genereret indhold.",

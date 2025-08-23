@@ -46,6 +46,8 @@
   "showLabels": "Показати мітки",
   "hideLabels": "Приховати мітки",
   "shortenButtons": "Скоротити кнопки",
+  "coreLabelsOnly": "Core Labels Only",
+  "showAllLabels": "Show All Labels",
   "language": "Мова",
   "appName": "Sora JSON Prompt Crafter",
   "tagline": "Налаштуйте параметри генерації Sora та отримайте досконалий JSON‑промпт для вражаючого AI‑контенту.",

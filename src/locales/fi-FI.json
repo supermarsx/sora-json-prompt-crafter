@@ -46,6 +46,8 @@
   "showLabels": "Näytä tarrat",
   "hideLabels": "Piilota tarrat",
   "shortenButtons": "Lyhennä painikkeet",
+  "coreLabelsOnly": "Core Labels Only",
+  "showAllLabels": "Show All Labels",
   "language": "Kieli",
   "appName": "Sora JSON‑kehotesepän työkalut",
   "tagline": "Säädä Soran generointiasetukset ja hanki täydellinen JSON‑kehote huikeaan tekoälysisältöön.",

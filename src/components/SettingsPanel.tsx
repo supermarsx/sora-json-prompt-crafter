@@ -72,6 +72,8 @@ interface SettingsPanelProps {
   onToggleLogo: () => void;
   actionLabelsEnabled: boolean;
   onToggleActionLabels: () => void;
+  coreActionLabelsOnly: boolean;
+  onToggleCoreActionLabels: () => void;
   defaultTab?: 'manage' | 'general' | 'milestones';
 }
 
@@ -116,6 +118,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   onToggleLogo,
   actionLabelsEnabled,
   onToggleActionLabels,
+  coreActionLabelsOnly,
+  onToggleCoreActionLabels,
   defaultTab = 'manage',
 }) => {
   const { t } = useTranslation();
@@ -532,6 +536,48 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       {actionLabelsEnabled
                         ? t('shortenButtons')
                         : t('showLabels')}
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
+                        onClick={() => {
+                          try {
+                            onToggleCoreActionLabels();
+                            toast.success(
+                              !coreActionLabelsOnly
+                                ? t('coreLabelsOnly')
+                                : t('showAllLabels'),
+                            );
+                            trackEvent(
+                              trackingEnabled,
+                              AnalyticsEvent.ToggleCoreActionLabels,
+                              {
+                                enabled: !coreActionLabelsOnly,
+                              },
+                            );
+                          } catch {
+                            toast.error('Failed to toggle core action labels');
+                          }
+                        }}
+                      >
+                        {coreActionLabelsOnly ? (
+                          <>
+                            <Eye className="w-4 h-4" /> {t('showAllLabels')}
+                          </>
+                        ) : (
+                          <>
+                            <EyeOff className="w-4 h-4" /> {t('coreLabelsOnly')}
+                          </>
+                        )}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {coreActionLabelsOnly
+                        ? t('showAllLabels')
+                        : t('coreLabelsOnly')}
                     </TooltipContent>
                   </Tooltip>
                   <Tooltip>
