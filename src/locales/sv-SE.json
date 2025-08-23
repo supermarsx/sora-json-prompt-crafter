@@ -23,6 +23,8 @@
   "redo": "Gör om",
   "enableTracking": "Aktivera spårning",
   "disableTracking": "Inaktivera spårning",
+  "showHeader": "Visa headern",
+  "hideHeader": "Dölj headern",
   "showHeaderButtons": "Visa huvudknappar",
   "hideHeaderButtons": "Dölj huvudknappar",
   "showLogo": "Visa logotyp",

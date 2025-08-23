@@ -23,6 +23,8 @@
   "redo": "Ripeti",
   "enableTracking": "Abilita tracciamento",
   "disableTracking": "Disabilita tracciamento",
+  "showHeader": "Mostra intestazione",
+  "hideHeader": "Nascondi intestazione",
   "showHeaderButtons": "Mostra pulsanti header",
   "hideHeaderButtons": "Nascondi pulsanti header",
   "showLogo": "Mostra logo",

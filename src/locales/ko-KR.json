@@ -23,6 +23,8 @@
   "redo": "다시 실행",
   "enableTracking": "추적 활성화",
   "disableTracking": "추적 비활성화",
+  "showHeader": "헤더 표시",
+  "hideHeader": "헤더 숨기기",
   "showHeaderButtons": "헤더 버튼 표시",
   "hideHeaderButtons": "헤더 버튼 숨기기",
   "showLogo": "로고 표시",

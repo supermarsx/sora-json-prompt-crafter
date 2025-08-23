@@ -23,6 +23,8 @@
   "redo": "Redo",
   "enableTracking": "Enable Tracking",
   "disableTracking": "Disable Tracking",
+  "showHeader": "Show Header",
+  "hideHeader": "Hide Header",
   "showHeaderButtons": "Show Header Buttons",
   "hideHeaderButtons": "Hide Header Buttons",
   "showLogo": "Show Logo",

@@ -23,6 +23,8 @@
   "redo": "Tee uudelleen",
   "enableTracking": "Ota seuranta käyttöön",
   "disableTracking": "Poista seuranta käytöstä",
+  "showHeader": "Näytä yläpalkki",
+  "hideHeader": "Piilota yläpalkki",
   "showHeaderButtons": "Näytä yläpalkin painikkeet",
   "hideHeaderButtons": "Piilota yläpalkin painikkeet",
   "showLogo": "Näytä logo",

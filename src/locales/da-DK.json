@@ -23,6 +23,8 @@
   "redo": "Gentag",
   "enableTracking": "Aktivér sporing",
   "disableTracking": "Deaktivér sporing",
+  "showHeader": "Vis header",
+  "hideHeader": "Skjul header",
   "showHeaderButtons": "Vis header‑knapper",
   "hideHeaderButtons": "Skjul header‑knapper",
   "showLogo": "Vis logo",

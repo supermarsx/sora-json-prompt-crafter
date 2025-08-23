@@ -23,6 +23,8 @@
   "redo": "Повторить",
   "enableTracking": "Включить отслеживание",
   "disableTracking": "Отключить отслеживание",
+  "showHeader": "Показать заголовок",
+  "hideHeader": "Скрыть заголовок",
   "showHeaderButtons": "Показать кнопки заголовка",
   "hideHeaderButtons": "Скрыть кнопки заголовка",
   "showLogo": "Показать логотип",

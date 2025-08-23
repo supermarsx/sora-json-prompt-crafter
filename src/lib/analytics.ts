@@ -18,6 +18,7 @@ export enum AnalyticsEvent {
   HistoryDeleteConfirm = 'history_delete_confirm',
   SettingsOpen = 'settings_open',
   ToggleHeaderButtons = 'toggle_header_buttons',
+  ToggleHeaderVisibility = 'toggle_header_visibility',
   ToggleLogo = 'toggle_logo',
   ToggleActionLabels = 'toggle_action_labels',
   ToggleCoreActionLabels = 'toggle_core_action_labels',

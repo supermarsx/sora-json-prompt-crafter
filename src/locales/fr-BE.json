@@ -23,6 +23,8 @@
   "redo": "Rétablir",
   "enableTracking": "Activer le suivi",
   "disableTracking": "Désactiver le suivi",
+  "showHeader": "Afficher l'en-tête",
+  "hideHeader": "Masquer l'en-tête",
   "showHeaderButtons": "Afficher les boutons d’en-tête",
   "hideHeaderButtons": "Masquer les boutons d’en-tête",
   "showLogo": "Afficher le logo",

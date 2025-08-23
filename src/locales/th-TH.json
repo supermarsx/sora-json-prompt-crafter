@@ -23,6 +23,8 @@
   "redo": "ทำซ้ำ",
   "enableTracking": "เปิดการติดตาม",
   "disableTracking": "ปิดการติดตาม",
+  "showHeader": "แสดงส่วนหัว",
+  "hideHeader": "ซ่อนส่วนหัว",
   "showHeaderButtons": "แสดงปุ่มส่วนหัว",
   "hideHeaderButtons": "ซ่อนปุ่มส่วนหัว",
   "showLogo": "แสดงโลโก้",

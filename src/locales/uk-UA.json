@@ -23,6 +23,8 @@
   "redo": "Повторити",
   "enableTracking": "Увімкнути відстеження",
   "disableTracking": "Вимкнути відстеження",
+  "showHeader": "Показати заголовок",
+  "hideHeader": "Приховати заголовок",
   "showHeaderButtons": "Показати кнопки заголовка",
   "hideHeaderButtons": "Приховати кнопки заголовка",
   "showLogo": "Показати логотип",

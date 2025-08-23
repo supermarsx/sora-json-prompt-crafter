@@ -23,6 +23,8 @@
   "redo": "Wiederholen",
   "enableTracking": "Tracking aktivieren",
   "disableTracking": "Tracking deaktivieren",
+  "showHeader": "Header anzeigen",
+  "hideHeader": "Header ausblenden",
   "showHeaderButtons": "Header‑Schaltflächen anzeigen",
   "hideHeaderButtons": "Header‑Schaltflächen ausblenden",
   "showLogo": "Logo anzeigen",

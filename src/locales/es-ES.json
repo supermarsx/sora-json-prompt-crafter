@@ -23,6 +23,8 @@
   "redo": "Rehacer",
   "enableTracking": "Habilitar seguimiento",
   "disableTracking": "Deshabilitar seguimiento",
+  "showHeader": "Mostrar cabecera",
+  "hideHeader": "Ocultar cabecera",
   "showHeaderButtons": "Mostrar botones de cabecera",
   "hideHeaderButtons": "Ocultar botones de cabecera",
   "showLogo": "Mostrar logotipo",

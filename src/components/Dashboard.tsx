@@ -26,6 +26,7 @@ import { useIsSingleColumn } from '@/hooks/use-single-column';
 import { useDarkMode } from '@/hooks/use-dark-mode';
 import { useTracking } from '@/hooks/use-tracking';
 import { useSoraTools } from '@/hooks/use-sora-tools';
+import { useHeaderVisibility } from '@/hooks/use-header-visibility';
 import { useHeaderButtons } from '@/hooks/use-header-buttons';
 import { useLogo } from '@/hooks/use-logo';
 import { useActionLabels } from '@/hooks/use-action-labels';
@@ -132,6 +133,7 @@ const Dashboard = () => {
   const [darkMode, setDarkMode] = useDarkMode();
   const [trackingEnabled, setTrackingEnabled] = useTracking();
   const [soraToolsEnabled, setSoraToolsEnabled] = useSoraTools();
+  const [headerVisible, setHeaderVisible] = useHeaderVisibility();
   const [headerButtonsEnabled, setHeaderButtonsEnabled] = useHeaderButtons();
   const [logoEnabled, setLogoEnabled] = useLogo();
   const [floatingJsonEnabled, setFloatingJsonEnabled] = useFloatingJson();
@@ -506,27 +508,28 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <div className="container mx-auto p-6 flex flex-col flex-1">
-        <div className="mb-8 flex items-start justify-between">
-          <div>
-            <h1 className="text-4xl font-bold mb-2 flex items-center gap-3 select-none">
-              {logoEnabled && (
-                <img
-                  src="/web-app-manifest-512x512.png"
-                  alt=""
-                  role="presentation"
-                  className="w-10 h-10 animate-rainbow dark:animate-rainbow-dark"
-                />
-              )}
-              {t('appName')}
-            </h1>
-            <p className="text-muted-foreground select-none">{t('tagline')}</p>
-            {headerButtonsEnabled && (
-              <div className="flex flex-wrap items-center gap-2 mt-2">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button asChild variant="outline" size="sm" className="gap-1">
-                      <a
-                        href="https://github.com/sponsors/supermarsx"
+        {headerVisible && (
+          <div className="mb-8 flex items-start justify-between">
+            <div>
+              <h1 className="text-4xl font-bold mb-2 flex items-center gap-3 select-none">
+                {logoEnabled && (
+                  <img
+                    src="/web-app-manifest-512x512.png"
+                    alt=""
+                    role="presentation"
+                    className="w-10 h-10 animate-rainbow dark:animate-rainbow-dark"
+                  />
+                )}
+                {t('appName')}
+              </h1>
+              <p className="text-muted-foreground select-none">{t('tagline')}</p>
+              {headerButtonsEnabled && (
+                <div className="flex flex-wrap items-center gap-2 mt-2">
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button asChild variant="outline" size="sm" className="gap-1">
+                        <a
+                          href="https://github.com/sponsors/supermarsx"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-1"
@@ -728,6 +731,7 @@ const Dashboard = () => {
             <TooltipContent>Toggle dark mode</TooltipContent>
           </Tooltip>
         </div>
+        )}
 
         <div className="grid lg:grid-cols-2 gap-6 flex-1">
           <Card className="flex flex-col">
@@ -795,6 +799,8 @@ const Dashboard = () => {
         soraToolsEnabled={soraToolsEnabled}
         onToggleSoraTools={() => setSoraToolsEnabled(!soraToolsEnabled)}
         onToggleTracking={() => setTrackingEnabled(!trackingEnabled)}
+        headerVisible={headerVisible}
+        onToggleHeaderVisible={() => setHeaderVisible(!headerVisible)}
         headerButtonsEnabled={headerButtonsEnabled}
         onToggleHeaderButtons={() =>
           setHeaderButtonsEnabled(!headerButtonsEnabled)
