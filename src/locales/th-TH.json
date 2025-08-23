@@ -29,6 +29,8 @@
   "hideHeaderButtons": "ซ่อนปุ่มส่วนหัว",
   "showLogo": "แสดงโลโก้",
   "hideLogo": "ซ่อนโลโก้",
+  "showDarkModeToggle": "Show Dark Mode Toggle",
+  "hideDarkModeToggle": "Hide Dark Mode Toggle",
   "enableFloatingJson": "Enable Floating JSON",
   "disableFloatingJson": "Disable Floating JSON",
   "history": "ประวัติ",

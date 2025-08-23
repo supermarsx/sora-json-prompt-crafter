@@ -29,6 +29,8 @@
   "hideHeaderButtons": "Peida päise nupud",
   "showLogo": "Näita logo",
   "hideLogo": "Peida logo",
+  "showDarkModeToggle": "Show Dark Mode Toggle",
+  "hideDarkModeToggle": "Hide Dark Mode Toggle",
   "enableFloatingJson": "Enable Floating JSON",
   "disableFloatingJson": "Disable Floating JSON",
   "history": "Ajalugu",

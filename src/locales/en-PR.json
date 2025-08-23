@@ -29,6 +29,8 @@
   "hideHeaderButtons": "Hide the Mast Buttons",
   "showLogo": "Show the Jolly Roger",
   "hideLogo": "Stow the Jolly Roger",
+  "showDarkModeToggle": "Show Dark Mode Toggle",
+  "hideDarkModeToggle": "Hide Dark Mode Toggle",
   "enableFloatingJson": "Enable Floating JSON",
   "disableFloatingJson": "Disable Floating JSON",
   "history": "Logbook",

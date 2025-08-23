@@ -1,4 +1,5 @@
 export const DARK_MODE = 'darkMode';
+export const DARK_MODE_TOGGLE_VISIBLE = 'darkModeToggleVisible';
 export const SORA_TOOLS_ENABLED = 'soraToolsEnabled';
 export const HEADER_VISIBLE = 'headerVisible';
 export const HEADER_BUTTONS_ENABLED = 'headerButtonsEnabled';

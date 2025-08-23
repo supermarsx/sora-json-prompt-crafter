@@ -24,6 +24,7 @@ import DisclaimerModal from './DisclaimerModal';
 import GeneratedJson from './GeneratedJson';
 import { useIsSingleColumn } from '@/hooks/use-single-column';
 import { useDarkMode } from '@/hooks/use-dark-mode';
+import { useDarkModeToggleVisibility } from '@/hooks/use-dark-mode-toggle-visibility';
 import { useTracking } from '@/hooks/use-tracking';
 import { useSoraTools } from '@/hooks/use-sora-tools';
 import { useHeaderVisibility } from '@/hooks/use-header-visibility';
@@ -136,6 +137,8 @@ const Dashboard = () => {
   const [headerVisible, setHeaderVisible] = useHeaderVisibility();
   const [headerButtonsEnabled, setHeaderButtonsEnabled] = useHeaderButtons();
   const [logoEnabled, setLogoEnabled] = useLogo();
+  const [darkModeToggleVisible, setDarkModeToggleVisible] =
+    useDarkModeToggleVisibility();
   const [floatingJsonEnabled, setFloatingJsonEnabled] = useFloatingJson();
   const [actionLabelsEnabled, setActionLabelsEnabled] = useActionLabels();
   const [coreActionLabelsOnly, setCoreActionLabelsOnly] = useCoreActionLabels();
@@ -708,28 +711,30 @@ const Dashboard = () => {
               </Tooltip>
             </p>
           </div>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => {
-                  setDarkMode(!darkMode);
-                  trackEvent(trackingEnabled, AnalyticsEvent.DarkModeToggle, {
-                    enabled: !darkMode,
-                  });
-                }}
-                aria-label="Toggle dark mode"
-              >
-                {darkMode ? (
-                  <Sun className="w-5 h-5" />
-                ) : (
-                  <Moon className="w-5 h-5" />
-                )}
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Toggle dark mode</TooltipContent>
-          </Tooltip>
+          {darkModeToggleVisible && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => {
+                    setDarkMode(!darkMode);
+                    trackEvent(trackingEnabled, AnalyticsEvent.DarkModeToggle, {
+                      enabled: !darkMode,
+                    });
+                  }}
+                  aria-label="Toggle dark mode"
+                >
+                  {darkMode ? (
+                    <Sun className="w-5 h-5" />
+                  ) : (
+                    <Moon className="w-5 h-5" />
+                  )}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Toggle dark mode</TooltipContent>
+            </Tooltip>
+          )}
         </div>
         )}
 
@@ -807,6 +812,10 @@ const Dashboard = () => {
         }
         logoEnabled={logoEnabled}
         onToggleLogo={() => setLogoEnabled(!logoEnabled)}
+        darkModeToggleVisible={darkModeToggleVisible}
+        onToggleDarkModeToggleVisible={() =>
+          setDarkModeToggleVisible(!darkModeToggleVisible)
+        }
         floatingJsonEnabled={floatingJsonEnabled}
         onToggleFloatingJson={() =>
           setFloatingJsonEnabled(!floatingJsonEnabled)

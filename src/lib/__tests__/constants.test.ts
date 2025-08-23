@@ -1,6 +1,7 @@
 import { MOBILE_BREAKPOINT, SINGLE_COLUMN_BREAKPOINT } from '../breakpoints';
 import {
   DARK_MODE,
+  DARK_MODE_TOGGLE_VISIBLE,
   SORA_TOOLS_ENABLED,
   HEADER_BUTTONS_ENABLED,
   LOGO_ENABLED,
@@ -24,6 +25,7 @@ describe('constants', () => {
 
   test('storage keys', () => {
     expect(DARK_MODE).toBe('darkMode');
+    expect(DARK_MODE_TOGGLE_VISIBLE).toBe('darkModeToggleVisible');
     expect(SORA_TOOLS_ENABLED).toBe('soraToolsEnabled');
     expect(HEADER_BUTTONS_ENABLED).toBe('headerButtonsEnabled');
     expect(LOGO_ENABLED).toBe('logoEnabled');

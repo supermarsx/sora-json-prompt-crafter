@@ -75,6 +75,8 @@ interface SettingsPanelProps {
   onToggleHeaderButtons: () => void;
   logoEnabled: boolean;
   onToggleLogo: () => void;
+  darkModeToggleVisible: boolean;
+  onToggleDarkModeToggleVisible: () => void;
   floatingJsonEnabled: boolean;
   onToggleFloatingJson: () => void;
   actionLabelsEnabled: boolean;
@@ -107,6 +109,8 @@ interface SettingsPanelProps {
  * @param onToggleHeaderButtons - Toggles header button visibility.
  * @param logoEnabled - Whether the logo is displayed.
  * @param onToggleLogo - Toggles logo visibility.
+ * @param darkModeToggleVisible - Whether the dark mode toggle is shown.
+ * @param onToggleDarkModeToggleVisible - Toggles dark mode toggle visibility.
  * @param floatingJsonEnabled - Whether floating JSON view is enabled.
  * @param onToggleFloatingJson - Toggles floating JSON view.
  * @param actionLabelsEnabled - Whether action buttons display text labels.
@@ -129,6 +133,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   onToggleHeaderButtons,
   logoEnabled,
   onToggleLogo,
+  darkModeToggleVisible,
+  onToggleDarkModeToggleVisible,
   floatingJsonEnabled,
   onToggleFloatingJson,
   actionLabelsEnabled,
@@ -485,6 +491,60 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                           })
                         : t('enableDarkMode', {
                             defaultValue: 'Enable dark mode',
+                          })}
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
+                        onClick={() => {
+                          try {
+                            onToggleDarkModeToggleVisible();
+                            toast.success(
+                              !darkModeToggleVisible
+                                ? t('showDarkModeToggle', {
+                                    defaultValue: 'Show dark mode toggle',
+                                  })
+                                : t('hideDarkModeToggle', {
+                                    defaultValue: 'Hide dark mode toggle',
+                                  }),
+                            );
+                            trackEvent(
+                              trackingEnabled,
+                              AnalyticsEvent.ToggleDarkModeButton,
+                              { enabled: !darkModeToggleVisible },
+                            );
+                          } catch {
+                            toast.error('Failed to toggle dark mode button');
+                          }
+                        }}
+                      >
+                        {darkModeToggleVisible ? (
+                          <>
+                            <EyeOff className="w-4 h-4" />
+                            {t('hideDarkModeToggle', {
+                              defaultValue: 'Hide dark mode toggle',
+                            })}
+                          </>
+                        ) : (
+                          <>
+                            <Eye className="w-4 h-4" />
+                            {t('showDarkModeToggle', {
+                              defaultValue: 'Show dark mode toggle',
+                            })}
+                          </>
+                        )}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {darkModeToggleVisible
+                        ? t('hideDarkModeToggle', {
+                            defaultValue: 'Hide dark mode toggle',
+                          })
+                        : t('showDarkModeToggle', {
+                            defaultValue: 'Show dark mode toggle',
                           })}
                     </TooltipContent>
                   </Tooltip>

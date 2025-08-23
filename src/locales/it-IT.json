@@ -29,6 +29,8 @@
   "hideHeaderButtons": "Nascondi pulsanti header",
   "showLogo": "Mostra logo",
   "hideLogo": "Nascondi logo",
+  "showDarkModeToggle": "Show Dark Mode Toggle",
+  "hideDarkModeToggle": "Hide Dark Mode Toggle",
   "enableFloatingJson": "Enable Floating JSON",
   "disableFloatingJson": "Disable Floating JSON",
   "history": "Cronologia",

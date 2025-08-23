@@ -73,6 +73,10 @@ jest.mock('@/hooks/use-dark-mode', () => ({
   __esModule: true,
   useDarkMode: (...args: unknown[]) => mockUseDarkMode(...args),
 }));
+jest.mock('@/hooks/use-dark-mode-toggle-visibility', () => ({
+  __esModule: true,
+  useDarkModeToggleVisibility: jest.fn(() => [true, jest.fn()] as const),
+}));
 jest.mock('@/hooks/use-tracking', () => ({
   __esModule: true,
   useTracking: jest.fn(() => [true, jest.fn()] as const),

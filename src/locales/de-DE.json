@@ -29,6 +29,8 @@
   "hideHeaderButtons": "Header-Schaltflächen ausblenden",
   "showLogo": "Logo anzeigen",
   "hideLogo": "Logo ausblenden",
+  "showDarkModeToggle": "Show Dark Mode Toggle",
+  "hideDarkModeToggle": "Hide Dark Mode Toggle",
   "enableFloatingJson": "Enable Floating JSON",
   "disableFloatingJson": "Disable Floating JSON",
   "history": "Verlauf",
