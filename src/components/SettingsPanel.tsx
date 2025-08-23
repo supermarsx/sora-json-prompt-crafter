@@ -21,6 +21,8 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import {
+  Sun,
+  Moon,
   Import as ImportIcon,
   Download,
   RotateCcw,
@@ -35,6 +37,7 @@ import { toast } from '@/components/ui/sonner-toast';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { purgeCache } from '@/lib/purgeCache';
 import { useUpdateCheck } from '@/hooks/use-update-check';
+import { useDarkMode } from '@/hooks/use-dark-mode';
 import { exportAppData, importAppData, safeGet } from '@/lib/storage';
 import { formatDateTime } from '@/lib/date';
 import {
@@ -139,6 +142,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   const [confirmDisableTracking, setConfirmDisableTracking] = useState(false);
   const [confirmEnableTracking, setConfirmEnableTracking] = useState(false);
   const { checkForUpdate } = useUpdateCheck();
+  const [darkMode, setDarkMode] = useDarkMode();
 
   useEffect(() => {
     if (open) {
@@ -431,6 +435,58 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                         ? 'Hide Sora Integration'
                         : 'Show Sora Integration'}
                   </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
+                        onClick={() => {
+                          try {
+                            setDarkMode(!darkMode);
+                            toast.success(
+                              !darkMode
+                                ? t('darkModeEnabled', {
+                                    defaultValue: 'Dark mode enabled',
+                                  })
+                                : t('darkModeDisabled', {
+                                    defaultValue: 'Dark mode disabled',
+                                  }),
+                            );
+                            trackEvent(
+                              trackingEnabled,
+                              AnalyticsEvent.DarkModeToggle,
+                              { enabled: !darkMode },
+                            );
+                          } catch {
+                            toast.error('Failed to toggle dark mode');
+                          }
+                        }}
+                      >
+                        {darkMode ? (
+                          <>
+                            <Sun className="w-4 h-4" /> {t('disableDarkMode', {
+                              defaultValue: 'Disable dark mode',
+                            })}
+                          </>
+                        ) : (
+                          <>
+                            <Moon className="w-4 h-4" /> {t('enableDarkMode', {
+                              defaultValue: 'Enable dark mode',
+                            })}
+                          </>
+                        )}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {darkMode
+                        ? t('disableDarkMode', {
+                            defaultValue: 'Disable dark mode',
+                          })
+                        : t('enableDarkMode', {
+                            defaultValue: 'Enable dark mode',
+                          })}
+                    </TooltipContent>
                   </Tooltip>
                   <Tooltip>
                     <TooltipTrigger asChild>
