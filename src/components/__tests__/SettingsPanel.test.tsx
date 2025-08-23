@@ -25,6 +25,10 @@ jest.mock('@/lib/date', () => ({
   __esModule: true,
   formatDateTime: jest.fn(() => '20240101-000000'),
 }));
+jest.mock('@/hooks/use-dark-mode', () => ({
+  __esModule: true,
+  useDarkMode: jest.fn(() => [false, jest.fn()] as const),
+}));
 
 jest.mock('@/components/ui/dialog', () => ({
   __esModule: true,
