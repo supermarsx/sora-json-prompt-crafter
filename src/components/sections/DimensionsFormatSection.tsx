@@ -32,7 +32,7 @@ interface DimensionsFormatSectionProps {
 export const DimensionsFormatSection: React.FC<
   DimensionsFormatSectionProps
 > = ({ options, updateOptions, isEnabled, onToggle }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const qualityOptions = [
     'maximum',
     'ultra',
@@ -52,9 +52,18 @@ export const DimensionsFormatSection: React.FC<
     'defective',
   ];
   const aspectRatios = ['16:9', '21:9', '4:3', '1:1', '9:16'];
-  const aspectRatioLabels = t('aspectRatioLabels', {
-    returnObjects: true,
-  }) as Record<string, string>;
+  const rawAspectRatioLabels =
+    (i18n.getResource(
+      i18n.language,
+      'translation',
+      'aspectRatioLabels',
+    ) as Record<string, string>) || {};
+  const aspectRatioLabels = aspectRatios.reduce(
+    (labels, ratio) => ({ ...labels, [ratio]: rawAspectRatioLabels[ratio] }),
+    {} as Record<string, string>,
+  );
+  const formatAspectRatio = (ratio: string) =>
+    aspectRatioLabels[ratio] || ratio.replace(':', '×');
 
   return (
     <CollapsibleSection
@@ -78,7 +87,7 @@ export const DimensionsFormatSection: React.FC<
             <SelectContent>
               {aspectRatios.map((ratio) => (
                 <SelectItem key={ratio} value={ratio}>
-                  {aspectRatioLabels[ratio] || ratio}
+                  {formatAspectRatio(ratio)}
                 </SelectItem>
               ))}
             </SelectContent>
