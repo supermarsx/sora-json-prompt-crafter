@@ -27,6 +27,8 @@
   "hideHeaderButtons": "Header‑Schaltflächen ausblenden",
   "showLogo": "Logo anzeigen",
   "hideLogo": "Logo ausblenden",
+  "enableFloatingJson": "Enable Floating JSON",
+  "disableFloatingJson": "Disable Floating JSON",
   "history": "Verlauf",
   "jumpToJson": "Zu JSON springen",
   "actions": "Aktionen",

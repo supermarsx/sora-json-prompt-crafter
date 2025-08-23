@@ -27,6 +27,8 @@
   "hideHeaderButtons": "Nascondi pulsanti header",
   "showLogo": "Mostra logo",
   "hideLogo": "Nascondi logo",
+  "enableFloatingJson": "Enable Floating JSON",
+  "disableFloatingJson": "Disable Floating JSON",
   "history": "Cronologia",
   "jumpToJson": "Vai a JSON",
   "actions": "Azioni",

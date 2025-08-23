@@ -87,6 +87,8 @@ interface ActionBarProps {
   onToggleHeaderButtons: () => void;
   logoEnabled: boolean;
   onToggleLogo: () => void;
+  floatingJsonEnabled: boolean;
+  onToggleFloatingJson: () => void;
   actionLabelsEnabled: boolean;
   onToggleActionLabels: () => void;
   coreActionLabelsOnly: boolean;
@@ -129,6 +131,8 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   onToggleHeaderButtons,
   logoEnabled,
   onToggleLogo,
+  floatingJsonEnabled,
+  onToggleFloatingJson,
   actionLabelsEnabled,
   onToggleActionLabels,
   coreActionLabelsOnly,
@@ -718,6 +722,8 @@ const { toast: notify } = useToast();
         onToggleHeaderButtons={onToggleHeaderButtons}
         logoEnabled={logoEnabled}
         onToggleLogo={onToggleLogo}
+        floatingJsonEnabled={floatingJsonEnabled}
+        onToggleFloatingJson={onToggleFloatingJson}
         actionLabelsEnabled={actionLabelsEnabled}
         onToggleActionLabels={onToggleActionLabels}
         coreActionLabelsOnly={coreActionLabelsOnly}

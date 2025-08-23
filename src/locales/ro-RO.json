@@ -27,6 +27,8 @@
   "hideHeaderButtons": "Ascunde butoane header",
   "showLogo": "Arată logo",
   "hideLogo": "Ascunde logo",
+  "enableFloatingJson": "Enable Floating JSON",
+  "disableFloatingJson": "Disable Floating JSON",
   "history": "Istoric",
   "jumpToJson": "Salt la JSON",
   "actions": "Acțiuni",

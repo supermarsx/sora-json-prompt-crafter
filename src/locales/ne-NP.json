@@ -27,6 +27,8 @@
   "hideHeaderButtons": "हेडर बटन लुकाउनुहोस्",
   "showLogo": "लोगो देखाउनुहोस्",
   "hideLogo": "लोगो लुकाउनुहोस्",
+  "enableFloatingJson": "Enable Floating JSON",
+  "disableFloatingJson": "Disable Floating JSON",
   "history": "इतिहास",
   "jumpToJson": "JSON मा जानुहोस्",
   "actions": "कार्यहरू",

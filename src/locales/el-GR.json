@@ -27,6 +27,8 @@
   "hideHeaderButtons": "Απόκρυψη κουμπιών κεφαλίδας",
   "showLogo": "Εμφάνιση λογοτύπου",
   "hideLogo": "Απόκρυψη λογοτύπου",
+  "enableFloatingJson": "Enable Floating JSON",
+  "disableFloatingJson": "Disable Floating JSON",
   "history": "Ιστορικό",
   "jumpToJson": "Μετάβαση στο JSON",
   "actions": "Ενέργειες",

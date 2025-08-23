@@ -27,6 +27,8 @@
   "hideHeaderButtons": "隐藏标题按钮",
   "showLogo": "显示徽标",
   "hideLogo": "隐藏徽标",
+  "enableFloatingJson": "Enable Floating JSON",
+  "disableFloatingJson": "Disable Floating JSON",
   "history": "历史记录",
   "jumpToJson": "跳转到 JSON",
   "actions": "操作",

@@ -27,6 +27,8 @@
   "hideHeaderButtons": "Skjul header‑knapper",
   "showLogo": "Vis logo",
   "hideLogo": "Skjul logo",
+  "enableFloatingJson": "Enable Floating JSON",
+  "disableFloatingJson": "Disable Floating JSON",
   "history": "Historik",
   "jumpToJson": "Gå til JSON",
   "actions": "Handlinger",

@@ -4,6 +4,7 @@ import {
   SORA_TOOLS_ENABLED,
   HEADER_BUTTONS_ENABLED,
   LOGO_ENABLED,
+  FLOATING_JSON_ENABLED,
   ACTION_LABELS_ENABLED,
   CORE_ACTION_LABELS_ONLY,
   TRACKING_ENABLED,
@@ -26,6 +27,7 @@ describe('constants', () => {
     expect(SORA_TOOLS_ENABLED).toBe('soraToolsEnabled');
     expect(HEADER_BUTTONS_ENABLED).toBe('headerButtonsEnabled');
     expect(LOGO_ENABLED).toBe('logoEnabled');
+    expect(FLOATING_JSON_ENABLED).toBe('floatingJsonEnabled');
     expect(ACTION_LABELS_ENABLED).toBe('actionLabelsEnabled');
     expect(CORE_ACTION_LABELS_ONLY).toBe('coreActionLabelsOnly');
     expect(TRACKING_ENABLED).toBe('trackingEnabled');

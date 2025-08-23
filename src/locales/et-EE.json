@@ -27,6 +27,8 @@
   "hideHeaderButtons": "Peida päise nupud",
   "showLogo": "Näita logo",
   "hideLogo": "Peida logo",
+  "enableFloatingJson": "Enable Floating JSON",
+  "disableFloatingJson": "Disable Floating JSON",
   "history": "Ajalugu",
   "jumpToJson": "Hüppa JSON-i",
   "actions": "Tegevused",
