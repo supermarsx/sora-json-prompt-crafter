@@ -30,6 +30,7 @@ import { useHeaderButtons } from '@/hooks/use-header-buttons';
 import { useLogo } from '@/hooks/use-logo';
 import { useActionLabels } from '@/hooks/use-action-labels';
 import { useCoreActionLabels } from '@/hooks/use-core-action-labels';
+import { useFloatingJson } from '@/hooks/use-floating-json';
 import { useSoraUserscript } from '@/hooks/use-sora-userscript';
 import { useActionHistory } from '@/hooks/use-action-history';
 import { useUndoRedo } from '@/hooks/use-undo-redo';
@@ -133,6 +134,7 @@ const Dashboard = () => {
   const [soraToolsEnabled, setSoraToolsEnabled] = useSoraTools();
   const [headerButtonsEnabled, setHeaderButtonsEnabled] = useHeaderButtons();
   const [logoEnabled, setLogoEnabled] = useLogo();
+  const [floatingJsonEnabled, setFloatingJsonEnabled] = useFloatingJson();
   const [actionLabelsEnabled, setActionLabelsEnabled] = useActionLabels();
   const [coreActionLabelsOnly, setCoreActionLabelsOnly] = useCoreActionLabels();
   const [userscriptInstalled, userscriptVersion] = useSoraUserscript();
@@ -747,25 +749,32 @@ const Dashboard = () => {
             </CardContent>
           </Card>
 
-          <Card
-            id="generated-json"
-            className="flex flex-col lg:sticky lg:top-4 lg:max-h-[calc(100vh-1rem)]"
-          >
-            <CardHeader className="border-b">
-              <CardTitle className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                {t('generatedJsonPrompt')}
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="flex-1 p-0 overflow-hidden">
-              <GeneratedJson
-                json={jsonString}
-                trackingEnabled={trackingEnabled}
-              />
-            </CardContent>
-          </Card>
+          {(!isSingleColumn || !floatingJsonEnabled) && (
+            <Card
+              id="generated-json"
+              className="flex flex-col lg:sticky lg:top-4 lg:max-h-[calc(100vh-1rem)]"
+            >
+              <CardHeader className="border-b">
+                <CardTitle className="flex items-center gap-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  {t('generatedJsonPrompt')}
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="flex-1 p-0 overflow-hidden">
+                <GeneratedJson
+                  json={jsonString}
+                  trackingEnabled={trackingEnabled}
+                />
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
+      {isSingleColumn && floatingJsonEnabled && (
+        <div className="fixed bottom-0 left-0 right-0 z-40 h-[40vh] max-h-[50vh] border-t bg-background">
+          <GeneratedJson json={jsonString} trackingEnabled={trackingEnabled} />
+        </div>
+      )}
 
       <ActionBar
         onUndo={undo}
@@ -792,6 +801,10 @@ const Dashboard = () => {
         }
         logoEnabled={logoEnabled}
         onToggleLogo={() => setLogoEnabled(!logoEnabled)}
+        floatingJsonEnabled={floatingJsonEnabled}
+        onToggleFloatingJson={() =>
+          setFloatingJsonEnabled(!floatingJsonEnabled)
+        }
         actionLabelsEnabled={actionLabelsEnabled}
         onToggleActionLabels={() =>
           setActionLabelsEnabled(!actionLabelsEnabled)
@@ -801,7 +814,7 @@ const Dashboard = () => {
           setCoreActionLabelsOnly(!coreActionLabelsOnly)
         }
         copied={copied}
-        showJumpToJson={isSingleColumn}
+        showJumpToJson={isSingleColumn && !floatingJsonEnabled}
         onJumpToJson={scrollToJson}
       />
       <ShareModal

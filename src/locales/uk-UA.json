@@ -27,6 +27,8 @@
   "hideHeaderButtons": "Приховати кнопки заголовка",
   "showLogo": "Показати логотип",
   "hideLogo": "Приховати логотип",
+  "enableFloatingJson": "Enable Floating JSON",
+  "disableFloatingJson": "Disable Floating JSON",
   "history": "Історія",
   "jumpToJson": "Перейти до JSON",
   "actions": "Дії",

@@ -27,6 +27,8 @@
   "hideHeaderButtons": "Piilota yläpalkin painikkeet",
   "showLogo": "Näytä logo",
   "hideLogo": "Piilota logo",
+  "enableFloatingJson": "Enable Floating JSON",
+  "disableFloatingJson": "Disable Floating JSON",
   "history": "Historia",
   "jumpToJson": "Siirry JSON‑tiedostoon",
   "actions": "Toiminnot",

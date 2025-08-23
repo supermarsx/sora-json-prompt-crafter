@@ -70,6 +70,8 @@ interface SettingsPanelProps {
   onToggleHeaderButtons: () => void;
   logoEnabled: boolean;
   onToggleLogo: () => void;
+  floatingJsonEnabled: boolean;
+  onToggleFloatingJson: () => void;
   actionLabelsEnabled: boolean;
   onToggleActionLabels: () => void;
   coreActionLabelsOnly: boolean;
@@ -98,6 +100,8 @@ interface SettingsPanelProps {
  * @param onToggleHeaderButtons - Toggles header button visibility.
  * @param logoEnabled - Whether the logo is displayed.
  * @param onToggleLogo - Toggles logo visibility.
+ * @param floatingJsonEnabled - Whether floating JSON view is enabled.
+ * @param onToggleFloatingJson - Toggles floating JSON view.
  * @param actionLabelsEnabled - Whether action buttons display text labels.
  * @param onToggleActionLabels - Toggles action button labels.
  */
@@ -116,6 +120,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   onToggleHeaderButtons,
   logoEnabled,
   onToggleLogo,
+  floatingJsonEnabled,
+  onToggleFloatingJson,
   actionLabelsEnabled,
   onToggleActionLabels,
   coreActionLabelsOnly,
@@ -574,10 +580,52 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                         )}
                       </Button>
                     </TooltipTrigger>
-                    <TooltipContent>
+                  <TooltipContent>
                       {coreActionLabelsOnly
                         ? t('showAllLabels')
                         : t('coreLabelsOnly')}
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
+                        onClick={() => {
+                          try {
+                            onToggleFloatingJson();
+                            toast.success(
+                              !floatingJsonEnabled
+                                ? t('enableFloatingJson')
+                                : t('disableFloatingJson'),
+                            );
+                            trackEvent(
+                              trackingEnabled,
+                              AnalyticsEvent.ToggleFloatingJson,
+                              { enabled: !floatingJsonEnabled },
+                            );
+                          } catch {
+                            toast.error('Failed to toggle floating JSON');
+                          }
+                        }}
+                      >
+                        {floatingJsonEnabled ? (
+                          <>
+                            <EyeOff className="w-4 h-4" />
+                            {t('disableFloatingJson')}
+                          </>
+                        ) : (
+                          <>
+                            <Eye className="w-4 h-4" />
+                            {t('enableFloatingJson')}
+                          </>
+                        )}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {floatingJsonEnabled
+                        ? t('disableFloatingJson')
+                        : t('enableFloatingJson')}
                     </TooltipContent>
                   </Tooltip>
                   <Tooltip>

@@ -27,6 +27,8 @@
   "hideHeaderButtons": "হেডার বোতাম লুকান",
   "showLogo": "লোগো দেখান",
   "hideLogo": "লোগো লুকান",
+  "enableFloatingJson": "Enable Floating JSON",
+  "disableFloatingJson": "Disable Floating JSON",
   "history": "ইতিহাস",
   "jumpToJson": "JSON‑এ যান",
   "actions": "কর্মসমূহ",

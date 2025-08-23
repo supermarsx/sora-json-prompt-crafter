@@ -21,6 +21,7 @@ export enum AnalyticsEvent {
   ToggleLogo = 'toggle_logo',
   ToggleActionLabels = 'toggle_action_labels',
   ToggleCoreActionLabels = 'toggle_core_action_labels',
+  ToggleFloatingJson = 'toggle_floating_json',
   PurgeCache = 'purge_cache',
   DisableTrackingConfirm = 'disable_tracking_confirm',
   ToggleTracking = 'toggle_tracking',

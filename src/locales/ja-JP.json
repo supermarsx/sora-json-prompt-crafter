@@ -27,6 +27,8 @@
   "hideHeaderButtons": "ヘッダーボタンを非表示",
   "showLogo": "ロゴを表示",
   "hideLogo": "ロゴを非表示",
+  "enableFloatingJson": "Enable Floating JSON",
+  "disableFloatingJson": "Disable Floating JSON",
   "history": "履歴",
   "jumpToJson": "JSONへジャンプ",
   "actions": "アクション",

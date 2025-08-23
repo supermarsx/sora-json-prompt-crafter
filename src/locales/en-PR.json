@@ -27,6 +27,8 @@
   "hideHeaderButtons": "Hide the Mast Buttons",
   "showLogo": "Show the Jolly Roger",
   "hideLogo": "Stow the Jolly Roger",
+  "enableFloatingJson": "Enable Floating JSON",
+  "disableFloatingJson": "Disable Floating JSON",
   "history": "Logbook",
   "jumpToJson": "Leap to JSON",
   "actions": "Deeds",

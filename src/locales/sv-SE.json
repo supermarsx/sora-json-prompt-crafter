@@ -27,6 +27,8 @@
   "hideHeaderButtons": "Dölj huvudknappar",
   "showLogo": "Visa logotyp",
   "hideLogo": "Dölj logotyp",
+  "enableFloatingJson": "Enable Floating JSON",
+  "disableFloatingJson": "Disable Floating JSON",
   "history": "Historik",
   "jumpToJson": "Hoppa till JSON",
   "actions": "Åtgärder",

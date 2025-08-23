@@ -27,6 +27,8 @@
   "hideHeaderButtons": "ซ่อนปุ่มส่วนหัว",
   "showLogo": "แสดงโลโก้",
   "hideLogo": "ซ่อนโลโก้",
+  "enableFloatingJson": "Enable Floating JSON",
+  "disableFloatingJson": "Disable Floating JSON",
   "history": "ประวัติ",
   "jumpToJson": "ไปที่ JSON",
   "actions": "การดำเนินการ",

@@ -27,6 +27,8 @@
   "hideHeaderButtons": "헤더 버튼 숨기기",
   "showLogo": "로고 표시",
   "hideLogo": "로고 숨기기",
+  "enableFloatingJson": "Enable Floating JSON",
+  "disableFloatingJson": "Disable Floating JSON",
   "history": "기록",
   "jumpToJson": "JSON으로 이동",
   "actions": "동작",

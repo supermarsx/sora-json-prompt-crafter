@@ -27,6 +27,8 @@
   "hideHeaderButtons": "Ocultar botões de cabeçalho",
   "showLogo": "Mostrar logotipo",
   "hideLogo": "Ocultar logotipo",
+  "enableFloatingJson": "Enable Floating JSON",
+  "disableFloatingJson": "Disable Floating JSON",
   "history": "Histórico",
   "jumpToJson": "Ir para JSON",
   "actions": "Ações",

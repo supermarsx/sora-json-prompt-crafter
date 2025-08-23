@@ -34,6 +34,7 @@ jest.mock('../SettingsPanel', () => ({
     open: boolean;
     onToggleTracking: () => void;
     trackingEnabled: boolean;
+    [key: string]: unknown;
   }) =>
     open ? (
       <div>
@@ -146,6 +147,8 @@ function createProps(
     onToggleHeaderButtons: jest.fn(),
     logoEnabled: true,
     onToggleLogo: jest.fn(),
+    floatingJsonEnabled: false,
+    onToggleFloatingJson: jest.fn(),
     actionLabelsEnabled: true,
     onToggleActionLabels: jest.fn(),
     coreActionLabelsOnly: false,
