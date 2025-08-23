@@ -29,6 +29,8 @@
   "hideHeaderButtons": "Απόκρυψη κουμπιών κεφαλίδας",
   "showLogo": "Εμφάνιση λογοτύπου",
   "hideLogo": "Απόκρυψη λογοτύπου",
+  "showDarkModeToggle": "Show Dark Mode Toggle",
+  "hideDarkModeToggle": "Hide Dark Mode Toggle",
   "enableFloatingJson": "Enable Floating JSON",
   "disableFloatingJson": "Disable Floating JSON",
   "history": "Ιστορικό",

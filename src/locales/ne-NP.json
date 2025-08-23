@@ -29,6 +29,8 @@
   "hideHeaderButtons": "हेडर बटन लुकाउनुहोस्",
   "showLogo": "लोगो देखाउनुहोस्",
   "hideLogo": "लोगो लुकाउनुहोस्",
+  "showDarkModeToggle": "Show Dark Mode Toggle",
+  "hideDarkModeToggle": "Hide Dark Mode Toggle",
   "enableFloatingJson": "Enable Floating JSON",
   "disableFloatingJson": "Disable Floating JSON",
   "history": "इतिहास",

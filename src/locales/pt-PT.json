@@ -29,6 +29,8 @@
   "hideHeaderButtons": "Ocultar Botões de Cabeçalho",
   "showLogo": "Mostrar Logótipo",
   "hideLogo": "Ocultar Logótipo",
+  "showDarkModeToggle": "Show Dark Mode Toggle",
+  "hideDarkModeToggle": "Hide Dark Mode Toggle",
   "enableFloatingJson": "Enable Floating JSON",
   "disableFloatingJson": "Disable Floating JSON",
   "history": "Histórico",

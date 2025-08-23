@@ -29,6 +29,8 @@
   "hideHeaderButtons": "Masquer les boutons d’en-tête",
   "showLogo": "Afficher le logo",
   "hideLogo": "Masquer le logo",
+  "showDarkModeToggle": "Show Dark Mode Toggle",
+  "hideDarkModeToggle": "Hide Dark Mode Toggle",
   "enableFloatingJson": "Enable Floating JSON",
   "disableFloatingJson": "Disable Floating JSON",
   "history": "Historique",
