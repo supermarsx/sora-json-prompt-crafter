@@ -46,6 +46,8 @@
   "showLabels": "Показать метки",
   "hideLabels": "Скрыть метки",
   "shortenButtons": "Сократить кнопки",
+  "coreLabelsOnly": "Core Labels Only",
+  "showAllLabels": "Show All Labels",
   "language": "Язык",
   "appName": "Конструктор JSON‑промптов Sora",
   "tagline": "Настройте параметры генерации Sora и получите идеальный JSON‑промпт для потрясающего ИИ‑контента.",

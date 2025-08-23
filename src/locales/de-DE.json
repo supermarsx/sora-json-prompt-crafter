@@ -46,6 +46,8 @@
   "showLabels": "Labels anzeigen",
   "hideLabels": "Labels ausblenden",
   "shortenButtons": "Schaltflächen verkürzen",
+  "coreLabelsOnly": "Core Labels Only",
+  "showAllLabels": "Show All Labels",
   "language": "Sprache",
   "appName": "Sora JSON Prompt Crafter",
   "tagline": "Konfiguriere Soras Generierungseinstellungen und erhalte den perfekten JSON-Prompt für beeindruckende KI-Inhalte.",

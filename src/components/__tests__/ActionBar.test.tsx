@@ -148,6 +148,8 @@ function createProps(
     onToggleLogo: jest.fn(),
     actionLabelsEnabled: true,
     onToggleActionLabels: jest.fn(),
+    coreActionLabelsOnly: false,
+    onToggleCoreActionLabels: jest.fn(),
     copied: false,
     trackingEnabled: true,
     ...overrides,
@@ -242,6 +244,16 @@ describe('ActionBar', () => {
     fireEvent.click(btn);
     expect(onJumpToJson).toHaveBeenCalled();
     expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.JumpToJson);
+  });
+
+  test('hides non-core labels when coreActionLabelsOnly is true', () => {
+    const props = createProps({ coreActionLabelsOnly: true, showJumpToJson: true });
+    renderActionBar(props);
+    expect(screen.getByText(/undo/i)).toBeTruthy();
+    expect(screen.queryByText(/manage/i)).toBeNull();
+    expect(screen.queryByText(/language/i)).toBeNull();
+    expect(screen.queryByText(/history/i)).toBeNull();
+    expect(screen.queryByText(/jump to json/i)).toBeNull();
   });
 
   test('Send to Sora button appears and calls handler', () => {

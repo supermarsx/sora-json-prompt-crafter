@@ -46,6 +46,8 @@
   "showLabels": "Show Labels",
   "hideLabels": "Hide Labels",
   "shortenButtons": "Trim Buttons",
+  "coreLabelsOnly": "Core Labels Only",
+  "showAllLabels": "Show All Labels",
   "language": "Tongue",
   "appName": "Sora JSON Prompt Forge",
   "tagline": "Trim Sora's sails an' snag the perfect JSON prompt fer plunder‑worthy AI booty.",

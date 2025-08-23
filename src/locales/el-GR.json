@@ -46,6 +46,8 @@
   "showLabels": "Εμφάνιση ετικετών",
   "hideLabels": "Απόκρυψη ετικετών",
   "shortenButtons": "Σύντμηση κουμπιών",
+  "coreLabelsOnly": "Core Labels Only",
+  "showAllLabels": "Show All Labels",
   "language": "Γλώσσα",
   "appName": "Sora JSON Prompt Crafter",
   "tagline": "Διαμορφώστε τις ρυθμίσεις δημιουργίας του Sora και αποκτήστε το ιδανικό JSON prompt για εντυπωσιακό AI περιεχόμενο.",

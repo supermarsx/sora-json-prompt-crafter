@@ -46,6 +46,8 @@
   "showLabels": "Näita silte",
   "hideLabels": "Peida sildid",
   "shortenButtons": "Lühenda nupud",
+  "coreLabelsOnly": "Core Labels Only",
+  "showAllLabels": "Show All Labels",
   "language": "Keel",
   "appName": "Sora JSON Prompt Crafter",
   "tagline": "Seadista Sora generatsioonisätted ja hangi täiuslik JSON‑prompt vapustava tehisintellekti sisu jaoks.",

@@ -46,6 +46,8 @@
   "showLabels": "ラベルを表示",
   "hideLabels": "ラベルを非表示",
   "shortenButtons": "ボタンを短縮",
+  "coreLabelsOnly": "Core Labels Only",
+  "showAllLabels": "Show All Labels",
   "language": "言語",
   "appName": "Sora JSONプロンプトクラフター",
   "tagline": "Soraの生成設定を構成して、見事なAI生成コンテンツのための完璧なJSONプロンプトを手に入れましょう。",

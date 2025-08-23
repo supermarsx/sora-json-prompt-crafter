@@ -86,6 +86,8 @@ function renderPanel(overrides: Partial<React.ComponentProps<typeof SettingsPane
     onToggleLogo: jest.fn(),
     actionLabelsEnabled: true,
     onToggleActionLabels: jest.fn(),
+    coreActionLabelsOnly: false,
+    onToggleCoreActionLabels: jest.fn(),
     ...overrides,
   };
   return render(<SettingsPanel {...props} />);

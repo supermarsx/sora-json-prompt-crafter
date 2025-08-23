@@ -46,6 +46,8 @@
   "showLabels": "แสดงป้ายกำกับ",
   "hideLabels": "ซ่อนป้ายกำกับ",
   "shortenButtons": "ลดความยาวปุ่ม",
+  "coreLabelsOnly": "Core Labels Only",
+  "showAllLabels": "Show All Labels",
   "language": "ภาษา",
   "appName": "เครื่องสร้างพรอมต์ JSON ของ Sora",
   "tagline": "กำหนดการตั้งค่าการสร้างของ Sora และรับพรอมต์ JSON ที่สมบูรณ์แบบเพื่อสร้างเนื้อหา AI ที่น่าทึ่ง",

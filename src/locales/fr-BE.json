@@ -46,6 +46,8 @@
   "showLabels": "Afficher les étiquettes",
   "hideLabels": "Masquer les étiquettes",
   "shortenButtons": "Raccourcir les boutons",
+  "coreLabelsOnly": "Core Labels Only",
+  "showAllLabels": "Show All Labels",
   "language": "Langue",
   "appName": "Sora Générateur de Prompts JSON",
   "tagline": "Configurez les paramètres de génération de Sora et obtenez le prompt JSON parfait pour un contenu IA épatant.",

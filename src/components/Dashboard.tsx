@@ -29,6 +29,7 @@ import { useSoraTools } from '@/hooks/use-sora-tools';
 import { useHeaderButtons } from '@/hooks/use-header-buttons';
 import { useLogo } from '@/hooks/use-logo';
 import { useActionLabels } from '@/hooks/use-action-labels';
+import { useCoreActionLabels } from '@/hooks/use-core-action-labels';
 import { useSoraUserscript } from '@/hooks/use-sora-userscript';
 import { useActionHistory } from '@/hooks/use-action-history';
 import { useUndoRedo } from '@/hooks/use-undo-redo';
@@ -133,6 +134,7 @@ const Dashboard = () => {
   const [headerButtonsEnabled, setHeaderButtonsEnabled] = useHeaderButtons();
   const [logoEnabled, setLogoEnabled] = useLogo();
   const [actionLabelsEnabled, setActionLabelsEnabled] = useActionLabels();
+  const [coreActionLabelsOnly, setCoreActionLabelsOnly] = useCoreActionLabels();
   const [userscriptInstalled, userscriptVersion] = useSoraUserscript();
   const actionHistory = useActionHistory();
   const githubStats = useGithubStats();
@@ -793,6 +795,10 @@ const Dashboard = () => {
         actionLabelsEnabled={actionLabelsEnabled}
         onToggleActionLabels={() =>
           setActionLabelsEnabled(!actionLabelsEnabled)
+        }
+        coreActionLabelsOnly={coreActionLabelsOnly}
+        onToggleCoreActionLabels={() =>
+          setCoreActionLabelsOnly(!coreActionLabelsOnly)
         }
         copied={copied}
         showJumpToJson={isSingleColumn}

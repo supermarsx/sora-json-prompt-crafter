@@ -46,6 +46,8 @@
   "showLabels": "লেবেল দেখান",
   "hideLabels": "লেবেল লুকান",
   "shortenButtons": "বোতাম সংক্ষিপ্ত করুন",
+  "coreLabelsOnly": "Core Labels Only",
+  "showAllLabels": "Show All Labels",
   "language": "ভাষা",
   "appName": "Sora JSON প্রম্পট ক্রাফটার",
   "tagline": "Sora‑র জেনারেশন সেটিংস কনফিগার করুন এবং অসাধারণ AI‑জেনারেটেড কনটেন্টের জন্য নিখুঁত JSON প্রম্পট তৈরি করুন।",

@@ -46,6 +46,8 @@
   "showLabels": "显示标签",
   "hideLabels": "隐藏标签",
   "shortenButtons": "缩短按钮",
+  "coreLabelsOnly": "Core Labels Only",
+  "showAllLabels": "Show All Labels",
   "language": "语言",
   "appName": "Sora JSON 提示生成器",
   "tagline": "配置 Sora 的生成设置，获取用于创建令人惊叹的 AI 内容的完美 JSON 提示。",
