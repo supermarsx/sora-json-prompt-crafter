@@ -40,9 +40,12 @@ describe('DimensionsFormatSection', () => {
       />,
     );
     const comboboxes = screen.getAllByRole('combobox');
-    const ratioLabels = i18n.t('aspectRatioLabels', {
-      returnObjects: true,
-    }) as Record<string, string>;
+    const ratioLabels =
+      (i18n.getResource(
+        i18n.language,
+        'translation',
+        'aspectRatioLabels',
+      ) as Record<string, string>) || {};
     fireEvent.click(comboboxes[0]);
     fireEvent.click(
       screen.getByRole('option', { name: ratioLabels['4:3'] }),
@@ -81,5 +84,32 @@ describe('DimensionsFormatSection', () => {
     fireEvent.click(comboboxes[3]);
     fireEvent.click(screen.getByRole('option', { name: /hdr/i }));
     expect(updateOptions).toHaveBeenCalledWith({ dynamic_range: 'HDR' });
+  });
+
+  test('displays aspect ratios with colon keys', () => {
+    render(
+      <DimensionsFormatSection
+        options={{
+          ...DEFAULT_OPTIONS,
+          use_dimensions_format: true,
+        }}
+        updateOptions={jest.fn()}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+    const ratioLabels =
+      (i18n.getResource(
+        i18n.language,
+        'translation',
+        'aspectRatioLabels',
+      ) as Record<string, string>) || {};
+    fireEvent.click(screen.getAllByRole('combobox')[0]);
+    expect(
+      screen.getByRole('option', { name: ratioLabels['21:9'] }),
+    ).toBeTruthy();
+    expect(
+      screen.getByRole('option', { name: ratioLabels['9:16'] }),
+    ).toBeTruthy();
   });
 });
