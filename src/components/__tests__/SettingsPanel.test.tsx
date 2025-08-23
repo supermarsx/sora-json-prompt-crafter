@@ -80,6 +80,8 @@ function renderPanel(overrides: Partial<React.ComponentProps<typeof SettingsPane
     onToggleTracking: jest.fn(),
     soraToolsEnabled: true,
     onToggleSoraTools: jest.fn(),
+    headerVisible: true,
+    onToggleHeaderVisible: jest.fn(),
     headerButtonsEnabled: true,
     onToggleHeaderButtons: jest.fn(),
     logoEnabled: true,

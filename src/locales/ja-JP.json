@@ -23,6 +23,8 @@
   "redo": "やり直す",
   "enableTracking": "トラッキングを有効化",
   "disableTracking": "トラッキングを無効化",
+  "showHeader": "ヘッダーを表示",
+  "hideHeader": "ヘッダーを非表示",
   "showHeaderButtons": "ヘッダーボタンを表示",
   "hideHeaderButtons": "ヘッダーボタンを非表示",
   "showLogo": "ロゴを表示",

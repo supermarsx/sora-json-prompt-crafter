@@ -66,6 +66,8 @@ interface SettingsPanelProps {
   onToggleTracking: () => void;
   soraToolsEnabled: boolean;
   onToggleSoraTools: () => void;
+  headerVisible: boolean;
+  onToggleHeaderVisible: () => void;
   headerButtonsEnabled: boolean;
   onToggleHeaderButtons: () => void;
   logoEnabled: boolean;
@@ -96,6 +98,8 @@ interface SettingsPanelProps {
  * @param onToggleTracking - Toggles analytics tracking.
  * @param soraToolsEnabled - Whether Sora tools are enabled.
  * @param onToggleSoraTools - Toggles Sora tools visibility.
+ * @param headerVisible - Whether the header is displayed.
+ * @param onToggleHeaderVisible - Toggles header visibility.
  * @param headerButtonsEnabled - Whether header buttons are shown.
  * @param onToggleHeaderButtons - Toggles header button visibility.
  * @param logoEnabled - Whether the logo is displayed.
@@ -116,6 +120,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   onToggleTracking,
   soraToolsEnabled,
   onToggleSoraTools,
+  headerVisible,
+  onToggleHeaderVisible,
   headerButtonsEnabled,
   onToggleHeaderButtons,
   logoEnabled,
@@ -424,6 +430,42 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       {soraToolsEnabled
                         ? 'Hide Sora Integration'
                         : 'Show Sora Integration'}
+                  </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
+                        onClick={() => {
+                          try {
+                            onToggleHeaderVisible();
+                            toast.success(
+                              !headerVisible ? t('showHeader') : t('hideHeader'),
+                            );
+                            trackEvent(
+                              trackingEnabled,
+                              AnalyticsEvent.ToggleHeaderVisibility,
+                              { enabled: !headerVisible },
+                            );
+                          } catch {
+                            toast.error('Failed to toggle header');
+                          }
+                        }}
+                      >
+                        {headerVisible ? (
+                          <>
+                            <EyeOff className="w-4 h-4" /> {t('hideHeader')}
+                          </>
+                        ) : (
+                          <>
+                            <Eye className="w-4 h-4" /> {t('showHeader')}
+                          </>
+                        )}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {headerVisible ? t('hideHeader') : t('showHeader')}
                     </TooltipContent>
                   </Tooltip>
                   <Tooltip>

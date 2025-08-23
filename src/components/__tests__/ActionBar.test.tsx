@@ -143,6 +143,8 @@ function createProps(
     soraToolsEnabled: true,
     onToggleSoraTools: jest.fn(),
     onToggleTracking: jest.fn(),
+    headerVisible: true,
+    onToggleHeaderVisible: jest.fn(),
     headerButtonsEnabled: true,
     onToggleHeaderButtons: jest.fn(),
     logoEnabled: true,

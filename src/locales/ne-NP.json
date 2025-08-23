@@ -23,6 +23,8 @@
   "redo": "पुनः गर्नुहोस्",
   "enableTracking": "ट्र्याकिङ सक्षम गर्नुहोस्",
   "disableTracking": "ट्र्याकिङ अक्षम गर्नुहोस्",
+  "showHeader": "हेडर देखाउनुहोस्",
+  "hideHeader": "हेडर लुकाउनुहोस्",
   "showHeaderButtons": "हेडर बटन देखाउनुहोस्",
   "hideHeaderButtons": "हेडर बटन लुकाउनुहोस्",
   "showLogo": "लोगो देखाउनुहोस्",

@@ -23,6 +23,8 @@
   "redo": "Tee uuesti",
   "enableTracking": "Luba jälgimine",
   "disableTracking": "Keela jälgimine",
+  "showHeader": "Näita päist",
+  "hideHeader": "Peida päis",
   "showHeaderButtons": "Näita päise nuppe",
   "hideHeaderButtons": "Peida päise nupud",
   "showLogo": "Näita logo",

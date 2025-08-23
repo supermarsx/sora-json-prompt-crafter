@@ -23,6 +23,8 @@
   "redo": "রিডু",
   "enableTracking": "ট্র্যাকিং সক্রিয় করুন",
   "disableTracking": "ট্র্যাকিং নিষ্ক্রিয় করুন",
+  "showHeader": "হেডার দেখান",
+  "hideHeader": "হেডার লুকান",
   "showHeaderButtons": "হেডার বোতাম দেখান",
   "hideHeaderButtons": "হেডার বোতাম লুকান",
   "showLogo": "লোগো দেখান",

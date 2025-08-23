@@ -23,6 +23,8 @@
   "redo": "Refă",
   "enableTracking": "Activează urmărire",
   "disableTracking": "Dezactivează urmărire",
+  "showHeader": "Arată antetul",
+  "hideHeader": "Ascunde antetul",
   "showHeaderButtons": "Arată butoane header",
   "hideHeaderButtons": "Ascunde butoane header",
   "showLogo": "Arată logo",

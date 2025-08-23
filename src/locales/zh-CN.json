@@ -23,6 +23,8 @@
   "redo": "重做",
   "enableTracking": "启用跟踪",
   "disableTracking": "禁用跟踪",
+  "showHeader": "显示页眉",
+  "hideHeader": "隐藏页眉",
   "showHeaderButtons": "显示标题按钮",
   "hideHeaderButtons": "隐藏标题按钮",
   "showLogo": "显示徽标",

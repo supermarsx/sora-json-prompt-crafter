@@ -23,6 +23,8 @@
   "redo": "Do 'er Again",
   "enableTracking": "Set Sails fer Trackin'",
   "disableTracking": "Drop Anchor on Trackin'",
+  "showHeader": "Raise the Masthead",
+  "hideHeader": "Lower the Masthead",
   "showHeaderButtons": "Show the Mast Buttons",
   "hideHeaderButtons": "Hide the Mast Buttons",
   "showLogo": "Show the Jolly Roger",

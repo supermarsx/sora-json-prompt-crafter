@@ -85,6 +85,8 @@ interface ActionBarProps {
   onToggleTracking: () => void;
   headerButtonsEnabled: boolean;
   onToggleHeaderButtons: () => void;
+  headerVisible: boolean;
+  onToggleHeaderVisible: () => void;
   logoEnabled: boolean;
   onToggleLogo: () => void;
   floatingJsonEnabled: boolean;
@@ -129,6 +131,8 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   onToggleTracking,
   headerButtonsEnabled,
   onToggleHeaderButtons,
+  headerVisible,
+  onToggleHeaderVisible,
   logoEnabled,
   onToggleLogo,
   floatingJsonEnabled,
@@ -718,6 +722,8 @@ const { toast: notify } = useToast();
         onToggleTracking={onToggleTracking}
         soraToolsEnabled={soraToolsEnabled}
         onToggleSoraTools={onToggleSoraTools}
+        headerVisible={headerVisible}
+        onToggleHeaderVisible={onToggleHeaderVisible}
         headerButtonsEnabled={headerButtonsEnabled}
         onToggleHeaderButtons={onToggleHeaderButtons}
         logoEnabled={logoEnabled}
