@@ -23,10 +23,18 @@ const queryClient = new QueryClient({
   },
 });
 
+/**
+ * Root component that wires global providers and boundaries for the app.
+ *
+ * - `QueryClientProvider` supplies React Query caching for server state.
+ * - `I18nextProvider` enables internationalization.
+ * - `BrowserRouter` handles client-side navigation (add custom routes above the catch-all `*` route).
+ * - `Suspense` and `ErrorBoundary` manage lazy-loading fallbacks and runtime errors.
+ */
 const App = () => {
-  useDarkMode();
-  useTotalTime();
-  const { checkForUpdate } = useUpdateCheck();
+  useDarkMode(); // Applies the persisted theme class to the document root
+  useTotalTime(); // Persists cumulative usage time and fires milestone toasts
+  const { checkForUpdate } = useUpdateCheck(); // Provides function that checks the service worker and flags updates
   useEffect(() => {
     checkForUpdate();
   }, [checkForUpdate]);
