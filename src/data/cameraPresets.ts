@@ -1,5 +1,10 @@
+/**
+ * Preset values for camera configuration UI components such as shot types,
+ * angles, lenses, and related settings.
+ */
 import { COMMON_OPTION_PREFIXES } from './commonOptions';
 
+/** Preset shot type options for the camera configuration UI. */
 export const shotTypeOptions = [
   ...COMMON_OPTION_PREFIXES,
   'establishing',
@@ -61,8 +66,11 @@ export const shotTypeOptions = [
   'objective',
   'isometric',
 ] as const;
+
+/** Type representing the available shot type options. */
 export type ShotTypeOption = (typeof shotTypeOptions)[number];
 
+/** Preset camera angle options for the camera configuration UI. */
 export const cameraAngleOptions = [
   ...COMMON_OPTION_PREFIXES,
   'eye-level',
@@ -102,8 +110,11 @@ export const cameraAngleOptions = [
   'diagonal',
   'tilted',
 ] as const;
+
+/** Type representing the available camera angle options. */
 export type CameraAngleOption = (typeof cameraAngleOptions)[number];
 
+/** Preset composition rules to guide framing. */
 export const compositionRulesOptions = [
   'rule of thirds',
   'golden ratio',
@@ -156,8 +167,11 @@ export const compositionRulesOptions = [
   "bird's eye perspective",
   "worm's eye perspective",
 ] as const;
+
+/** Type representing the available composition rule options. */
 export type CompositionRulesOption = (typeof compositionRulesOptions)[number];
 
+/** Preset camera body types available in the UI. */
 export const cameraTypeOptions = [
   'default (auto/any camera)',
   'not defined',
@@ -234,8 +248,11 @@ export const cameraTypeOptions = [
   'GoPro HERO12 Black (action camera)',
   'GoPro Max (360 action cam)',
 ] as const;
+
+/** Type representing the available camera body options. */
 export type CameraTypeOption = (typeof cameraTypeOptions)[number];
 
+/** Preset lens types to choose from in the UI. */
 export const lensTypeOptions = [
   ...COMMON_OPTION_PREFIXES,
   'standard 50mm',
@@ -272,8 +289,11 @@ export const lensTypeOptions = [
   'superzoom 18-200mm',
   'perspective control 24mm',
 ] as const;
+
+/** Type representing the available lens options. */
 export type LensTypeOption = (typeof lensTypeOptions)[number];
 
+/** Preset aperture values for depth of field control. */
 export const apertureOptions = [
   'default (auto aperture)',
   'not defined',
@@ -321,8 +341,11 @@ export const apertureOptions = [
   'f/57 (very rare, large format only)',
   'f/64 (famous Ansel Adams, Group f/64, maximum depth)',
 ] as const;
+
+/** Type representing the available aperture options. */
 export type ApertureOption = (typeof apertureOptions)[number];
 
+/** Preset blur styles for motion or focus effects. */
 export const blurStyleOptions = [
   'default',
   'no blur',
@@ -386,8 +409,11 @@ export const blurStyleOptions = [
   'glitter blur',
   'zoom burst blur',
 ] as const;
+
+/** Type representing the available blur style options. */
 export type BlurStyleOption = (typeof blurStyleOptions)[number];
 
+/** Preset depth of field options for focus control. */
 export const depthOfFieldOptions = [
   'default',
   'keep original',
@@ -416,8 +442,11 @@ export const depthOfFieldOptions = [
   'foreground in focus',
   'background in focus',
 ] as const;
+
+/** Type representing the available depth of field options. */
 export type DepthOfFieldOption = (typeof depthOfFieldOptions)[number];
 
+/** Preset positions for subject focus within the frame. */
 export const subjectFocusOptions = [
   'center',
   'left',
@@ -425,4 +454,6 @@ export const subjectFocusOptions = [
   'top',
   'bottom',
 ] as const;
+
+/** Type representing the available subject focus options. */
 export type SubjectFocusOption = (typeof subjectFocusOptions)[number];
