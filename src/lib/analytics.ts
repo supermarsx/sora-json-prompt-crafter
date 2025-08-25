@@ -151,6 +151,11 @@ export enum AnalyticsEvent {
   Time2Month = 'time_2m',
   Time4Month = 'time_4m',
   Time8Month = 'time_8m',
+
+  // ---------------------------------------------------------------------------
+  // Error events
+  // ---------------------------------------------------------------------------
+  RuntimeError = 'runtime_error',
 }
 
 let trackingFailures = 0;

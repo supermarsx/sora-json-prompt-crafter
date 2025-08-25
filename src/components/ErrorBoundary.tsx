@@ -8,6 +8,9 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from '@/components/ui/tooltip';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
+import { safeGet } from '@/lib/storage';
+import { TRACKING_ENABLED } from '@/lib/storage-keys';
 
 interface Props {
   children: ReactNode;
@@ -30,6 +33,11 @@ class ErrorBoundary extends Component<Props, State> {
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('Error caught by boundary:', error, errorInfo);
+    const trackingEnabled =
+      (safeGet<string>(TRACKING_ENABLED, 'true') as string) !== 'false';
+    trackEvent(trackingEnabled, AnalyticsEvent.RuntimeError, {
+      message: error.message,
+    });
   }
 
   private handleReset = () => {
