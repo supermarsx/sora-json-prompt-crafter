@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocale } from '@/hooks/use-locale';
 import { Button } from '@/components/ui/button';
@@ -157,6 +157,82 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   const { checkForUpdate, updateAvailable } = useUpdateCheck();
 const { toast: notify } = useToast();
 
+  const handleUndoAction = useCallback(() => {
+    onUndo();
+    trackEvent(trackingEnabled, AnalyticsEvent.UndoButton);
+    try {
+      const count = (safeGet<number>(UNDO_COUNT, 0, true) as number) ?? 0;
+      const newCount = count + 1;
+      safeSet(UNDO_COUNT, newCount, true);
+      const milestones =
+        (safeGet<number[]>(UNDO_MILESTONES, [], true) as number[]) ?? [];
+      for (const [threshold, event] of UNDO_MILESTONE_EVENTS) {
+        if (newCount >= threshold && !milestones.includes(threshold)) {
+          trackEvent(trackingEnabled, event);
+          toast.success(t('milestoneReached', { threshold }));
+          milestones.push(threshold);
+        }
+      }
+      safeSet(UNDO_MILESTONES, milestones, true);
+    } catch {
+      console.error('Undo counter: There was an error.');
+    }
+  }, [onUndo, trackingEnabled, t]);
+
+  const handleRedoAction = useCallback(() => {
+    onRedo();
+    trackEvent(trackingEnabled, AnalyticsEvent.RedoButton);
+    try {
+      const count = (safeGet<number>(REDO_COUNT, 0, true) as number) ?? 0;
+      const newCount = count + 1;
+      safeSet(REDO_COUNT, newCount, true);
+      const milestones =
+        (safeGet<number[]>(REDO_MILESTONES, [], true) as number[]) ?? [];
+      for (const [threshold, event] of REDO_MILESTONE_EVENTS) {
+        if (newCount >= threshold && !milestones.includes(threshold)) {
+          trackEvent(trackingEnabled, event);
+          toast.success(t('milestoneReached', { threshold }));
+          milestones.push(threshold);
+        }
+      }
+      safeSet(REDO_MILESTONES, milestones, true);
+    } catch {
+      console.error('Redo counter: There was an error.');
+    }
+  }, [onRedo, trackingEnabled, t]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === 'INPUT' ||
+          target.tagName === 'TEXTAREA' ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+
+      if (e.ctrlKey) {
+        const key = e.key.toLowerCase();
+        if (key === 'z') {
+          if (e.shiftKey) {
+            handleRedoAction();
+          } else {
+            handleUndoAction();
+          }
+          e.preventDefault();
+        } else if (key === 'y') {
+          handleRedoAction();
+          e.preventDefault();
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleUndoAction, handleRedoAction]);
+
   useEffect(() => {
     checkForUpdate();
   }, [checkForUpdate]);
@@ -238,27 +314,7 @@ const { toast: notify } = useToast();
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
-            onClick={() => {
-              onUndo();
-              trackEvent(trackingEnabled, AnalyticsEvent.UndoButton);
-              try {
-                const count = (safeGet<number>(UNDO_COUNT, 0, true) as number) ?? 0;
-                const newCount = count + 1;
-                safeSet(UNDO_COUNT, newCount, true);
-                const milestones =
-                  (safeGet<number[]>(UNDO_MILESTONES, [], true) as number[]) ?? [];
-                for (const [threshold, event] of UNDO_MILESTONE_EVENTS) {
-                  if (newCount >= threshold && !milestones.includes(threshold)) {
-                    trackEvent(trackingEnabled, event);
-                    toast.success(t('milestoneReached', { threshold }));
-                    milestones.push(threshold);
-                  }
-                }
-                safeSet(UNDO_MILESTONES, milestones, true);
-              } catch {
-                console.error('Undo counter: There was an error.');
-              }
-            }}
+            onClick={handleUndoAction}
             variant="outline"
             size="sm"
             disabled={!canUndo}
@@ -273,27 +329,7 @@ const { toast: notify } = useToast();
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
-            onClick={() => {
-              onRedo();
-              trackEvent(trackingEnabled, AnalyticsEvent.RedoButton);
-              try {
-                const count = (safeGet<number>(REDO_COUNT, 0, true) as number) ?? 0;
-                const newCount = count + 1;
-                safeSet(REDO_COUNT, newCount, true);
-                const milestones =
-                  (safeGet<number[]>(REDO_MILESTONES, [], true) as number[]) ?? [];
-                for (const [threshold, event] of REDO_MILESTONE_EVENTS) {
-                  if (newCount >= threshold && !milestones.includes(threshold)) {
-                    trackEvent(trackingEnabled, event);
-                    toast.success(t('milestoneReached', { threshold }));
-                    milestones.push(threshold);
-                  }
-                }
-                safeSet(REDO_MILESTONES, milestones, true);
-              } catch {
-                console.error('Redo counter: There was an error.');
-              }
-            }}
+            onClick={handleRedoAction}
             variant="outline"
             size="sm"
             disabled={!canRedo}
