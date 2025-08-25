@@ -235,6 +235,17 @@ describe('HistoryPanel basic actions', () => {
       screen.queryByRole('button', { name: /export data/i }),
     ).toBeNull();
   });
+
+  test('filters history based on search input', () => {
+    renderPanel();
+    expect(screen.getByText('p2')).toBeTruthy();
+
+    const input = screen.getByPlaceholderText(/search/i);
+    fireEvent.change(input, { target: { value: 'p1' } });
+
+    expect(screen.queryByText('p2')).toBeNull();
+    expect(screen.getByText('p1')).toBeTruthy();
+  });
 });
 
 describe('HistoryPanel action history', () => {
