@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import HistoryItem from '@/components/history/HistoryItem';
 import { FixedSizeList as List } from 'react-window';
+import { Input } from '@/components/ui/input';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -109,8 +110,12 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
   const [confirmDeleteActionIdx, setConfirmDeleteActionIdx] = useState<
     number | null
   >(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const noHistory = history.length === 0;
   const noActions = actionHistory.length === 0;
+  const filteredHistory = history.filter((entry) =>
+    entry.json.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
 
   useEffect(() => {
     if (open) {
@@ -376,43 +381,52 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                   >
                     {t('clearHistory')}
                   </Button>
-                </TooltipTrigger>
-                <TooltipContent>{t('clearHistory')}</TooltipContent>
-              </Tooltip>
-              </div>
-              <div className="h-[60vh]">
-                {history.length > 0 ? (
-                  <List
-                    height={Math.round(window.innerHeight * 0.6)}
-                    itemCount={history.length}
-                    itemSize={130}
-                    width="100%"
-                    className="pb-2"
-                    outerElementType={HistoryListOuter}
-                  >
-                    {({ index, style }) => (
-                      <div style={{ ...style, paddingBottom: 16 }}>
-                        <HistoryItem
-                          entry={history[index]}
-                          onEdit={onEdit}
-                          onCopy={onCopy}
-                          onDelete={(id) => {
-                            onDelete(id);
-                            toast.success(t('entryDeleted'));
-                          }}
-                          onPreview={setPreview}
-                          trackingEnabled={trackingEnabled}
-                        />
-                      </div>
-                    )}
-                  </List>
-                ) : (
-                  <p className="text-center text-sm text-muted-foreground">
-                    {t('historyEmptyPrompts')}
-                  </p>
-                )}
-              </div>
-            </TabsContent>
+              </TooltipTrigger>
+              <TooltipContent>{t('clearHistory')}</TooltipContent>
+            </Tooltip>
+            </div>
+            <div className="mb-2">
+              <Input
+                placeholder={t('searchHistoryPlaceholder', {
+                  defaultValue: 'Search history...'
+                })}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <div className="h-[60vh]">
+              {filteredHistory.length > 0 ? (
+                <List
+                  height={Math.round(window.innerHeight * 0.6)}
+                  itemCount={filteredHistory.length}
+                  itemSize={130}
+                  width="100%"
+                  className="pb-2"
+                  outerElementType={HistoryListOuter}
+                >
+                  {({ index, style }) => (
+                    <div style={{ ...style, paddingBottom: 16 }}>
+                      <HistoryItem
+                        entry={filteredHistory[index]}
+                        onEdit={onEdit}
+                        onCopy={onCopy}
+                        onDelete={(id) => {
+                          onDelete(id);
+                          toast.success(t('entryDeleted'));
+                        }}
+                        onPreview={setPreview}
+                        trackingEnabled={trackingEnabled}
+                      />
+                    </div>
+                  )}
+                </List>
+              ) : (
+                <p className="text-center text-sm text-muted-foreground">
+                  {t('historyEmptyPrompts')}
+                </p>
+              )}
+            </div>
+          </TabsContent>
             <TabsContent value="actions">
               <div className="flex justify-between items-center mb-2">
                 <p className="text-sm text-muted-foreground">
