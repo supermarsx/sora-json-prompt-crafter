@@ -28,6 +28,14 @@ function parseArgs(argv: string[]): Record<string, string | boolean> {
       }
       continue;
     }
+    if (arg === '--url') {
+      const next = argv[i + 1];
+      if (next && !next.startsWith('--')) {
+        args.url = next;
+        i++;
+      }
+      continue;
+    }
     if (arg.startsWith('--')) {
       const key = arg.slice(2);
       const next = argv[i + 1];
@@ -54,7 +62,8 @@ function buildOptionsFromFlags(
   const updates: Partial<SoraOptions> = {};
 
   Object.entries(values).forEach(([key, value]) => {
-    if (key === 'file' || key === 'output' || key === 'minify') return;
+    if (key === 'file' || key === 'output' || key === 'minify' || key === 'url')
+      return;
     const typedKey = key as keyof SoraOptions;
     const defaultVal = DEFAULT_OPTIONS[typedKey];
     if (defaultVal === undefined) return;
@@ -90,7 +99,10 @@ function buildOptionsFromFlags(
  * @param stdinInput - Optional JSON string supplied via stdin (used in tests).
  * @returns Generated JSON string of active Sora options.
  */
-export function runCli(argv: string[], stdinInput?: string): string {
+export async function runCli(
+  argv: string[],
+  stdinInput?: string,
+): Promise<string> {
   const args = parseArgs(argv);
 
   if (args.help) {
@@ -113,6 +125,7 @@ export function runCli(argv: string[], stdinInput?: string): string {
     'file',
     'output',
     'minify',
+    'url',
     ...Object.keys(DEFAULT_OPTIONS),
   ]);
 
@@ -123,7 +136,15 @@ export function runCli(argv: string[], stdinInput?: string): string {
 
   let options: SoraOptions | null = null;
 
-  if (typeof args.file === 'string') {
+  if (typeof args.url === 'string') {
+    try {
+      const res = await fetch(args.url);
+      const json = await res.text();
+      options = loadOptionsFromJson(json);
+    } catch {
+      options = null;
+    }
+  } else if (typeof args.file === 'string') {
     try {
       const json = readFileSync(args.file, 'utf8');
       options = loadOptionsFromJson(json);
@@ -156,5 +177,7 @@ export function runCli(argv: string[], stdinInput?: string): string {
 }
 
 if (process.argv[1]?.includes('cli/index')) {
-  process.stdout.write(runCli(process.argv.slice(2)));
+  runCli(process.argv.slice(2)).then((result) => {
+    process.stdout.write(result);
+  });
 }
