@@ -3,63 +3,36 @@ import { MEASUREMENT_ID, GTAG_DEBUG } from './config';
 import { TRACKING_HISTORY } from './storage-keys';
 
 /**
- * Analytics events that can be emitted by the application.
+ * Central registry of analytics events emitted throughout the app.
+ *
+ * Events are grouped by feature area to clarify where they originate:
+ * - **Sharing** – emitted from `ShareModal` and share utilities.
+ * - **History & data** – from `HistoryPanel` and import/export modals.
+ * - **Settings & preferences** – toggles in `SettingsPanel` and the action bar.
+ * - **General actions** – common interactions across the dashboard.
+ * - **Usage milestones** – counters and performance metrics.
  */
 export enum AnalyticsEvent {
+  // ---------------------------------------------------------------------------
+  // Sharing events (ShareModal and sharing utilities)
+  // ---------------------------------------------------------------------------
   ShareFacebook = 'share_facebook',
   ShareTwitter = 'share_twitter',
   ShareWhatsapp = 'share_whatsapp',
   ShareTelegram = 'share_telegram',
   ShareNative = 'share_native',
   CopyLink = 'copy_link',
+  ShareButton = 'share_button',
+  SendToSora = 'send_to_sora',
+
+  // ---------------------------------------------------------------------------
+  // History and data management (HistoryPanel, Import/Export modals)
+  // ---------------------------------------------------------------------------
   HistoryEdit = 'history_edit',
   HistoryCopy = 'history_copy',
   HistoryPreview = 'history_preview',
   HistoryDeleteConfirm = 'history_delete_confirm',
-  SettingsOpen = 'settings_open',
-  ToggleHeaderButtons = 'toggle_header_buttons',
-  ToggleHeaderVisibility = 'toggle_header_visibility',
-  ToggleLogo = 'toggle_logo',
-  ToggleActionLabels = 'toggle_action_labels',
-  ToggleCoreActionLabels = 'toggle_core_action_labels',
-  ToggleFloatingJson = 'toggle_floating_json',
-  ToggleDarkModeButton = 'toggle_dark_mode_button',
-  PurgeCache = 'purge_cache',
-  DisableTrackingConfirm = 'disable_tracking_confirm',
-  ToggleTracking = 'toggle_tracking',
-  EnableTrackingConfirm = 'enable_tracking_confirm',
-  ScrollBottom = 'scroll_bottom',
-  Stay3Min = 'stay_3min',
-  Stay5Min = 'stay_5min',
-  Stay10Min = 'stay_10min',
-  Stay30Min = 'stay_30min',
-  Stay60Min = 'stay_60min',
-  CopyJson = 'copy_json',
-  ClearJson = 'clear_json',
-  ShareButton = 'share_button',
-  SendToSora = 'send_to_sora',
-  ImportButton = 'import_button',
-  ResetButton = 'reset_button',
-  RegenerateButton = 'regenerate_button',
-  RandomizeButton = 'randomize_button',
-  UndoButton = 'undo_button',
-  RedoButton = 'redo_button',
-  OptionsChange = 'options_change',
-  InputChange = 'input_change',
-  SelectedJsonPrompt = 'selected_json_prompt',
   HistoryImport = 'history_import',
-  ClickSponsor = 'click_sponsor',
-  SeeGithub = 'see_github',
-  StarGithub = 'star_github',
-  ForkGithub = 'fork_github',
-  OpenIssues = 'open_issues',
-  ViewOnLovable = 'view_on_lovable',
-  InstallUserscript = 'install_userscript',
-  UpdateUserscript = 'update_userscript',
-  OpenDisclaimer = 'open_disclaimer',
-  DarkModeToggle = 'dark_mode_toggle',
-  PromptResize = 'prompt_resize',
-  NegativePromptResize = 'negative_prompt_resize',
   HistoryOpen = 'history_open',
   HistoryViewPrompts = 'history_view_prompts',
   HistoryViewActions = 'history_view_actions',
@@ -72,8 +45,61 @@ export enum AnalyticsEvent {
   HistoryClearClick = 'history_clear_click',
   HistoryClearConfirm = 'history_clear_confirm',
   RestoreActions = 'restore_actions',
-  JumpToJson = 'jump_to_json',
+
+  // ---------------------------------------------------------------------------
+  // Settings and UI preferences (SettingsPanel, ActionBar toggles)
+  // ---------------------------------------------------------------------------
+  SettingsOpen = 'settings_open',
+  ToggleHeaderButtons = 'toggle_header_buttons',
+  ToggleHeaderVisibility = 'toggle_header_visibility',
+  ToggleLogo = 'toggle_logo',
+  ToggleActionLabels = 'toggle_action_labels',
+  ToggleCoreActionLabels = 'toggle_core_action_labels',
+  ToggleFloatingJson = 'toggle_floating_json',
+  ToggleDarkModeButton = 'toggle_dark_mode_button',
+  PurgeCache = 'purge_cache',
+  DisableTrackingConfirm = 'disable_tracking_confirm',
+  ToggleTracking = 'toggle_tracking',
+  EnableTrackingConfirm = 'enable_tracking_confirm',
+  DarkModeToggle = 'dark_mode_toggle',
+  PromptResize = 'prompt_resize',
+  NegativePromptResize = 'negative_prompt_resize',
   MinimizeActions = 'minimize_actions',
+  JumpToJson = 'jump_to_json',
+
+  // ---------------------------------------------------------------------------
+  // General user actions (Dashboard and common components)
+  // ---------------------------------------------------------------------------
+  ScrollBottom = 'scroll_bottom',
+  CopyJson = 'copy_json',
+  ClearJson = 'clear_json',
+  ImportButton = 'import_button',
+  ResetButton = 'reset_button',
+  RegenerateButton = 'regenerate_button',
+  RandomizeButton = 'randomize_button',
+  UndoButton = 'undo_button',
+  RedoButton = 'redo_button',
+  OptionsChange = 'options_change',
+  InputChange = 'input_change',
+  SelectedJsonPrompt = 'selected_json_prompt',
+  ClickSponsor = 'click_sponsor',
+  SeeGithub = 'see_github',
+  StarGithub = 'star_github',
+  ForkGithub = 'fork_github',
+  OpenIssues = 'open_issues',
+  ViewOnLovable = 'view_on_lovable',
+  InstallUserscript = 'install_userscript',
+  UpdateUserscript = 'update_userscript',
+  OpenDisclaimer = 'open_disclaimer',
+
+  // ---------------------------------------------------------------------------
+  // Usage milestones and counters
+  // ---------------------------------------------------------------------------
+  Stay3Min = 'stay_3min',
+  Stay5Min = 'stay_5min',
+  Stay10Min = 'stay_10min',
+  Stay30Min = 'stay_30min',
+  Stay60Min = 'stay_60min',
   JsonChanged = 'json_changed',
   JsonChanged250 = 'json_changed_250',
   JsonChanged1500 = 'json_changed_1500',
