@@ -2,6 +2,12 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import ErrorBoundary from '../ErrorBoundary';
 import i18n from '@/i18n';
 import { jest } from '@jest/globals';
+import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
+
+jest.mock('@/lib/analytics', () => {
+  const actual = jest.requireActual('@/lib/analytics');
+  return { __esModule: true, ...actual, trackEvent: jest.fn() };
+});
 
 function ProblemChild({ shouldThrow }: { shouldThrow: boolean }) {
   if (shouldThrow) {
@@ -15,6 +21,7 @@ describe('ErrorBoundary', () => {
 
   beforeEach(() => {
     errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    (trackEvent as jest.Mock).mockClear();
   });
 
   afterEach(() => {
@@ -28,6 +35,11 @@ describe('ErrorBoundary', () => {
     );
 
     expect(screen.getByText(i18n.t('somethingWentWrong'))).toBeTruthy();
+    expect(trackEvent).toHaveBeenCalledWith(
+      true,
+      AnalyticsEvent.RuntimeError,
+      { message: 'boom' },
+    );
 
     rerender(
       <ErrorBoundary>
