@@ -62,6 +62,7 @@ import {
   JSON_COPY_COUNT,
   JSON_COPY_MILESTONES,
 } from '@/lib/storage-keys';
+import { useOnlineStatus } from '@/hooks/use-online-status';
 
 const COPY_MILESTONES: [number, AnalyticsEvent][] = [
   [10, AnalyticsEvent.CopyJson10],
@@ -84,6 +85,8 @@ const COPY_MILESTONES: [number, AnalyticsEvent][] = [
 const Dashboard = () => {
   const { t } = useTranslation();
   useLocale();
+  const isOnline = useOnlineStatus();
+  const [offlineDismissed, setOfflineDismissed] = useState(false);
   /**
    * Initialize Sora options from the URL or local storage.
    * Falls back to default options if no saved state is found or parsing fails.
@@ -510,6 +513,20 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
+      {!isOnline && !offlineDismissed && (
+        <div className="bg-yellow-500 text-black p-2 text-center">
+          <div className="flex items-center justify-between max-w-2xl mx-auto">
+            <span>{t('offlineNotice', { defaultValue: 'You are offline' })}</span>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setOfflineDismissed(true)}
+            >
+              {t('dismiss', { defaultValue: 'Dismiss' })}
+            </Button>
+          </div>
+        </div>
+      )}
       <div className="container mx-auto p-6 flex flex-col flex-1">
         {headerVisible && (
           <div className="mb-8 flex items-start justify-between">

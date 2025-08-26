@@ -452,3 +452,44 @@ describe('userscript version', () => {
     expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.UpdateUserscript);
   });
 });
+
+describe('offline banner', () => {
+  const setOnline = (value: boolean) => {
+    Object.defineProperty(window.navigator, 'onLine', {
+      configurable: true,
+      value,
+    });
+  };
+
+  beforeEach(() => {
+    localStorage.clear();
+    window.matchMedia = jest.fn().mockReturnValue({
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+    }) as unknown as typeof window.matchMedia;
+  });
+
+  test('toggles visibility based on navigator.onLine', async () => {
+    setOnline(false);
+    render(<Dashboard />);
+    expect(screen.getByText(/offline/i)).toBeTruthy();
+
+    act(() => {
+      setOnline(true);
+      window.dispatchEvent(new Event('online'));
+    });
+
+    await waitFor(() => {
+      expect(screen.queryByText(/offline/i)).toBeNull();
+    });
+
+    act(() => {
+      setOnline(false);
+      window.dispatchEvent(new Event('offline'));
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(/offline/i)).toBeTruthy();
+    });
+  });
+});
