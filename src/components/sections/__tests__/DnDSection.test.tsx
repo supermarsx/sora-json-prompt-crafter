@@ -152,4 +152,29 @@ describe('DnDSection', () => {
     fireEvent.click(screen.getByRole('button', { name: /amulet/i }));
     expect(updateOptions).toHaveBeenCalledWith({ dnd_item_type: 'amulet' });
   });
+
+  test('SearchableDropdown displays translated option labels', () => {
+    const options = {
+      ...DEFAULT_OPTIONS,
+      use_dnd_section: true,
+      use_dnd_monster_type: true,
+      dnd_monster_type: 'mind flayer',
+    } as const;
+
+    render(
+      <DnDSection
+        options={options}
+        updateOptions={() => {}}
+        isEnabled={true}
+        onToggle={() => {}}
+      />,
+    );
+
+    const monsterSection = screen.getByText(i18n.t('monsterType'))
+      .parentElement as HTMLElement;
+    const monsterButton = within(monsterSection).getByRole('button');
+    expect(monsterButton.textContent).toBe(
+      i18n.t('dndOptions.monsterType.mind_flayer'),
+    );
+  });
 });
