@@ -14,6 +14,16 @@ import {
   makeupStyleOptions,
   characterMoodOptions,
 } from './faceOptions';
+import {
+  characterRaceOptions,
+  characterClassOptions,
+  characterBackgroundOptions,
+  characterAlignmentOptions,
+  monsterTypeOptions,
+  dndEnvironmentOptions,
+  magicSchoolOptions,
+  itemTypeOptions,
+} from './dndPresets';
 
 const slugify = (str: string) =>
   str
@@ -60,4 +70,36 @@ export const faceOptionTranslations = {
     characterMoodOptions,
     'faceOptions.characterMood',
   ),
+};
+
+export const dndOptionTranslations = {
+  characterRace: createMapping(
+    characterRaceOptions,
+    'dndOptions.characterRace',
+  ),
+  characterClass: createMapping(
+    characterClassOptions,
+    'dndOptions.characterClass',
+  ),
+  characterBackground: createMapping(
+    characterBackgroundOptions,
+    'dndOptions.characterBackground',
+  ),
+  characterAlignment: createMapping(
+    characterAlignmentOptions,
+    'dndOptions.characterAlignment',
+  ),
+  monsterType: createMapping(
+    monsterTypeOptions,
+    'dndOptions.monsterType',
+  ),
+  environment: createMapping(
+    dndEnvironmentOptions,
+    'dndOptions.environment',
+  ),
+  magicSchool: createMapping(
+    magicSchoolOptions,
+    'dndOptions.magicSchool',
+  ),
+  itemType: createMapping(itemTypeOptions, 'dndOptions.itemType'),
 };

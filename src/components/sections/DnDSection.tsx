@@ -15,6 +15,8 @@ import {
   magicSchoolOptions,
   itemTypeOptions,
 } from '@/data/dndPresets';
+import { dndOptionTranslations } from '@/data/optionTranslations';
+import { getOptionLabel as translateOption } from '@/lib/optionTranslator';
 
 interface DnDSectionProps {
   options: SoraOptions;
@@ -65,6 +67,9 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
                 updateOptions({ dnd_character_race: value })
               }
               label="Character Race Options"
+              getOptionLabel={(opt) =>
+                translateOption(opt, dndOptionTranslations.characterRace, t)
+              }
             />
           </div>
         </ToggleField>
@@ -86,6 +91,9 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
                 updateOptions({ dnd_character_class: value })
               }
               label="Character Class Options"
+              getOptionLabel={(opt) =>
+                translateOption(opt, dndOptionTranslations.characterClass, t)
+              }
             />
           </div>
         </ToggleField>
@@ -107,6 +115,13 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
                 updateOptions({ dnd_character_background: value })
               }
               label="Character Background Options"
+              getOptionLabel={(opt) =>
+                translateOption(
+                  opt,
+                  dndOptionTranslations.characterBackground,
+                  t,
+                )
+              }
             />
           </div>
         </ToggleField>
@@ -128,6 +143,13 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
                 updateOptions({ dnd_character_alignment: value })
               }
               label="Character Alignment Options"
+              getOptionLabel={(opt) =>
+                translateOption(
+                  opt,
+                  dndOptionTranslations.characterAlignment,
+                  t,
+                )
+              }
             />
           </div>
         </ToggleField>
@@ -149,6 +171,9 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
                 updateOptions({ dnd_monster_type: value })
               }
               label="Monster Type Options"
+              getOptionLabel={(opt) =>
+                translateOption(opt, dndOptionTranslations.monsterType, t)
+              }
             />
           </div>
         </ToggleField>
@@ -170,6 +195,9 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
                 updateOptions({ dnd_environment: value })
               }
               label="D&D Environment Options"
+              getOptionLabel={(opt) =>
+                translateOption(opt, dndOptionTranslations.environment, t)
+              }
             />
           </div>
         </ToggleField>
@@ -191,6 +219,9 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
                 updateOptions({ dnd_magic_school: value })
               }
               label="Magic School Options"
+              getOptionLabel={(opt) =>
+                translateOption(opt, dndOptionTranslations.magicSchool, t)
+              }
             />
           </div>
         </ToggleField>
@@ -210,6 +241,9 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
               value={options.dnd_item_type || 'magic sword'}
               onValueChange={(value) => updateOptions({ dnd_item_type: value })}
               label="Item Type Options"
+              getOptionLabel={(opt) =>
+                translateOption(opt, dndOptionTranslations.itemType, t)
+              }
             />
           </div>
         </ToggleField>
