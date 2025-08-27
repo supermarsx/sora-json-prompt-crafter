@@ -81,6 +81,7 @@ const sampleHistory = Array.from({ length: 20 }, (_, i) => ({
   id: i + 1,
   date: 'd',
   json: `{"prompt":"p${i}"}`,
+  favorite: i % 2 === 0,
 }));
 const sampleActions = [{ date: 'd', action: 'a' }];
 
@@ -97,6 +98,7 @@ function renderPanel(
     onCopy: jest.fn(),
     onEdit: jest.fn(),
     onImport: jest.fn(),
+    onToggleFavorite: jest.fn(),
   };
   return render(
     <TooltipProvider>
@@ -244,6 +246,22 @@ describe('HistoryPanel basic actions', () => {
     fireEvent.change(input, { target: { value: 'p1' } });
 
     expect(screen.queryByText('p2')).toBeNull();
+    expect(screen.getByText('p1')).toBeTruthy();
+  });
+
+  test('toggles favorites and filters favorites', () => {
+    const onToggleFavorite = jest.fn();
+    renderPanel({ onToggleFavorite });
+
+    const starBtn = screen.getAllByRole('button', { name: /unfavorite/i })[0];
+    fireEvent.click(starBtn);
+    expect(onToggleFavorite).toHaveBeenCalledWith(1);
+
+    const filterBtn = screen.getByLabelText(/favorites filter/i);
+    fireEvent.click(filterBtn);
+    expect(screen.queryByText('p1')).toBeNull();
+    expect(screen.getByText('p0')).toBeTruthy();
+    fireEvent.click(filterBtn);
     expect(screen.getByText('p1')).toBeTruthy();
   });
 });

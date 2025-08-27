@@ -78,6 +78,7 @@ function createEntries(n: number) {
     id: i,
     date: 'd',
     json: '{}',
+    favorite: false,
   }));
 }
 

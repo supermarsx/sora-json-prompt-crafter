@@ -131,7 +131,10 @@ const Dashboard = () => {
   const [showDisclaimer, setShowDisclaimer] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [history, setHistory] = useState<HistoryEntry[]>(() =>
-    safeGet<HistoryEntry[]>(JSON_HISTORY, [], true),
+    (safeGet<HistoryEntry[]>(JSON_HISTORY, [], true) ?? []).map((e) => ({
+      favorite: false,
+      ...e,
+    })),
   );
   const isSingleColumn = useIsSingleColumn();
   const [darkMode, setDarkMode] = useDarkMode();
@@ -198,6 +201,7 @@ const Dashboard = () => {
         id: Date.now(),
         date: new Date().toLocaleString(),
         json: jsonString,
+        favorite: false,
       };
       setHistory((prev) => [entry, ...prev].slice(0, 100));
       const opts = options as unknown as Record<string, unknown>;
@@ -497,9 +501,21 @@ const Dashboard = () => {
       id: Date.now() + Math.random(),
       date: new Date().toLocaleString(),
       json: j,
+      favorite: false,
     }));
     setHistory((prev) => [...entries, ...prev].slice(0, 100));
     trackEvent(trackingEnabled, AnalyticsEvent.HistoryImport, { type: 'bulk' });
+  };
+
+  /**
+   * Toggle favorite state for a history entry by id.
+   *
+   * @param {number} id - Entry identifier.
+   */
+  const toggleFavorite = (id: number) => {
+    setHistory((prev) =>
+      prev.map((e) => (e.id === id ? { ...e, favorite: !e.favorite } : e)),
+    );
   };
 
   /**
@@ -865,6 +881,7 @@ const Dashboard = () => {
         onCopy={copyHistoryEntry}
         onEdit={editHistoryEntry}
         onImport={importHistoryEntries}
+        onToggleFavorite={toggleFavorite}
       />
       <ImportModal
         isOpen={showImportModal}
