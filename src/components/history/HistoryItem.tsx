@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Clipboard, Trash2, Edit, Eye, Check } from 'lucide-react';
+import { Clipboard, Trash2, Edit, Eye, Check, Star } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import type { HistoryEntry } from '../HistoryPanel';
@@ -17,6 +17,7 @@ interface HistoryItemProps {
   onDelete: (id: number) => void;
   onPreview: (entry: HistoryEntry) => void;
   trackingEnabled: boolean;
+  onToggleFavorite: (id: number) => void;
 }
 
 const HistoryItem: React.FC<HistoryItemProps> = ({
@@ -26,6 +27,7 @@ const HistoryItem: React.FC<HistoryItemProps> = ({
   onDelete,
   onPreview,
   trackingEnabled,
+  onToggleFavorite,
 }) => {
   const { t } = useTranslation();
   const [edited, setEdited] = useState(false);
@@ -103,6 +105,30 @@ const HistoryItem: React.FC<HistoryItemProps> = ({
             </Button>
           </TooltipTrigger>
           <TooltipContent>{t('preview')}</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              size="sm"
+              variant={entry.favorite ? 'default' : 'outline'}
+              onClick={() => onToggleFavorite(entry.id)}
+              className="gap-1"
+              aria-label={entry.favorite
+                ? t('unfavorite', { defaultValue: 'Unfavorite' })
+                : t('favorite', { defaultValue: 'Favorite' })}
+            >
+              <Star
+                className={`w-4 h-4 ${
+                  entry.favorite ? 'fill-current text-yellow-500' : ''
+                }`}
+              />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            {entry.favorite
+              ? t('unfavorite', { defaultValue: 'Unfavorite' })
+              : t('favorite', { defaultValue: 'Favorite' })}
+          </TooltipContent>
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>

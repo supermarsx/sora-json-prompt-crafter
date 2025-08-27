@@ -27,6 +27,7 @@ import {
   Import as ImportIcon,
   Download,
   Check,
+  Star,
 } from 'lucide-react';
 import {
   Tooltip,
@@ -56,6 +57,7 @@ export interface HistoryEntry {
   id: number;
   date: string;
   json: string;
+  favorite: boolean;
 }
 
 interface HistoryPanelProps {
@@ -68,6 +70,7 @@ interface HistoryPanelProps {
   onCopy: (json: string) => void;
   onEdit: (json: string) => void;
   onImport: (jsons: string[]) => void;
+  onToggleFavorite: (id: number) => void;
 }
 
 /**
@@ -97,6 +100,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
   onCopy,
   onEdit,
   onImport,
+  onToggleFavorite,
 }) => {
   const { t } = useTranslation();
   const [preview, setPreview] = useState<HistoryEntry | null>(null);
@@ -111,11 +115,14 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
     number | null
   >(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [favoritesOnly, setFavoritesOnly] = useState(false);
   const noHistory = history.length === 0;
   const noActions = actionHistory.length === 0;
-  const filteredHistory = history.filter((entry) =>
-    entry.json.toLowerCase().includes(searchTerm.toLowerCase()),
-  );
+  const filteredHistory = history
+    .filter((entry) =>
+      entry.json.toLowerCase().includes(searchTerm.toLowerCase()),
+    )
+    .filter((entry) => (!favoritesOnly ? true : entry.favorite));
 
   useEffect(() => {
     if (open) {
@@ -385,7 +392,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
               <TooltipContent>{t('clearHistory')}</TooltipContent>
             </Tooltip>
             </div>
-            <div className="mb-2">
+            <div className="mb-2 flex items-center gap-2">
               <Input
                 placeholder={t('searchHistoryPlaceholder', {
                   defaultValue: 'Search history...'
@@ -393,6 +400,29 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    size="icon"
+                    variant={favoritesOnly ? 'default' : 'outline'}
+                    onClick={() => setFavoritesOnly((prev) => !prev)}
+                    aria-label={t('favoritesFilter', {
+                      defaultValue: 'Favorites filter'
+                    })}
+                  >
+                    <Star
+                      className={`w-4 h-4 ${favoritesOnly ? 'fill-current' : ''}`}
+                    />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {favoritesOnly
+                    ? t('showAll', { defaultValue: 'Show all' })
+                    : t('showFavoritesOnly', {
+                        defaultValue: 'Show favorites only'
+                      })}
+                </TooltipContent>
+              </Tooltip>
             </div>
             <div className="h-[60vh]">
               {filteredHistory.length > 0 ? (
@@ -416,6 +446,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                         }}
                         onPreview={setPreview}
                         trackingEnabled={trackingEnabled}
+                        onToggleFavorite={onToggleFavorite}
                       />
                     </div>
                   )}
