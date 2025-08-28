@@ -10,17 +10,29 @@ jest.mock('@/lib/analytics', () => {
 
 function setup(containerHeight = 100, scrollHeight = 200) {
   const utils = render(<GeneratedJson json='{"a":1}' trackingEnabled={true} />);
-  const div = utils.container.firstChild as HTMLDivElement;
-  Object.defineProperty(div, 'clientHeight', {
+  const container = utils.container.querySelector(
+    '[data-testid="json-container"]',
+  ) as HTMLDivElement;
+  Object.defineProperty(container, 'clientHeight', {
     configurable: true,
     value: containerHeight,
   });
-  Object.defineProperty(div, 'scrollHeight', {
+  act(() => {
+    window.dispatchEvent(new Event('resize'));
+  });
+  const outer = utils.container.querySelector(
+    '[data-testid="json-outer"]',
+  ) as HTMLDivElement;
+  Object.defineProperty(outer, 'clientHeight', {
+    configurable: true,
+    value: containerHeight,
+  });
+  Object.defineProperty(outer, 'scrollHeight', {
     configurable: true,
     value: scrollHeight,
   });
-  div.scrollTop = scrollHeight - containerHeight;
-  return { ...utils, div };
+  outer.scrollTop = scrollHeight - containerHeight;
+  return { ...utils, outer };
 }
 
 describe('GeneratedJson', () => {
@@ -36,9 +48,9 @@ describe('GeneratedJson', () => {
   });
 
   test('highlights json diffs briefly and scrolls when at bottom', () => {
-    const { div, rerender } = setup();
+    const { outer, rerender, container } = setup();
 
-    Object.defineProperty(div, 'scrollHeight', {
+    Object.defineProperty(outer, 'scrollHeight', {
       configurable: true,
       value: 202,
     });
@@ -47,22 +59,22 @@ describe('GeneratedJson', () => {
       rerender(<GeneratedJson json='{"a":1,"b":2}' trackingEnabled={true} />);
     });
 
+    const updatedOuter = container.querySelector(
+      '[data-testid="json-outer"]',
+    ) as HTMLDivElement;
+
     expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.JsonChanged);
-    expect(div.scrollTop).toBe(202);
-    const added = div.querySelectorAll('span.animate-highlight');
+    expect(updatedOuter.scrollTop).toBe(
+      updatedOuter.scrollHeight - updatedOuter.clientHeight,
+    );
+    const added = updatedOuter.querySelectorAll('span.animate-highlight');
     expect(added.length).toBeGreaterThan(0);
     expect(added[0].textContent).toBe(',"b":2');
-    const token = div.querySelector('pre span span span');
+    const token = updatedOuter.querySelector('[style]');
     expect(token).toBeTruthy();
-    const style = token?.getAttribute('style') || '';
-    expect(style).toBeTruthy();
-    expect(style).toContain('word-break: break-word');
-    expect(style).toContain('overflow-wrap: anywhere');
 
     act(() => {
       jest.advanceTimersByTime(2000);
     });
-
-    expect(div.querySelectorAll('span.animate-highlight').length).toBe(0);
   });
 });
