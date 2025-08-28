@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { diffChars, Change } from 'diff';
 import SyntaxHighlighter from 'react-syntax-highlighter/dist/cjs/prism-light';
 import jsonLang from 'react-syntax-highlighter/dist/cjs/languages/prism/json';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { VariableSizeList as List } from 'react-window';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { safeGet, safeSet } from '@/lib/storage';
 import {
@@ -42,9 +43,17 @@ const CHANGE_MILESTONES: [number, AnalyticsEvent][] = [
  */
 const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const outerRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<List>(null);
   const prevRef = useRef(json);
   const [diffParts, setDiffParts] = useState<Change[] | null>(null);
+  const [height, setHeight] = useState(0);
   const { t } = useTranslation();
+
+  const rows = useMemo(
+    () => diffParts ?? [{ value: json, added: false } as Change],
+    [diffParts, json],
+  );
 
   useEffect(() => {
     const diff = diffChars(prevRef.current, json).filter((p) => !p.removed);
@@ -76,19 +85,40 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
   }, [json, trackingEnabled, t]);
 
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
+    const updateHeight = () => {
+      setHeight(containerRef.current?.clientHeight || window.innerHeight);
+    };
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+    return () => window.removeEventListener('resize', updateHeight);
+  }, []);
+
+  useEffect(() => {
+    const outer = outerRef.current;
+    if (!outer) return;
     const atBottom =
-      Math.abs(
-        container.scrollHeight - container.scrollTop - container.clientHeight,
-      ) < 5;
-    const atTop = container.scrollTop === 0;
+      Math.abs(outer.scrollHeight - outer.scrollTop - outer.clientHeight) < 5;
+    const atTop = outer.scrollTop === 0;
     if (atBottom) {
-      container.scrollTop = container.scrollHeight;
+      listRef.current?.scrollToItem(rows.length - 1);
     } else if (atTop) {
-      container.scrollTop = 0;
+      listRef.current?.scrollToItem(0);
     }
-  }, [json]);
+  }, [json, rows.length]);
+
+  useEffect(() => {
+    listRef.current?.resetAfterIndex(0);
+  }, [diffParts]);
+
+  const getItemSize = (index: number) => {
+    const lineHeight = 26; // match leading-relaxed with text-sm
+    const lines = rows[index].value.split('\n').length;
+    return lines * lineHeight;
+  };
+
+  const Outer = React.forwardRef<HTMLDivElement, React.HTMLProps<HTMLDivElement>>(
+    (props, ref) => <div ref={ref} data-testid="json-outer" {...props} />,
+  );
 
   const renderHighlighted = (value: string, added: boolean, key: number) => (
     <span key={key} className={added ? 'animate-highlight' : undefined}>
@@ -120,16 +150,32 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
 
   return (
     <div
-      className="h-full overflow-y-auto overflow-x-hidden"
+      className="h-full overflow-hidden"
       ref={containerRef}
+      data-testid="json-container"
     >
-      <pre className="p-6 text-sm font-mono whitespace-pre-wrap break-words leading-relaxed">
-        {diffParts
-          ? diffParts.map((part, idx) =>
-              renderHighlighted(part.value, Boolean(part.added), idx),
-            )
-          : renderHighlighted(json, false, 0)}
-      </pre>
+      {height > 0 && (
+        <List
+          height={height}
+          width="100%"
+          itemCount={rows.length}
+          itemSize={getItemSize}
+          ref={listRef}
+          outerRef={outerRef}
+          outerElementType={Outer}
+          overscanCount={5}
+        >
+          {({ index, style }) => (
+            <div style={style} data-testid="json-row">
+              {renderHighlighted(
+                rows[index].value,
+                Boolean(rows[index].added),
+                index,
+              )}
+            </div>
+          )}
+        </List>
+      )}
     </div>
   );
 };
