@@ -197,30 +197,6 @@ describe('ActionBar', () => {
     expect(props.onRedo).toHaveBeenCalled();
   });
 
-  test('keyboard shortcuts trigger undo/redo', () => {
-    const props = createProps();
-    renderActionBar(props);
-    fireEvent.keyDown(window, { key: 'z', ctrlKey: true });
-    expect(props.onUndo).toHaveBeenCalledTimes(1);
-    fireEvent.keyDown(window, { key: 'z', ctrlKey: true, shiftKey: true });
-    expect(props.onRedo).toHaveBeenCalledTimes(1);
-    fireEvent.keyDown(window, { key: 'y', ctrlKey: true });
-    expect(props.onRedo).toHaveBeenCalledTimes(2);
-  });
-
-  test('shortcuts ignored when typing in inputs', () => {
-    const props = createProps();
-    renderActionBar(props);
-    const input = document.createElement('input');
-    document.body.appendChild(input);
-    input.focus();
-    fireEvent.keyDown(input, { key: 'z', ctrlKey: true });
-    fireEvent.keyDown(input, { key: 'y', ctrlKey: true });
-    expect(props.onUndo).not.toHaveBeenCalled();
-    expect(props.onRedo).not.toHaveBeenCalled();
-    input.remove();
-  });
-
   test('undo/redo disabled states', () => {
     const props = createProps({ canUndo: false, canRedo: false });
     renderActionBar(props);

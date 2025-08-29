@@ -201,41 +201,9 @@ const { toast: notify } = useToast();
     }
   }, [onRedo, trackingEnabled, t]);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement | null;
-      if (
-        target &&
-        (target.tagName === 'INPUT' ||
-          target.tagName === 'TEXTAREA' ||
-          target.isContentEditable)
-      ) {
-        return;
-      }
-
-      if (e.ctrlKey) {
-        const key = e.key.toLowerCase();
-        if (key === 'z') {
-          if (e.shiftKey) {
-            handleRedoAction();
-          } else {
-            handleUndoAction();
-          }
-          e.preventDefault();
-        } else if (key === 'y') {
-          handleRedoAction();
-          e.preventDefault();
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [handleUndoAction, handleRedoAction]);
-
-  useEffect(() => {
-    checkForUpdate();
-  }, [checkForUpdate]);
+    useEffect(() => {
+      checkForUpdate();
+    }, [checkForUpdate]);
 
   useEffect(() => {
     if (updateAvailable) {

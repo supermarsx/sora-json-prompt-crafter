@@ -36,6 +36,7 @@ import { useFloatingJson } from '@/hooks/use-floating-json';
 import { useSoraUserscript } from '@/hooks/use-sora-userscript';
 import { useActionHistory } from '@/hooks/use-action-history';
 import { useUndoRedo } from '@/hooks/use-undo-redo';
+import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { trackShare } from '@/lib/share-counter';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
@@ -521,15 +522,21 @@ const Dashboard = () => {
   /**
    * Scroll the page to the generated JSON section.
    */
-  const scrollToJson = () => {
-    document
-      .getElementById('generated-json')
-      ?.scrollIntoView({ behavior: 'smooth' });
-  };
+    const scrollToJson = () => {
+      document
+        .getElementById('generated-json')
+        ?.scrollIntoView({ behavior: 'smooth' });
+    };
 
-  return (
-    <div className="min-h-screen flex flex-col bg-background">
-      {!isOnline && !offlineDismissed && (
+    useKeyboardShortcuts({
+      onCopy: copyToClipboard,
+      onUndo: undo,
+      onRedo: redo,
+    });
+
+    return (
+      <div className="min-h-screen flex flex-col bg-background">
+        {!isOnline && !offlineDismissed && (
         <div className="bg-yellow-500 text-black p-2 text-center">
           <div className="flex items-center justify-between max-w-2xl mx-auto">
             <span>{t('offlineNotice', { defaultValue: 'You are offline' })}</span>
