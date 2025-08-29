@@ -6,6 +6,8 @@ import { CollapsibleSection } from '../CollapsibleSection';
 import type { SoraOptions } from '@/lib/soraOptions';
 
 import { colorGradingOptions } from '@/data/colorGradingOptions';
+import { Button } from '@/components/ui/button';
+import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 interface ColorGradingSectionProps {
   options: SoraOptions;
   updateOptions: (updates: Partial<SoraOptions>) => void;
@@ -23,6 +25,13 @@ export const ColorGradingSection: React.FC<ColorGradingSectionProps> = ({
   updateOptions,
 }) => {
   const { t } = useTranslation();
+
+  const handleReset = () => {
+    updateOptions({
+      use_color_grading: DEFAULT_OPTIONS.use_color_grading,
+      color_grade: DEFAULT_OPTIONS.color_grade,
+    });
+  };
   return (
     <CollapsibleSection
       title="Color Grading"
@@ -31,6 +40,11 @@ export const ColorGradingSection: React.FC<ColorGradingSectionProps> = ({
       onToggle={(enabled) => updateOptions({ use_color_grading: enabled })}
     >
       <div className="space-y-4">
+        <div className="flex justify-end">
+          <Button variant="outline" size="sm" onClick={handleReset}>
+            {t('reset')}
+          </Button>
+        </div>
         <div>
           <Label>{t('colorGrade')}</Label>
           <SearchableDropdown

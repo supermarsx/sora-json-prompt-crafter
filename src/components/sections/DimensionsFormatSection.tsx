@@ -12,6 +12,8 @@ import {
 import { CollapsibleSection } from '../CollapsibleSection';
 import { ToggleField } from '../ToggleField';
 import type { SoraOptions } from '@/lib/soraOptions';
+import { Button } from '@/components/ui/button';
+import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 
 interface DimensionsFormatSectionProps {
   options: SoraOptions;
@@ -73,6 +75,27 @@ export const DimensionsFormatSection: React.FC<
       onToggle={onToggle}
     >
       <div className="grid grid-cols-1 gap-4">
+        <div className="flex justify-end">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              updateOptions({
+                aspect_ratio: DEFAULT_OPTIONS.aspect_ratio,
+                quality: DEFAULT_OPTIONS.quality,
+                use_dimensions: DEFAULT_OPTIONS.use_dimensions,
+                width: DEFAULT_OPTIONS.width,
+                height: DEFAULT_OPTIONS.height,
+                use_output_format: DEFAULT_OPTIONS.use_output_format,
+                output_format: DEFAULT_OPTIONS.output_format,
+                use_dynamic_range: DEFAULT_OPTIONS.use_dynamic_range,
+                dynamic_range: DEFAULT_OPTIONS.dynamic_range,
+              })
+            }
+          >
+            {t('reset')}
+          </Button>
+        </div>
         <div>
           <Label htmlFor="aspect_ratio">{t('aspectRatio')}</Label>
           <Select

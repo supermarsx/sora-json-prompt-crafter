@@ -12,6 +12,8 @@ import {
   safetyFilterOptions,
   qualityBoosterOptions,
 } from '@/data/enhancementOptions';
+import { Button } from '@/components/ui/button';
+import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 interface EnhancementsSectionProps {
   options: SoraOptions;
   updateOptions: (updates: Partial<SoraOptions>) => void;
@@ -63,6 +65,29 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
       onToggle={onToggle}
     >
       <div className="space-y-4">
+        <div className="flex justify-end">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              updateOptions({
+                prevent_deformities: DEFAULT_OPTIONS.prevent_deformities,
+                use_upscale_factor: DEFAULT_OPTIONS.use_upscale_factor,
+                upscale: DEFAULT_OPTIONS.upscale,
+                use_safety_filter: DEFAULT_OPTIONS.use_safety_filter,
+                safety_filter: DEFAULT_OPTIONS.safety_filter,
+                keep_typography_details: DEFAULT_OPTIONS.keep_typography_details,
+                use_quality_booster: DEFAULT_OPTIONS.use_quality_booster,
+                quality_booster: DEFAULT_OPTIONS.quality_booster,
+                enhance_object_reflections:
+                  DEFAULT_OPTIONS.enhance_object_reflections,
+                keep_key_details: DEFAULT_OPTIONS.keep_key_details,
+              })
+            }
+          >
+            {t('reset')}
+          </Button>
+        </div>
         <div className="flex items-center space-x-2">
           <Checkbox
             id="prevent_deformities"

@@ -63,4 +63,28 @@ describe('PromptSection', () => {
       ),
     ).toBe(false);
   });
+
+  test('reset button restores default prompt values', () => {
+    const updateOptions = jest.fn();
+    const options = {
+      ...DEFAULT_OPTIONS,
+      prompt: 'custom prompt',
+      negative_prompt: 'custom negative',
+      use_negative_prompt: false,
+    };
+    render(
+      <PromptSection
+        options={options}
+        updateOptions={updateOptions}
+        trackingEnabled={false}
+      />,
+    );
+    const resetButton = screen.getByRole('button', { name: /reset/i });
+    fireEvent.click(resetButton);
+    expect(updateOptions).toHaveBeenCalledWith({
+      prompt: DEFAULT_OPTIONS.prompt,
+      negative_prompt: DEFAULT_OPTIONS.negative_prompt,
+      use_negative_prompt: DEFAULT_OPTIONS.use_negative_prompt,
+    });
+  });
 });

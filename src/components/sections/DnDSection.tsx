@@ -17,6 +17,8 @@ import {
 } from '@/data/dndPresets';
 import { dndOptionTranslations } from '@/data/optionTranslations';
 import { getOptionLabel as translateOption } from '@/lib/optionTranslator';
+import { Button } from '@/components/ui/button';
+import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 
 interface DnDSectionProps {
   options: SoraOptions;
@@ -50,6 +52,38 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
       onToggle={onToggle}
     >
       <div className="grid grid-cols-1 gap-4">
+        <div className="flex justify-end">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              updateOptions({
+                use_dnd_character_race:
+                  DEFAULT_OPTIONS.use_dnd_character_race,
+                dnd_character_race: DEFAULT_OPTIONS.dnd_character_race,
+                use_dnd_character_class:
+                  DEFAULT_OPTIONS.use_dnd_character_class,
+                dnd_character_class: DEFAULT_OPTIONS.dnd_character_class,
+                use_dnd_character_background:
+                  DEFAULT_OPTIONS.use_dnd_character_background,
+                dnd_character_background: DEFAULT_OPTIONS.dnd_character_background,
+                use_dnd_character_alignment:
+                  DEFAULT_OPTIONS.use_dnd_character_alignment,
+                dnd_character_alignment: DEFAULT_OPTIONS.dnd_character_alignment,
+                use_dnd_monster_type: DEFAULT_OPTIONS.use_dnd_monster_type,
+                dnd_monster_type: DEFAULT_OPTIONS.dnd_monster_type,
+                use_dnd_environment: DEFAULT_OPTIONS.use_dnd_environment,
+                dnd_environment: DEFAULT_OPTIONS.dnd_environment,
+                use_dnd_magic_school: DEFAULT_OPTIONS.use_dnd_magic_school,
+                dnd_magic_school: DEFAULT_OPTIONS.dnd_magic_school,
+                use_dnd_item_type: DEFAULT_OPTIONS.use_dnd_item_type,
+                dnd_item_type: DEFAULT_OPTIONS.dnd_item_type,
+              })
+            }
+          >
+            {t('reset')}
+          </Button>
+        </div>
         <ToggleField
           id="use_dnd_character_race"
           label={t('useCharacterRace')}

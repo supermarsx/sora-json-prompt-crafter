@@ -12,6 +12,8 @@ import {
   seasonOptions,
   atmosphereMoodOptions,
 } from '@/data/locationPresets';
+import { Button } from '@/components/ui/button';
+import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 
 interface SettingsLocationSectionProps {
   options: SoraOptions;
@@ -37,6 +39,31 @@ export const SettingsLocationSection: React.FC<
       onToggle={(enabled) => updateOptions({ use_settings_location: enabled })}
     >
       <div className="grid grid-cols-1 gap-4">
+        <div className="flex justify-end">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              updateOptions({
+                use_settings_location: DEFAULT_OPTIONS.use_settings_location,
+                use_year: DEFAULT_OPTIONS.use_year,
+                year: DEFAULT_OPTIONS.year,
+                use_environment: DEFAULT_OPTIONS.use_environment,
+                environment: DEFAULT_OPTIONS.environment,
+                use_location: DEFAULT_OPTIONS.use_location,
+                location: DEFAULT_OPTIONS.location,
+                use_season: DEFAULT_OPTIONS.use_season,
+                season: DEFAULT_OPTIONS.season,
+                use_time_of_year: DEFAULT_OPTIONS.use_time_of_year,
+                time_of_year: DEFAULT_OPTIONS.time_of_year,
+                use_atmosphere_mood: DEFAULT_OPTIONS.use_atmosphere_mood,
+                atmosphere_mood: DEFAULT_OPTIONS.atmosphere_mood,
+              })
+            }
+          >
+            {t('reset')}
+          </Button>
+        </div>
         <ToggleField
           id="use_year"
           label={t('useYear')}

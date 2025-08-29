@@ -27,6 +27,8 @@ import {
   subjectFocusOptions,
   type SubjectFocusOption,
 } from '@/data/cameraPresets';
+import { Button } from '@/components/ui/button';
+import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 
 interface CameraCompositionSectionProps {
   options: SoraOptions;
@@ -57,6 +59,27 @@ export const CameraCompositionSection: React.FC<
     updateOptions({ composition_rules: selectedRules });
   };
 
+  const handleReset = () => {
+    updateOptions({
+      camera_type: DEFAULT_OPTIONS.camera_type,
+      use_lens_type: DEFAULT_OPTIONS.use_lens_type,
+      lens_type: DEFAULT_OPTIONS.lens_type,
+      use_shot_type: DEFAULT_OPTIONS.use_shot_type,
+      shot_type: DEFAULT_OPTIONS.shot_type,
+      use_camera_angle: DEFAULT_OPTIONS.use_camera_angle,
+      camera_angle: DEFAULT_OPTIONS.camera_angle,
+      use_subject_focus: DEFAULT_OPTIONS.use_subject_focus,
+      subject_focus: DEFAULT_OPTIONS.subject_focus,
+      composition_rules: DEFAULT_OPTIONS.composition_rules,
+      use_aperture: DEFAULT_OPTIONS.use_aperture,
+      aperture: DEFAULT_OPTIONS.aperture,
+      use_dof: DEFAULT_OPTIONS.use_dof,
+      depth_of_field: DEFAULT_OPTIONS.depth_of_field,
+      use_blur_style: DEFAULT_OPTIONS.use_blur_style,
+      blur_style: DEFAULT_OPTIONS.blur_style,
+    });
+  };
+
   return (
     <CollapsibleSection
       title="Camera & Composition"
@@ -65,6 +88,11 @@ export const CameraCompositionSection: React.FC<
       onToggle={onToggle}
     >
       <div className="grid grid-cols-1 gap-4">
+        <div className="flex justify-end">
+          <Button variant="outline" size="sm" onClick={handleReset}>
+            {t('reset')}
+          </Button>
+        </div>
         <div>
           <Label>{t('cameraType')}</Label>
           <SearchableDropdown
