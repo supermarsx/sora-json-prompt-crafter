@@ -147,6 +147,8 @@ function createProps(
     onToggleDarkModeToggleVisible: jest.fn(),
     floatingJsonEnabled: false,
     onToggleFloatingJson: jest.fn(),
+    shortcutsEnabled: true,
+    onToggleShortcuts: jest.fn(),
     actionLabelsEnabled: true,
     onToggleActionLabels: jest.fn(),
     coreActionLabelsOnly: false,

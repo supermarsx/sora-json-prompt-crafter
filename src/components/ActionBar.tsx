@@ -72,6 +72,8 @@ interface ActionBarProps {
   onToggleDarkModeToggleVisible: () => void;
   floatingJsonEnabled: boolean;
   onToggleFloatingJson: () => void;
+  shortcutsEnabled: boolean;
+  onToggleShortcuts: () => void;
   actionLabelsEnabled: boolean;
   onToggleActionLabels: () => void;
   coreActionLabelsOnly: boolean;
@@ -120,6 +122,8 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   onToggleDarkModeToggleVisible,
   floatingJsonEnabled,
   onToggleFloatingJson,
+  shortcutsEnabled,
+  onToggleShortcuts,
   actionLabelsEnabled,
   onToggleActionLabels,
   coreActionLabelsOnly,
@@ -675,6 +679,8 @@ const { toast: notify } = useToast();
         onToggleDarkModeToggleVisible={onToggleDarkModeToggleVisible}
         floatingJsonEnabled={floatingJsonEnabled}
         onToggleFloatingJson={onToggleFloatingJson}
+        shortcutsEnabled={shortcutsEnabled}
+        onToggleShortcuts={onToggleShortcuts}
         actionLabelsEnabled={actionLabelsEnabled}
         onToggleActionLabels={onToggleActionLabels}
         coreActionLabelsOnly={coreActionLabelsOnly}

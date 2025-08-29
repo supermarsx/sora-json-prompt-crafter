@@ -11,8 +11,13 @@ interface ShortcutHandlers {
  *
  * @param handlers Callback functions for the respective keyboard shortcuts.
  */
-export function useKeyboardShortcuts({ onCopy, onUndo, onRedo }: ShortcutHandlers) {
+export function useKeyboardShortcuts(
+  { onCopy, onUndo, onRedo }: ShortcutHandlers,
+  enabled = true,
+) {
   useEffect(() => {
+    if (!enabled) return;
+
     const handleKeyDown = (e: KeyboardEvent) => {
       const target = e.target as HTMLElement | null;
       if (
@@ -58,7 +63,7 @@ export function useKeyboardShortcuts({ onCopy, onUndo, onRedo }: ShortcutHandler
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onCopy, onUndo, onRedo]);
+  }, [onCopy, onUndo, onRedo, enabled]);
 }
 
 export default useKeyboardShortcuts;

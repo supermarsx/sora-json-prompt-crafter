@@ -5,6 +5,7 @@ export const HEADER_VISIBLE = 'headerVisible';
 export const HEADER_BUTTONS_ENABLED = 'headerButtonsEnabled';
 export const LOGO_ENABLED = 'logoEnabled';
 export const FLOATING_JSON_ENABLED = 'floatingJsonEnabled';
+export const KEYBOARD_SHORTCUTS_ENABLED = 'keyboardShortcutsEnabled';
 export const ACTION_LABELS_ENABLED = 'actionLabelsEnabled';
 export const CORE_ACTION_LABELS_ONLY = 'coreActionLabelsOnly';
 export const TRACKING_ENABLED = 'trackingEnabled';

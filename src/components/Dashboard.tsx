@@ -37,6 +37,7 @@ import { useSoraUserscript } from '@/hooks/use-sora-userscript';
 import { useActionHistory } from '@/hooks/use-action-history';
 import { useUndoRedo } from '@/hooks/use-undo-redo';
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts';
+import { useKeyboardShortcutsEnabled } from '@/hooks/use-keyboard-shortcuts-enabled';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { trackShare } from '@/lib/share-counter';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
@@ -171,6 +172,9 @@ const Dashboard = () => {
   const actionHistory = useActionHistory();
   const githubStats = useGithubStats();
   const { copy } = useClipboard();
+
+  const [shortcutsEnabled, setShortcutsEnabled] =
+    useKeyboardShortcutsEnabled();
 
   useEffect(() => {
     const timer = setTimeout(
@@ -590,11 +594,14 @@ const Dashboard = () => {
         ?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    useKeyboardShortcuts({
-      onCopy: copyToClipboard,
-      onUndo: handleUndoAction,
-      onRedo: handleRedoAction,
-    });
+    useKeyboardShortcuts(
+      {
+        onCopy: copyToClipboard,
+        onUndo: handleUndoAction,
+        onRedo: handleRedoAction,
+      },
+      shortcutsEnabled,
+    );
 
     return (
       <div className="min-h-screen flex flex-col bg-background">
@@ -921,6 +928,10 @@ const Dashboard = () => {
         floatingJsonEnabled={floatingJsonEnabled}
         onToggleFloatingJson={() =>
           setFloatingJsonEnabled(!floatingJsonEnabled)
+        }
+        shortcutsEnabled={shortcutsEnabled}
+        onToggleShortcuts={() =>
+          setShortcutsEnabled(!shortcutsEnabled)
         }
         actionLabelsEnabled={actionLabelsEnabled}
         onToggleActionLabels={() =>

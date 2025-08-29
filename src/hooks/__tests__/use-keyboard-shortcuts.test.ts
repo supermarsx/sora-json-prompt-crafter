@@ -32,5 +32,13 @@ describe('useKeyboardShortcuts', () => {
     expect(onCopy).not.toHaveBeenCalled();
     expect(onUndo).not.toHaveBeenCalled();
     input.remove();
+});
+
+  test('does not register when disabled', () => {
+    const onCopy = jest.fn();
+    renderHook(() => useKeyboardShortcuts({ onCopy }, false));
+
+    fireEvent.keyDown(window, { key: 'c', ctrlKey: true });
+    expect(onCopy).not.toHaveBeenCalled();
   });
 });

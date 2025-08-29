@@ -6,6 +6,7 @@ import {
   UNDO_MILESTONES,
   REDO_COUNT,
   REDO_MILESTONES,
+  KEYBOARD_SHORTCUTS_ENABLED,
 } from '@/lib/storage-keys';
 
 jest.mock('../HistoryPanel', () => ({ __esModule: true, default: () => null }));
@@ -120,6 +121,14 @@ describe('Dashboard keyboard undo/redo counters', () => {
     expect(JSON.parse(localStorage.getItem(REDO_COUNT) || '0')).toBe(101);
     expect(calls.length).toBe(0);
     expect(JSON.parse(localStorage.getItem(REDO_MILESTONES) || '[]')).toEqual([100]);
+  });
+
+  test('shortcuts can be disabled', () => {
+    localStorage.setItem(KEYBOARD_SHORTCUTS_ENABLED, 'false');
+    render(<Dashboard />);
+
+    fireEvent.keyDown(window, { key: 'z', ctrlKey: true });
+    expect(localStorage.getItem(UNDO_COUNT)).toBe(null);
   });
 });
 

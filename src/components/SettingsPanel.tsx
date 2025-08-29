@@ -28,6 +28,8 @@ import {
   RotateCcw,
   RefreshCw,
   Shuffle,
+  Keyboard,
+  KeyboardOff,
   Eye,
   EyeOff,
   Trash2,
@@ -79,6 +81,8 @@ interface SettingsPanelProps {
   onToggleDarkModeToggleVisible: () => void;
   floatingJsonEnabled: boolean;
   onToggleFloatingJson: () => void;
+  shortcutsEnabled: boolean;
+  onToggleShortcuts: () => void;
   actionLabelsEnabled: boolean;
   onToggleActionLabels: () => void;
   coreActionLabelsOnly: boolean;
@@ -137,6 +141,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   onToggleDarkModeToggleVisible,
   floatingJsonEnabled,
   onToggleFloatingJson,
+  shortcutsEnabled,
+  onToggleShortcuts,
   actionLabelsEnabled,
   onToggleActionLabels,
   coreActionLabelsOnly,
@@ -780,17 +786,71 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                         )}
                       </Button>
                     </TooltipTrigger>
-                    <TooltipContent>
-                      {floatingJsonEnabled
-                        ? t('disableFloatingJson')
-                        : t('enableFloatingJson')}
-                    </TooltipContent>
-                  </Tooltip>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start gap-2"
+                  <TooltipContent>
+                    {floatingJsonEnabled
+                      ? t('disableFloatingJson')
+                      : t('enableFloatingJson')}
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start gap-2"
+                      onClick={() => {
+                        try {
+                          onToggleShortcuts();
+                          toast.success(
+                            !shortcutsEnabled
+                              ? t('enableShortcuts', {
+                                  defaultValue: 'Enable shortcuts',
+                                })
+                              : t('disableShortcuts', {
+                                  defaultValue: 'Disable shortcuts',
+                                }),
+                          );
+                          trackEvent(
+                            trackingEnabled,
+                            AnalyticsEvent.ToggleKeyboardShortcuts,
+                            { enabled: !shortcutsEnabled },
+                          );
+                        } catch {
+                          toast.error('Failed to toggle shortcuts');
+                        }
+                      }}
+                    >
+                      {shortcutsEnabled ? (
+                        <>
+                          <KeyboardOff className="w-4 h-4" />
+                          {t('disableShortcuts', {
+                            defaultValue: 'Disable shortcuts',
+                          })}
+                        </>
+                      ) : (
+                        <>
+                          <Keyboard className="w-4 h-4" />
+                          {t('enableShortcuts', {
+                            defaultValue: 'Enable shortcuts',
+                          })}
+                        </>
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {shortcutsEnabled
+                      ? t('disableShortcuts', {
+                          defaultValue: 'Disable shortcuts',
+                        })
+                      : t('enableShortcuts', {
+                          defaultValue: 'Enable shortcuts',
+                        })}
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start gap-2"
                         onClick={exportDataFile}
                       >
                         <Download className="w-4 h-4" />
