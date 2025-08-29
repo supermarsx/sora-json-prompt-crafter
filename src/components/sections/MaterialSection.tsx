@@ -7,6 +7,8 @@ import { ToggleField } from '../ToggleField';
 import type { SoraOptions } from '@/lib/soraOptions';
 
 import { materialOptions } from '@/data/materialOptions';
+import { Button } from '@/components/ui/button';
+import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 interface MaterialSectionProps {
   options: SoraOptions;
   updateOptions: (updates: Partial<SoraOptions>) => void;
@@ -32,6 +34,22 @@ export const MaterialSection: React.FC<MaterialSectionProps> = ({
       onToggle={(enabled) => updateOptions({ use_material: enabled })}
     >
       <div className="space-y-4">
+        <div className="flex justify-end">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              updateOptions({
+                use_material: DEFAULT_OPTIONS.use_material,
+                made_out_of: DEFAULT_OPTIONS.made_out_of,
+                use_secondary_material: DEFAULT_OPTIONS.use_secondary_material,
+                secondary_material: DEFAULT_OPTIONS.secondary_material,
+              })
+            }
+          >
+            {t('reset')}
+          </Button>
+        </div>
         <div>
           <Label>{t('madeOutOf')}</Label>
           <SearchableDropdown

@@ -14,6 +14,8 @@ import { Slider } from '@/components/ui/slider';
 import { CollapsibleSection } from '../CollapsibleSection';
 import { ToggleField } from '../ToggleField';
 import type { SoraOptions } from '@/lib/soraOptions';
+import { Button } from '@/components/ui/button';
+import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 
 interface VideoMotionSectionProps {
   options: SoraOptions;
@@ -47,6 +49,29 @@ export const VideoMotionSection: React.FC<VideoMotionSectionProps> = ({
       onToggle={onToggle}
     >
       <div className="grid grid-cols-1 gap-4">
+        <div className="flex justify-end">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              updateOptions({
+                use_duration: DEFAULT_OPTIONS.use_duration,
+                duration_seconds: DEFAULT_OPTIONS.duration_seconds,
+                extended_fps: DEFAULT_OPTIONS.extended_fps,
+                fps: DEFAULT_OPTIONS.fps,
+                extended_motion_strength:
+                  DEFAULT_OPTIONS.extended_motion_strength,
+                use_motion_strength: DEFAULT_OPTIONS.use_motion_strength,
+                motion_strength: DEFAULT_OPTIONS.motion_strength,
+                camera_motion: DEFAULT_OPTIONS.camera_motion,
+                motion_direction: DEFAULT_OPTIONS.motion_direction,
+                frame_interpolation: DEFAULT_OPTIONS.frame_interpolation,
+              })
+            }
+          >
+            {t('reset')}
+          </Button>
+        </div>
         <ToggleField
           id="use_duration"
           label={t('useDuration')}

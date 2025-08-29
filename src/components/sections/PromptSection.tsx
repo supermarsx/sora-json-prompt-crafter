@@ -6,6 +6,8 @@ import { ToggleField } from '../ToggleField';
 import type { SoraOptions } from '@/lib/soraOptions';
 import { useResizeTracker } from '@/hooks/use-resize-tracker';
 import { AnalyticsEvent } from '@/lib/analytics';
+import { Button } from '@/components/ui/button';
+import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 
 interface PromptSectionProps {
   options: SoraOptions;
@@ -35,8 +37,21 @@ export const PromptSection: React.FC<PromptSectionProps> = ({
     trackingEnabled,
     AnalyticsEvent.NegativePromptResize,
   );
+
+  const handleReset = () => {
+    updateOptions({
+      prompt: DEFAULT_OPTIONS.prompt,
+      negative_prompt: DEFAULT_OPTIONS.negative_prompt,
+      use_negative_prompt: DEFAULT_OPTIONS.use_negative_prompt,
+    });
+  };
   return (
     <div className="space-y-4">
+      <div className="flex justify-end">
+        <Button variant="outline" size="sm" onClick={handleReset}>
+          {t('reset')}
+        </Button>
+      </div>
       <div>
         <Label htmlFor="prompt" className="text-base font-semibold mb-2 block">
           {t('prompt')}

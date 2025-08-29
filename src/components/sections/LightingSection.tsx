@@ -6,6 +6,8 @@ import { CollapsibleSection } from '../CollapsibleSection';
 import type { SoraOptions } from '@/lib/soraOptions';
 
 import { lightingOptions } from '@/data/lightingOptions';
+import { Button } from '@/components/ui/button';
+import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 interface LightingSectionProps {
   options: SoraOptions;
   updateOptions: (updates: Partial<SoraOptions>) => void;
@@ -31,6 +33,20 @@ export const LightingSection: React.FC<LightingSectionProps> = ({
       onToggle={(enabled) => updateOptions({ use_lighting: enabled })}
     >
       <div className="space-y-4">
+        <div className="flex justify-end">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              updateOptions({
+                use_lighting: DEFAULT_OPTIONS.use_lighting,
+                lighting: DEFAULT_OPTIONS.lighting,
+              })
+            }
+          >
+            {t('reset')}
+          </Button>
+        </div>
         <div>
           <Label>{t('lighting')}</Label>
           <SearchableDropdown

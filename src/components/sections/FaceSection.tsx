@@ -14,6 +14,8 @@ import {
   makeupStyleOptions,
   characterMoodOptions,
 } from '@/data/faceOptions';
+import { Button } from '@/components/ui/button';
+import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 interface FaceSectionProps {
   options: SoraOptions;
   updateOptions: (updates: Partial<SoraOptions>) => void;
@@ -39,6 +41,27 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
       onToggle={(enabled) => updateOptions({ use_face_enhancements: enabled })}
     >
       <div className="space-y-4">
+        <div className="flex justify-end">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              updateOptions({
+                use_face_enhancements: DEFAULT_OPTIONS.use_face_enhancements,
+                add_same_face: DEFAULT_OPTIONS.add_same_face,
+                dont_change_face: DEFAULT_OPTIONS.dont_change_face,
+                use_subject_gender: DEFAULT_OPTIONS.use_subject_gender,
+                subject_gender: DEFAULT_OPTIONS.subject_gender,
+                use_makeup_style: DEFAULT_OPTIONS.use_makeup_style,
+                makeup_style: DEFAULT_OPTIONS.makeup_style,
+                use_character_mood: DEFAULT_OPTIONS.use_character_mood,
+                character_mood: DEFAULT_OPTIONS.character_mood,
+              })
+            }
+          >
+            {t('reset')}
+          </Button>
+        </div>
         <div className="flex items-center space-x-2">
           <Checkbox
             id="add_same_face"

@@ -12,6 +12,8 @@ import { SearchableDropdown } from '../SearchableDropdown';
 import { CollapsibleSection } from '../CollapsibleSection';
 import type { SoraOptions } from '@/lib/soraOptions';
 import { stylePresets } from '@/data/stylePresets';
+import { Button } from '@/components/ui/button';
+import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 
 interface StyleSectionProps {
   options: SoraOptions;
@@ -54,6 +56,27 @@ export const StyleSection: React.FC<StyleSectionProps> = ({
       onToggle={(enabled) => updateOptions({ use_style_preset: enabled })}
     >
       <div className="grid grid-cols-1 gap-4">
+        <div className="flex justify-end">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              updateOptions({
+                use_style_preset: DEFAULT_OPTIONS.use_style_preset,
+              });
+              updateNestedOptions(
+                'style_preset.category',
+                DEFAULT_OPTIONS.style_preset.category,
+              );
+              updateNestedOptions(
+                'style_preset.style',
+                DEFAULT_OPTIONS.style_preset.style,
+              );
+            }}
+          >
+            {t('reset')}
+          </Button>
+        </div>
         <div>
           <Label htmlFor="style_category">{t('styleCategory')}</Label>
           <Select

@@ -5,6 +5,8 @@ import { Input } from '@/components/ui/input';
 import { Slider } from '@/components/ui/slider';
 import { CollapsibleSection } from '../CollapsibleSection';
 import type { SoraOptions } from '@/lib/soraOptions';
+import { Button } from '@/components/ui/button';
+import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 
 interface CoreSettingsSectionProps {
   options: SoraOptions;
@@ -31,6 +33,16 @@ export const CoreSettingsSection: React.FC<CoreSettingsSectionProps> = ({
   onToggle,
 }) => {
   const { t } = useTranslation();
+
+  const handleReset = () => {
+    updateOptions({
+      seed: DEFAULT_OPTIONS.seed,
+      steps: DEFAULT_OPTIONS.steps,
+      guidance_scale: DEFAULT_OPTIONS.guidance_scale,
+      temperature: DEFAULT_OPTIONS.temperature,
+      cfg_rescale: DEFAULT_OPTIONS.cfg_rescale,
+    });
+  };
   return (
     <CollapsibleSection
       title={t('coreSettings')}
@@ -39,6 +51,11 @@ export const CoreSettingsSection: React.FC<CoreSettingsSectionProps> = ({
       onToggle={onToggle}
     >
       <div className="grid grid-cols-1 gap-4">
+        <div className="flex justify-end">
+          <Button variant="outline" size="sm" onClick={handleReset}>
+            {t('reset')}
+          </Button>
+        </div>
         <div>
           <Label htmlFor="seed">{t('seed')}</Label>
           <Input
