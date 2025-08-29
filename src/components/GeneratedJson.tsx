@@ -1,9 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { diffChars, Change } from 'diff';
-import SyntaxHighlighter from 'react-syntax-highlighter/dist/cjs/prism-light';
-import jsonLang from 'react-syntax-highlighter/dist/cjs/languages/prism/json';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
-import { VariableSizeList as List } from 'react-window';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { safeGet, safeSet } from '@/lib/storage';
 import {
@@ -13,7 +9,6 @@ import {
 import { toast } from '@/components/ui/sonner-toast';
 import { useTranslation } from 'react-i18next';
 
-SyntaxHighlighter.registerLanguage('json', jsonLang);
 
 interface Props {
   json: string;
@@ -43,11 +38,8 @@ const CHANGE_MILESTONES: [number, AnalyticsEvent][] = [
  */
 const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const outerRef = useRef<HTMLDivElement>(null);
-  const listRef = useRef<List>(null);
   const prevRef = useRef(json);
   const [diffParts, setDiffParts] = useState<Change[] | null>(null);
-  const [height, setHeight] = useState(0);
   const { t } = useTranslation();
 
   const rows = useMemo(
@@ -85,97 +77,33 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
   }, [json, trackingEnabled, t]);
 
   useEffect(() => {
-    const updateHeight = () => {
-      setHeight(containerRef.current?.clientHeight || window.innerHeight);
-    };
-    updateHeight();
-    window.addEventListener('resize', updateHeight);
-    return () => window.removeEventListener('resize', updateHeight);
-  }, []);
-
-  useEffect(() => {
-    const outer = outerRef.current;
-    if (!outer) return;
+    const container = containerRef.current;
+    if (!container) return;
     const atBottom =
-      Math.abs(outer.scrollHeight - outer.scrollTop - outer.clientHeight) < 5;
-    const atTop = outer.scrollTop === 0;
+      Math.abs(container.scrollHeight - container.scrollTop - container.clientHeight) < 5;
+    const atTop = container.scrollTop === 0;
     if (atBottom) {
-      listRef.current?.scrollToItem(rows.length - 1);
+      container.scrollTop = container.scrollHeight - container.clientHeight;
     } else if (atTop) {
-      listRef.current?.scrollToItem(0);
+      container.scrollTop = 0;
     }
   }, [json, rows.length]);
 
-  useEffect(() => {
-    listRef.current?.resetAfterIndex(0);
-  }, [diffParts]);
-
-  const getItemSize = (index: number) => {
-    const lineHeight = 26; // match leading-relaxed with text-sm
-    const lines = rows[index].value.split('\n').length;
-    return lines * lineHeight;
-  };
-
-  const Outer = React.forwardRef<HTMLDivElement, React.HTMLProps<HTMLDivElement>>(
-    (props, ref) => <div ref={ref} data-testid="json-outer" {...props} />,
-  );
-
   const renderHighlighted = (value: string, added: boolean, key: number) => (
     <span key={key} className={added ? 'animate-highlight' : undefined}>
-      <SyntaxHighlighter
-        language="json"
-        style={vscDarkPlus}
-        PreTag="span"
-        CodeTag="span"
-        wrapLongLines
-        codeTagProps={{
-          style: {
-            whiteSpace: 'pre-wrap',
-            wordBreak: 'break-word',
-            overflowWrap: 'anywhere',
-          },
-        }}
-        customStyle={{
-          margin: 0,
-          padding: 0,
-          background: 'none',
-          overflowX: 'hidden',
-          overflowY: 'auto',
-        }}
-      >
-        {value}
-      </SyntaxHighlighter>
+      {value}
     </span>
   );
 
   return (
     <div
-      className="h-full overflow-hidden"
+      className="h-full overflow-auto"
       ref={containerRef}
       data-testid="json-container"
     >
-      {height > 0 && (
-        <List
-          height={height}
-          width="100%"
-          itemCount={rows.length}
-          itemSize={getItemSize}
-          ref={listRef}
-          outerRef={outerRef}
-          outerElementType={Outer}
-          overscanCount={5}
-        >
-          {({ index, style }) => (
-            <div style={style} data-testid="json-row">
-              {renderHighlighted(
-                rows[index].value,
-                Boolean(rows[index].added),
-                index,
-              )}
-            </div>
-          )}
-        </List>
-      )}
+      <pre className="whitespace-pre-wrap text-sm leading-relaxed m-0">
+        {rows.map((r, i) => renderHighlighted(r.value, Boolean(r.added), i))}
+      </pre>
     </div>
   );
 };
