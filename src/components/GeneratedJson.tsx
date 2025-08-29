@@ -1,5 +1,8 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { diffLines, Change } from 'diff';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import jsonLang from 'react-syntax-highlighter/dist/cjs/languages/prism/json';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { safeGet, safeSet } from '@/lib/storage';
 import {
@@ -8,6 +11,8 @@ import {
 } from '@/lib/storage-keys';
 import { toast } from '@/components/ui/sonner-toast';
 import { useTranslation } from 'react-i18next';
+
+SyntaxHighlighter.registerLanguage('json', jsonLang);
 
 
 interface Props {
@@ -103,7 +108,16 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
 
   const renderHighlighted = (value: string, added: boolean, key: number) => (
     <span key={key} className={added ? 'animate-highlight' : undefined}>
-      {value}
+      <SyntaxHighlighter
+        language="json"
+        style={vscDarkPlus}
+        PreTag="span"
+        CodeTag="span"
+        wrapLongLines
+        customStyle={{ margin: 0, padding: 0, background: 'none' }}
+      >
+        {value}
+      </SyntaxHighlighter>
     </span>
   );
 
@@ -113,7 +127,7 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
       ref={containerRef}
       data-testid="json-container"
     >
-      <pre className="whitespace-pre-wrap text-sm leading-relaxed m-0">
+      <pre className="p-6 text-sm font-mono whitespace-pre-wrap break-words leading-relaxed">
         {rows.map((r, i) => renderHighlighted(r.value, Boolean(r.added), i))}
       </pre>
     </div>
