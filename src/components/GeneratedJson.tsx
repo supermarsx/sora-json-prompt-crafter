@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { diffChars, Change } from 'diff';
+import { diffLines, Change } from 'diff';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { safeGet, safeSet } from '@/lib/storage';
 import {
@@ -42,13 +42,25 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
   const [diffParts, setDiffParts] = useState<Change[] | null>(null);
   const { t } = useTranslation();
 
-  const rows = useMemo(
-    () => diffParts ?? [{ value: json, added: false } as Change],
-    [diffParts, json],
-  );
+  const rows = useMemo(() => {
+    const parts = diffParts ?? [{ value: json, added: false } as Change];
+    const lineRows: Change[] = [];
+    for (const p of parts) {
+      const lines = p.value.split('\n');
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        if (line === '' && i === lines.length - 1) continue;
+        lineRows.push({
+          value: i < lines.length - 1 ? line + '\n' : line,
+          added: p.added,
+        } as Change);
+      }
+    }
+    return lineRows;
+  }, [diffParts, json]);
 
   useEffect(() => {
-    const diff = diffChars(prevRef.current, json).filter((p) => !p.removed);
+    const diff = diffLines(prevRef.current, json).filter((p) => !p.removed);
     prevRef.current = json;
     setDiffParts(diff);
     const timer = setTimeout(() => {

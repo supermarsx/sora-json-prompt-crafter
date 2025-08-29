@@ -34,7 +34,7 @@ describe('GeneratedJson', () => {
     expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.JsonChanged);
     const added = container.querySelectorAll('span.animate-highlight');
     expect(added.length).toBeGreaterThan(0);
-    expect(added[0].textContent).toBe(',"b":2');
+    expect(added[0].textContent).toBe('{"a":1,"b":2}');
 
     act(() => {
       jest.advanceTimersByTime(2000);
