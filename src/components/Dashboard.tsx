@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   Sun,
   Moon,
@@ -36,6 +36,8 @@ import { useFloatingJson } from '@/hooks/use-floating-json';
 import { useSoraUserscript } from '@/hooks/use-sora-userscript';
 import { useActionHistory } from '@/hooks/use-action-history';
 import { useUndoRedo } from '@/hooks/use-undo-redo';
+import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts';
+import { useKeyboardShortcutsEnabled } from '@/hooks/use-keyboard-shortcuts-enabled';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { trackShare } from '@/lib/share-counter';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
@@ -61,6 +63,10 @@ import {
   JSON_HISTORY,
   JSON_COPY_COUNT,
   JSON_COPY_MILESTONES,
+  UNDO_COUNT,
+  UNDO_MILESTONES,
+  REDO_COUNT,
+  REDO_MILESTONES,
 } from '@/lib/storage-keys';
 import { useOnlineStatus } from '@/hooks/use-online-status';
 
@@ -75,6 +81,20 @@ const COPY_MILESTONES: [number, AnalyticsEvent][] = [
   [2000, AnalyticsEvent.CopyJson2000],
   [5000, AnalyticsEvent.CopyJson5000],
   [10000, AnalyticsEvent.CopyJson10000],
+];
+
+const UNDO_MILESTONE_EVENTS: [number, AnalyticsEvent][] = [
+  [100, AnalyticsEvent.Undo100],
+  [500, AnalyticsEvent.Undo500],
+  [1000, AnalyticsEvent.Undo1000],
+  [10000, AnalyticsEvent.Undo10000],
+];
+
+const REDO_MILESTONE_EVENTS: [number, AnalyticsEvent][] = [
+  [100, AnalyticsEvent.Redo100],
+  [500, AnalyticsEvent.Redo500],
+  [1000, AnalyticsEvent.Redo1000],
+  [10000, AnalyticsEvent.Redo10000],
 ];
 
 /**
@@ -152,6 +172,9 @@ const Dashboard = () => {
   const actionHistory = useActionHistory();
   const githubStats = useGithubStats();
   const { copy } = useClipboard();
+
+  const [shortcutsEnabled, setShortcutsEnabled] =
+    useKeyboardShortcutsEnabled();
 
   useEffect(() => {
     const timer = setTimeout(
@@ -355,6 +378,50 @@ const Dashboard = () => {
     trackEvent(trackingEnabled, AnalyticsEvent.RandomizeButton);
   };
 
+  const handleUndoAction = useCallback(() => {
+    undo();
+    trackEvent(trackingEnabled, AnalyticsEvent.UndoButton);
+    try {
+      const count = (safeGet<number>(UNDO_COUNT, 0, true) as number) ?? 0;
+      const newCount = count + 1;
+      safeSet(UNDO_COUNT, newCount, true);
+      const milestones =
+        (safeGet<number[]>(UNDO_MILESTONES, [], true) as number[]) ?? [];
+      for (const [threshold, event] of UNDO_MILESTONE_EVENTS) {
+        if (newCount >= threshold && !milestones.includes(threshold)) {
+          trackEvent(trackingEnabled, event);
+          toast.success(t('milestoneReached', { threshold }));
+          milestones.push(threshold);
+        }
+      }
+      safeSet(UNDO_MILESTONES, milestones, true);
+    } catch {
+      console.error('Undo counter: There was an error.');
+    }
+  }, [undo, trackingEnabled, t]);
+
+  const handleRedoAction = useCallback(() => {
+    redo();
+    trackEvent(trackingEnabled, AnalyticsEvent.RedoButton);
+    try {
+      const count = (safeGet<number>(REDO_COUNT, 0, true) as number) ?? 0;
+      const newCount = count + 1;
+      safeSet(REDO_COUNT, newCount, true);
+      const milestones =
+        (safeGet<number[]>(REDO_MILESTONES, [], true) as number[]) ?? [];
+      for (const [threshold, event] of REDO_MILESTONE_EVENTS) {
+        if (newCount >= threshold && !milestones.includes(threshold)) {
+          trackEvent(trackingEnabled, event);
+          toast.success(t('milestoneReached', { threshold }));
+          milestones.push(threshold);
+        }
+      }
+      safeSet(REDO_MILESTONES, milestones, true);
+    } catch {
+      console.error('Redo counter: There was an error.');
+    }
+  }, [redo, trackingEnabled, t]);
+
   /**
    * Shallow merge updates into the options state and track changed keys.
    *
@@ -521,15 +588,24 @@ const Dashboard = () => {
   /**
    * Scroll the page to the generated JSON section.
    */
-  const scrollToJson = () => {
-    document
-      .getElementById('generated-json')
-      ?.scrollIntoView({ behavior: 'smooth' });
-  };
+    const scrollToJson = () => {
+      document
+        .getElementById('generated-json')
+        ?.scrollIntoView({ behavior: 'smooth' });
+    };
 
-  return (
-    <div className="min-h-screen flex flex-col bg-background">
-      {!isOnline && !offlineDismissed && (
+    useKeyboardShortcuts(
+      {
+        onCopy: copyToClipboard,
+        onUndo: handleUndoAction,
+        onRedo: handleRedoAction,
+      },
+      shortcutsEnabled,
+    );
+
+    return (
+      <div className="min-h-screen flex flex-col bg-background">
+        {!isOnline && !offlineDismissed && (
         <div className="bg-yellow-500 text-black p-2 text-center">
           <div className="flex items-center justify-between max-w-2xl mx-auto">
             <span>{t('offlineNotice', { defaultValue: 'You are offline' })}</span>
@@ -819,8 +895,8 @@ const Dashboard = () => {
       )}
 
       <ActionBar
-        onUndo={undo}
-        onRedo={redo}
+        onUndo={handleUndoAction}
+        onRedo={handleRedoAction}
         canUndo={canUndo}
         canRedo={canRedo}
         onCopy={copyToClipboard}
@@ -852,6 +928,10 @@ const Dashboard = () => {
         floatingJsonEnabled={floatingJsonEnabled}
         onToggleFloatingJson={() =>
           setFloatingJsonEnabled(!floatingJsonEnabled)
+        }
+        shortcutsEnabled={shortcutsEnabled}
+        onToggleShortcuts={() =>
+          setShortcutsEnabled(!shortcutsEnabled)
         }
         actionLabelsEnabled={actionLabelsEnabled}
         onToggleActionLabels={() =>

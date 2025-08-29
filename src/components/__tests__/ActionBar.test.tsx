@@ -2,12 +2,6 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import { ActionBar } from '../ActionBar';
 import { toast } from '@/components/ui/sonner-toast';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
-import {
-  UNDO_COUNT,
-  UNDO_MILESTONES,
-  REDO_COUNT,
-  REDO_MILESTONES,
-} from '@/lib/storage-keys';
 import i18n from '@/i18n';
 import { TooltipProvider } from '@/components/ui/tooltip';
 
@@ -153,6 +147,8 @@ function createProps(
     onToggleDarkModeToggleVisible: jest.fn(),
     floatingJsonEnabled: false,
     onToggleFloatingJson: jest.fn(),
+    shortcutsEnabled: true,
+    onToggleShortcuts: jest.fn(),
     actionLabelsEnabled: true,
     onToggleActionLabels: jest.fn(),
     coreActionLabelsOnly: false,
@@ -195,30 +191,6 @@ describe('ActionBar', () => {
     expect(props.onUndo).toHaveBeenCalled();
     fireEvent.click(screen.getByRole('button', { name: /redo/i }));
     expect(props.onRedo).toHaveBeenCalled();
-  });
-
-  test('keyboard shortcuts trigger undo/redo', () => {
-    const props = createProps();
-    renderActionBar(props);
-    fireEvent.keyDown(window, { key: 'z', ctrlKey: true });
-    expect(props.onUndo).toHaveBeenCalledTimes(1);
-    fireEvent.keyDown(window, { key: 'z', ctrlKey: true, shiftKey: true });
-    expect(props.onRedo).toHaveBeenCalledTimes(1);
-    fireEvent.keyDown(window, { key: 'y', ctrlKey: true });
-    expect(props.onRedo).toHaveBeenCalledTimes(2);
-  });
-
-  test('shortcuts ignored when typing in inputs', () => {
-    const props = createProps();
-    renderActionBar(props);
-    const input = document.createElement('input');
-    document.body.appendChild(input);
-    input.focus();
-    fireEvent.keyDown(input, { key: 'z', ctrlKey: true });
-    fireEvent.keyDown(input, { key: 'y', ctrlKey: true });
-    expect(props.onUndo).not.toHaveBeenCalled();
-    expect(props.onRedo).not.toHaveBeenCalled();
-    input.remove();
   });
 
   test('undo/redo disabled states', () => {
@@ -327,61 +299,4 @@ describe('ActionBar', () => {
     expect(screen.getByRole('button', { name: /copy/i })).toBeTruthy();
   });
 
-  test('undo counter persists and milestone triggers once', () => {
-    localStorage.setItem(UNDO_COUNT, '99');
-    localStorage.setItem(UNDO_MILESTONES, '[]');
-    (trackEvent as jest.Mock).mockClear();
-    const props = createProps();
-    const { unmount } = renderActionBar(props);
-    const undoBtn = screen.getByRole('button', { name: /undo/i });
-    fireEvent.click(undoBtn);
-    expect(JSON.parse(localStorage.getItem(UNDO_COUNT) || '0')).toBe(100);
-    let calls = (trackEvent as jest.Mock).mock.calls.filter(
-      (c) => c[1] === AnalyticsEvent.Undo100,
-    );
-    expect(calls.length).toBe(1);
-    expect(JSON.parse(localStorage.getItem(UNDO_MILESTONES) || '[]')).toEqual([
-      100,
-    ]);
-    unmount();
-    renderActionBar(props);
-    fireEvent.click(screen.getByRole('button', { name: /undo/i }));
-    expect(JSON.parse(localStorage.getItem(UNDO_COUNT) || '0')).toBe(101);
-    calls = (trackEvent as jest.Mock).mock.calls.filter(
-      (c) => c[1] === AnalyticsEvent.Undo100,
-    );
-    expect(calls.length).toBe(1);
-    expect(JSON.parse(localStorage.getItem(UNDO_MILESTONES) || '[]')).toEqual([
-      100,
-    ]);
-  });
-
-  test('redo counter persists and milestone triggers once', () => {
-    localStorage.setItem(REDO_COUNT, '99');
-    localStorage.setItem(REDO_MILESTONES, '[]');
-    (trackEvent as jest.Mock).mockClear();
-    const props = createProps();
-    const { unmount } = renderActionBar(props);
-    const redoBtn = screen.getByRole('button', { name: /redo/i });
-    fireEvent.click(redoBtn);
-    expect(JSON.parse(localStorage.getItem(REDO_COUNT) || '0')).toBe(100);
-    let calls = (trackEvent as jest.Mock).mock.calls.filter(
-      (c) => c[1] === AnalyticsEvent.Redo100,
-    );
-    expect(calls.length).toBe(1);
-    expect(JSON.parse(localStorage.getItem(REDO_MILESTONES) || '[]')).toEqual([
-      100,
-    ]);
-    unmount();
-    renderActionBar(props);
-    fireEvent.click(screen.getByRole('button', { name: /redo/i }));
-    expect(JSON.parse(localStorage.getItem(REDO_COUNT) || '0')).toBe(101);
-    calls = (trackEvent as jest.Mock).mock.calls.filter(
-      (c) => c[1] === AnalyticsEvent.Redo100,
-    );
-    expect(calls.length).toBe(1);
-    expect(JSON.parse(localStorage.getItem(REDO_MILESTONES) || '[]')).toEqual([
-      100,
-    ]);
-  });
 });

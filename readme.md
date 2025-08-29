@@ -50,6 +50,16 @@ go "my eyes!" when there's bright white lights.
 - Works offline thanks to service worker caching of assets
 - Automatically checks for service worker updates on load and when opening the Settings panel
 
+## Keyboard Shortcuts
+
+| Shortcut | Action |
+| --- | --- |
+| Cmd/Ctrl + C | Copy generated JSON |
+| Cmd/Ctrl + Z | Undo last change |
+| Cmd/Ctrl + Shift + Z or Cmd/Ctrl + Y | Redo last change |
+
+Keyboard shortcuts are enabled by default. You can toggle them in the Settings panel if they interfere with other tools.
+
 Example JSON output:
 
 ```json

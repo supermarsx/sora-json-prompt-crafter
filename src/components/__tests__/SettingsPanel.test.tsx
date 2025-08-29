@@ -94,6 +94,8 @@ function renderPanel(overrides: Partial<React.ComponentProps<typeof SettingsPane
     onToggleDarkModeToggleVisible: jest.fn(),
     floatingJsonEnabled: false,
     onToggleFloatingJson: jest.fn(),
+    shortcutsEnabled: true,
+    onToggleShortcuts: jest.fn(),
     actionLabelsEnabled: true,
     onToggleActionLabels: jest.fn(),
     coreActionLabelsOnly: false,

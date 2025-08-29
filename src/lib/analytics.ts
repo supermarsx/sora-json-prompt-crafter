@@ -56,6 +56,7 @@ export enum AnalyticsEvent {
   ToggleActionLabels = 'toggle_action_labels',
   ToggleCoreActionLabels = 'toggle_core_action_labels',
   ToggleFloatingJson = 'toggle_floating_json',
+  ToggleKeyboardShortcuts = 'toggle_keyboard_shortcuts',
   ToggleDarkModeButton = 'toggle_dark_mode_button',
   PurgeCache = 'purge_cache',
   DisableTrackingConfirm = 'disable_tracking_confirm',
