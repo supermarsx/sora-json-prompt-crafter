@@ -7,6 +7,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
@@ -40,7 +41,8 @@ import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { purgeCache } from '@/lib/purgeCache';
 import { useUpdateCheck } from '@/hooks/use-update-check';
 import { useDarkMode } from '@/hooks/use-dark-mode';
-import { exportAppData, importAppData, safeGet } from '@/lib/storage';
+import { exportAppData, importAppData, safeGet, safeSet } from '@/lib/storage';
+import { loadCustomPresetsFromUrl } from '@/lib/presetLoader';
 import { formatDateTime } from '@/lib/date';
 import {
   JSON_COPY_COUNT,
@@ -57,6 +59,7 @@ import {
   APP_RELOAD_MILESTONES,
   TOTAL_SECONDS,
   TIME_MILESTONES,
+  CUSTOM_PRESETS_URL,
 } from '@/lib/storage-keys';
 import { cn } from '@/lib/utils';
 
@@ -155,6 +158,10 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   const [confirmEnableTracking, setConfirmEnableTracking] = useState(false);
   const { checkForUpdate } = useUpdateCheck();
   const [darkMode, setDarkMode] = useDarkMode();
+  const [presetUrl, setPresetUrl] = useState(() => {
+    const stored = safeGet(CUSTOM_PRESETS_URL);
+    return typeof stored === 'string' ? stored : '';
+  });
 
   useEffect(() => {
     if (open) {
@@ -196,6 +203,23 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       }
     };
     input.click();
+  };
+
+  const loadPresetPack = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    try {
+      await loadCustomPresetsFromUrl(presetUrl.trim());
+      safeSet(CUSTOM_PRESETS_URL, presetUrl.trim());
+      toast.success(
+        t('presetsLoaded', { defaultValue: 'Presets loaded' }),
+      );
+    } catch {
+      toast.error(
+        t('failedToLoadPresets', {
+          defaultValue: 'Failed to load presets',
+        }),
+      );
+    }
   };
 
   const TIER_NAMES = [
@@ -366,22 +390,39 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     <TooltipContent>{t('regenerate')}</TooltipContent>
                   </Tooltip>
                   <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start gap-2"
-                        onClick={onRandomize}
-                      >
-                        <Shuffle className="w-4 h-4" /> {t('randomize')}
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>{t('randomize')}</TooltipContent>
-                  </Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start gap-2"
+                      onClick={onRandomize}
+                    >
+                      <Shuffle className="w-4 h-4" /> {t('randomize')}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>{t('randomize')}</TooltipContent>
+                </Tooltip>
+                <div className="flex gap-2">
+                  <Input
+                    value={presetUrl}
+                    onChange={(e) => setPresetUrl(e.target.value)}
+                    placeholder={t('presetPackUrl', {
+                      defaultValue: 'Preset pack URL',
+                    })}
+                    className="flex-1"
+                  />
+                  <Button
+                    variant="outline"
+                    disabled={!presetUrl.trim()}
+                    onClick={() => loadPresetPack()}
+                  >
+                    {t('loadPresets', { defaultValue: 'Load presets' })}
+                  </Button>
                 </div>
-              </ScrollArea>
-            </TabsContent>
-            <TabsContent value="general">
-              <ScrollArea className="max-h-[70vh]">
+              </div>
+            </ScrollArea>
+          </TabsContent>
+          <TabsContent value="general">
+            <ScrollArea className="max-h-[70vh]">
                 <div className="space-y-2 py-2">
                   <Tooltip>
                     <TooltipTrigger asChild>
