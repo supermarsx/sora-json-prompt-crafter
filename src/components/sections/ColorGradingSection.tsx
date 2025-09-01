@@ -6,6 +6,7 @@ import { CollapsibleSection } from '../CollapsibleSection';
 import type { SoraOptions } from '@/lib/soraOptions';
 
 import { colorGradingOptions } from '@/data/colorGradingOptions';
+import { mergeCustomValues } from '@/lib/storage';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { PresetDropdown } from '../PresetDropdown';
@@ -63,11 +64,12 @@ export const ColorGradingSection: React.FC<ColorGradingSectionProps> = ({
         <div>
           <Label>{t('colorGrade')}</Label>
           <SearchableDropdown
-            options={colorGradingOptions}
+            options={mergeCustomValues('color_grade', colorGradingOptions)}
             value={options.color_grade || 'default (no specific color grading)'}
             onValueChange={(value) => updateOptions({ color_grade: value })}
             label="Color Grade Options"
             disabled={!options.use_color_grading}
+            optionKey="color_grade"
           />
         </div>
       </div>

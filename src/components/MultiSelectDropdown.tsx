@@ -18,6 +18,7 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from '@/components/ui/tooltip';
+import { addCustomValue } from '@/lib/storage';
 
 interface MultiSelectDropdownProps {
   options: readonly string[];
@@ -27,6 +28,7 @@ interface MultiSelectDropdownProps {
   label?: string;
   getOptionLabel?: (option: string) => string;
   disabled?: boolean;
+  optionKey?: string;
 }
 
 /**
@@ -51,6 +53,7 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   label,
   getOptionLabel,
   disabled = false,
+  optionKey,
 }) => {
   const { t } = useTranslation();
   const placeholderText = placeholder ?? t('multiSelectPlaceholder');
@@ -177,6 +180,24 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
               ))}
             </div>
           </ScrollArea>
+          {optionKey && (
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => {
+                const input = window.prompt('Enter custom value');
+                const custom = input?.trim();
+                if (!custom) return;
+                addCustomValue(optionKey, custom);
+                onValueChange([...value, custom]);
+                setIsOpen(false);
+                setSearchQuery('');
+              }}
+              disabled={disabled}
+            >
+              Add custom value
+            </Button>
+          )}
         </div>
       </DialogContent>
     </Dialog>

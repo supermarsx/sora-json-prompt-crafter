@@ -12,6 +12,7 @@ import {
   safetyFilterOptions,
   qualityBoosterOptions,
 } from '@/data/enhancementOptions';
+import { mergeCustomValues } from '@/lib/storage';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { PresetDropdown } from '../PresetDropdown';
@@ -153,12 +154,13 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
           <div>
             <Label>{t('safetyFilter')}</Label>
             <SearchableDropdown
-              options={safetyFilterOptions}
+              options={mergeCustomValues('safety_filter', safetyFilterOptions)}
               value={
                 options.safety_filter || 'default (auto safety level)'
               }
               onValueChange={handleSafetyFilterChange}
               label="Safety Filter Options"
+              optionKey="safety_filter"
             />
           </div>
         </ToggleField>
@@ -187,7 +189,7 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
           <div>
             <Label>{t('qualityBooster')}</Label>
             <SearchableDropdown
-              options={qualityBoosterOptions}
+              options={mergeCustomValues('quality_booster', qualityBoosterOptions)}
               value={
                 options.quality_booster || 'default (standard quality)'
               }
@@ -195,6 +197,7 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
                 updateOptions({ quality_booster: value })
               }
               label="Quality Booster Options"
+              optionKey="quality_booster"
             />
           </div>
         </ToggleField>

@@ -15,6 +15,7 @@ import { stylePresets } from '@/data/stylePresets';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { PresetDropdown } from '../PresetDropdown';
+import { mergeCustomValues } from '@/lib/storage';
 
 interface StyleSectionProps {
   options: SoraOptions;
@@ -123,17 +124,19 @@ export const StyleSection: React.FC<StyleSectionProps> = ({
         <div>
           <Label htmlFor="style_preset">{t('style')}</Label>
           <SearchableDropdown
-            options={
+            options={mergeCustomValues(
+              `style_${options.style_preset.category}`,
               stylePresets[
                 options.style_preset.category as keyof typeof stylePresets
-              ] ?? []
-            }
+              ] ?? [],
+            )}
             value={options.style_preset.style}
             onValueChange={(value) =>
               updateNestedOptions('style_preset.style', value)
             }
             label="Style Options"
             placeholder="Select style..."
+            optionKey={`style_${options.style_preset.category}`}
           />
         </div>
       </div>

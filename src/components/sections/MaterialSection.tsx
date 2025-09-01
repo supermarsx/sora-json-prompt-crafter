@@ -7,6 +7,7 @@ import { ToggleField } from '../ToggleField';
 import type { SoraOptions } from '@/lib/soraOptions';
 
 import { materialOptions } from '@/data/materialOptions';
+import { mergeCustomValues } from '@/lib/storage';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { PresetDropdown } from '../PresetDropdown';
@@ -67,10 +68,11 @@ export const MaterialSection: React.FC<MaterialSectionProps> = ({
         <div>
           <Label>{t('madeOutOf')}</Label>
           <SearchableDropdown
-            options={materialOptions}
+            options={mergeCustomValues('material', materialOptions)}
             value={options.made_out_of}
             onValueChange={(value) => updateOptions({ made_out_of: value })}
             label="Material Options"
+            optionKey="material"
           />
         </div>
 
@@ -85,12 +87,13 @@ export const MaterialSection: React.FC<MaterialSectionProps> = ({
           <div>
             <Label>{t('secondaryMaterial')}</Label>
             <SearchableDropdown
-              options={materialOptions}
+              options={mergeCustomValues('material', materialOptions)}
               value={options.secondary_material || 'default'}
               onValueChange={(value) =>
                 updateOptions({ secondary_material: value })
               }
               label="Secondary Material Options"
+              optionKey="material"
             />
           </div>
         </ToggleField>

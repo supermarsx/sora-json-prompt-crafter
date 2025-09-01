@@ -12,6 +12,7 @@ import {
   seasonOptions,
   atmosphereMoodOptions,
 } from '@/data/locationPresets';
+import { mergeCustomValues } from '@/lib/storage';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { PresetDropdown } from '../PresetDropdown';
@@ -121,10 +122,11 @@ export const SettingsLocationSection: React.FC<
           <div>
             <Label>{t('environment')}</Label>
             <SearchableDropdown
-              options={environmentOptions}
+              options={mergeCustomValues('environment', environmentOptions)}
               value={options.environment}
               onValueChange={(value) => updateOptions({ environment: value })}
               label={t('environmentOptions')}
+              optionKey="environment"
             />
           </div>
         </ToggleField>
@@ -140,10 +142,11 @@ export const SettingsLocationSection: React.FC<
           <div>
             <Label>{t('location')}</Label>
             <SearchableDropdown
-              options={locationOptions}
+              options={mergeCustomValues('location', locationOptions)}
               value={options.location || 'Berlin, Germany'}
               onValueChange={(value) => updateOptions({ location: value })}
               label={t('locationOptions')}
+              optionKey="location"
             />
           </div>
         </ToggleField>
@@ -159,10 +162,11 @@ export const SettingsLocationSection: React.FC<
           <div>
             <Label>{t('season')}</Label>
             <SearchableDropdown
-              options={seasonOptions}
+              options={mergeCustomValues('season', seasonOptions)}
               value={options.season || 'default (any season)'}
               onValueChange={(value) => updateOptions({ season: value })}
               label={t('seasonOptions')}
+              optionKey="season"
             />
           </div>
         </ToggleField>
@@ -196,7 +200,7 @@ export const SettingsLocationSection: React.FC<
           <div>
             <Label>{t('atmosphereMood')}</Label>
             <SearchableDropdown
-              options={atmosphereMoodOptions}
+              options={mergeCustomValues('atmosphere_mood', atmosphereMoodOptions)}
               value={
                 options.atmosphere_mood || 'default (neutral mood)'
               }
@@ -204,6 +208,7 @@ export const SettingsLocationSection: React.FC<
                 updateOptions({ atmosphere_mood: value })
               }
               label={t('atmosphereMoodOptions')}
+              optionKey="atmosphere_mood"
             />
           </div>
         </ToggleField>
