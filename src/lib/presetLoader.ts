@@ -8,6 +8,17 @@ import {
 } from '@/data/locationPresets';
 import * as dndPresets from '@/data/dndPresets';
 
+// Preserve initial preset values for reset/export operations
+const originalStylePresets = JSON.parse(JSON.stringify(stylePresets));
+const originalCameraPresets = JSON.parse(JSON.stringify(cameraPresets));
+const originalLocationPresets = {
+  environmentOptions: [...environmentOptions],
+  locationOptions: [...locationOptions],
+  seasonOptions: [...seasonOptions],
+  atmosphereMoodOptions: [...atmosphereMoodOptions],
+};
+const originalDndPresets = JSON.parse(JSON.stringify(dndPresets));
+
 export interface CustomPresetData {
   stylePresets?: Record<string, string[]>;
   cameraPresets?: Partial<typeof cameraPresets>;
@@ -145,5 +156,61 @@ export async function loadCustomPresetsFromUrl(url: string) {
     importCustomPresets(json);
   } catch (err) {
     throw new Error('Failed to load custom presets: ' + err);
+  }
+}
+
+/**
+ * Export the current in-memory preset collections.
+ */
+export function exportCurrentPresets(): CustomPresetData {
+  return {
+    stylePresets: { ...stylePresets },
+    cameraPresets: { ...(cameraPresets as Record<string, string[]>) },
+    locationPresets: {
+      environmentOptions: [...environmentOptions],
+      locationOptions: [...locationOptions],
+      seasonOptions: [...seasonOptions],
+      atmosphereMoodOptions: [...atmosphereMoodOptions],
+    },
+    dndPresets: { ...(dndPresets as Record<string, string[]>) },
+  };
+}
+
+/**
+ * Reset all preset collections to their original values.
+ */
+export function resetPresetCollections(): void {
+  for (const key of Object.keys(originalStylePresets)) {
+    stylePresets[key] = [...originalStylePresets[key]];
+  }
+  for (const key of Object.keys(originalCameraPresets)) {
+    (cameraPresets as Record<string, string[]>)[key] = [
+      ...originalCameraPresets[key],
+    ];
+  }
+  environmentOptions.splice(
+    0,
+    environmentOptions.length,
+    ...originalLocationPresets.environmentOptions,
+  );
+  locationOptions.splice(
+    0,
+    locationOptions.length,
+    ...originalLocationPresets.locationOptions,
+  );
+  seasonOptions.splice(
+    0,
+    seasonOptions.length,
+    ...originalLocationPresets.seasonOptions,
+  );
+  atmosphereMoodOptions.splice(
+    0,
+    atmosphereMoodOptions.length,
+    ...originalLocationPresets.atmosphereMoodOptions,
+  );
+  for (const key of Object.keys(originalDndPresets)) {
+    (dndPresets as Record<string, string[]>)[key] = [
+      ...originalDndPresets[key],
+    ];
   }
 }

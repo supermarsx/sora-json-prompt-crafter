@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
@@ -42,7 +43,12 @@ import { purgeCache } from '@/lib/purgeCache';
 import { useUpdateCheck } from '@/hooks/use-update-check';
 import { useDarkMode } from '@/hooks/use-dark-mode';
 import { exportAppData, importAppData, safeGet, safeSet } from '@/lib/storage';
-import { loadCustomPresetsFromUrl } from '@/lib/presetLoader';
+import {
+  loadCustomPresetsFromUrl,
+  importCustomPresets,
+  exportCurrentPresets,
+  resetPresetCollections,
+} from '@/lib/presetLoader';
 import { formatDateTime } from '@/lib/date';
 import {
   JSON_COPY_COUNT,
@@ -90,7 +96,7 @@ interface SettingsPanelProps {
   onToggleActionLabels: () => void;
   coreActionLabelsOnly: boolean;
   onToggleCoreActionLabels: () => void;
-  defaultTab?: 'manage' | 'general' | 'milestones';
+  defaultTab?: 'manage' | 'general' | 'presets' | 'milestones';
 }
 
 /**
@@ -162,6 +168,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     const stored = safeGet(CUSTOM_PRESETS_URL);
     return typeof stored === 'string' ? stored : '';
   });
+  const [presetEditor, setPresetEditor] = useState('');
 
   useEffect(() => {
     if (open) {
@@ -169,6 +176,12 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       checkForUpdate();
     }
   }, [open, trackingEnabled, checkForUpdate]);
+
+  useEffect(() => {
+    if (open) {
+      setPresetEditor(JSON.stringify(exportCurrentPresets(), null, 2));
+    }
+  }, [open]);
 
   const exportDataFile = () => {
     const blob = new Blob([JSON.stringify(exportAppData(), null, 2)], {
@@ -205,6 +218,65 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     input.click();
   };
 
+  const exportPresetFile = () => {
+    const blob = new Blob(
+      [JSON.stringify(exportCurrentPresets(), null, 2)],
+      { type: 'application/json' },
+    );
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const datetime = formatDateTime();
+    const rand = Math.random().toString(16).slice(2, 8);
+    a.href = url;
+    a.download = `sora-presets-${datetime}-${rand}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success(t('presetsExported', { defaultValue: 'Presets exported' }));
+  };
+
+  const importPresetFile = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'application/json';
+    input.onchange = async () => {
+      const file = input.files?.[0];
+      if (!file) return;
+      try {
+        const text = await file.text();
+        importCustomPresets(JSON.parse(text));
+        setPresetEditor(JSON.stringify(exportCurrentPresets(), null, 2));
+        toast.success(
+          t('presetsImported', { defaultValue: 'Presets imported' }),
+        );
+      } catch {
+        toast.error(
+          t('invalidPresetFile', { defaultValue: 'Invalid preset file' }),
+        );
+      }
+    };
+    input.click();
+  };
+
+  const applyPresetEditor = () => {
+    try {
+      importCustomPresets(JSON.parse(presetEditor));
+      setPresetEditor(JSON.stringify(exportCurrentPresets(), null, 2));
+      toast.success(
+        t('presetsUpdated', { defaultValue: 'Presets updated' }),
+      );
+    } catch {
+      toast.error(
+        t('invalidPresetFile', { defaultValue: 'Invalid preset file' }),
+      );
+    }
+  };
+
+  const clearPresetCollections = () => {
+    resetPresetCollections();
+    setPresetEditor(JSON.stringify(exportCurrentPresets(), null, 2));
+    toast.success(t('presetsCleared', { defaultValue: 'Presets cleared' }));
+  };
+
   const loadPresetPack = async (e?: React.FormEvent) => {
     e?.preventDefault();
     try {
@@ -213,6 +285,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       toast.success(
         t('presetsLoaded', { defaultValue: 'Presets loaded' }),
       );
+      setPresetEditor(JSON.stringify(exportCurrentPresets(), null, 2));
     } catch {
       toast.error(
         t('failedToLoadPresets', {
@@ -345,9 +418,10 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
             <DialogTitle>{t('manage')}</DialogTitle>
           </DialogHeader>
           <Tabs defaultValue={defaultTab}>
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="manage">{t('manage')}</TabsTrigger>
               <TabsTrigger value="general">{t('general')}</TabsTrigger>
+              <TabsTrigger value="presets">{t('presets')}</TabsTrigger>
               <TabsTrigger value="milestones">{t('milestones')}</TabsTrigger>
             </TabsList>
             <TabsContent value="manage">
@@ -401,23 +475,6 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   </TooltipTrigger>
                   <TooltipContent>{t('randomize')}</TooltipContent>
                 </Tooltip>
-                <div className="flex gap-2">
-                  <Input
-                    value={presetUrl}
-                    onChange={(e) => setPresetUrl(e.target.value)}
-                    placeholder={t('presetPackUrl', {
-                      defaultValue: 'Preset pack URL',
-                    })}
-                    className="flex-1"
-                  />
-                  <Button
-                    variant="outline"
-                    disabled={!presetUrl.trim()}
-                    onClick={() => loadPresetPack()}
-                  >
-                    {t('loadPresets', { defaultValue: 'Load presets' })}
-                  </Button>
-                </div>
               </div>
             </ScrollArea>
           </TabsContent>
@@ -931,6 +988,58 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     </TooltipTrigger>
                     <TooltipContent>{t('purgeCache')}</TooltipContent>
                   </Tooltip>
+                </div>
+              </ScrollArea>
+            </TabsContent>
+            <TabsContent value="presets">
+              <ScrollArea className="max-h-[70vh]">
+                <div className="space-y-2 py-2">
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      className="flex-1"
+                      onClick={exportPresetFile}
+                    >
+                      {t('exportPresets', { defaultValue: 'Export presets' })}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="flex-1"
+                      onClick={importPresetFile}
+                    >
+                      {t('importPresets', { defaultValue: 'Import presets' })}
+                    </Button>
+                  </div>
+                  <div className="flex gap-2">
+                    <Input
+                      value={presetUrl}
+                      onChange={(e) => setPresetUrl(e.target.value)}
+                      placeholder={t('presetPackUrl', {
+                        defaultValue: 'Preset pack URL',
+                      })}
+                      className="flex-1"
+                    />
+                    <Button
+                      variant="outline"
+                      disabled={!presetUrl.trim()}
+                      onClick={() => loadPresetPack()}
+                    >
+                      {t('loadPresets', { defaultValue: 'Load presets' })}
+                    </Button>
+                  </div>
+                  <Textarea
+                    value={presetEditor}
+                    onChange={(e) => setPresetEditor(e.target.value)}
+                    className="h-40"
+                  />
+                  <div className="flex gap-2">
+                    <Button variant="outline" onClick={applyPresetEditor}>
+                      {t('apply', { defaultValue: 'Apply' })}
+                    </Button>
+                    <Button variant="outline" onClick={clearPresetCollections}>
+                      {t('clearPresets', { defaultValue: 'Clear presets' })}
+                    </Button>
+                  </div>
                 </div>
               </ScrollArea>
             </TabsContent>
