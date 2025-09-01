@@ -82,6 +82,7 @@ const sampleHistory = Array.from({ length: 20 }, (_, i) => ({
   date: 'd',
   json: `{"prompt":"p${i}"}`,
   favorite: i % 2 === 0,
+  title: `title${i}`,
 }));
 const sampleActions = [{ date: 'd', action: 'a' }];
 
@@ -99,6 +100,7 @@ function renderPanel(
     onEdit: jest.fn(),
     onImport: jest.fn(),
     onToggleFavorite: jest.fn(),
+    onRename: jest.fn(),
   };
   return render(
     <TooltipProvider>
@@ -247,6 +249,23 @@ describe('HistoryPanel basic actions', () => {
 
     expect(screen.queryByText('p2')).toBeNull();
     expect(screen.getByText('p1')).toBeTruthy();
+
+    fireEvent.change(input, { target: { value: 'title2' } });
+    expect(screen.queryByText('p1')).toBeNull();
+    expect(screen.getByText('title2')).toBeTruthy();
+  });
+
+  test('renames history entry', () => {
+    const onRename = jest.fn();
+    renderPanel({ onRename });
+    const renameBtn = screen.getAllByRole('button', { name: /rename/i })[0];
+    fireEvent.click(renameBtn);
+    const dialog = screen.getByRole('dialog');
+    const input = within(dialog).getByRole('textbox');
+    fireEvent.change(input, { target: { value: 'new title' } });
+    const saveBtn = within(dialog).getByRole('button', { name: /save/i });
+    fireEvent.click(saveBtn);
+    expect(onRename).toHaveBeenCalledWith(1, 'new title');
   });
 
   test('toggles favorites and filters favorites', () => {

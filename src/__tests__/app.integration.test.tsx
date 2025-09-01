@@ -94,6 +94,8 @@ describe('App integration flow', () => {
     fireEvent.click(historyButton);
 
     const dialog = await screen.findByRole('dialog');
-    expect(within(dialog).getByText('Integration test prompt')).toBeTruthy();
+    expect(
+      within(dialog).getAllByText('Integration test prompt').length,
+    ).toBeGreaterThan(0);
   }, 15000);
 });
