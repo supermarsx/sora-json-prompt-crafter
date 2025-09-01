@@ -14,6 +14,7 @@ import type { SoraOptions } from '@/lib/soraOptions';
 import { stylePresets } from '@/data/stylePresets';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
+import { PresetDropdown } from '../PresetDropdown';
 
 interface StyleSectionProps {
   options: SoraOptions;
@@ -47,6 +48,10 @@ export const StyleSection: React.FC<StyleSectionProps> = ({
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
   };
+  const currentValues = {
+    use_style_preset: options.use_style_preset,
+    style_preset: options.style_preset,
+  };
 
   return (
     <CollapsibleSection
@@ -56,7 +61,24 @@ export const StyleSection: React.FC<StyleSectionProps> = ({
       onToggle={(enabled) => updateOptions({ use_style_preset: enabled })}
     >
       <div className="grid grid-cols-1 gap-4">
-        <div className="flex justify-end">
+        <div className="flex justify-end space-x-2">
+          <PresetDropdown
+            sectionKey="style"
+            currentValues={currentValues}
+            onApply={(values) => {
+              const v = values as Partial<SoraOptions>;
+              if ('use_style_preset' in v) {
+                updateOptions({
+                  use_style_preset: v.use_style_preset as boolean,
+                });
+              }
+              if (v.style_preset) {
+                const preset = v.style_preset as SoraOptions['style_preset'];
+                updateNestedOptions('style_preset.category', preset.category);
+                updateNestedOptions('style_preset.style', preset.style);
+              }
+            }}
+          />
           <Button
             variant="outline"
             size="sm"

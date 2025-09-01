@@ -16,6 +16,7 @@ import {
 } from '@/data/faceOptions';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
+import { PresetDropdown } from '../PresetDropdown';
 interface FaceSectionProps {
   options: SoraOptions;
   updateOptions: (updates: Partial<SoraOptions>) => void;
@@ -33,6 +34,17 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
   updateOptions,
 }) => {
   const { t } = useTranslation();
+  const currentValues = {
+    use_face_enhancements: options.use_face_enhancements,
+    add_same_face: options.add_same_face,
+    dont_change_face: options.dont_change_face,
+    use_subject_gender: options.use_subject_gender,
+    subject_gender: options.subject_gender,
+    use_makeup_style: options.use_makeup_style,
+    makeup_style: options.makeup_style,
+    use_character_mood: options.use_character_mood,
+    character_mood: options.character_mood,
+  };
   return (
     <CollapsibleSection
       title="Face"
@@ -41,7 +53,14 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
       onToggle={(enabled) => updateOptions({ use_face_enhancements: enabled })}
     >
       <div className="space-y-4">
-        <div className="flex justify-end">
+        <div className="flex justify-end space-x-2">
+          <PresetDropdown
+            sectionKey="face"
+            currentValues={currentValues}
+            onApply={(values) =>
+              updateOptions(values as Partial<SoraOptions>)
+            }
+          />
           <Button
             variant="outline"
             size="sm"

@@ -19,6 +19,7 @@ import { dndOptionTranslations } from '@/data/optionTranslations';
 import { getOptionLabel as translateOption } from '@/lib/optionTranslator';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
+import { PresetDropdown } from '../PresetDropdown';
 
 interface DnDSectionProps {
   options: SoraOptions;
@@ -44,6 +45,24 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
   onToggle,
 }) => {
   const { t } = useTranslation();
+  const currentValues = {
+    use_dnd_character_race: options.use_dnd_character_race,
+    dnd_character_race: options.dnd_character_race,
+    use_dnd_character_class: options.use_dnd_character_class,
+    dnd_character_class: options.dnd_character_class,
+    use_dnd_character_background: options.use_dnd_character_background,
+    dnd_character_background: options.dnd_character_background,
+    use_dnd_character_alignment: options.use_dnd_character_alignment,
+    dnd_character_alignment: options.dnd_character_alignment,
+    use_dnd_monster_type: options.use_dnd_monster_type,
+    dnd_monster_type: options.dnd_monster_type,
+    use_dnd_environment: options.use_dnd_environment,
+    dnd_environment: options.dnd_environment,
+    use_dnd_magic_school: options.use_dnd_magic_school,
+    dnd_magic_school: options.dnd_magic_school,
+    use_dnd_item_type: options.use_dnd_item_type,
+    dnd_item_type: options.dnd_item_type,
+  };
   return (
     <CollapsibleSection
       title="Dungeons & Dragons"
@@ -52,7 +71,14 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
       onToggle={onToggle}
     >
       <div className="grid grid-cols-1 gap-4">
-        <div className="flex justify-end">
+        <div className="flex justify-end space-x-2">
+          <PresetDropdown
+            sectionKey="dnd"
+            currentValues={currentValues}
+            onApply={(values) =>
+              updateOptions(values as Partial<SoraOptions>)
+            }
+          />
           <Button
             variant="outline"
             size="sm"

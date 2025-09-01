@@ -79,7 +79,7 @@ describe('PromptSection', () => {
         trackingEnabled={false}
       />,
     );
-    const resetButton = screen.getByRole('button', { name: /reset/i });
+    const resetButton = screen.getByRole('button', { name: /^reset$/i });
     fireEvent.click(resetButton);
     expect(updateOptions).toHaveBeenCalledWith({
       prompt: DEFAULT_OPTIONS.prompt,

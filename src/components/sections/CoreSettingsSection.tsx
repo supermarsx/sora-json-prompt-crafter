@@ -7,6 +7,7 @@ import { CollapsibleSection } from '../CollapsibleSection';
 import type { SoraOptions } from '@/lib/soraOptions';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
+import { PresetDropdown } from '../PresetDropdown';
 
 interface CoreSettingsSectionProps {
   options: SoraOptions;
@@ -34,6 +35,9 @@ export const CoreSettingsSection: React.FC<CoreSettingsSectionProps> = ({
 }) => {
   const { t } = useTranslation();
 
+  /**
+   * Resets core generation parameters to their default values.
+   */
   const handleReset = () => {
     updateOptions({
       seed: DEFAULT_OPTIONS.seed,
@@ -43,6 +47,13 @@ export const CoreSettingsSection: React.FC<CoreSettingsSectionProps> = ({
       cfg_rescale: DEFAULT_OPTIONS.cfg_rescale,
     });
   };
+  const currentValues = {
+    seed: options.seed,
+    steps: options.steps,
+    guidance_scale: options.guidance_scale,
+    temperature: options.temperature,
+    cfg_rescale: options.cfg_rescale,
+  };
   return (
     <CollapsibleSection
       title={t('coreSettings')}
@@ -51,7 +62,14 @@ export const CoreSettingsSection: React.FC<CoreSettingsSectionProps> = ({
       onToggle={onToggle}
     >
       <div className="grid grid-cols-1 gap-4">
-        <div className="flex justify-end">
+        <div className="flex justify-end space-x-2">
+          <PresetDropdown
+            sectionKey="core"
+            currentValues={currentValues}
+            onApply={(values) =>
+              updateOptions(values as Partial<SoraOptions>)
+            }
+          />
           <Button variant="outline" size="sm" onClick={handleReset}>
             {t('reset')}
           </Button>

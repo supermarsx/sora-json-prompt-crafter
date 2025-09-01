@@ -29,6 +29,7 @@ import {
 } from '@/data/cameraPresets';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
+import { PresetDropdown } from '../PresetDropdown';
 
 interface CameraCompositionSectionProps {
   options: SoraOptions;
@@ -59,6 +60,9 @@ export const CameraCompositionSection: React.FC<
     updateOptions({ composition_rules: selectedRules });
   };
 
+  /**
+   * Resets all camera and composition-related options to their defaults.
+   */
   const handleReset = () => {
     updateOptions({
       camera_type: DEFAULT_OPTIONS.camera_type,
@@ -79,6 +83,24 @@ export const CameraCompositionSection: React.FC<
       blur_style: DEFAULT_OPTIONS.blur_style,
     });
   };
+  const currentValues = {
+    camera_type: options.camera_type,
+    use_lens_type: options.use_lens_type,
+    lens_type: options.lens_type,
+    use_shot_type: options.use_shot_type,
+    shot_type: options.shot_type,
+    use_camera_angle: options.use_camera_angle,
+    camera_angle: options.camera_angle,
+    use_subject_focus: options.use_subject_focus,
+    subject_focus: options.subject_focus,
+    composition_rules: options.composition_rules,
+    use_aperture: options.use_aperture,
+    aperture: options.aperture,
+    use_dof: options.use_dof,
+    depth_of_field: options.depth_of_field,
+    use_blur_style: options.use_blur_style,
+    blur_style: options.blur_style,
+  };
 
   return (
     <CollapsibleSection
@@ -88,7 +110,14 @@ export const CameraCompositionSection: React.FC<
       onToggle={onToggle}
     >
       <div className="grid grid-cols-1 gap-4">
-        <div className="flex justify-end">
+        <div className="flex justify-end space-x-2">
+          <PresetDropdown
+            sectionKey="camera"
+            currentValues={currentValues}
+            onApply={(values) =>
+              updateOptions(values as Partial<SoraOptions>)
+            }
+          />
           <Button variant="outline" size="sm" onClick={handleReset}>
             {t('reset')}
           </Button>

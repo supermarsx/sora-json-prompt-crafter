@@ -8,6 +8,7 @@ import type { SoraOptions } from '@/lib/soraOptions';
 import { lightingOptions } from '@/data/lightingOptions';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
+import { PresetDropdown } from '../PresetDropdown';
 interface LightingSectionProps {
   options: SoraOptions;
   updateOptions: (updates: Partial<SoraOptions>) => void;
@@ -25,6 +26,10 @@ export const LightingSection: React.FC<LightingSectionProps> = ({
   updateOptions,
 }) => {
   const { t } = useTranslation();
+  const currentValues = {
+    use_lighting: options.use_lighting,
+    lighting: options.lighting,
+  };
   return (
     <CollapsibleSection
       title="Lighting"
@@ -33,7 +38,14 @@ export const LightingSection: React.FC<LightingSectionProps> = ({
       onToggle={(enabled) => updateOptions({ use_lighting: enabled })}
     >
       <div className="space-y-4">
-        <div className="flex justify-end">
+        <div className="flex justify-end space-x-2">
+          <PresetDropdown
+            sectionKey="lighting"
+            currentValues={currentValues}
+            onApply={(values) =>
+              updateOptions(values as Partial<SoraOptions>)
+            }
+          />
           <Button
             variant="outline"
             size="sm"

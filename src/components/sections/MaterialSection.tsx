@@ -9,6 +9,7 @@ import type { SoraOptions } from '@/lib/soraOptions';
 import { materialOptions } from '@/data/materialOptions';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
+import { PresetDropdown } from '../PresetDropdown';
 interface MaterialSectionProps {
   options: SoraOptions;
   updateOptions: (updates: Partial<SoraOptions>) => void;
@@ -26,6 +27,12 @@ export const MaterialSection: React.FC<MaterialSectionProps> = ({
   updateOptions,
 }) => {
   const { t } = useTranslation();
+  const currentValues = {
+    use_material: options.use_material,
+    made_out_of: options.made_out_of,
+    use_secondary_material: options.use_secondary_material,
+    secondary_material: options.secondary_material,
+  };
   return (
     <CollapsibleSection
       title="Material"
@@ -34,7 +41,14 @@ export const MaterialSection: React.FC<MaterialSectionProps> = ({
       onToggle={(enabled) => updateOptions({ use_material: enabled })}
     >
       <div className="space-y-4">
-        <div className="flex justify-end">
+        <div className="flex justify-end space-x-2">
+          <PresetDropdown
+            sectionKey="material"
+            currentValues={currentValues}
+            onApply={(values) =>
+              updateOptions(values as Partial<SoraOptions>)
+            }
+          />
           <Button
             variant="outline"
             size="sm"

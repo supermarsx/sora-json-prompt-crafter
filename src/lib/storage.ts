@@ -9,6 +9,7 @@ import {
   LOGO_ENABLED,
   SORA_TOOLS_ENABLED,
   TRACKING_ENABLED,
+  SECTION_PRESETS,
 } from './storage-keys';
 /**
  * Safely retrieves a value from `localStorage`.
@@ -117,6 +118,62 @@ export function setJson<T>(key: string, value: T): boolean {
   }
 }
 
+export interface SectionPreset<T = Record<string, unknown>> {
+  name: string;
+  values: T;
+}
+
+export type SectionPresets = Record<string, SectionPreset[]>;
+
+/**
+ * Retrieves all saved presets grouped by section from local storage.
+ *
+ * @returns A mapping of section keys to their associated presets.
+ */
+export function getSectionPresets(): SectionPresets {
+  return getJson<SectionPresets>(SECTION_PRESETS, {}) ?? {};
+}
+
+/**
+ * Saves or updates a preset for the specified section.
+ *
+ * @param section - Section key under which the preset should be stored.
+ * @param preset - Preset details including name and values.
+ * @returns The updated map of section presets.
+ */
+export function saveSectionPreset(
+  section: string,
+  preset: SectionPreset,
+): SectionPresets {
+  const presets = getSectionPresets();
+  const sectionPresets = presets[section] ?? [];
+  const filtered = sectionPresets.filter((p) => p.name !== preset.name);
+  const updated = { ...presets, [section]: [...filtered, preset] };
+  setJson(SECTION_PRESETS, updated);
+  return updated;
+}
+
+/**
+ * Removes a preset by name from the specified section.
+ *
+ * @param section - Section key containing the preset.
+ * @param name - Name of the preset to remove.
+ * @returns The updated map of section presets.
+ */
+export function removeSectionPreset(
+  section: string,
+  name: string,
+): SectionPresets {
+  const presets = getSectionPresets();
+  const sectionPresets = presets[section] ?? [];
+  const updated = {
+    ...presets,
+    [section]: sectionPresets.filter((p) => p.name !== name),
+  };
+  setJson(SECTION_PRESETS, updated);
+  return updated;
+}
+
 const PREFERENCE_KEYS = [
   DARK_MODE,
   DARK_MODE_TOGGLE_VISIBLE,
@@ -132,8 +189,14 @@ export interface AppData {
   currentJson: string | null;
   jsonHistory: unknown[];
   preferences: Record<string, unknown>;
+  sectionPresets: SectionPresets;
 }
 
+/**
+ * Exports all application data needed for backup or sharing.
+ *
+ * @returns An object containing the current JSON, history, preferences, and section presets.
+ */
 export function exportAppData(): AppData {
   const preferences: Record<string, unknown> = {};
   for (const key of PREFERENCE_KEYS) {
@@ -144,9 +207,15 @@ export function exportAppData(): AppData {
     currentJson: safeGet<string>(CURRENT_JSON, null) as string | null,
     jsonHistory: getJson<unknown[]>(JSON_HISTORY, []) ?? [],
     preferences,
+    sectionPresets: getSectionPresets(),
   };
 }
 
+/**
+ * Imports application data previously exported via {@link exportAppData}.
+ *
+ * @param data - The exported data object to restore.
+ */
 export function importAppData(data: AppData) {
   if (!data || typeof data !== 'object') return;
   if (typeof data.currentJson === 'string') {
@@ -159,5 +228,8 @@ export function importAppData(data: AppData) {
     for (const [key, value] of Object.entries(data.preferences)) {
       setJson(key, value);
     }
+  }
+  if (data.sectionPresets && typeof data.sectionPresets === 'object') {
+    setJson(SECTION_PRESETS, data.sectionPresets);
   }
 }

@@ -8,6 +8,7 @@ import { useResizeTracker } from '@/hooks/use-resize-tracker';
 import { AnalyticsEvent } from '@/lib/analytics';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
+import { PresetDropdown } from '../PresetDropdown';
 
 interface PromptSectionProps {
   options: SoraOptions;
@@ -38,6 +39,9 @@ export const PromptSection: React.FC<PromptSectionProps> = ({
     AnalyticsEvent.NegativePromptResize,
   );
 
+  /**
+   * Restores prompt and negative prompt fields to their defaults.
+   */
   const handleReset = () => {
     updateOptions({
       prompt: DEFAULT_OPTIONS.prompt,
@@ -45,9 +49,21 @@ export const PromptSection: React.FC<PromptSectionProps> = ({
       use_negative_prompt: DEFAULT_OPTIONS.use_negative_prompt,
     });
   };
+  const currentValues = {
+    prompt: options.prompt,
+    negative_prompt: options.negative_prompt,
+    use_negative_prompt: options.use_negative_prompt,
+  };
   return (
     <div className="space-y-4">
-      <div className="flex justify-end">
+      <div className="flex justify-end space-x-2">
+        <PresetDropdown
+          sectionKey="prompt"
+          currentValues={currentValues}
+          onApply={(values) =>
+            updateOptions(values as Partial<SoraOptions>)
+          }
+        />
         <Button variant="outline" size="sm" onClick={handleReset}>
           {t('reset')}
         </Button>

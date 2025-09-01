@@ -16,6 +16,7 @@ import { ToggleField } from '../ToggleField';
 import type { SoraOptions } from '@/lib/soraOptions';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
+import { PresetDropdown } from '../PresetDropdown';
 
 interface VideoMotionSectionProps {
   options: SoraOptions;
@@ -41,6 +42,18 @@ export const VideoMotionSection: React.FC<VideoMotionSectionProps> = ({
   onToggle,
 }) => {
   const { t } = useTranslation();
+  const currentValues = {
+    use_duration: options.use_duration,
+    duration_seconds: options.duration_seconds,
+    extended_fps: options.extended_fps,
+    fps: options.fps,
+    extended_motion_strength: options.extended_motion_strength,
+    use_motion_strength: options.use_motion_strength,
+    motion_strength: options.motion_strength,
+    camera_motion: options.camera_motion,
+    motion_direction: options.motion_direction,
+    frame_interpolation: options.frame_interpolation,
+  };
   return (
     <CollapsibleSection
       title="Video & Motion"
@@ -49,7 +62,14 @@ export const VideoMotionSection: React.FC<VideoMotionSectionProps> = ({
       onToggle={onToggle}
     >
       <div className="grid grid-cols-1 gap-4">
-        <div className="flex justify-end">
+        <div className="flex justify-end space-x-2">
+          <PresetDropdown
+            sectionKey="video"
+            currentValues={currentValues}
+            onApply={(values) =>
+              updateOptions(values as Partial<SoraOptions>)
+            }
+          />
           <Button
             variant="outline"
             size="sm"

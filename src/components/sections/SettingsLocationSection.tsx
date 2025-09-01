@@ -14,6 +14,7 @@ import {
 } from '@/data/locationPresets';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
+import { PresetDropdown } from '../PresetDropdown';
 
 interface SettingsLocationSectionProps {
   options: SoraOptions;
@@ -31,6 +32,21 @@ export const SettingsLocationSection: React.FC<
   SettingsLocationSectionProps
 > = ({ options, updateOptions }) => {
   const t = i18n.t.bind(i18n);
+  const currentValues = {
+    use_settings_location: options.use_settings_location,
+    use_year: options.use_year,
+    year: options.year,
+    use_environment: options.use_environment,
+    environment: options.environment,
+    use_location: options.use_location,
+    location: options.location,
+    use_season: options.use_season,
+    season: options.season,
+    use_time_of_year: options.use_time_of_year,
+    time_of_year: options.time_of_year,
+    use_atmosphere_mood: options.use_atmosphere_mood,
+    atmosphere_mood: options.atmosphere_mood,
+  };
   return (
     <CollapsibleSection
       title={t('settingsLocation')}
@@ -39,7 +55,14 @@ export const SettingsLocationSection: React.FC<
       onToggle={(enabled) => updateOptions({ use_settings_location: enabled })}
     >
       <div className="grid grid-cols-1 gap-4">
-        <div className="flex justify-end">
+        <div className="flex justify-end space-x-2">
+          <PresetDropdown
+            sectionKey="location"
+            currentValues={currentValues}
+            onApply={(values) =>
+              updateOptions(values as Partial<SoraOptions>)
+            }
+          />
           <Button
             variant="outline"
             size="sm"
