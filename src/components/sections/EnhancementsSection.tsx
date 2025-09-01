@@ -14,6 +14,7 @@ import {
 } from '@/data/enhancementOptions';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
+import { PresetDropdown } from '../PresetDropdown';
 interface EnhancementsSectionProps {
   options: SoraOptions;
   updateOptions: (updates: Partial<SoraOptions>) => void;
@@ -56,6 +57,18 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
     }
     updateOptions({ safety_filter: safetyFilter });
   };
+  const currentValues = {
+    prevent_deformities: options.prevent_deformities,
+    use_upscale_factor: options.use_upscale_factor,
+    upscale: options.upscale,
+    use_safety_filter: options.use_safety_filter,
+    safety_filter: options.safety_filter,
+    keep_typography_details: options.keep_typography_details,
+    use_quality_booster: options.use_quality_booster,
+    quality_booster: options.quality_booster,
+    enhance_object_reflections: options.enhance_object_reflections,
+    keep_key_details: options.keep_key_details,
+  };
 
   return (
     <CollapsibleSection
@@ -65,7 +78,14 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
       onToggle={onToggle}
     >
       <div className="space-y-4">
-        <div className="flex justify-end">
+        <div className="flex justify-end space-x-2">
+          <PresetDropdown
+            sectionKey="enhancements"
+            currentValues={currentValues}
+            onApply={(values) =>
+              updateOptions(values as Partial<SoraOptions>)
+            }
+          />
           <Button
             variant="outline"
             size="sm"

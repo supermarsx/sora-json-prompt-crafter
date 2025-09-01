@@ -1075,5 +1075,10 @@
   "presetPackUrl": "Preset pack URL",
   "loadPresets": "Load presets",
   "presetsLoaded": "Presets loaded!",
-  "failedToLoadPresets": "Failed to load presets"
+  "failedToLoadPresets": "Failed to load presets",
+  "presets": "Presets",
+  "noPresets": "No presets",
+  "apply": "Apply",
+  "savePreset": "Save preset",
+  "presetNamePrompt": "Preset name?"
 }

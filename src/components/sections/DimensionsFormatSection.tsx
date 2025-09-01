@@ -14,6 +14,7 @@ import { ToggleField } from '../ToggleField';
 import type { SoraOptions } from '@/lib/soraOptions';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
+import { PresetDropdown } from '../PresetDropdown';
 
 interface DimensionsFormatSectionProps {
   options: SoraOptions;
@@ -66,6 +67,17 @@ export const DimensionsFormatSection: React.FC<
   );
   const formatAspectRatio = (ratio: string) =>
     aspectRatioLabels[ratio] || ratio.replace(':', '×');
+  const currentValues = {
+    aspect_ratio: options.aspect_ratio,
+    quality: options.quality,
+    use_dimensions: options.use_dimensions,
+    width: options.width,
+    height: options.height,
+    use_output_format: options.use_output_format,
+    output_format: options.output_format,
+    use_dynamic_range: options.use_dynamic_range,
+    dynamic_range: options.dynamic_range,
+  };
 
   return (
     <CollapsibleSection
@@ -75,7 +87,14 @@ export const DimensionsFormatSection: React.FC<
       onToggle={onToggle}
     >
       <div className="grid grid-cols-1 gap-4">
-        <div className="flex justify-end">
+        <div className="flex justify-end space-x-2">
+          <PresetDropdown
+            sectionKey="dimensions"
+            currentValues={currentValues}
+            onApply={(values) =>
+              updateOptions(values as Partial<SoraOptions>)
+            }
+          />
           <Button
             variant="outline"
             size="sm"
