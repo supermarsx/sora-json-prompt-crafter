@@ -15,7 +15,7 @@ jest.mock('@/lib/analytics', () => {
 jest.mock('@/lib/storage', () => ({
   exportAppData: jest.fn(() => ({})),
   importAppData: jest.fn(),
-  safeGet: jest.fn(() => []),
+  safeGet: jest.fn((key: string) => (key === 'customPresetsUrl' ? '' : [])),
 }));
 jest.mock('@/components/ui/sonner-toast', () => ({
   __esModule: true,
