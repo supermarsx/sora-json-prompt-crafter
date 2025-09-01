@@ -13,11 +13,15 @@ import { useActionHistory } from '@/hooks/use-action-history';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { JSON_HISTORY } from '@/lib/storage-keys';
 
-let importFn: ((jsons: string[]) => void) | null = null;
+let importFn: ((entries: { json: string; title?: string }[]) => void) | null = null;
 
 jest.mock('../HistoryPanel', () => ({
   __esModule: true,
-  default: ({ onImport }: { onImport: (jsons: string[]) => void }) => {
+  default: ({
+    onImport,
+  }: {
+    onImport: (entries: { json: string; title?: string }[]) => void;
+  }) => {
     importFn = onImport;
     return null;
   },
@@ -79,6 +83,7 @@ function createEntries(n: number) {
     date: 'd',
     json: '{}',
     favorite: false,
+    title: `t${i}`,
   }));
 }
 
@@ -119,7 +124,7 @@ describe('Dashboard history limit', () => {
     });
 
     act(() => {
-      importFn?.(Array(20).fill('{}'));
+      importFn?.(Array(20).fill({ json: '{}' }));
     });
 
     await waitFor(() => {

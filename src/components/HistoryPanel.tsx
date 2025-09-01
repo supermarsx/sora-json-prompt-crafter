@@ -6,6 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
+  DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -58,6 +59,7 @@ export interface HistoryEntry {
   date: string;
   json: string;
   favorite: boolean;
+  title: string;
 }
 
 interface HistoryPanelProps {
@@ -69,8 +71,9 @@ interface HistoryPanelProps {
   onClear: () => void;
   onCopy: (json: string) => void;
   onEdit: (json: string) => void;
-  onImport: (jsons: string[]) => void;
+  onImport: (entries: { json: string; title?: string }[]) => void;
   onToggleFavorite: (id: number) => void;
+  onRename: (id: number, title: string) => void;
 }
 
 /**
@@ -101,6 +104,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
   onEdit,
   onImport,
   onToggleFavorite,
+  onRename,
 }) => {
   const { t } = useTranslation();
   const [preview, setPreview] = useState<HistoryEntry | null>(null);
@@ -116,11 +120,14 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
   >(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [favoritesOnly, setFavoritesOnly] = useState(false);
+  const [renaming, setRenaming] = useState<HistoryEntry | null>(null);
+  const [titleInput, setTitleInput] = useState('');
   const noHistory = history.length === 0;
   const noActions = actionHistory.length === 0;
   const filteredHistory = history
     .filter((entry) =>
-      entry.json.toLowerCase().includes(searchTerm.toLowerCase()),
+      entry.json.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      entry.title.toLowerCase().includes(searchTerm.toLowerCase()),
     )
     .filter((entry) => (!favoritesOnly ? true : entry.favorite));
 
@@ -447,6 +454,10 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                         onPreview={setPreview}
                         trackingEnabled={trackingEnabled}
                         onToggleFavorite={onToggleFavorite}
+                        onRename={(entry) => {
+                          setRenaming(entry);
+                          setTitleInput(entry.title);
+                        }}
                       />
                     </div>
                   )}
@@ -612,6 +623,33 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
               </pre>
             </ScrollArea>
           )}
+        </DialogContent>
+      </Dialog>
+      <Dialog open={!!renaming} onOpenChange={() => setRenaming(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>{t('rename', { defaultValue: 'Rename' })}</DialogTitle>
+          </DialogHeader>
+          <Input
+            value={titleInput}
+            onChange={(e) => setTitleInput(e.target.value)}
+            placeholder={t('title', { defaultValue: 'Title' })}
+          />
+          <DialogFooter>
+            <Button variant="secondary" onClick={() => setRenaming(null)}>
+              {t('cancel')}
+            </Button>
+            <Button
+              onClick={() => {
+                if (renaming) {
+                  onRename(renaming.id, titleInput);
+                }
+                setRenaming(null);
+              }}
+            >
+              {t('save')}
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
       <ClipboardImportModal

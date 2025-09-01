@@ -83,6 +83,18 @@ const COPY_MILESTONES: [number, AnalyticsEvent][] = [
   [10000, AnalyticsEvent.CopyJson10000],
 ];
 
+const getTitleFromJson = (json: string): string => {
+  try {
+    const obj = JSON.parse(json) as { prompt?: string };
+    if (obj && typeof obj.prompt === 'string') {
+      return obj.prompt.split(/\s+/).slice(0, 5).join(' ');
+    }
+  } catch {
+    /* ignore */
+  }
+  return 'Untitled';
+};
+
 const UNDO_MILESTONE_EVENTS: [number, AnalyticsEvent][] = [
   [100, AnalyticsEvent.Undo100],
   [500, AnalyticsEvent.Undo500],
@@ -153,6 +165,7 @@ const Dashboard = () => {
   const [history, setHistory] = useState<HistoryEntry[]>(() =>
     (safeGet<HistoryEntry[]>(JSON_HISTORY, [], true) ?? []).map((e) => ({
       favorite: false,
+      title: e.title ?? getTitleFromJson(e.json),
       ...e,
     })),
   );
@@ -225,6 +238,7 @@ const Dashboard = () => {
         date: new Date().toLocaleString(),
         json: jsonString,
         favorite: false,
+        title: getTitleFromJson(jsonString),
       };
       setHistory((prev) => [entry, ...prev].slice(0, 100));
       const opts = options as unknown as Record<string, unknown>;
@@ -558,19 +572,20 @@ const Dashboard = () => {
   };
 
   /**
-   * Import multiple JSON strings into the history list.
+   * Import multiple history entries into the history list.
    *
-   * @param {string[]} jsons - Array of JSON strings to add.
+   * @param entries - Array of objects containing JSON and optional title.
    * Side effects: updates history state and logs analytics.
    */
-  const importHistoryEntries = (jsons: string[]) => {
-    const entries = jsons.map((j) => ({
+  const importHistoryEntries = (entries: { json: string; title?: string }[]) => {
+    const mapped = entries.map(({ json, title }) => ({
       id: Date.now() + Math.random(),
       date: new Date().toLocaleString(),
-      json: j,
+      json,
       favorite: false,
+      title: title ?? getTitleFromJson(json),
     }));
-    setHistory((prev) => [...entries, ...prev].slice(0, 100));
+    setHistory((prev) => [...mapped, ...prev].slice(0, 100));
     trackEvent(trackingEnabled, AnalyticsEvent.HistoryImport, { type: 'bulk' });
   };
 
@@ -583,6 +598,13 @@ const Dashboard = () => {
     setHistory((prev) =>
       prev.map((e) => (e.id === id ? { ...e, favorite: !e.favorite } : e)),
     );
+  };
+
+  /**
+   * Rename a history entry by id.
+   */
+  const renameHistoryEntry = (id: number, title: string) => {
+    setHistory((prev) => prev.map((e) => (e.id === id ? { ...e, title } : e)));
   };
 
   /**
@@ -962,6 +984,7 @@ const Dashboard = () => {
         onEdit={editHistoryEntry}
         onImport={importHistoryEntries}
         onToggleFavorite={toggleFavorite}
+        onRename={renameHistoryEntry}
       />
       <ImportModal
         isOpen={showImportModal}

@@ -1,7 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import ClipboardImportModal from '../ClipboardImportModal';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
-import i18n from '@/i18n';
 import { useTracking } from '@/hooks/use-tracking';
 import { toast } from '@/components/ui/sonner-toast';
 import i18n from '@/i18n';
@@ -46,7 +45,9 @@ describe('ClipboardImportModal', () => {
     const button = screen.getByRole('button', { name: /import/i });
     fireEvent.click(button);
 
-    expect(onImport).toHaveBeenCalledWith(['{"prompt":"test"}']);
+    expect(onImport).toHaveBeenCalledWith([
+      { json: '{"prompt":"test"}', title: undefined },
+    ]);
     expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.HistoryImport, {
       type: 'clipboard',
     });
@@ -73,8 +74,8 @@ describe('ClipboardImportModal', () => {
     fireEvent.click(button);
 
     expect(onImport).toHaveBeenCalledWith([
-      '{"prompt":"one"}',
-      '{"prompt":"two"}',
+      { json: '{"prompt":"one"}', title: undefined },
+      { json: '{"prompt":"two"}', title: undefined },
     ]);
     expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.HistoryImport, {
       type: 'clipboard',
@@ -95,7 +96,7 @@ describe('ClipboardImportModal', () => {
     );
     const textarea = screen.getByPlaceholderText(/paste json/i);
     const objectArrayText = JSON.stringify([
-      { json: '{"prompt":"one"}' },
+      { json: '{"prompt":"one"}', title: 't1' },
       { json: '{"prompt":"two"}' },
     ]);
     fireEvent.change(textarea, {
@@ -105,8 +106,8 @@ describe('ClipboardImportModal', () => {
     fireEvent.click(button);
 
     expect(onImport).toHaveBeenCalledWith([
-      '{"prompt":"one"}',
-      '{"prompt":"two"}',
+      { json: '{"prompt":"one"}', title: 't1' },
+      { json: '{"prompt":"two"}', title: undefined },
     ]);
     expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.HistoryImport, {
       type: 'clipboard',

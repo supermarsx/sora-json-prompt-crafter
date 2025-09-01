@@ -23,7 +23,7 @@ import {
 interface BulkFileImportModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onImport: (jsons: string[]) => void;
+  onImport: (entries: { json: string; title?: string }[]) => void;
 }
 
 /**
@@ -32,7 +32,7 @@ interface BulkFileImportModalProps {
  * @param {BulkFileImportModalProps} props - Component props.
  * @param {boolean} props.open - Whether the dialog is visible.
  * @param {(open: boolean) => void} props.onOpenChange - Change handler for dialog visibility.
- * @param {(jsons: string[]) => void} props.onImport - Invoked with validated JSON strings.
+ * @param {(entries: { json: string; title?: string }[]) => void} props.onImport - Invoked with validated history entries.
  *
  * @remarks
  * Shows toast notifications for success or failure and sends an analytics event
@@ -56,29 +56,33 @@ const BulkFileImportModal: React.FC<BulkFileImportModalProps> = ({
       const text = await file.text();
       const parsed = JSON.parse(text);
       const arr = Array.isArray(parsed) ? parsed : [parsed];
-      const jsons: string[] = [];
+      const entries: { json: string; title?: string }[] = [];
       for (const item of arr) {
         let obj: unknown = item;
+        let titleVal: string | undefined;
         if (typeof item === 'string') {
           try {
             obj = JSON.parse(item);
           } catch {
             obj = undefined;
           }
-        } else if (item && typeof item === 'object' && 'json' in item) {
-          obj = (item as { json: string }).json;
-          try {
-            obj = JSON.parse(String(obj));
-          } catch {
-            /* ignore parse errors */
+        } else if (item && typeof item === 'object') {
+          if ('json' in item) {
+            titleVal = (item as { title?: string }).title;
+            obj = (item as { json: string }).json;
+            try {
+              obj = JSON.parse(String(obj));
+            } catch {
+              /* ignore parse errors */
+            }
           }
         }
         if (obj && typeof obj === 'object' && isValidOptions(obj)) {
-          jsons.push(JSON.stringify(obj));
+          entries.push({ json: JSON.stringify(obj), title: titleVal });
         }
       }
-      if (!jsons.length) throw new Error('invalid');
-      onImport(jsons);
+      if (!entries.length) throw new Error('invalid');
+      onImport(entries);
       toast.success(t('fileImported'));
       trackEvent(trackingEnabled, AnalyticsEvent.HistoryImport, {
         type: 'bulk_file',

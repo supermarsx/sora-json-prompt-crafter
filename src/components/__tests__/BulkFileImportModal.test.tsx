@@ -56,7 +56,9 @@ describe('BulkFileImportModal', () => {
     const button = screen.getByRole('button', { name: /import/i });
     fireEvent.click(button);
     await waitFor(() =>
-      expect(onImport).toHaveBeenCalledWith(['{"prompt":"test"}']),
+      expect(onImport).toHaveBeenCalledWith([
+        { json: '{"prompt":"test"}', title: undefined },
+      ]),
     );
     expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.HistoryImport, {
       type: 'bulk_file',

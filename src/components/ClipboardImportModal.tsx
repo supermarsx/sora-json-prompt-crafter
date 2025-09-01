@@ -23,7 +23,7 @@ import {
 interface ClipboardImportModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onImport: (jsons: string[]) => void;
+  onImport: (entries: { json: string; title?: string }[]) => void;
   title: string;
 }
 
@@ -34,7 +34,7 @@ interface ClipboardImportModalProps {
  * @param {ClipboardImportModalProps} props - Component props.
  * @param {boolean} props.open - Whether the dialog is visible.
  * @param {(open: boolean) => void} props.onOpenChange - Change handler for dialog visibility.
- * @param {(jsons: string[]) => void} props.onImport - Called with validated JSON strings.
+ * @param {(entries: { json: string; title?: string }[]) => void} props.onImport - Called with validated history entries.
  * @param {string} props.title - Title displayed in the dialog header.
  *
  * @remarks
@@ -77,29 +77,33 @@ const ClipboardImportModal: React.FC<ClipboardImportModalProps> = ({
     try {
       const parsed = JSON.parse(text);
       const arr = Array.isArray(parsed) ? parsed : [parsed];
-      const strings: string[] = [];
+      const entries: { json: string; title?: string }[] = [];
       for (const item of arr) {
         let obj: unknown = item;
+        let titleVal: string | undefined;
         if (typeof item === 'string') {
           try {
             obj = JSON.parse(item);
           } catch {
             obj = undefined;
           }
-        } else if (item && typeof item === 'object' && 'json' in item) {
-          obj = (item as { json: string }).json;
-          try {
-            obj = JSON.parse(String(obj));
-          } catch {
-            /* ignore parse errors */
+        } else if (item && typeof item === 'object') {
+          if ('json' in item) {
+            titleVal = (item as { title?: string }).title;
+            obj = (item as { json: string }).json;
+            try {
+              obj = JSON.parse(String(obj));
+            } catch {
+              /* ignore parse errors */
+            }
           }
         }
         if (obj && typeof obj === 'object' && isValidOptions(obj)) {
-          strings.push(JSON.stringify(obj));
+          entries.push({ json: JSON.stringify(obj), title: titleVal });
         }
       }
-      if (!strings.length) throw new Error('invalid');
-      onImport(strings);
+      if (!entries.length) throw new Error('invalid');
+      onImport(entries);
     } catch {
       toast.error(t('invalidJson'));
       onOpenChange(false);

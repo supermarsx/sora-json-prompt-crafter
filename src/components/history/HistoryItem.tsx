@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Clipboard, Trash2, Edit, Eye, Check, Star } from 'lucide-react';
+import { Clipboard, Trash2, Edit, Eye, Check, Star, Pencil } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import type { HistoryEntry } from '../HistoryPanel';
@@ -18,6 +18,7 @@ interface HistoryItemProps {
   onPreview: (entry: HistoryEntry) => void;
   trackingEnabled: boolean;
   onToggleFavorite: (id: number) => void;
+  onRename: (entry: HistoryEntry) => void;
 }
 
 const HistoryItem: React.FC<HistoryItemProps> = ({
@@ -28,6 +29,7 @@ const HistoryItem: React.FC<HistoryItemProps> = ({
   onPreview,
   trackingEnabled,
   onToggleFavorite,
+  onRename,
 }) => {
   const { t } = useTranslation();
   const [edited, setEdited] = useState(false);
@@ -39,18 +41,19 @@ const HistoryItem: React.FC<HistoryItemProps> = ({
       <div className="text-xs text-muted-foreground flex justify-between">
         <span>{entry.date}</span>
       </div>
-      {(() => {
-        try {
-          const obj = JSON.parse(entry.json);
-          return (
-            <div className="space-y-1 text-xs text-muted-foreground">
-              <div className="font-medium break-words">{obj.prompt}</div>
-            </div>
-          );
-        } catch {
-          return null;
-        }
-      })()}
+      <div className="space-y-1 text-xs text-muted-foreground">
+        <div className="font-medium break-words text-foreground">
+          {entry.title}
+        </div>
+        {(() => {
+          try {
+            const obj = JSON.parse(entry.json);
+            return <div className="break-words">{obj.prompt}</div>;
+          } catch {
+            return null;
+          }
+        })()}
+      </div>
       <div className="flex flex-wrap gap-2">
         <Tooltip>
           <TooltipTrigger asChild>
@@ -89,6 +92,19 @@ const HistoryItem: React.FC<HistoryItemProps> = ({
             </Button>
           </TooltipTrigger>
           <TooltipContent>{copied ? t('copied') : t('copy')}</TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => onRename(entry)}
+              className="gap-1"
+            >
+              <Pencil className="w-4 h-4" /> {t('rename', { defaultValue: 'Rename' })}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>{t('rename', { defaultValue: 'Rename' })}</TooltipContent>
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
