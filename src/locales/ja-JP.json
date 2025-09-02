@@ -16,6 +16,8 @@
   "reset": "リセット",
   "regenerate": "再生成",
   "randomize": "ランダム化",
+  "syncToUrl": "Sync to URL",
+  "loadFromUrl": "Load from URL",
   "purgeCache": "Purge Cache",
   "purgeCacheTitle": "Purge cache?",
   "purgeCacheConfirm": "Purge",

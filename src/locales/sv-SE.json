@@ -16,6 +16,8 @@
   "reset": "Återställ",
   "regenerate": "Regenerera",
   "randomize": "Slumpa",
+  "syncToUrl": "Sync to URL",
+  "loadFromUrl": "Load from URL",
   "purgeCache": "Purge Cache",
   "purgeCacheTitle": "Purge cache?",
   "purgeCacheConfirm": "Purge",

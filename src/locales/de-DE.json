@@ -16,6 +16,8 @@
   "reset": "Zurücksetzen",
   "regenerate": "Neu generieren",
   "randomize": "Zufällig",
+  "syncToUrl": "Sync to URL",
+  "loadFromUrl": "Load from URL",
   "purgeCache": "Purge Cache",
   "purgeCacheTitle": "Purge cache?",
   "purgeCacheConfirm": "Purge",

@@ -16,6 +16,8 @@
   "reset": "রিসেট",
   "regenerate": "পুনরায় তৈরি করুন",
   "randomize": "এলোমেলো করুন",
+  "syncToUrl": "Sync to URL",
+  "loadFromUrl": "Load from URL",
   "purgeCache": "Purge Cache",
   "purgeCacheTitle": "Purge cache?",
   "purgeCacheConfirm": "Purge",

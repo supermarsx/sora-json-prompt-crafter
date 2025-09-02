@@ -16,6 +16,8 @@
   "reset": "रीसेट",
   "regenerate": "पुनः उत्पन्न गर्नुहोस्",
   "randomize": "अनियमित बनाउनुहोस्",
+  "syncToUrl": "Sync to URL",
+  "loadFromUrl": "Load from URL",
   "purgeCache": "Purge Cache",
   "purgeCacheTitle": "Purge cache?",
   "purgeCacheConfirm": "Purge",

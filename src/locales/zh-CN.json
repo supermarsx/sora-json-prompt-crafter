@@ -16,6 +16,8 @@
   "reset": "重置",
   "regenerate": "重新生成",
   "randomize": "随机化",
+  "syncToUrl": "Sync to URL",
+  "loadFromUrl": "Load from URL",
   "purgeCache": "Purge Cache",
   "purgeCacheTitle": "Purge cache?",
   "purgeCacheConfirm": "Purge",
