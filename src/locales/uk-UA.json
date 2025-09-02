@@ -16,6 +16,8 @@
   "reset": "Скинути",
   "regenerate": "Згенерувати знову",
   "randomize": "Випадково",
+  "syncToUrl": "Sync to URL",
+  "loadFromUrl": "Load from URL",
   "purgeCache": "Purge Cache",
   "purgeCacheTitle": "Purge cache?",
   "purgeCacheConfirm": "Purge",

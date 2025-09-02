@@ -27,6 +27,7 @@ import {
   Moon,
   Import as ImportIcon,
   Download,
+  Upload,
   Plus,
   Pencil,
   RotateCcw,
@@ -55,6 +56,8 @@ import {
   updateCustomValue,
   exportCustomValues,
   importCustomValues,
+  syncConfigToUrl,
+  loadConfigFromUrl,
   type CustomValuesMap,
 } from '@/lib/storage';
 import {
@@ -237,6 +240,28 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     toast.success(
       t('customValuesExported', { defaultValue: 'Custom values exported' }),
     );
+  };
+
+  const syncToUrl = async () => {
+    const url = window.prompt('Enter URL');
+    if (!url) return;
+    try {
+      await syncConfigToUrl(url.trim());
+      toast.success(t('dataExported', { defaultValue: 'Data exported' }));
+    } catch {
+      toast.error(t('requestBlocked'));
+    }
+  };
+
+  const loadFromUrl = async () => {
+    const url = window.prompt('Enter URL');
+    if (!url) return;
+    try {
+      await loadConfigFromUrl(url.trim());
+      toast.success(t('dataImported', { defaultValue: 'Data imported' }));
+    } catch {
+      toast.error(t('requestBlocked'));
+    }
   };
 
   const importCustomValuesFile = () => {
@@ -520,6 +545,30 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>{t('import')}</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
+                        onClick={syncToUrl}
+                      >
+                        <Upload className="w-4 h-4" /> {t('syncToUrl')}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>{t('syncToUrl')}</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
+                        onClick={loadFromUrl}
+                      >
+                        <Download className="w-4 h-4" /> {t('loadFromUrl')}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>{t('loadFromUrl')}</TooltipContent>
                   </Tooltip>
                   <Tooltip>
                     <TooltipTrigger asChild>

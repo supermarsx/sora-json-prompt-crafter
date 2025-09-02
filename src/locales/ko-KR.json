@@ -16,6 +16,8 @@
   "reset": "초기화",
   "regenerate": "재생성",
   "randomize": "무작위화",
+  "syncToUrl": "Sync to URL",
+  "loadFromUrl": "Load from URL",
   "purgeCache": "Purge Cache",
   "purgeCacheTitle": "Purge cache?",
   "purgeCacheConfirm": "Purge",

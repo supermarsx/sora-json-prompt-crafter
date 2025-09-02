@@ -372,3 +372,59 @@ export function importAppData(data: AppData) {
     setCustomValues(data.customValues);
   }
 }
+
+/**
+ * POST the current {@link AppData} to a remote endpoint.
+ *
+ * @param url - Destination URL expected to accept a JSON body.
+ * @throws {Error} If the request fails or returns a non-OK status.
+ */
+export async function syncConfigToUrl(url: string): Promise<void> {
+  const body = JSON.stringify(exportAppData());
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body,
+    });
+  } catch (err) {
+    throw new Error('Failed to sync config: ' + err);
+  }
+
+  if (!res.ok) {
+    throw new Error(
+      `Failed to sync config: HTTP ${res.status} ${res.statusText || ''}`.trim(),
+    );
+  }
+}
+
+/**
+ * Fetch an {@link AppData} JSON bundle from a URL and import it.
+ *
+ * @param url - Endpoint returning {@link AppData} JSON.
+ * @throws {Error} If the request fails, returns non-OK status, or invalid JSON.
+ */
+export async function loadConfigFromUrl(url: string): Promise<void> {
+  let res: Response;
+  try {
+    res = await fetch(url);
+  } catch (err) {
+    throw new Error('Failed to load config: ' + err);
+  }
+
+  if (!res.ok) {
+    throw new Error(
+      `Failed to load config: HTTP ${res.status} ${res.statusText || ''}`.trim(),
+    );
+  }
+
+  let json: unknown;
+  try {
+    json = await res.json();
+  } catch (err) {
+    throw new Error('Failed to load config: invalid JSON: ' + err);
+  }
+
+  importAppData(json as AppData);
+}

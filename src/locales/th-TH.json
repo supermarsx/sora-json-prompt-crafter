@@ -16,6 +16,8 @@
   "reset": "รีเซ็ต",
   "regenerate": "สร้างใหม่",
   "randomize": "สุ่ม",
+  "syncToUrl": "Sync to URL",
+  "loadFromUrl": "Load from URL",
   "purgeCache": "Purge Cache",
   "purgeCacheTitle": "Purge cache?",
   "purgeCacheConfirm": "Purge",
