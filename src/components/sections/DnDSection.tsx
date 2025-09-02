@@ -20,6 +20,7 @@ import { getOptionLabel as translateOption } from '@/lib/optionTranslator';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { PresetDropdown } from '../PresetDropdown';
+import { mergeCustomValues } from '@/lib/storage';
 
 interface DnDSectionProps {
   options: SoraOptions;
@@ -121,7 +122,7 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
           <div>
             <Label>{t('characterRace')}</Label>
             <SearchableDropdown
-              options={characterRaceOptions}
+              options={mergeCustomValues('dnd_character_race', characterRaceOptions)}
               value={options.dnd_character_race || 'human'}
               onValueChange={(value) =>
                 updateOptions({ dnd_character_race: value })
@@ -130,6 +131,7 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
               getOptionLabel={(opt) =>
                 translateOption(opt, dndOptionTranslations.characterRace, t)
               }
+              optionKey="dnd_character_race"
             />
           </div>
         </ToggleField>
@@ -145,7 +147,7 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
           <div>
             <Label>{t('characterClass')}</Label>
             <SearchableDropdown
-              options={characterClassOptions}
+              options={mergeCustomValues('dnd_character_class', characterClassOptions)}
               value={options.dnd_character_class || 'fighter'}
               onValueChange={(value) =>
                 updateOptions({ dnd_character_class: value })
@@ -154,6 +156,7 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
               getOptionLabel={(opt) =>
                 translateOption(opt, dndOptionTranslations.characterClass, t)
               }
+              optionKey="dnd_character_class"
             />
           </div>
         </ToggleField>
@@ -169,7 +172,7 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
           <div>
             <Label>{t('characterBackground')}</Label>
             <SearchableDropdown
-              options={characterBackgroundOptions}
+              options={mergeCustomValues('dnd_character_background', characterBackgroundOptions)}
               value={options.dnd_character_background || 'soldier'}
               onValueChange={(value) =>
                 updateOptions({ dnd_character_background: value })
@@ -182,6 +185,7 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
                   t,
                 )
               }
+              optionKey="dnd_character_background"
             />
           </div>
         </ToggleField>
@@ -197,7 +201,7 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
           <div>
             <Label>{t('characterAlignment')}</Label>
             <SearchableDropdown
-              options={characterAlignmentOptions}
+              options={mergeCustomValues('dnd_character_alignment', characterAlignmentOptions)}
               value={options.dnd_character_alignment || 'lawful good'}
               onValueChange={(value) =>
                 updateOptions({ dnd_character_alignment: value })
@@ -210,6 +214,7 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
                   t,
                 )
               }
+              optionKey="dnd_character_alignment"
             />
           </div>
         </ToggleField>
@@ -225,7 +230,7 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
           <div>
             <Label>{t('monsterType')}</Label>
             <SearchableDropdown
-              options={monsterTypeOptions}
+              options={mergeCustomValues('dnd_monster_type', monsterTypeOptions)}
               value={options.dnd_monster_type || 'dragon'}
               onValueChange={(value) =>
                 updateOptions({ dnd_monster_type: value })
@@ -234,6 +239,7 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
               getOptionLabel={(opt) =>
                 translateOption(opt, dndOptionTranslations.monsterType, t)
               }
+              optionKey="dnd_monster_type"
             />
           </div>
         </ToggleField>
@@ -249,7 +255,7 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
           <div>
             <Label>{t('dndEnvironment')}</Label>
             <SearchableDropdown
-              options={dndEnvironmentOptions}
+              options={mergeCustomValues('dnd_environment', dndEnvironmentOptions)}
               value={options.dnd_environment || 'dungeon'}
               onValueChange={(value) =>
                 updateOptions({ dnd_environment: value })
@@ -258,6 +264,7 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
               getOptionLabel={(opt) =>
                 translateOption(opt, dndOptionTranslations.environment, t)
               }
+              optionKey="dnd_environment"
             />
           </div>
         </ToggleField>
@@ -273,7 +280,7 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
           <div>
             <Label>{t('magicSchool')}</Label>
             <SearchableDropdown
-              options={magicSchoolOptions}
+              options={mergeCustomValues('dnd_magic_school', magicSchoolOptions)}
               value={options.dnd_magic_school || 'evocation'}
               onValueChange={(value) =>
                 updateOptions({ dnd_magic_school: value })
@@ -282,6 +289,7 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
               getOptionLabel={(opt) =>
                 translateOption(opt, dndOptionTranslations.magicSchool, t)
               }
+              optionKey="dnd_magic_school"
             />
           </div>
         </ToggleField>
@@ -297,13 +305,14 @@ export const DnDSection: React.FC<DnDSectionProps> = ({
           <div>
             <Label>{t('itemType')}</Label>
             <SearchableDropdown
-              options={itemTypeOptions}
+              options={mergeCustomValues('dnd_item_type', itemTypeOptions)}
               value={options.dnd_item_type || 'magic sword'}
               onValueChange={(value) => updateOptions({ dnd_item_type: value })}
               label="Item Type Options"
               getOptionLabel={(opt) =>
                 translateOption(opt, dndOptionTranslations.itemType, t)
               }
+              optionKey="dnd_item_type"
             />
           </div>
         </ToggleField>

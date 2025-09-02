@@ -10,6 +10,7 @@ import {
   SORA_TOOLS_ENABLED,
   TRACKING_ENABLED,
   SECTION_PRESETS,
+  CUSTOM_VALUES,
 } from './storage-keys';
 /**
  * Safely retrieves a value from `localStorage`.
@@ -172,6 +173,50 @@ export function removeSectionPreset(
   };
   setJson(SECTION_PRESETS, updated);
   return updated;
+}
+
+export type CustomValuesMap = Record<string, string[]>;
+
+/**
+ * Retrieves all custom option values grouped by their option key.
+ */
+export function getCustomValues(): CustomValuesMap {
+  return getJson<CustomValuesMap>(CUSTOM_VALUES, {}) ?? {};
+}
+
+/**
+ * Adds a custom value for the specified option key and persists it.
+ *
+ * @param optionKey - Identifier for the option type.
+ * @param value - Custom value to store.
+ * @returns Updated map of custom values.
+ */
+export function addCustomValue(
+  optionKey: string,
+  value: string,
+): CustomValuesMap {
+  const map = getCustomValues();
+  const values = new Set(map[optionKey] ?? []);
+  values.add(value);
+  const updated = { ...map, [optionKey]: Array.from(values) };
+  setJson(CUSTOM_VALUES, updated);
+  return updated;
+}
+
+/**
+ * Merges stored custom values for the given option key with a base list.
+ *
+ * @param optionKey - Identifier for the option type.
+ * @param base - Base list of option strings.
+ * @returns Combined array including any saved custom values.
+ */
+export function mergeCustomValues(
+  optionKey: string,
+  base: readonly string[],
+): string[] {
+  const map = getCustomValues();
+  const custom = map[optionKey] ?? [];
+  return [...base, ...custom];
 }
 
 const PREFERENCE_KEYS = [

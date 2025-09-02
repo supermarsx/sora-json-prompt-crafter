@@ -17,6 +17,7 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from '@/components/ui/tooltip';
+import { addCustomValue } from '@/lib/storage';
 
 interface SearchableDropdownProps {
   options: readonly string[];
@@ -26,6 +27,7 @@ interface SearchableDropdownProps {
   label?: string;
   disabled?: boolean;
   getOptionLabel?: (option: string) => string;
+  optionKey?: string;
 }
 
 export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
@@ -36,6 +38,7 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
   label,
   disabled = false,
   getOptionLabel,
+  optionKey,
 }) => {
   const { t } = useTranslation();
   const placeholderText = placeholder ?? t('searchablePlaceholder');
@@ -142,6 +145,24 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
               ))}
             </div>
           </ScrollArea>
+          {optionKey && (
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => {
+                const input = window.prompt('Enter custom value');
+                const custom = input?.trim();
+                if (!custom) return;
+                addCustomValue(optionKey, custom);
+                onValueChange(custom);
+                setIsOpen(false);
+                setSearchQuery('');
+              }}
+              disabled={disabled}
+            >
+              Add custom value
+            </Button>
+          )}
         </div>
       </DialogContent>
     </Dialog>

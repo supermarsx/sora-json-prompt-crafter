@@ -27,6 +27,7 @@ import {
   subjectFocusOptions,
   type SubjectFocusOption,
 } from '@/data/cameraPresets';
+import { mergeCustomValues } from '@/lib/storage';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { PresetDropdown } from '../PresetDropdown';
@@ -125,13 +126,14 @@ export const CameraCompositionSection: React.FC<
         <div>
           <Label>{t('cameraType')}</Label>
           <SearchableDropdown
-            options={cameraTypeOptions}
+            options={mergeCustomValues('camera_type', cameraTypeOptions)}
             value={options.camera_type}
             onValueChange={(value) => updateOptions({ camera_type: value })}
             label="Camera Type"
             getOptionLabel={(opt) =>
               translateOption(opt, cameraOptionTranslations.cameraType, t)
             }
+            optionKey="camera_type"
           />
         </div>
 
@@ -146,13 +148,14 @@ export const CameraCompositionSection: React.FC<
           <div>
             <Label>{t('lensType')}</Label>
             <SearchableDropdown
-              options={lensTypeOptions}
+              options={mergeCustomValues('lens_type', lensTypeOptions)}
               value={options.lens_type}
               onValueChange={(value) => updateOptions({ lens_type: value })}
               label="Lens Type"
               getOptionLabel={(opt) =>
                 translateOption(opt, cameraOptionTranslations.lensType, t)
               }
+              optionKey="lens_type"
             />
           </div>
         </ToggleField>
@@ -168,13 +171,14 @@ export const CameraCompositionSection: React.FC<
           <div>
             <Label>{t('shotType')}</Label>
             <SearchableDropdown
-              options={shotTypeOptions}
+              options={mergeCustomValues('shot_type', shotTypeOptions)}
               value={options.shot_type}
               onValueChange={(value) => updateOptions({ shot_type: value })}
               label="Shot Type"
               getOptionLabel={(opt) =>
                 translateOption(opt, cameraOptionTranslations.shotType, t)
               }
+              optionKey="shot_type"
             />
           </div>
         </ToggleField>
@@ -190,7 +194,7 @@ export const CameraCompositionSection: React.FC<
           <div>
             <Label>{t('cameraAngle')}</Label>
             <SearchableDropdown
-              options={cameraAngleOptions}
+              options={mergeCustomValues('camera_angle', cameraAngleOptions)}
               value={options.camera_angle}
               onValueChange={(value) =>
                 updateOptions({ camera_angle: value })
@@ -199,6 +203,7 @@ export const CameraCompositionSection: React.FC<
               getOptionLabel={(opt) =>
                 translateOption(opt, cameraOptionTranslations.cameraAngle, t)
               }
+              optionKey="camera_angle"
             />
           </div>
         </ToggleField>
@@ -240,7 +245,7 @@ export const CameraCompositionSection: React.FC<
         <div>
           <Label>{t('compositionRules')}</Label>
           <MultiSelectDropdown
-            options={compositionRulesOptions}
+            options={mergeCustomValues('composition_rules', compositionRulesOptions)}
             value={options.composition_rules}
             onValueChange={handleCompositionRulesChange}
             label="Composition Rules"
@@ -248,6 +253,7 @@ export const CameraCompositionSection: React.FC<
             getOptionLabel={(opt) =>
               translateOption(opt, cameraOptionTranslations.compositionRules, t)
             }
+            optionKey="composition_rules"
           />
         </div>
 
@@ -262,7 +268,7 @@ export const CameraCompositionSection: React.FC<
           <div>
             <Label>{t('aperture')}</Label>
             <SearchableDropdown
-              options={apertureOptions}
+              options={mergeCustomValues('aperture', apertureOptions)}
               value={options.aperture}
               onValueChange={(value) =>
                 updateOptions({ aperture: value })
@@ -271,6 +277,7 @@ export const CameraCompositionSection: React.FC<
               getOptionLabel={(opt) =>
                 translateOption(opt, cameraOptionTranslations.aperture, t)
               }
+              optionKey="aperture"
             />
           </div>
         </ToggleField>
@@ -286,7 +293,7 @@ export const CameraCompositionSection: React.FC<
           <div>
             <Label>{t('depthOfField')}</Label>
             <SearchableDropdown
-              options={depthOfFieldOptions}
+              options={mergeCustomValues('depth_of_field', depthOfFieldOptions)}
               value={options.depth_of_field || 'default'}
               onValueChange={(value) =>
                 updateOptions({ depth_of_field: value })
@@ -299,6 +306,7 @@ export const CameraCompositionSection: React.FC<
                   t,
                 )
               }
+              optionKey="depth_of_field"
             />
           </div>
         </ToggleField>
@@ -314,7 +322,7 @@ export const CameraCompositionSection: React.FC<
           <div>
             <Label>{t('blurStyle')}</Label>
             <SearchableDropdown
-              options={blurStyleOptions}
+              options={mergeCustomValues('blur_style', blurStyleOptions)}
               value={options.blur_style || 'default'}
               onValueChange={(value) =>
                 updateOptions({ blur_style: value })
@@ -323,6 +331,7 @@ export const CameraCompositionSection: React.FC<
               getOptionLabel={(opt) =>
                 translateOption(opt, cameraOptionTranslations.blurStyle, t)
               }
+              optionKey="blur_style"
             />
           </div>
         </ToggleField>

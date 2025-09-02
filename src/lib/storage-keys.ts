@@ -31,3 +31,4 @@ export const TOTAL_SECONDS = 'totalSeconds';
 export const TIME_MILESTONES = 'timeMilestones';
 export const CUSTOM_PRESETS_URL = 'customPresetsUrl';
 export const SECTION_PRESETS = 'sectionPresets';
+export const CUSTOM_VALUES = 'customValues';

@@ -17,6 +17,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { PresetDropdown } from '../PresetDropdown';
+import { mergeCustomValues } from '@/lib/storage';
 interface FaceSectionProps {
   options: SoraOptions;
   updateOptions: (updates: Partial<SoraOptions>) => void;
@@ -114,7 +115,7 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
           <div>
             <Label>{t('subjectGender')}</Label>
             <SearchableDropdown
-              options={subjectGenderOptions}
+              options={mergeCustomValues('subject_gender', subjectGenderOptions)}
               value={
                 options.subject_gender || 'default (auto/inferred gender)'
               }
@@ -123,6 +124,7 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
               getOptionLabel={(opt) =>
                 translateOption(opt, faceOptionTranslations.subjectGender, t)
               }
+              optionKey="subject_gender"
             />
           </div>
         </ToggleField>
@@ -138,7 +140,7 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
           <div>
             <Label>{t('makeupStyle')}</Label>
             <SearchableDropdown
-              options={makeupStyleOptions}
+              options={mergeCustomValues('makeup_style', makeupStyleOptions)}
               value={
                 options.makeup_style || 'default (no specific makeup)'
               }
@@ -147,6 +149,7 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
               getOptionLabel={(opt) =>
                 translateOption(opt, faceOptionTranslations.makeupStyle, t)
               }
+              optionKey="makeup_style"
             />
           </div>
         </ToggleField>
@@ -162,7 +165,7 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
           <div>
             <Label>{t('characterMood')}</Label>
             <SearchableDropdown
-              options={characterMoodOptions}
+              options={mergeCustomValues('character_mood', characterMoodOptions)}
               value={
                 options.character_mood || 'default (neutral mood)'
               }
@@ -173,6 +176,7 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
               getOptionLabel={(opt) =>
                 translateOption(opt, faceOptionTranslations.characterMood, t)
               }
+              optionKey="character_mood"
             />
           </div>
         </ToggleField>

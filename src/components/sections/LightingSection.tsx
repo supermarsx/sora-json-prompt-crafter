@@ -6,6 +6,7 @@ import { CollapsibleSection } from '../CollapsibleSection';
 import type { SoraOptions } from '@/lib/soraOptions';
 
 import { lightingOptions } from '@/data/lightingOptions';
+import { mergeCustomValues } from '@/lib/storage';
 import { Button } from '@/components/ui/button';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { PresetDropdown } from '../PresetDropdown';
@@ -62,12 +63,13 @@ export const LightingSection: React.FC<LightingSectionProps> = ({
         <div>
           <Label>{t('lighting')}</Label>
           <SearchableDropdown
-            options={lightingOptions}
+            options={mergeCustomValues('lighting', lightingOptions)}
             value={options.lighting || ''}
             onValueChange={(value) => updateOptions({ lighting: value })}
             label="Lighting Options"
             placeholder="Select lighting..."
             disabled={!options.use_lighting}
+            optionKey="lighting"
           />
         </div>
       </div>

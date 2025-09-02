@@ -70,4 +70,30 @@ describe('SearchableDropdown', () => {
       screen.queryByPlaceholderText(i18n.t('searchOptionsPlaceholder')),
     ).toBeNull();
   });
+
+  test('allows adding a custom value', () => {
+    localStorage.clear();
+    const handleChange = jest.fn();
+    const promptSpy = jest
+      .spyOn(window, 'prompt')
+      .mockReturnValue('orange');
+    render(
+      <SearchableDropdown
+        options={options}
+        value=""
+        onValueChange={handleChange}
+        optionKey="fruits"
+      />,
+    );
+
+    fireEvent.click(
+      screen.getByRole('button', { name: i18n.t('searchablePlaceholder') }),
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Add custom value' }));
+
+    expect(handleChange).toHaveBeenCalledWith('orange');
+    const stored = JSON.parse(localStorage.getItem('customValues') || '{}');
+    expect(stored.fruits).toContain('orange');
+    promptSpy.mockRestore();
+  });
 });

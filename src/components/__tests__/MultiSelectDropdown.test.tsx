@@ -115,4 +115,28 @@ describe('MultiSelectDropdown', () => {
       screen.queryByPlaceholderText(i18n.t('searchOptionsPlaceholder')),
     ).toBeNull();
   });
+
+  test('adds a custom value and selects it', () => {
+    localStorage.clear();
+    const handleChange = jest.fn();
+    const promptSpy = jest
+      .spyOn(window, 'prompt')
+      .mockReturnValue('bazooka');
+    render(
+      <MultiSelectDropdown
+        options={options}
+        value={[]}
+        onValueChange={handleChange}
+        optionKey="things"
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button'));
+    fireEvent.click(screen.getByRole('button', { name: 'Add custom value' }));
+
+    expect(handleChange).toHaveBeenCalledWith(['bazooka']);
+    const stored = JSON.parse(localStorage.getItem('customValues') || '{}');
+    expect(stored.things).toContain('bazooka');
+    promptSpy.mockRestore();
+  });
 });
