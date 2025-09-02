@@ -11,7 +11,13 @@ import {
   TRACKING_ENABLED,
   SECTION_PRESETS,
   CUSTOM_VALUES,
+  PRESETS,
 } from './storage-keys';
+import {
+  exportCurrentPresets,
+  importCustomPresets,
+  type CustomPresetData,
+} from './presetLoader';
 /**
  * Safely retrieves a value from `localStorage`.
  *
@@ -309,6 +315,8 @@ export interface AppData {
   jsonHistory: unknown[];
   preferences: Record<string, unknown>;
   sectionPresets: SectionPresets;
+  presets: CustomPresetData;
+  customValues: CustomValuesMap;
 }
 
 /**
@@ -322,11 +330,16 @@ export function exportAppData(): AppData {
     const value = getJson<unknown>(key);
     if (value !== null) preferences[key] = value;
   }
+  const presets =
+    getJson<CustomPresetData>(PRESETS, exportCurrentPresets()) ??
+    exportCurrentPresets();
   return {
     currentJson: safeGet<string>(CURRENT_JSON, null) as string | null,
     jsonHistory: getJson<unknown[]>(JSON_HISTORY, []) ?? [],
     preferences,
     sectionPresets: getSectionPresets(),
+    presets,
+    customValues: getCustomValues(),
   };
 }
 
@@ -350,5 +363,12 @@ export function importAppData(data: AppData) {
   }
   if (data.sectionPresets && typeof data.sectionPresets === 'object') {
     setJson(SECTION_PRESETS, data.sectionPresets);
+  }
+  if (data.presets && typeof data.presets === 'object') {
+    setJson(PRESETS, data.presets);
+    importCustomPresets(data.presets);
+  }
+  if (data.customValues && typeof data.customValues === 'object') {
+    setCustomValues(data.customValues);
   }
 }

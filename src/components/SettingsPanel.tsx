@@ -286,6 +286,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
       try {
         const text = await file.text();
         importAppData(JSON.parse(text));
+        setPresetEditor(JSON.stringify(exportCurrentPresets(), null, 2));
+        setCustomMap(getCustomValues());
         toast.success(t('dataImported', { defaultValue: 'Data imported' }));
         trackEvent(trackingEnabled, AnalyticsEvent.DataImport);
       } catch {
