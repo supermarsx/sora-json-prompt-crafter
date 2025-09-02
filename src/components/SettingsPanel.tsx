@@ -83,6 +83,8 @@ import {
   TOTAL_SECONDS,
   TIME_MILESTONES,
   CUSTOM_PRESETS_URL,
+  CUSTOM_CSS,
+  CUSTOM_JS,
 } from '@/lib/storage-keys';
 import { cn } from '@/lib/utils';
 
@@ -194,6 +196,22 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   const [customMap, setCustomMap] = useState<CustomValuesMap>(() => getCustomValues());
   const [customKey, setCustomKey] = useState('');
   const [customValue, setCustomValue] = useState('');
+  const [cssEditorOpen, setCssEditorOpen] = useState(false);
+  const [jsEditorOpen, setJsEditorOpen] = useState(false);
+  const [customCss, setCustomCss] = useState('');
+  const [customJs, setCustomJs] = useState('');
+
+  const openCssEditor = () => {
+    const stored = safeGet(CUSTOM_CSS);
+    setCustomCss(typeof stored === 'string' ? stored : '');
+    setCssEditorOpen(true);
+  };
+
+  const openJsEditor = () => {
+    const stored = safeGet(CUSTOM_JS);
+    setCustomJs(typeof stored === 'string' ? stored : '');
+    setJsEditorOpen(true);
+  };
 
   useEffect(() => {
     if (open) {
@@ -675,13 +693,43 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       {soraToolsEnabled
                         ? 'Hide Sora Integration'
                         : 'Show Sora Integration'}
-                  </TooltipContent>
-                  </Tooltip>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start gap-2"
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start gap-2"
+                    onClick={openCssEditor}
+                  >
+                    <Pencil className="w-4 h-4" />
+                    {t('editCustomCss', { defaultValue: 'Edit custom CSS' })}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {t('editCustomCss', { defaultValue: 'Edit custom CSS' })}
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start gap-2"
+                    onClick={openJsEditor}
+                  >
+                    <Pencil className="w-4 h-4" />
+                    {t('editCustomJs', { defaultValue: 'Edit custom JS' })}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {t('editCustomJs', { defaultValue: 'Edit custom JS' })}
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start gap-2"
                         onClick={() => {
                           try {
                             setDarkMode(!darkMode);
@@ -1332,6 +1380,62 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
               </ScrollArea>
             </TabsContent>
           </Tabs>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={cssEditorOpen} onOpenChange={setCssEditorOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>
+              {t('customCss', { defaultValue: 'Custom CSS' })}
+            </DialogTitle>
+          </DialogHeader>
+          <Textarea
+            className="h-48"
+            value={customCss}
+            onChange={(e) => setCustomCss(e.target.value)}
+          />
+          <div className="flex justify-end gap-2 mt-2">
+            <Button variant="outline" onClick={() => setCssEditorOpen(false)}>
+              {t('cancel')}
+            </Button>
+            <Button
+              onClick={() => {
+                safeSet(CUSTOM_CSS, customCss);
+                setCssEditorOpen(false);
+              }}
+            >
+              {t('save', { defaultValue: 'Save' })}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={jsEditorOpen} onOpenChange={setJsEditorOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>
+              {t('customJs', { defaultValue: 'Custom JS' })}
+            </DialogTitle>
+          </DialogHeader>
+          <Textarea
+            className="h-48"
+            value={customJs}
+            onChange={(e) => setCustomJs(e.target.value)}
+          />
+          <div className="flex justify-end gap-2 mt-2">
+            <Button variant="outline" onClick={() => setJsEditorOpen(false)}>
+              {t('cancel')}
+            </Button>
+            <Button
+              onClick={() => {
+                safeSet(CUSTOM_JS, customJs);
+                setJsEditorOpen(false);
+              }}
+            >
+              {t('save', { defaultValue: 'Save' })}
+            </Button>
+          </div>
         </DialogContent>
       </Dialog>
 

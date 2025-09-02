@@ -49,6 +49,7 @@ go "my eyes!" when there's bright white lights.
 - Internationalization support for English, Spanish and other 2 dozens of locales
 - Works offline thanks to service worker caching of assets
 - Automatically checks for service worker updates on load and when opening the Settings panel
+- Inject custom CSS and JavaScript from the Settings panel
 
 ## Keyboard Shortcuts
 
@@ -222,6 +223,12 @@ a JSON object (or URL via `loadCustomPresetsFromUrl`). The JSON can include
 `stylePresets`, `cameraPresets`, `locationPresets` and `dndPresets` keys
 matching the built‑in structures. Imported values are merged with existing
 presets so they become available in the UI.
+
+## Custom CSS/JS
+
+Use the **Settings** panel to add custom CSS or JavaScript snippets that will
+be injected on startup. These values are stored locally and included in config
+exports and imports.
 
 ## Contributing
 
