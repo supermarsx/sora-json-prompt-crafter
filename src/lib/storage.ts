@@ -219,6 +219,80 @@ export function mergeCustomValues(
   return [...base, ...custom];
 }
 
+/**
+ * Replaces the entire custom values map in storage.
+ *
+ * @param map - Complete map of option keys to custom values.
+ */
+export function setCustomValues(map: CustomValuesMap): void {
+  setJson(CUSTOM_VALUES, map);
+}
+
+/**
+ * Removes a specific custom value for the given option key.
+ *
+ * @param optionKey - Identifier for the option type.
+ * @param value - The custom value to remove.
+ * @returns Updated map of custom values.
+ */
+export function removeCustomValue(
+  optionKey: string,
+  value: string,
+): CustomValuesMap {
+  const map = getCustomValues();
+  const values = (map[optionKey] ?? []).filter((v) => v !== value);
+  const updated = { ...map };
+  if (values.length) {
+    updated[optionKey] = values;
+  } else {
+    delete updated[optionKey];
+  }
+  setJson(CUSTOM_VALUES, updated);
+  return updated;
+}
+
+/**
+ * Updates an existing custom value for the given option key.
+ *
+ * @param optionKey - Identifier for the option type.
+ * @param oldValue - The current value to replace.
+ * @param newValue - New value to store.
+ * @returns Updated map of custom values.
+ */
+export function updateCustomValue(
+  optionKey: string,
+  oldValue: string,
+  newValue: string,
+): CustomValuesMap {
+  const map = getCustomValues();
+  const values = map[optionKey] ?? [];
+  const index = values.indexOf(oldValue);
+  if (index !== -1) {
+    values[index] = newValue;
+  }
+  const updated = { ...map, [optionKey]: Array.from(new Set(values)) };
+  setJson(CUSTOM_VALUES, updated);
+  return updated;
+}
+
+/**
+ * Exports the current custom values map.
+ */
+export function exportCustomValues(): CustomValuesMap {
+  return getCustomValues();
+}
+
+/**
+ * Imports and stores a custom values map.
+ *
+ * @param map - Map of option keys to custom values.
+ * @returns The stored custom values map.
+ */
+export function importCustomValues(map: CustomValuesMap): CustomValuesMap {
+  setCustomValues(map);
+  return map;
+}
+
 const PREFERENCE_KEYS = [
   DARK_MODE,
   DARK_MODE_TOGGLE_VISIBLE,

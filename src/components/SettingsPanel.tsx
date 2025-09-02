@@ -27,6 +27,8 @@ import {
   Moon,
   Import as ImportIcon,
   Download,
+  Plus,
+  Pencil,
   RotateCcw,
   RefreshCw,
   Shuffle,
@@ -42,7 +44,19 @@ import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { purgeCache } from '@/lib/purgeCache';
 import { useUpdateCheck } from '@/hooks/use-update-check';
 import { useDarkMode } from '@/hooks/use-dark-mode';
-import { exportAppData, importAppData, safeGet, safeSet } from '@/lib/storage';
+import {
+  exportAppData,
+  importAppData,
+  safeGet,
+  safeSet,
+  getCustomValues,
+  addCustomValue,
+  removeCustomValue,
+  updateCustomValue,
+  exportCustomValues,
+  importCustomValues,
+  type CustomValuesMap,
+} from '@/lib/storage';
 import {
   loadCustomPresetsFromUrl,
   importCustomPresets,
@@ -96,7 +110,12 @@ interface SettingsPanelProps {
   onToggleActionLabels: () => void;
   coreActionLabelsOnly: boolean;
   onToggleCoreActionLabels: () => void;
-  defaultTab?: 'manage' | 'general' | 'presets' | 'milestones';
+  defaultTab?:
+    | 'manage'
+    | 'general'
+    | 'presets'
+    | 'custom-values'
+    | 'milestones';
 }
 
 /**
@@ -169,6 +188,9 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     return typeof stored === 'string' ? stored : '';
   });
   const [presetEditor, setPresetEditor] = useState('');
+  const [customMap, setCustomMap] = useState<CustomValuesMap>(() => getCustomValues());
+  const [customKey, setCustomKey] = useState('');
+  const [customValue, setCustomValue] = useState('');
 
   useEffect(() => {
     if (open) {
@@ -180,6 +202,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   useEffect(() => {
     if (open) {
       setPresetEditor(JSON.stringify(exportCurrentPresets(), null, 2));
+      setCustomMap(getCustomValues());
     }
   }, [open]);
 
@@ -197,6 +220,60 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     URL.revokeObjectURL(url);
     toast.success(t('dataExported', { defaultValue: 'Data exported' }));
     trackEvent(trackingEnabled, AnalyticsEvent.DataExport);
+  };
+
+  const exportCustomValuesFile = () => {
+    const blob = new Blob([JSON.stringify(exportCustomValues(), null, 2)], {
+      type: 'application/json',
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const datetime = formatDateTime();
+    const rand = Math.random().toString(16).slice(2, 8);
+    a.href = url;
+    a.download = `sora-custom-values-${datetime}-${rand}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success(
+      t('customValuesExported', { defaultValue: 'Custom values exported' }),
+    );
+  };
+
+  const importCustomValuesFile = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'application/json';
+    input.onchange = (e: Event) => {
+      const target = e.target as HTMLInputElement;
+      const file = target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const map = JSON.parse(reader.result as string);
+          importCustomValues(map);
+          setCustomMap(getCustomValues());
+          toast.success(
+            t('customValuesImported', {
+              defaultValue: 'Custom values imported',
+            }),
+          );
+        } catch {
+          toast.error('Invalid custom values file');
+        }
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  };
+
+  const handleAddCustomValue = () => {
+    const key = customKey.trim();
+    const value = customValue.trim();
+    if (!key || !value) return;
+    addCustomValue(key, value);
+    setCustomMap(getCustomValues());
+    setCustomValue('');
   };
 
   const importDataFile = () => {
@@ -418,10 +495,13 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
             <DialogTitle>{t('manage')}</DialogTitle>
           </DialogHeader>
           <Tabs defaultValue={defaultTab}>
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="manage">{t('manage')}</TabsTrigger>
               <TabsTrigger value="general">{t('general')}</TabsTrigger>
               <TabsTrigger value="presets">{t('presets')}</TabsTrigger>
+              <TabsTrigger value="custom-values">
+                {t('customValues', { defaultValue: 'Custom values' })}
+              </TabsTrigger>
               <TabsTrigger value="milestones">{t('milestones')}</TabsTrigger>
             </TabsList>
             <TabsContent value="manage">
@@ -1040,6 +1120,96 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       {t('clearPresets', { defaultValue: 'Clear presets' })}
                     </Button>
                   </div>
+                </div>
+              </ScrollArea>
+            </TabsContent>
+            <TabsContent value="custom-values">
+              <ScrollArea className="max-h-[70vh]">
+                <div className="space-y-2 py-2">
+                  <div className="flex gap-2">
+                    <Input
+                      value={customKey}
+                      onChange={(e) => setCustomKey(e.target.value)}
+                      placeholder={t('optionKey', { defaultValue: 'Option key' })}
+                      className="flex-1"
+                    />
+                    <Input
+                      value={customValue}
+                      onChange={(e) => setCustomValue(e.target.value)}
+                      placeholder={t('customValue', { defaultValue: 'Custom value' })}
+                      className="flex-1"
+                    />
+                    <Button
+                      variant="outline"
+                      onClick={handleAddCustomValue}
+                      disabled={!customKey.trim() || !customValue.trim()}
+                    >
+                      <Plus className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      className="flex-1"
+                      onClick={exportCustomValuesFile}
+                    >
+                      {t('exportCustomValues', {
+                        defaultValue: 'Export custom values',
+                      })}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="flex-1"
+                      onClick={importCustomValuesFile}
+                    >
+                      {t('importCustomValues', {
+                        defaultValue: 'Import custom values',
+                      })}
+                    </Button>
+                  </div>
+                  {Object.entries(customMap).length === 0 && (
+                    <p className="text-sm text-muted-foreground">
+                      {t('noCustomValues', {
+                        defaultValue: 'No custom values',
+                      })}
+                    </p>
+                  )}
+                  {Object.entries(customMap).map(([key, values]) => (
+                    <div key={key} className="space-y-1">
+                      <div className="font-medium">{key}</div>
+                      {values.map((val) => (
+                        <div key={val} className="flex items-center gap-2 ml-2">
+                          <span className="flex-1 truncate">{val}</span>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              const input = window.prompt(
+                                t('editValue', { defaultValue: 'Edit value' }),
+                                val,
+                              );
+                              const newVal = input?.trim();
+                              if (!newVal || newVal === val) return;
+                              updateCustomValue(key, val, newVal);
+                              setCustomMap(getCustomValues());
+                            }}
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              removeCustomValue(key, val);
+                              setCustomMap(getCustomValues());
+                            }}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
                 </div>
               </ScrollArea>
             </TabsContent>
