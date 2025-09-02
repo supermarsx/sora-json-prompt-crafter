@@ -16,6 +16,12 @@ jest.mock('@/lib/storage', () => ({
   exportAppData: jest.fn(() => ({})),
   importAppData: jest.fn(),
   safeGet: jest.fn((key: string) => (key === 'customPresetsUrl' ? '' : [])),
+  getCustomValues: jest.fn(() => ({})),
+  addCustomValue: jest.fn(),
+  removeCustomValue: jest.fn(),
+  updateCustomValue: jest.fn(),
+  exportCustomValues: jest.fn(() => ({})),
+  importCustomValues: jest.fn(),
 }));
 jest.mock('@/components/ui/sonner-toast', () => ({
   __esModule: true,
