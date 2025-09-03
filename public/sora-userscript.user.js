@@ -12,7 +12,15 @@
   const VERSION = '__USERSCRIPT_VERSION__';
   const DEBUG = false;
   const SESSION_KEY = 'sora_json_payload';
-  const ALLOWED_ORIGIN = 'https://sora.chatgpt.com';
+  const SORA_ORIGIN = window.location.origin;
+  let CRAFTER_ORIGIN = null;
+  try {
+    CRAFTER_ORIGIN = document.referrer
+      ? new URL(document.referrer).origin
+      : null;
+  } catch {
+    CRAFTER_ORIGIN = null;
+  }
   console.log(`[Sora Injector] Loaded v${VERSION}`);
   if (DEBUG) {
     console.debug(`[Sora Injector] Hostname: ${window.location.hostname}`);
@@ -165,8 +173,11 @@
   window.addEventListener(
     'message',
     (event) => {
+      const isAllowedOrigin =
+        event.origin !== SORA_ORIGIN &&
+        (!CRAFTER_ORIGIN || event.origin === CRAFTER_ORIGIN);
       if (
-        event.origin === ALLOWED_ORIGIN &&
+        isAllowedOrigin &&
         event.data?.type === 'INSERT_SORA_JSON' &&
         typeof event.data.nonce === 'string'
       ) {

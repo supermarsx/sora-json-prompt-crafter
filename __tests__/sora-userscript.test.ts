@@ -11,6 +11,7 @@ describe('sora-userscript', () => {
     jest.useFakeTimers();
     document.body.innerHTML = '';
     document.head.innerHTML = '';
+    sessionStorage.clear();
     mockPostMessage = jest.fn();
     Object.defineProperty(window, 'postMessage', {
       value: mockPostMessage,
@@ -44,6 +45,10 @@ describe('sora-userscript', () => {
     document.head.innerHTML = '<meta property="og:title" content="Sora">';
     const opener = { postMessage: jest.fn() } as unknown as WindowProxy;
     Object.defineProperty(window, 'opener', { value: opener, writable: true });
+    Object.defineProperty(document, 'referrer', {
+      get: () => 'https://crafter.local/page',
+      configurable: true,
+    });
 
     const textarea = document.createElement('textarea');
     document.body.appendChild(textarea);
@@ -54,7 +59,7 @@ describe('sora-userscript', () => {
     window.dispatchEvent(
       new MessageEvent('message', {
         data: { type: 'INSERT_SORA_JSON', json: { foo: 'bar' }, nonce: 'abc' },
-        origin: 'https://sora.chatgpt.com',
+        origin: 'https://crafter.local',
         source,
       }),
     );
@@ -62,12 +67,16 @@ describe('sora-userscript', () => {
     expect(textarea.value).toBe(JSON.stringify({ foo: 'bar' }, null, 2));
     expect(source.postMessage).toHaveBeenCalledWith(
       { type: 'INSERT_SORA_JSON_ACK', nonce: 'abc' },
-      'https://sora.chatgpt.com',
+      'https://crafter.local',
     );
   });
 
-  test('ignores messages from disallowed origin', async () => {
+  test('ignores messages from same origin', async () => {
     document.head.innerHTML = '<meta property="og:title" content="Sora">';
+    Object.defineProperty(document, 'referrer', {
+      get: () => 'https://crafter.local',
+      configurable: true,
+    });
     const textarea = document.createElement('textarea');
     document.body.appendChild(textarea);
 
@@ -77,7 +86,7 @@ describe('sora-userscript', () => {
     window.dispatchEvent(
       new MessageEvent('message', {
         data: { type: 'INSERT_SORA_JSON', json: { foo: 'bar' }, nonce: 'abc' },
-        origin: 'https://evil.com',
+        origin: window.location.origin,
         source,
       }),
     );
@@ -88,6 +97,10 @@ describe('sora-userscript', () => {
 
   test('ignores messages with invalid nonce', async () => {
     document.head.innerHTML = '<meta property="og:title" content="Sora">';
+    Object.defineProperty(document, 'referrer', {
+      get: () => 'https://crafter.local',
+      configurable: true,
+    });
     const textarea = document.createElement('textarea');
     document.body.appendChild(textarea);
 
@@ -97,7 +110,7 @@ describe('sora-userscript', () => {
     window.dispatchEvent(
       new MessageEvent('message', {
         data: { type: 'INSERT_SORA_JSON', json: { foo: 'bar' } },
-        origin: 'https://sora.chatgpt.com',
+        origin: 'https://crafter.local',
         source,
       }),
     );
@@ -117,6 +130,10 @@ describe('sora-userscript', () => {
 
   test('reapplies JSON on focus if cleared', async () => {
     document.head.innerHTML = '<meta property="og:title" content="Sora">';
+    Object.defineProperty(document, 'referrer', {
+      get: () => 'https://crafter.local',
+      configurable: true,
+    });
 
     const textarea = document.createElement('textarea');
     document.body.appendChild(textarea);
@@ -127,7 +144,7 @@ describe('sora-userscript', () => {
     window.dispatchEvent(
       new MessageEvent('message', {
         data: { type: 'INSERT_SORA_JSON', json: { foo: 'bar' }, nonce: 'abc' },
-        origin: 'https://sora.chatgpt.com',
+        origin: 'https://crafter.local',
         source,
       }),
     );
