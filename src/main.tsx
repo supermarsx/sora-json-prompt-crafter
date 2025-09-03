@@ -20,6 +20,7 @@ import {
 } from '@/lib/storage-keys';
 import { toast } from '@/components/ui/sonner-toast';
 import i18n from '@/i18n';
+import { injectCustomCode } from '@/lib/inject-custom-code';
 
 /**
  * Maps reload count thresholds to corresponding analytics events.
@@ -64,5 +65,8 @@ try {
   // Log error without stopping the app
   console.error('Reload counter: There was an error.');
 }
+
+// Inject any user-provided CSS/JS before rendering
+injectCustomCode();
 
 createRoot(document.getElementById('root')!).render(<App />);

@@ -12,6 +12,8 @@ import {
   SECTION_PRESETS,
   CUSTOM_VALUES,
   PRESETS,
+  CUSTOM_CSS,
+  CUSTOM_JS,
 } from './storage-keys';
 import {
   exportCurrentPresets,
@@ -308,6 +310,8 @@ const PREFERENCE_KEYS = [
   ACTION_LABELS_ENABLED,
   TRACKING_ENABLED,
   LOCALE,
+  CUSTOM_CSS,
+  CUSTOM_JS,
 ];
 
 export interface AppData {
@@ -327,8 +331,13 @@ export interface AppData {
 export function exportAppData(): AppData {
   const preferences: Record<string, unknown> = {};
   for (const key of PREFERENCE_KEYS) {
-    const value = getJson<unknown>(key);
-    if (value !== null) preferences[key] = value;
+    if (key === CUSTOM_CSS || key === CUSTOM_JS) {
+      const str = safeGet<string>(key, '') as string;
+      if (str) preferences[key] = str;
+    } else {
+      const value = getJson<unknown>(key);
+      if (value !== null) preferences[key] = value;
+    }
   }
   const presets =
     getJson<CustomPresetData>(PRESETS, exportCurrentPresets()) ??
@@ -358,7 +367,11 @@ export function importAppData(data: AppData) {
   }
   if (data.preferences && typeof data.preferences === 'object') {
     for (const [key, value] of Object.entries(data.preferences)) {
-      setJson(key, value);
+      if (key === CUSTOM_CSS || key === CUSTOM_JS) {
+        safeSet(key, value as string);
+      } else {
+        setJson(key, value);
+      }
     }
   }
   if (data.sectionPresets && typeof data.sectionPresets === 'object') {

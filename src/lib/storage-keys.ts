@@ -33,3 +33,5 @@ export const CUSTOM_PRESETS_URL = 'customPresetsUrl';
 export const PRESETS = 'presets';
 export const SECTION_PRESETS = 'sectionPresets';
 export const CUSTOM_VALUES = 'customValues';
+export const CUSTOM_CSS = 'customCss';
+export const CUSTOM_JS = 'customJs';
