@@ -300,10 +300,15 @@ const Dashboard = () => {
   const sendToSora = () => {
     const win = window.open('https://sora.chatgpt.com', '_blank', 'noopener');
     if (!win) return;
-    const payload = { type: 'INSERT_SORA_JSON', json: JSON.parse(jsonString) };
+    const nonce = crypto.randomUUID();
+    const payload = {
+      type: 'INSERT_SORA_JSON',
+      json: JSON.parse(jsonString),
+      nonce,
+    } as const;
     const start = () => {
       const intervalId = setInterval(() => {
-        win.postMessage(payload, '*');
+        win.postMessage(payload, 'https://sora.chatgpt.com');
       }, 250);
       const timeoutId = setTimeout(() => {
         clearInterval(intervalId);
@@ -312,7 +317,9 @@ const Dashboard = () => {
       const ackHandler = (event: MessageEvent) => {
         if (
           event.source === win &&
-          event.data?.type === 'INSERT_SORA_JSON_ACK'
+          event.origin === 'https://sora.chatgpt.com' &&
+          event.data?.type === 'INSERT_SORA_JSON_ACK' &&
+          event.data?.nonce === nonce
         ) {
           clearInterval(intervalId);
           clearTimeout(timeoutId);

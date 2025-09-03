@@ -53,17 +53,57 @@ describe('sora-userscript', () => {
     const source = { postMessage: jest.fn() } as MessageEventSource;
     window.dispatchEvent(
       new MessageEvent('message', {
-        data: { type: 'INSERT_SORA_JSON', json: { foo: 'bar' } },
-        origin: 'https://crafter.local',
+        data: { type: 'INSERT_SORA_JSON', json: { foo: 'bar' }, nonce: 'abc' },
+        origin: 'https://sora.chatgpt.com',
         source,
       }),
     );
 
     expect(textarea.value).toBe(JSON.stringify({ foo: 'bar' }, null, 2));
     expect(source.postMessage).toHaveBeenCalledWith(
-      { type: 'INSERT_SORA_JSON_ACK' },
-      '*',
+      { type: 'INSERT_SORA_JSON_ACK', nonce: 'abc' },
+      'https://sora.chatgpt.com',
     );
+  });
+
+  test('ignores messages from disallowed origin', async () => {
+    document.head.innerHTML = '<meta property="og:title" content="Sora">';
+    const textarea = document.createElement('textarea');
+    document.body.appendChild(textarea);
+
+    await import(USERSCRIPT_PATH);
+
+    const source = { postMessage: jest.fn() } as MessageEventSource;
+    window.dispatchEvent(
+      new MessageEvent('message', {
+        data: { type: 'INSERT_SORA_JSON', json: { foo: 'bar' }, nonce: 'abc' },
+        origin: 'https://evil.com',
+        source,
+      }),
+    );
+
+    expect(textarea.value).toBe('');
+    expect(source.postMessage).not.toHaveBeenCalled();
+  });
+
+  test('ignores messages with invalid nonce', async () => {
+    document.head.innerHTML = '<meta property="og:title" content="Sora">';
+    const textarea = document.createElement('textarea');
+    document.body.appendChild(textarea);
+
+    await import(USERSCRIPT_PATH);
+
+    const source = { postMessage: jest.fn() } as MessageEventSource;
+    window.dispatchEvent(
+      new MessageEvent('message', {
+        data: { type: 'INSERT_SORA_JSON', json: { foo: 'bar' } },
+        origin: 'https://sora.chatgpt.com',
+        source,
+      }),
+    );
+
+    expect(textarea.value).toBe('');
+    expect(source.postMessage).not.toHaveBeenCalled();
   });
 
   test('logs and exits on unrelated pages', async () => {
@@ -86,8 +126,8 @@ describe('sora-userscript', () => {
     const source = { postMessage: jest.fn() } as MessageEventSource;
     window.dispatchEvent(
       new MessageEvent('message', {
-        data: { type: 'INSERT_SORA_JSON', json: { foo: 'bar' } },
-        origin: 'https://crafter.local',
+        data: { type: 'INSERT_SORA_JSON', json: { foo: 'bar' }, nonce: 'abc' },
+        origin: 'https://sora.chatgpt.com',
         source,
       }),
     );
