@@ -12,15 +12,23 @@
   const VERSION = '__USERSCRIPT_VERSION__';
   const DEBUG = false;
   const SESSION_KEY = 'sora_json_payload';
+  const CRAFTER_ORIGIN_KEY = 'sora_crafter_origin';
   const SORA_ORIGIN = window.location.origin;
   let CRAFTER_ORIGIN = null;
   try {
-    CRAFTER_ORIGIN = document.referrer
+    CRAFTER_ORIGIN = sessionStorage.getItem(CRAFTER_ORIGIN_KEY);
+  } catch {}
+  try {
+    const refOrigin = document.referrer
       ? new URL(document.referrer).origin
       : null;
-  } catch {
-    CRAFTER_ORIGIN = null;
-  }
+    if (refOrigin && refOrigin !== SORA_ORIGIN) {
+      CRAFTER_ORIGIN = refOrigin;
+      try {
+        sessionStorage.setItem(CRAFTER_ORIGIN_KEY, refOrigin);
+      } catch {}
+    }
+  } catch {}
   console.log(`[Sora Injector] Loaded v${VERSION}`);
   if (DEBUG) {
     console.debug(`[Sora Injector] Hostname: ${window.location.hostname}`);
