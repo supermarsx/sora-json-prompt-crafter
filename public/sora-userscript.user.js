@@ -175,7 +175,8 @@
     (event) => {
       const isAllowedOrigin =
         event.origin !== SORA_ORIGIN &&
-        (!CRAFTER_ORIGIN || event.origin === CRAFTER_ORIGIN);
+        CRAFTER_ORIGIN !== null &&
+        event.origin === CRAFTER_ORIGIN;
       if (
         isAllowedOrigin &&
         event.data?.type === 'INSERT_SORA_JSON' &&

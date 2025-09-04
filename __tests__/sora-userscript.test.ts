@@ -5,6 +5,12 @@ const USERSCRIPT_PATH = '../public/sora-userscript.user.js';
 describe('sora-userscript', () => {
   const originalPostMessage = window.postMessage;
   let mockPostMessage: jest.Mock;
+  let addedListeners: Array<{
+    type: string;
+    listener: EventListenerOrEventListenerObject;
+    options?: boolean | AddEventListenerOptions;
+  }>;
+  let originalAddEventListener: typeof window.addEventListener;
 
   beforeEach(() => {
     jest.resetModules();
@@ -17,9 +23,29 @@ describe('sora-userscript', () => {
       value: mockPostMessage,
       writable: true,
     });
+    addedListeners = [];
+    originalAddEventListener = window.addEventListener;
+    Object.defineProperty(window, 'addEventListener', {
+      value: (
+        type: string,
+        listener: EventListenerOrEventListenerObject,
+        options?: boolean | AddEventListenerOptions,
+      ) => {
+        addedListeners.push({ type, listener, options });
+        return originalAddEventListener.call(window, type, listener, options);
+      },
+      writable: true,
+    });
   });
 
   afterEach(() => {
+    addedListeners.forEach(({ type, listener, options }) => {
+      window.removeEventListener(type, listener, options);
+    });
+    Object.defineProperty(window, 'addEventListener', {
+      value: originalAddEventListener,
+      writable: true,
+    });
     jest.clearAllTimers();
     jest.useRealTimers();
     jest.restoreAllMocks();
@@ -110,6 +136,30 @@ describe('sora-userscript', () => {
     window.dispatchEvent(
       new MessageEvent('message', {
         data: { type: 'INSERT_SORA_JSON', json: { foo: 'bar' } },
+        origin: 'https://crafter.local',
+        source,
+      }),
+    );
+
+    expect(textarea.value).toBe('');
+    expect(source.postMessage).not.toHaveBeenCalled();
+  });
+
+  test('rejects messages when referrer is missing', async () => {
+    document.head.innerHTML = '<meta property="og:title" content="Sora">';
+    Object.defineProperty(document, 'referrer', {
+      get: () => '',
+      configurable: true,
+    });
+    const textarea = document.createElement('textarea');
+    document.body.appendChild(textarea);
+
+    await import(USERSCRIPT_PATH);
+
+    const source = { postMessage: jest.fn() } as MessageEventSource;
+    window.dispatchEvent(
+      new MessageEvent('message', {
+        data: { type: 'INSERT_SORA_JSON', json: { foo: 'bar' }, nonce: 'abc' },
         origin: 'https://crafter.local',
         source,
       }),
