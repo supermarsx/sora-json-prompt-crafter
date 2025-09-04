@@ -5,20 +5,47 @@ const USERSCRIPT_PATH = '../public/sora-userscript.user.js';
 describe('sora-userscript', () => {
   const originalPostMessage = window.postMessage;
   let mockPostMessage: jest.Mock;
+  let addedListeners: Array<{
+    type: string;
+    listener: EventListenerOrEventListenerObject;
+    options?: boolean | AddEventListenerOptions;
+  }>;
+  let originalAddEventListener: typeof window.addEventListener;
 
   beforeEach(() => {
     jest.resetModules();
     jest.useFakeTimers();
     document.body.innerHTML = '';
     document.head.innerHTML = '';
+    sessionStorage.clear();
     mockPostMessage = jest.fn();
     Object.defineProperty(window, 'postMessage', {
       value: mockPostMessage,
       writable: true,
     });
+    addedListeners = [];
+    originalAddEventListener = window.addEventListener;
+    Object.defineProperty(window, 'addEventListener', {
+      value: (
+        type: string,
+        listener: EventListenerOrEventListenerObject,
+        options?: boolean | AddEventListenerOptions,
+      ) => {
+        addedListeners.push({ type, listener, options });
+        return originalAddEventListener.call(window, type, listener, options);
+      },
+      writable: true,
+    });
   });
 
   afterEach(() => {
+    addedListeners.forEach(({ type, listener, options }) => {
+      window.removeEventListener(type, listener, options);
+    });
+    Object.defineProperty(window, 'addEventListener', {
+      value: originalAddEventListener,
+      writable: true,
+    });
     jest.clearAllTimers();
     jest.useRealTimers();
     jest.restoreAllMocks();
@@ -44,7 +71,62 @@ describe('sora-userscript', () => {
     document.head.innerHTML = '<meta property="og:title" content="Sora">';
     const opener = { postMessage: jest.fn() } as unknown as WindowProxy;
     Object.defineProperty(window, 'opener', { value: opener, writable: true });
+    Object.defineProperty(document, 'referrer', {
+      get: () => 'https://crafter.local/page',
+      configurable: true,
+    });
 
+    const textarea = document.createElement('textarea');
+    document.body.appendChild(textarea);
+
+    await import(USERSCRIPT_PATH);
+
+    const source = { postMessage: jest.fn() } as MessageEventSource;
+    window.dispatchEvent(
+      new MessageEvent('message', {
+        data: { type: 'INSERT_SORA_JSON', json: { foo: 'bar' }, nonce: 'abc' },
+        origin: 'https://crafter.local',
+        source,
+      }),
+    );
+
+    expect(textarea.value).toBe(JSON.stringify({ foo: 'bar' }, null, 2));
+    expect(source.postMessage).toHaveBeenCalledWith(
+      { type: 'INSERT_SORA_JSON_ACK', nonce: 'abc' },
+      'https://crafter.local',
+    );
+  });
+
+  test('ignores messages from same origin', async () => {
+    document.head.innerHTML = '<meta property="og:title" content="Sora">';
+    Object.defineProperty(document, 'referrer', {
+      get: () => 'https://crafter.local',
+      configurable: true,
+    });
+    const textarea = document.createElement('textarea');
+    document.body.appendChild(textarea);
+
+    await import(USERSCRIPT_PATH);
+
+    const source = { postMessage: jest.fn() } as MessageEventSource;
+    window.dispatchEvent(
+      new MessageEvent('message', {
+        data: { type: 'INSERT_SORA_JSON', json: { foo: 'bar' }, nonce: 'abc' },
+        origin: window.location.origin,
+        source,
+      }),
+    );
+
+    expect(textarea.value).toBe('');
+    expect(source.postMessage).not.toHaveBeenCalled();
+  });
+
+  test('ignores messages with invalid nonce', async () => {
+    document.head.innerHTML = '<meta property="og:title" content="Sora">';
+    Object.defineProperty(document, 'referrer', {
+      get: () => 'https://crafter.local',
+      configurable: true,
+    });
     const textarea = document.createElement('textarea');
     document.body.appendChild(textarea);
 
@@ -59,11 +141,77 @@ describe('sora-userscript', () => {
       }),
     );
 
-    expect(textarea.value).toBe(JSON.stringify({ foo: 'bar' }, null, 2));
-    expect(source.postMessage).toHaveBeenCalledWith(
-      { type: 'INSERT_SORA_JSON_ACK' },
-      '*',
+    expect(textarea.value).toBe('');
+    expect(source.postMessage).not.toHaveBeenCalled();
+  });
+
+  test('rejects messages when referrer is missing', async () => {
+    document.head.innerHTML = '<meta property="og:title" content="Sora">';
+    Object.defineProperty(document, 'referrer', {
+      get: () => '',
+      configurable: true,
+    });
+    const textarea = document.createElement('textarea');
+    document.body.appendChild(textarea);
+
+    await import(USERSCRIPT_PATH);
+
+    const source = { postMessage: jest.fn() } as MessageEventSource;
+    window.dispatchEvent(
+      new MessageEvent('message', {
+        data: { type: 'INSERT_SORA_JSON', json: { foo: 'bar' }, nonce: 'abc' },
+        origin: 'https://crafter.local',
+        source,
+      }),
     );
+
+    expect(textarea.value).toBe('');
+    expect(source.postMessage).not.toHaveBeenCalled();
+  });
+
+  test('accepts messages after navigation when crafter origin persisted', async () => {
+    document.head.innerHTML = '<meta property="og:title" content="Sora">';
+    Object.defineProperty(document, 'referrer', {
+      get: () => 'https://crafter.local',
+      configurable: true,
+    });
+    const textarea1 = document.createElement('textarea');
+    document.body.appendChild(textarea1);
+
+    await import(USERSCRIPT_PATH);
+
+    expect(sessionStorage.getItem('sora_crafter_origin')).toBe(
+      'https://crafter.local',
+    );
+
+    addedListeners.forEach(({ type, listener, options }) => {
+      window.removeEventListener(type, listener, options);
+    });
+    addedListeners = [];
+
+    jest.resetModules();
+
+    document.body.innerHTML = '';
+    document.head.innerHTML = '<meta property="og:title" content="Sora">';
+    Object.defineProperty(document, 'referrer', {
+      get: () => window.location.origin,
+      configurable: true,
+    });
+    const textarea2 = document.createElement('textarea');
+    document.body.appendChild(textarea2);
+
+    await import(USERSCRIPT_PATH);
+
+    const source = { postMessage: jest.fn() } as MessageEventSource;
+    window.dispatchEvent(
+      new MessageEvent('message', {
+        data: { type: 'INSERT_SORA_JSON', json: { foo: 'bar' }, nonce: 'abc' },
+        origin: 'https://crafter.local',
+        source,
+      }),
+    );
+
+    expect(textarea2.value).toBe(JSON.stringify({ foo: 'bar' }, null, 2));
   });
 
   test('logs and exits on unrelated pages', async () => {
@@ -77,6 +225,10 @@ describe('sora-userscript', () => {
 
   test('reapplies JSON on focus if cleared', async () => {
     document.head.innerHTML = '<meta property="og:title" content="Sora">';
+    Object.defineProperty(document, 'referrer', {
+      get: () => 'https://crafter.local',
+      configurable: true,
+    });
 
     const textarea = document.createElement('textarea');
     document.body.appendChild(textarea);
@@ -86,7 +238,7 @@ describe('sora-userscript', () => {
     const source = { postMessage: jest.fn() } as MessageEventSource;
     window.dispatchEvent(
       new MessageEvent('message', {
-        data: { type: 'INSERT_SORA_JSON', json: { foo: 'bar' } },
+        data: { type: 'INSERT_SORA_JSON', json: { foo: 'bar' }, nonce: 'abc' },
         origin: 'https://crafter.local',
         source,
       }),

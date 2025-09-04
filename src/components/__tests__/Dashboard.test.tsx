@@ -363,6 +363,7 @@ describe('Dashboard interactions', () => {
 
   test('dark mode toggle switches icon and sendToSora ACK stops interval', () => {
     jest.useFakeTimers();
+    jest.spyOn(globalThis.crypto, 'randomUUID').mockReturnValue('abc');
     mockUseDarkMode.mockImplementation(() => {
       const [dark, setDark] = React.useState(false);
       return [dark, setDark] as const;
@@ -411,8 +412,9 @@ describe('Dashboard interactions', () => {
 
     act(() => {
       (handler as EventListener)?.({
+        origin: 'https://sora.chatgpt.com',
         source: win,
-        data: { type: 'INSERT_SORA_JSON_ACK' },
+        data: { type: 'INSERT_SORA_JSON_ACK', nonce: 'abc' },
       } as MessageEvent);
     });
 
@@ -424,6 +426,7 @@ describe('Dashboard interactions', () => {
     expect(removeListenerSpy).toHaveBeenCalledWith('message', handler);
 
     openSpy.mockRestore();
+    (globalThis.crypto.randomUUID as jest.Mock).mockRestore();
     jest.runOnlyPendingTimers();
     jest.useRealTimers();
   });
