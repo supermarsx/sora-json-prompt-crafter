@@ -114,7 +114,14 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
         PreTag="span"
         CodeTag="span"
         wrapLongLines
-        customStyle={{ margin: 0, padding: 0, background: 'none' }}
+        wrapLines
+        customStyle={{
+          margin: 0,
+          padding: 0,
+          background: 'none',
+          wordBreak: 'break-word',
+          overflowWrap: 'anywhere',
+        }}
       >
         {value}
       </SyntaxHighlighter>

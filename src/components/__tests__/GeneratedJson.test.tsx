@@ -40,4 +40,19 @@ describe('GeneratedJson', () => {
       jest.advanceTimersByTime(2000);
     });
   });
+
+  test('wraps long tokens without horizontal scroll', () => {
+    const longToken = 'a'.repeat(5000);
+    const { getByTestId } = render(
+      <GeneratedJson
+        json={`{"token":"${longToken}"}`}
+        trackingEnabled={false}
+      />,
+    );
+
+    const container = getByTestId('json-container');
+    const pre = container.querySelector('pre') as HTMLElement;
+    expect(pre.className).toContain('break-words');
+    expect(container.scrollWidth).toBe(container.clientWidth);
+  });
 });
