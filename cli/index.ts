@@ -5,9 +5,13 @@ import { loadOptionsFromJson } from '../src/lib/loadOptionsFromJson.ts';
 import { DEFAULT_OPTIONS } from '../src/lib/defaultOptions.ts';
 import { OPTION_FLAG_MAP } from '../src/lib/optionFlagMap.ts';
 import type { SoraOptions } from '../src/lib/soraOptions.ts';
+import { serializeOptions } from '../src/lib/urlOptions.ts';
 
 /**
  * Parse command-line arguments into a key-value map.
+ *
+ * Supports boolean flags such as `--minify` and `--share-url` as well as
+ * key/value pairs like `--output <file>` or `--url <http>`.
  *
  * @param argv - Arguments provided to the CLI.
  * @returns Object mapping flag names to their values or boolean presence.
@@ -62,7 +66,13 @@ function buildOptionsFromFlags(
   const updates: Partial<SoraOptions> = {};
 
   Object.entries(values).forEach(([key, value]) => {
-    if (key === 'file' || key === 'output' || key === 'minify' || key === 'url')
+    if (
+      key === 'file' ||
+      key === 'output' ||
+      key === 'minify' ||
+      key === 'url' ||
+      key === 'share-url'
+    )
       return;
     const typedKey = key as keyof SoraOptions;
     const defaultVal = DEFAULT_OPTIONS[typedKey];
@@ -93,7 +103,7 @@ function buildOptionsFromFlags(
  * Entry point for the CLI.
  *
  * Parses flags, loads options from JSON input or file,
- * and outputs the generated JSON string.
+ * and outputs either the generated JSON string or a shareable URL.
  *
  * @param argv - CLI arguments excluding the node executable and script path.
  * @param stdinInput - Optional JSON string supplied via stdin (used in tests).
@@ -109,8 +119,10 @@ export async function runCli(
     return (
       'Usage: sora-crafter [options]\n' +
       '  --file <path>     Load options from JSON file\n' +
+      '  --url <url>       Load options from a remote JSON URL\n' +
       '  --output <path>   Write output JSON to file\n' +
       '  --minify          Minify JSON output\n' +
+      '  --share-url       Output shareable URL instead of JSON\n' +
       '  --help            Show this help message\n' +
       '  --version         Show the package version\n'
     );
@@ -126,6 +138,7 @@ export async function runCli(
     'output',
     'minify',
     'url',
+    'share-url',
     ...Object.keys(DEFAULT_OPTIONS),
   ]);
 
@@ -162,6 +175,18 @@ export async function runCli(
 
   if (!options) {
     options = buildOptionsFromFlags(args);
+  }
+
+  if (args['share-url']) {
+    const url = new URL('https://sora-json-prompt-crafter.lovable.app');
+    url.searchParams.set('ref', 'share');
+    url.hash = serializeOptions(options);
+    const share = url.toString();
+    if (typeof args.output === 'string') {
+      writeFileSync(args.output, share);
+      return '';
+    }
+    return share;
   }
 
   let json = generateJson(options);
