@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import * as fs from 'node:fs';
 import { runCli } from '../index.ts';
+import { deserializeOptions } from '../../src/lib/urlOptions.ts';
 
 test('generates JSON from flags', async () => {
   const out = await runCli(['--prompt', 'hello', '--width', '123']);
@@ -23,6 +24,7 @@ test('generates JSON from file', async () => {
 test('shows help with --help', async () => {
   const out = await runCli(['--help']);
   expect(out).toMatch(/Usage: sora-crafter/);
+  expect(out).toMatch(/--share-url/);
 });
 
 test('prints version with --version', async () => {
@@ -71,4 +73,28 @@ test('loads options from url', async () => {
   expect(obj.prompt).toBe('from url');
   expect(obj.width).toBe(789);
   mockFetch.mockRestore();
+});
+
+test('outputs share URL when --share-url is provided', async () => {
+  const out = await runCli(['--prompt', 'share', '--width', '111', '--share-url']);
+  const url = new URL(out.trim());
+  expect(url.searchParams.get('ref')).toBe('share');
+  const decoded = deserializeOptions(url.hash.slice(1));
+  expect(decoded?.prompt).toBe('share');
+  expect(decoded?.width).toBe(111);
+});
+
+test('writes share URL to file when --share-url and --output are provided', async () => {
+  const file = join(tmpdir(), 'share-url.txt');
+  const out = await runCli([
+    '--prompt',
+    'file share',
+    '--share-url',
+    '--output',
+    file,
+  ]);
+  expect(out).toBe('');
+  const url = new URL(fs.readFileSync(file, 'utf8').trim());
+  const decoded = deserializeOptions(url.hash.slice(1));
+  expect(decoded?.prompt).toBe('file share');
 });
