@@ -736,10 +736,10 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                             toast.success(
                               !darkMode
                                 ? t('darkModeEnabled', {
-                                    defaultValue: 'Dark mode enabled',
+                                    defaultValue: 'Dark mode enabled!',
                                   })
                                 : t('darkModeDisabled', {
-                                    defaultValue: 'Dark mode disabled',
+                                    defaultValue: 'Enabled light mode!',
                                   }),
                             );
                             trackEvent(
@@ -787,11 +787,11 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                             onToggleDarkModeToggleVisible();
                             toast.success(
                               !darkModeToggleVisible
-                                ? t('showDarkModeToggle', {
-                                    defaultValue: 'Show dark mode toggle',
+                                ? t('darkModeToggleShown', {
+                                    defaultValue: 'Shown dark mode toggle',
                                   })
-                                : t('hideDarkModeToggle', {
-                                    defaultValue: 'Hide dark mode toggle',
+                                : t('darkModeToggleHidden', {
+                                    defaultValue: 'Hidden dark mode toggle',
                                   }),
                             );
                             trackEvent(
