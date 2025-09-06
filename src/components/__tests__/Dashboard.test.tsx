@@ -9,6 +9,7 @@ import {
 import Dashboard from '../Dashboard';
 import { toast } from '@/components/ui/sonner-toast';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
+import i18n from '@/i18n';
 import type { SoraOptions } from '@/lib/soraOptions';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { useSoraUserscript } from '@/hooks/use-sora-userscript';
@@ -475,7 +476,7 @@ describe('offline banner', () => {
   test('toggles visibility based on navigator.onLine', async () => {
     setOnline(false);
     render(<Dashboard />);
-    expect(screen.getByText(/offline/i)).toBeTruthy();
+    expect(screen.getByText(i18n.t('offlineNotice'))).toBeTruthy();
 
     act(() => {
       setOnline(true);
@@ -483,7 +484,7 @@ describe('offline banner', () => {
     });
 
     await waitFor(() => {
-      expect(screen.queryByText(/offline/i)).toBeNull();
+      expect(screen.queryByText(i18n.t('offlineNotice'))).toBeNull();
     });
 
     act(() => {
@@ -492,7 +493,7 @@ describe('offline banner', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText(/offline/i)).toBeTruthy();
+      expect(screen.getByText(i18n.t('offlineNotice'))).toBeTruthy();
     });
   });
 });

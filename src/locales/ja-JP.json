@@ -33,6 +33,12 @@
   "hideLogo": "ロゴを非表示",
   "showDarkModeToggle": "Show Dark Mode Toggle",
   "hideDarkModeToggle": "Hide Dark Mode Toggle",
+  "darkModeEnabled": "Dark mode enabled!",
+  "darkModeDisabled": "Enabled light mode!",
+  "darkModeToggleShown": "Shown dark mode toggle",
+  "darkModeToggleHidden": "Hidden dark mode toggle",
+  "offlineNotice": "You are offline",
+  "dismiss": "Dismiss",
   "enableFloatingJson": "Enable Floating JSON",
   "disableFloatingJson": "Disable Floating JSON",
   "history": "履歴",
@@ -341,6 +347,13 @@
       "side": "side",
       "diagonal": "diagonal",
       "tilted": "tilted"
+    },
+    "subjectFocus": {
+      "center": "center",
+      "left": "left",
+      "right": "right",
+      "top": "top",
+      "bottom": "bottom"
     },
     "compositionRules": {
       "rule_of_thirds": "rule of thirds",
