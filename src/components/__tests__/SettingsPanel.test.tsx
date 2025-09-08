@@ -41,7 +41,17 @@ jest.mock('@/components/ui/dialog', () => ({
   Dialog: ({ open, children }: { open: boolean; children: React.ReactNode }) => (
     open ? <div>{children}</div> : null
   ),
-  DialogContent: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  DialogContent: ({
+    className,
+    children,
+  }: {
+    className?: string;
+    children: React.ReactNode;
+  }) => (
+    <div data-testid="dialog-content" className={className}>
+      {children}
+    </div>
+  ),
   DialogHeader: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   DialogTitle: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
@@ -166,5 +176,15 @@ describe('SettingsPanel', () => {
     await waitFor(() => expect(importAppData).toHaveBeenCalledWith({ b: 2 }));
     expect(toast.success).toHaveBeenCalledWith(i18n.t('dataImported'));
     expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.DataImport);
+  });
+
+  test('dialog content has responsive size classes', () => {
+    renderPanel();
+    const content = screen.getByTestId('dialog-content');
+    const cls = content.className;
+    expect(cls).toContain('w-[90vw]');
+    expect(cls).toContain('max-w-lg');
+    expect(cls).toContain('h-[80vh]');
+    expect(cls).toContain('overflow-hidden');
   });
 });

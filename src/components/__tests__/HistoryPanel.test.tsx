@@ -43,6 +43,28 @@ jest.mock('@/lib/storage', () => ({
   setJson: jest.fn(),
 }));
 
+jest.mock('@/components/ui/dialog', () => ({
+  __esModule: true,
+  Dialog: ({ open, children }: { open: boolean; children: React.ReactNode }) => (
+    open ? <div role="dialog">{children}</div> : null
+  ),
+  DialogContent: ({
+    className,
+    children,
+  }: {
+    className?: string;
+    children: React.ReactNode;
+  }) => (
+    <div data-testid="dialog-content" className={className}>
+      {children}
+    </div>
+  ),
+  DialogHeader: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  DialogTitle: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  DialogDescription: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  DialogFooter: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+}));
+
 jest.mock('../ClipboardImportModal', () => ({
   __esModule: true,
   default: () => null,
@@ -260,7 +282,7 @@ describe('HistoryPanel basic actions', () => {
     renderPanel({ onRename });
     const renameBtn = screen.getAllByRole('button', { name: /rename/i })[0];
     fireEvent.click(renameBtn);
-    const dialog = screen.getByRole('dialog');
+    const dialog = screen.getAllByRole('dialog')[1];
     const input = within(dialog).getByRole('textbox');
     fireEvent.change(input, { target: { value: 'new title' } });
     const saveBtn = within(dialog).getByRole('button', { name: /save/i });
@@ -334,5 +356,15 @@ describe('HistoryPanel action history', () => {
 
     expect(safeSet).toHaveBeenCalledWith(TRACKING_HISTORY, [], true);
     expect(events).toHaveLength(1);
+  });
+
+  test('dialog content has responsive size classes', () => {
+    renderPanel();
+    const content = screen.getByTestId('dialog-content');
+    const cls = content.className;
+    expect(cls).toContain('w-[90vw]');
+    expect(cls).toContain('max-w-2xl');
+    expect(cls).toContain('h-[80vh]');
+    expect(cls).toContain('overflow-hidden');
   });
 });
