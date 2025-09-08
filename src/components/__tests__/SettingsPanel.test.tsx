@@ -178,6 +178,16 @@ describe('SettingsPanel', () => {
     expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.DataImport);
   });
 
+  test('shows manage tab grouped headings', () => {
+    renderPanel({ defaultTab: 'manage' });
+    expect(
+      screen.getByRole('heading', { name: /data management/i }),
+    ).toBeTruthy();
+    expect(
+      screen.getByRole('heading', { name: /json generation/i }),
+    ).toBeTruthy();
+  });
+
   test('dialog content has responsive size classes', () => {
     renderPanel();
     const content = screen.getByTestId('dialog-content');

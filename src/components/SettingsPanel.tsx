@@ -551,82 +551,111 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
             </TabsList>
             <TabsContent value="manage">
               <ScrollArea className="max-h-[70vh]">
-                <div className="space-y-2 py-2">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start gap-2"
-                        onClick={onImport}
-                      >
-                        <ImportIcon className="w-4 h-4" /> {t('import')}
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>{t('import')}</TooltipContent>
-                  </Tooltip>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start gap-2"
-                        onClick={syncToUrl}
-                      >
-                        <Upload className="w-4 h-4" /> {t('syncToUrl')}
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>{t('syncToUrl')}</TooltipContent>
-                  </Tooltip>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start gap-2"
-                        onClick={loadFromUrl}
-                      >
-                        <Download className="w-4 h-4" /> {t('loadFromUrl')}
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>{t('loadFromUrl')}</TooltipContent>
-                  </Tooltip>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start gap-2"
-                        onClick={onReset}
-                      >
-                        <RotateCcw className="w-4 h-4" /> {t('reset')}
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>{t('reset')}</TooltipContent>
-                  </Tooltip>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full justify-start gap-2"
-                        onClick={onRegenerate}
-                      >
-                        <RefreshCw className="w-4 h-4" /> {t('regenerate')}
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>{t('regenerate')}</TooltipContent>
-                  </Tooltip>
-                  <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start gap-2"
-                      onClick={onRandomize}
-                    >
-                      <Shuffle className="w-4 h-4" /> {t('randomize')}
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>{t('randomize')}</TooltipContent>
-                </Tooltip>
-              </div>
-            </ScrollArea>
-          </TabsContent>
+                <div className="space-y-4 py-2">
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-medium">
+                      {t('dataManagement', { defaultValue: 'Data Management' })}
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="gap-2"
+                            onClick={onImport}
+                          >
+                            <ImportIcon className="w-4 h-4" /> {t('import')}
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>{t('import')}</TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="gap-2"
+                            onClick={exportDataFile}
+                          >
+                            <Download className="w-4 h-4" />
+                            {t('exportData', { defaultValue: 'Export data' })}
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          {t('exportData', { defaultValue: 'Export data' })}
+                        </TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="gap-2"
+                            onClick={syncToUrl}
+                          >
+                            <Upload className="w-4 h-4" /> {t('syncToUrl')}
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>{t('syncToUrl')}</TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="gap-2"
+                            onClick={loadFromUrl}
+                          >
+                            <Download className="w-4 h-4" /> {t('loadFromUrl')}
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>{t('loadFromUrl')}</TooltipContent>
+                      </Tooltip>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <h3 className="text-sm font-medium">
+                      {t('jsonGeneration', { defaultValue: 'JSON Generation' })}
+                    </h3>
+                    <div className="flex gap-2">
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="gap-2"
+                            onClick={onReset}
+                          >
+                            <RotateCcw className="w-4 h-4" /> {t('reset')}
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>{t('reset')}</TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="gap-2"
+                            onClick={onRegenerate}
+                          >
+                            <RefreshCw className="w-4 h-4" /> {t('regenerate')}
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>{t('regenerate')}</TooltipContent>
+                      </Tooltip>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="gap-2"
+                            onClick={onRandomize}
+                          >
+                            <Shuffle className="w-4 h-4" /> {t('randomize')}
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>{t('randomize')}</TooltipContent>
+                      </Tooltip>
+                    </div>
+                  </div>
+                </div>
+              </ScrollArea>
+            </TabsContent>
           <TabsContent value="general">
             <ScrollArea className="max-h-[70vh]">
                 <div className="space-y-2 py-2">
