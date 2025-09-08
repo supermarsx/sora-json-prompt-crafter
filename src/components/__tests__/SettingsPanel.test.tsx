@@ -197,4 +197,17 @@ describe('SettingsPanel', () => {
     expect(cls).toContain('h-[80vh]');
     expect(cls).toContain('overflow-hidden');
   });
+
+  test('milestones tab renders categories with descriptions and medals', () => {
+    renderPanel({ defaultTab: 'milestones' });
+    const title = screen.getByText(/copy/i);
+    expect(title).toBeTruthy();
+    const description = title.nextElementSibling as HTMLElement | null;
+    expect(description).toBeTruthy();
+    expect(description?.textContent).toMatch(/you did/i);
+    const medalRow = description?.nextElementSibling as HTMLElement | null;
+    expect(medalRow).toBeTruthy();
+    expect(medalRow?.className).toContain('mt-2');
+    expect(medalRow?.className).toContain('flex-wrap');
+  });
 });

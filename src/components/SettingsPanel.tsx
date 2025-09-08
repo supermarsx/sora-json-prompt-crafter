@@ -1343,7 +1343,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
             </TabsContent>
             <TabsContent value="milestones">
               <ScrollArea className="max-h-[70vh]">
-                <div className="space-y-4 py-2">
+                <div className="space-y-3 py-2">
                   {milestoneCategories.map((cat) => {
                     const achieved =
                       (safeGet<number[]>(cat.key, [], true) as number[]) ?? [];
@@ -1371,19 +1371,13 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     const message = `You did ${count} ${cat.unit}, you're currently at ${currentTier} level, reach ${nextTier} level by doing ${remaining} more.`;
                     return (
                       <div key={cat.key} className="space-y-1">
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-medium">
-                            {cat.label}
-                          </span>
-                          <span className="text-xs text-muted-foreground">
-                            {message}
-                          </span>
-                        </div>
+                        <div className="text-sm font-medium">{cat.label}</div>
+                        <p className="text-xs text-muted-foreground">{message}</p>
                         <div
                           className={cn(
-                            'flex gap-1',
+                            'mt-2 flex flex-wrap gap-1',
                             cat.key === TIME_MILESTONES &&
-                              'flex-wrap max-w-[200px] gap-2 mt-1'
+                              'max-w-[200px] gap-2'
                           )}
                         >
                           {cat.thresholds.map((th) => (
