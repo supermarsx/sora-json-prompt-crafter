@@ -535,7 +535,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-sm">
+        <DialogContent className="w-[90vw] max-w-lg h-[80vh] overflow-hidden">
           <DialogHeader>
             <DialogTitle>{t('manage')}</DialogTitle>
           </DialogHeader>

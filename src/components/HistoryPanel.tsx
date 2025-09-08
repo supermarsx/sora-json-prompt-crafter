@@ -269,7 +269,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="w-[90vw] max-w-2xl h-[80vh] overflow-hidden">
           <DialogHeader>
             <DialogTitle>{t('history')}</DialogTitle>
             <DialogDescription>{t('historyDescription')}</DialogDescription>
@@ -438,7 +438,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                   itemCount={filteredHistory.length}
                   itemSize={130}
                   width="100%"
-                  className="pb-2"
+                  className="pb-2 overflow-auto"
                   outerElementType={HistoryListOuter}
                 >
                   {({ index, style }) => (
