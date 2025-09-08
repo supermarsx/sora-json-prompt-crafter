@@ -13,7 +13,7 @@ const Loading: React.FC = () => {
 
   return (
     <div
-      className="flex h-screen w-screen flex-col items-center justify-center transition-opacity duration-50"
+      className="flex h-screen w-screen flex-col items-center justify-center text-center transition-opacity duration-50"
       role="status"
     >
       <div className="flex items-center justify-center gap-3">
@@ -21,7 +21,7 @@ const Loading: React.FC = () => {
         <span className="text-lg font-medium">{t('loading')}</span>
       </div>
       <div
-        className="mt-4 h-1 w-48 overflow-hidden rounded bg-muted"
+        className="mx-auto mt-4 h-1 w-48 overflow-hidden rounded bg-muted"
         role="progressbar"
         aria-label="loading progress"
         aria-valuemin={0}
