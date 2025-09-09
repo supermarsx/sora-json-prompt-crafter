@@ -12,8 +12,8 @@ import {
 
 interface HistoryItemProps {
   entry: HistoryEntry;
-  onEdit: (json: string) => void;
-  onCopy: (json: string) => void;
+  onEdit: (entry: HistoryEntry) => void;
+  onCopy: (entry: HistoryEntry) => void;
   onDelete: (id: number) => void;
   onPreview: (entry: HistoryEntry) => void;
   trackingEnabled: boolean;
@@ -62,14 +62,14 @@ const HistoryItem: React.FC<HistoryItemProps> = ({
               variant="outline"
               onClick={() => {
                 trackEvent(trackingEnabled, AnalyticsEvent.HistoryEdit);
-                onEdit(entry.json);
+                onEdit(entry);
                 setEdited(true);
                 setTimeout(() => setEdited(false), 1500);
               }}
               className={`gap-1 ${edited ? 'text-green-600 animate-pulse' : ''}`}
             >
               {edited ? <Check className="w-4 h-4" /> : <Edit className="w-4 h-4" />}{' '}
-              {edited ? t('edited') : t('edit')}
+              {edited ? t('edited') : t('edit')} ({entry.editCount})
             </Button>
           </TooltipTrigger>
           <TooltipContent>{edited ? t('edited') : t('edit')}</TooltipContent>
@@ -81,14 +81,14 @@ const HistoryItem: React.FC<HistoryItemProps> = ({
               variant="outline"
               onClick={() => {
                 trackEvent(trackingEnabled, AnalyticsEvent.HistoryCopy);
-                onCopy(entry.json);
+                onCopy(entry);
                 setCopied(true);
                 setTimeout(() => setCopied(false), 1500);
               }}
               className={`gap-1 ${copied ? 'text-green-600 animate-pulse' : ''}`}
             >
               {copied ? <Check className="w-4 h-4" /> : <Clipboard className="w-4 h-4" />}{' '}
-              {copied ? t('copied') : t('copy')}
+              {copied ? t('copied') : t('copy')} ({entry.copyCount})
             </Button>
           </TooltipTrigger>
           <TooltipContent>{copied ? t('copied') : t('copy')}</TooltipContent>

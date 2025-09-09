@@ -105,6 +105,8 @@ const sampleHistory = Array.from({ length: 20 }, (_, i) => ({
   json: `{"prompt":"p${i}"}`,
   favorite: i % 2 === 0,
   title: `title${i}`,
+  editCount: i === 0 ? 3 : 0,
+  copyCount: i === 0 ? 5 : 0,
 }));
 const sampleActions = [{ date: 'd', action: 'a' }];
 
@@ -149,6 +151,13 @@ afterEach(() => {
 });
 
 describe('HistoryPanel basic actions', () => {
+  test('displays copy and edit counters', () => {
+    renderPanel();
+    const editBtn = screen.getByRole('button', { name: /edit \(3\)/i });
+    const copyBtn = screen.getByRole('button', { name: /copy \(5\)/i });
+    expect(editBtn).toBeTruthy();
+    expect(copyBtn).toBeTruthy();
+  });
   test('exports to clipboard and file', async () => {
     renderPanel();
     const exportBtn = screen.getByRole('button', { name: /^export$/i });

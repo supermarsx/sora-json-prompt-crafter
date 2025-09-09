@@ -61,6 +61,8 @@ export interface HistoryEntry {
   json: string;
   favorite: boolean;
   title: string;
+  editCount: number;
+  copyCount: number;
 }
 
 interface HistoryPanelProps {
@@ -70,8 +72,8 @@ interface HistoryPanelProps {
   actionHistory: { date: string; action: string }[];
   onDelete: (id: number) => void;
   onClear: () => void;
-  onCopy: (json: string) => void;
-  onEdit: (json: string) => void;
+  onCopy: (entry: HistoryEntry) => void;
+  onEdit: (entry: HistoryEntry) => void;
   onImport: (entries: { json: string; title?: string }[]) => void;
   onToggleFavorite: (id: number) => void;
   onRename: (id: number, title: string) => void;

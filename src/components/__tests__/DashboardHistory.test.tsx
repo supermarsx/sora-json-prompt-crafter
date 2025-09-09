@@ -12,17 +12,27 @@ import { useTracking } from '@/hooks/use-tracking';
 import { useActionHistory } from '@/hooks/use-action-history';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { JSON_HISTORY } from '@/lib/storage-keys';
+jest.mock('@/lib/validateOptions', () => ({
+  __esModule: true,
+  isValidOptions: jest.fn(() => true),
+}));
 
 let importFn: ((entries: { json: string; title?: string }[]) => void) | null = null;
+let copyFn: ((entry: any) => void) | null = null;
 
 jest.mock('../HistoryPanel', () => ({
   __esModule: true,
   default: ({
     onImport,
+    onCopy,
+    onEdit,
   }: {
     onImport: (entries: { json: string; title?: string }[]) => void;
+    onCopy: (entry: any) => void;
+    onEdit: (entry: any) => void;
   }) => {
     importFn = onImport;
+    copyFn = onCopy;
     return null;
   },
 }));
@@ -84,6 +94,8 @@ function createEntries(n: number) {
     json: '{}',
     favorite: false,
     title: `t${i}`,
+    editCount: 0,
+    copyCount: 0,
   }));
 }
 
@@ -91,6 +103,7 @@ describe('Dashboard history limit', () => {
   beforeEach(() => {
     localStorage.clear();
     importFn = null;
+    copyFn = null;
     Object.defineProperty(navigator, 'clipboard', {
       value: { writeText: jest.fn().mockResolvedValue(undefined) },
       configurable: true,
@@ -131,6 +144,31 @@ describe('Dashboard history limit', () => {
       expect(
         JSON.parse(localStorage.getItem(JSON_HISTORY) || '[]'),
       ).toHaveLength(100);
+    });
+  });
+
+  test('increments copy counter', async () => {
+    const entry = {
+      id: 1,
+      date: 'd',
+      json: '{"prompt":"hi"}',
+      favorite: false,
+      title: 't1',
+      editCount: 0,
+      copyCount: 0,
+    };
+    localStorage.setItem(JSON_HISTORY, JSON.stringify([entry]));
+
+    render(<Dashboard />);
+
+    await waitFor(() => copyFn);
+
+    await act(async () => {
+      await copyFn?.(entry);
+    });
+    await waitFor(() => {
+      const stored = JSON.parse(localStorage.getItem(JSON_HISTORY) || '[]');
+      expect(stored[0].copyCount).toBe(1);
     });
   });
 });

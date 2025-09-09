@@ -167,6 +167,8 @@ const Dashboard = () => {
     (safeGet<HistoryEntry[]>(JSON_HISTORY, [], true) ?? []).map((e) => ({
       favorite: false,
       title: e.title ?? getTitleFromJson(e.json),
+      editCount: e.editCount ?? 0,
+      copyCount: e.copyCount ?? 0,
       ...e,
     })),
   );
@@ -201,6 +203,7 @@ const Dashboard = () => {
   }, [trackingEnabled]);
 
   useEffect(() => {
+    // persist full history including copy/edit counters
     safeSet(JSON_HISTORY, history, true);
   }, [history]);
 
@@ -240,6 +243,8 @@ const Dashboard = () => {
         json: jsonString,
         favorite: false,
         title: getTitleFromJson(jsonString),
+        editCount: 0,
+        copyCount: 0,
       };
       setHistory((prev) => [entry, ...prev].slice(0, 100));
       const opts = options as unknown as Record<string, unknown>;
@@ -527,9 +532,14 @@ const Dashboard = () => {
    * @param {string} json - JSON string to copy.
    * Side effects: logs analytics when successful.
    */
-  const copyHistoryEntry = async (json: string) => {
-    const success = await copy(json, t('jsonCopied'));
+  const copyHistoryEntry = async (entry: HistoryEntry) => {
+    const success = await copy(entry.json, t('jsonCopied'));
     if (success) {
+      setHistory((prev) =>
+        prev.map((e) =>
+          e.id === entry.id ? { ...e, copyCount: e.copyCount + 1 } : e,
+        ),
+      );
       trackEvent(trackingEnabled, AnalyticsEvent.HistoryCopy);
     }
   };
@@ -540,9 +550,9 @@ const Dashboard = () => {
    * @param {string} json - JSON string representing options to load.
    * Side effects: updates options, scrolls view, and logs analytics.
    */
-  const editHistoryEntry = (json: string) => {
+  const editHistoryEntry = (entry: HistoryEntry) => {
     try {
-      const obj = JSON.parse(json);
+      const obj = JSON.parse(entry.json);
       if (!isValidOptions(obj)) throw new Error('invalid');
       const enableMap = OPTION_FLAG_MAP;
 
@@ -574,6 +584,11 @@ const Dashboard = () => {
         ?.scrollIntoView({ behavior: 'smooth' });
       trackEvent(trackingEnabled, AnalyticsEvent.SelectedJsonPrompt);
       trackEvent(trackingEnabled, AnalyticsEvent.HistoryEdit);
+      setHistory((prev) =>
+        prev.map((e) =>
+          e.id === entry.id ? { ...e, editCount: e.editCount + 1 } : e,
+        ),
+      );
     } catch {
       toast.error(t('invalidJson'));
     }
@@ -592,6 +607,8 @@ const Dashboard = () => {
       json,
       favorite: false,
       title: title ?? getTitleFromJson(json),
+      editCount: 0,
+      copyCount: 0,
     }));
     setHistory((prev) => [...mapped, ...prev].slice(0, 100));
     trackEvent(trackingEnabled, AnalyticsEvent.HistoryImport, { type: 'bulk' });
