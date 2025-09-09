@@ -11,7 +11,11 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
-import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from '@/components/ui/tooltip';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -193,7 +197,9 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     return typeof stored === 'string' ? stored : '';
   });
   const [presetEditor, setPresetEditor] = useState('');
-  const [customMap, setCustomMap] = useState<CustomValuesMap>(() => getCustomValues());
+  const [customMap, setCustomMap] = useState<CustomValuesMap>(() =>
+    getCustomValues(),
+  );
   const [customKey, setCustomKey] = useState('');
   const [customValue, setCustomValue] = useState('');
   const [cssEditorOpen, setCssEditorOpen] = useState(false);
@@ -334,17 +340,18 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         toast.success(t('dataImported', { defaultValue: 'Data imported' }));
         trackEvent(trackingEnabled, AnalyticsEvent.DataImport);
       } catch {
-        toast.error(t('invalidDataFile', { defaultValue: 'Invalid data file' }));
+        toast.error(
+          t('invalidDataFile', { defaultValue: 'Invalid data file' }),
+        );
       }
     };
     input.click();
   };
 
   const exportPresetFile = () => {
-    const blob = new Blob(
-      [JSON.stringify(exportCurrentPresets(), null, 2)],
-      { type: 'application/json' },
-    );
+    const blob = new Blob([JSON.stringify(exportCurrentPresets(), null, 2)], {
+      type: 'application/json',
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     const datetime = formatDateTime();
@@ -383,9 +390,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     try {
       importCustomPresets(JSON.parse(presetEditor));
       setPresetEditor(JSON.stringify(exportCurrentPresets(), null, 2));
-      toast.success(
-        t('presetsUpdated', { defaultValue: 'Presets updated' }),
-      );
+      toast.success(t('presetsUpdated', { defaultValue: 'Presets updated' }));
     } catch {
       toast.error(
         t('invalidPresetFile', { defaultValue: 'Invalid preset file' }),
@@ -404,9 +409,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     try {
       await loadCustomPresetsFromUrl(presetUrl.trim());
       safeSet(CUSTOM_PRESETS_URL, presetUrl.trim());
-      toast.success(
-        t('presetsLoaded', { defaultValue: 'Presets loaded' }),
-      );
+      toast.success(t('presetsLoaded', { defaultValue: 'Presets loaded' }));
       setPresetEditor(JSON.stringify(exportCurrentPresets(), null, 2));
     } catch {
       toast.error(
@@ -535,7 +538,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="w-[90vw] max-w-lg h-[80vh] overflow-hidden">
+        <DialogContent className="top-0 translate-y-0 w-[90vw] max-w-lg h-[80vh] overflow-hidden">
           <DialogHeader>
             <DialogTitle>{t('manage')}</DialogTitle>
           </DialogHeader>
@@ -656,8 +659,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 </div>
               </ScrollArea>
             </TabsContent>
-          <TabsContent value="general">
-            <ScrollArea className="max-h-[70vh]">
+            <TabsContent value="general">
+              <ScrollArea className="max-h-[70vh]">
                 <div className="space-y-2 py-2">
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -674,7 +677,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       >
                         {trackingEnabled ? (
                           <>
-                            <EyeOff className="w-4 h-4" /> {t('disableTracking')}
+                            <EyeOff className="w-4 h-4" />{' '}
+                            {t('disableTracking')}
                           </>
                         ) : (
                           <>
@@ -722,43 +726,45 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       {soraToolsEnabled
                         ? 'Hide Sora Integration'
                         : 'Show Sora Integration'}
-                </TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start gap-2"
-                    onClick={openCssEditor}
-                  >
-                    <Pencil className="w-4 h-4" />
-                    {t('editCustomCss', { defaultValue: 'Edit custom CSS' })}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  {t('editCustomCss', { defaultValue: 'Edit custom CSS' })}
-                </TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start gap-2"
-                    onClick={openJsEditor}
-                  >
-                    <Pencil className="w-4 h-4" />
-                    {t('editCustomJs', { defaultValue: 'Edit custom JS' })}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  {t('editCustomJs', { defaultValue: 'Edit custom JS' })}
-                </TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start gap-2"
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
+                        onClick={openCssEditor}
+                      >
+                        <Pencil className="w-4 h-4" />
+                        {t('editCustomCss', {
+                          defaultValue: 'Edit custom CSS',
+                        })}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {t('editCustomCss', { defaultValue: 'Edit custom CSS' })}
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
+                        onClick={openJsEditor}
+                      >
+                        <Pencil className="w-4 h-4" />
+                        {t('editCustomJs', { defaultValue: 'Edit custom JS' })}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {t('editCustomJs', { defaultValue: 'Edit custom JS' })}
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
                         onClick={() => {
                           try {
                             setDarkMode(!darkMode);
@@ -783,13 +789,15 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       >
                         {darkMode ? (
                           <>
-                            <Sun className="w-4 h-4" /> {t('disableDarkMode', {
+                            <Sun className="w-4 h-4" />{' '}
+                            {t('disableDarkMode', {
                               defaultValue: 'Disable dark mode',
                             })}
                           </>
                         ) : (
                           <>
-                            <Moon className="w-4 h-4" /> {t('enableDarkMode', {
+                            <Moon className="w-4 h-4" />{' '}
+                            {t('enableDarkMode', {
                               defaultValue: 'Enable dark mode',
                             })}
                           </>
@@ -869,7 +877,9 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                           try {
                             onToggleHeaderVisible();
                             toast.success(
-                              !headerVisible ? t('showHeader') : t('hideHeader'),
+                              !headerVisible
+                                ? t('showHeader')
+                                : t('hideHeader'),
                             );
                             trackEvent(
                               trackingEnabled,
@@ -923,7 +933,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       >
                         {headerButtonsEnabled ? (
                           <>
-                            <EyeOff className="w-4 h-4" /> {t('hideHeaderButtons')}
+                            <EyeOff className="w-4 h-4" />{' '}
+                            {t('hideHeaderButtons')}
                           </>
                         ) : (
                           <>
@@ -949,9 +960,13 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                             toast.success(
                               !logoEnabled ? t('showLogo') : t('hideLogo'),
                             );
-                            trackEvent(trackingEnabled, AnalyticsEvent.ToggleLogo, {
-                              enabled: !logoEnabled,
-                            });
+                            trackEvent(
+                              trackingEnabled,
+                              AnalyticsEvent.ToggleLogo,
+                              {
+                                enabled: !logoEnabled,
+                              },
+                            );
                           } catch {
                             toast.error('Failed to toggle logo');
                           }
@@ -1050,7 +1065,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                         )}
                       </Button>
                     </TooltipTrigger>
-                  <TooltipContent>
+                    <TooltipContent>
                       {coreActionLabelsOnly
                         ? t('showAllLabels')
                         : t('coreLabelsOnly')}
@@ -1092,71 +1107,71 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                         )}
                       </Button>
                     </TooltipTrigger>
-                  <TooltipContent>
-                    {floatingJsonEnabled
-                      ? t('disableFloatingJson')
-                      : t('enableFloatingJson')}
-                  </TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start gap-2"
-                      onClick={() => {
-                        try {
-                          onToggleShortcuts();
-                          toast.success(
-                            !shortcutsEnabled
-                              ? t('enableShortcuts', {
-                                  defaultValue: 'Enable shortcuts',
-                                })
-                              : t('disableShortcuts', {
-                                  defaultValue: 'Disable shortcuts',
-                                }),
-                          );
-                          trackEvent(
-                            trackingEnabled,
-                            AnalyticsEvent.ToggleKeyboardShortcuts,
-                            { enabled: !shortcutsEnabled },
-                          );
-                        } catch {
-                          toast.error('Failed to toggle shortcuts');
-                        }
-                      }}
-                    >
-                      {shortcutsEnabled ? (
-                        <>
-                          <KeyboardOff className="w-4 h-4" />
-                          {t('disableShortcuts', {
+                    <TooltipContent>
+                      {floatingJsonEnabled
+                        ? t('disableFloatingJson')
+                        : t('enableFloatingJson')}
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
+                        onClick={() => {
+                          try {
+                            onToggleShortcuts();
+                            toast.success(
+                              !shortcutsEnabled
+                                ? t('enableShortcuts', {
+                                    defaultValue: 'Enable shortcuts',
+                                  })
+                                : t('disableShortcuts', {
+                                    defaultValue: 'Disable shortcuts',
+                                  }),
+                            );
+                            trackEvent(
+                              trackingEnabled,
+                              AnalyticsEvent.ToggleKeyboardShortcuts,
+                              { enabled: !shortcutsEnabled },
+                            );
+                          } catch {
+                            toast.error('Failed to toggle shortcuts');
+                          }
+                        }}
+                      >
+                        {shortcutsEnabled ? (
+                          <>
+                            <KeyboardOff className="w-4 h-4" />
+                            {t('disableShortcuts', {
+                              defaultValue: 'Disable shortcuts',
+                            })}
+                          </>
+                        ) : (
+                          <>
+                            <Keyboard className="w-4 h-4" />
+                            {t('enableShortcuts', {
+                              defaultValue: 'Enable shortcuts',
+                            })}
+                          </>
+                        )}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {shortcutsEnabled
+                        ? t('disableShortcuts', {
                             defaultValue: 'Disable shortcuts',
-                          })}
-                        </>
-                      ) : (
-                        <>
-                          <Keyboard className="w-4 h-4" />
-                          {t('enableShortcuts', {
+                          })
+                        : t('enableShortcuts', {
                             defaultValue: 'Enable shortcuts',
                           })}
-                        </>
-                      )}
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    {shortcutsEnabled
-                      ? t('disableShortcuts', {
-                          defaultValue: 'Disable shortcuts',
-                        })
-                      : t('enableShortcuts', {
-                          defaultValue: 'Enable shortcuts',
-                        })}
-                  </TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="w-full justify-start gap-2"
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
                         onClick={exportDataFile}
                       >
                         <Download className="w-4 h-4" />
@@ -1258,13 +1273,17 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     <Input
                       value={customKey}
                       onChange={(e) => setCustomKey(e.target.value)}
-                      placeholder={t('optionKey', { defaultValue: 'Option key' })}
+                      placeholder={t('optionKey', {
+                        defaultValue: 'Option key',
+                      })}
                       className="flex-1"
                     />
                     <Input
                       value={customValue}
                       onChange={(e) => setCustomValue(e.target.value)}
-                      placeholder={t('customValue', { defaultValue: 'Custom value' })}
+                      placeholder={t('customValue', {
+                        defaultValue: 'Custom value',
+                      })}
                       className="flex-1"
                     />
                     <Button
@@ -1372,12 +1391,14 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                     return (
                       <div key={cat.key} className="space-y-1">
                         <div className="text-sm font-medium">{cat.label}</div>
-                        <p className="text-xs text-muted-foreground">{message}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {message}
+                        </p>
                         <div
                           className={cn(
                             'mt-2 flex flex-wrap gap-1',
                             cat.key === TIME_MILESTONES &&
-                              'max-w-[200px] gap-2'
+                              'max-w-[200px] gap-2',
                           )}
                         >
                           {cat.thresholds.map((th) => (
@@ -1462,10 +1483,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         </DialogContent>
       </Dialog>
 
-      <AlertDialog
-        open={confirmPurgeCache}
-        onOpenChange={setConfirmPurgeCache}
-      >
+      <AlertDialog open={confirmPurgeCache} onOpenChange={setConfirmPurgeCache}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>{t('purgeCacheTitle')}</AlertDialogTitle>
@@ -1504,7 +1522,9 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   onToggleTracking();
                   toast.success(t('trackingDisabled'));
                   trackEvent(true, AnalyticsEvent.DisableTrackingConfirm);
-                  trackEvent(true, AnalyticsEvent.ToggleTracking, { enabled: false });
+                  trackEvent(true, AnalyticsEvent.ToggleTracking, {
+                    enabled: false,
+                  });
                   setConfirmDisableTracking(false);
                 } catch {
                   toast.error('Failed to toggle tracking');
@@ -1536,7 +1556,9 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                   onToggleTracking();
                   toast.success(t('trackingEnabled'));
                   trackEvent(true, AnalyticsEvent.EnableTrackingConfirm);
-                  trackEvent(true, AnalyticsEvent.ToggleTracking, { enabled: true });
+                  trackEvent(true, AnalyticsEvent.ToggleTracking, {
+                    enabled: true,
+                  });
                   setConfirmEnableTracking(false);
                 } catch {
                   toast.error('Failed to toggle tracking');

@@ -35,9 +35,10 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from '@/components/ui/tooltip';
-const HistoryListOuter = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  (props, ref) => <div ref={ref} data-testid="history-list" {...props} />,
-);
+const HistoryListOuter = forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>((props, ref) => <div ref={ref} data-testid="history-list" {...props} />);
 import { toast } from '@/components/ui/sonner-toast';
 import {
   DropdownMenu,
@@ -125,9 +126,10 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
   const noHistory = history.length === 0;
   const noActions = actionHistory.length === 0;
   const filteredHistory = history
-    .filter((entry) =>
-      entry.json.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      entry.title.toLowerCase().includes(searchTerm.toLowerCase()),
+    .filter(
+      (entry) =>
+        entry.json.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        entry.title.toLowerCase().includes(searchTerm.toLowerCase()),
     )
     .filter((entry) => (!favoritesOnly ? true : entry.favorite));
 
@@ -269,7 +271,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="w-[90vw] max-w-2xl h-[80vh] overflow-hidden">
+        <DialogContent className="top-0 translate-y-0 w-[90vw] max-w-2xl h-[80vh] overflow-hidden">
           <DialogHeader>
             <DialogTitle>{t('history')}</DialogTitle>
             <DialogDescription>{t('historyDescription')}</DialogDescription>
@@ -289,11 +291,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                     <Tooltip>
                       <TooltipTrigger asChild>
                         <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="gap-1"
-                          >
+                          <Button variant="outline" size="sm" className="gap-1">
                             <ImportIcon className="w-4 h-4" /> {t('import')}
                           </Button>
                         </DropdownMenuTrigger>
@@ -303,9 +301,13 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                     <DropdownMenuContent>
                       <DropdownMenuItem
                         onSelect={() => {
-                          trackEvent(trackingEnabled, AnalyticsEvent.HistoryImportOpen, {
-                            type: 'clipboard',
-                          });
+                          trackEvent(
+                            trackingEnabled,
+                            AnalyticsEvent.HistoryImportOpen,
+                            {
+                              type: 'clipboard',
+                            },
+                          );
                           setShowClipboard(true);
                         }}
                       >
@@ -317,8 +319,9 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                             trackingEnabled,
                             AnalyticsEvent.HistoryImportOpen,
                             {
-                            type: 'bulk_clipboard',
-                          });
+                              type: 'bulk_clipboard',
+                            },
+                          );
                           setShowBulkClipboard(true);
                         }}
                       >
@@ -330,8 +333,9 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                             trackingEnabled,
                             AnalyticsEvent.HistoryImportOpen,
                             {
-                            type: 'bulk_file',
-                          });
+                              type: 'bulk_file',
+                            },
+                          );
                           setShowBulkFile(true);
                         }}
                       >
@@ -355,120 +359,128 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                       </TooltipTrigger>
                       <TooltipContent>{t('export')}</TooltipContent>
                     </Tooltip>
-                  <DropdownMenuContent>
-                    <DropdownMenuItem
-                      onSelect={() => {
-                        trackEvent(trackingEnabled, AnalyticsEvent.HistoryExportClick, {
-                          type: 'clipboard',
-                        });
-                        exportClipboard();
-                      }}
-                    >
-                      {t('copyAllToClipboard')}
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      onSelect={() => {
+                    <DropdownMenuContent>
+                      <DropdownMenuItem
+                        onSelect={() => {
+                          trackEvent(
+                            trackingEnabled,
+                            AnalyticsEvent.HistoryExportClick,
+                            {
+                              type: 'clipboard',
+                            },
+                          );
+                          exportClipboard();
+                        }}
+                      >
+                        {t('copyAllToClipboard')}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onSelect={() => {
+                          trackEvent(
+                            trackingEnabled,
+                            AnalyticsEvent.HistoryExportClick,
+                            {
+                              type: 'file',
+                            },
+                          );
+                          exportFile();
+                        }}
+                      >
+                        {t('downloadJson')}
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => {
                         trackEvent(
                           trackingEnabled,
-                          AnalyticsEvent.HistoryExportClick,
-                          {
-                          type: 'file',
-                        });
-                        exportFile();
+                          AnalyticsEvent.HistoryClearClick,
+                        );
+                        setConfirmClear(true);
                       }}
+                      disabled={noHistory}
                     >
-                      {t('downloadJson')}
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                      {t('clearHistory')}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>{t('clearHistory')}</TooltipContent>
+                </Tooltip>
               </div>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => {
-                      trackEvent(trackingEnabled, AnalyticsEvent.HistoryClearClick);
-                      setConfirmClear(true);
-                    }}
-                    disabled={noHistory}
-                  >
-                    {t('clearHistory')}
-                  </Button>
-              </TooltipTrigger>
-              <TooltipContent>{t('clearHistory')}</TooltipContent>
-            </Tooltip>
-            </div>
-            <div className="mb-2 flex items-center gap-2">
-              <Input
-                placeholder={t('searchHistoryPlaceholder', {
-                  defaultValue: 'Search history...'
-                })}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    size="icon"
-                    variant={favoritesOnly ? 'default' : 'outline'}
-                    onClick={() => setFavoritesOnly((prev) => !prev)}
-                    aria-label={t('favoritesFilter', {
-                      defaultValue: 'Favorites filter'
-                    })}
-                  >
-                    <Star
-                      className={`w-4 h-4 ${favoritesOnly ? 'fill-current' : ''}`}
-                    />
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>
-                  {favoritesOnly
-                    ? t('showAll', { defaultValue: 'Show all' })
-                    : t('showFavoritesOnly', {
-                        defaultValue: 'Show favorites only'
+              <div className="mb-2 flex items-center gap-2">
+                <Input
+                  placeholder={t('searchHistoryPlaceholder', {
+                    defaultValue: 'Search history...',
+                  })}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size="icon"
+                      variant={favoritesOnly ? 'default' : 'outline'}
+                      onClick={() => setFavoritesOnly((prev) => !prev)}
+                      aria-label={t('favoritesFilter', {
+                        defaultValue: 'Favorites filter',
                       })}
-                </TooltipContent>
-              </Tooltip>
-            </div>
-            <div className="h-[60vh]">
-              {filteredHistory.length > 0 ? (
-                <List
-                  height={Math.round(window.innerHeight * 0.6)}
-                  itemCount={filteredHistory.length}
-                  itemSize={130}
-                  width="100%"
-                  className="pb-2 overflow-auto"
-                  outerElementType={HistoryListOuter}
-                >
-                  {({ index, style }) => (
-                    <div style={{ ...style, paddingBottom: 16 }}>
-                      <HistoryItem
-                        entry={filteredHistory[index]}
-                        onEdit={onEdit}
-                        onCopy={onCopy}
-                        onDelete={(id) => {
-                          onDelete(id);
-                          toast.success(t('entryDeleted'));
-                        }}
-                        onPreview={setPreview}
-                        trackingEnabled={trackingEnabled}
-                        onToggleFavorite={onToggleFavorite}
-                        onRename={(entry) => {
-                          setRenaming(entry);
-                          setTitleInput(entry.title);
-                        }}
+                    >
+                      <Star
+                        className={`w-4 h-4 ${favoritesOnly ? 'fill-current' : ''}`}
                       />
-                    </div>
-                  )}
-                </List>
-              ) : (
-                <p className="text-center text-sm text-muted-foreground">
-                  {t('historyEmptyPrompts')}
-                </p>
-              )}
-            </div>
-          </TabsContent>
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {favoritesOnly
+                      ? t('showAll', { defaultValue: 'Show all' })
+                      : t('showFavoritesOnly', {
+                          defaultValue: 'Show favorites only',
+                        })}
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+              <div className="h-[60vh]">
+                {filteredHistory.length > 0 ? (
+                  <List
+                    height={Math.round(window.innerHeight * 0.6)}
+                    itemCount={filteredHistory.length}
+                    itemSize={130}
+                    width="100%"
+                    className="pb-2 overflow-auto"
+                    outerElementType={HistoryListOuter}
+                  >
+                    {({ index, style }) => (
+                      <div style={{ ...style, paddingBottom: 16 }}>
+                        <HistoryItem
+                          entry={filteredHistory[index]}
+                          onEdit={onEdit}
+                          onCopy={onCopy}
+                          onDelete={(id) => {
+                            onDelete(id);
+                            toast.success(t('entryDeleted'));
+                          }}
+                          onPreview={setPreview}
+                          trackingEnabled={trackingEnabled}
+                          onToggleFavorite={onToggleFavorite}
+                          onRename={(entry) => {
+                            setRenaming(entry);
+                            setTitleInput(entry.title);
+                          }}
+                        />
+                      </div>
+                    )}
+                  </List>
+                ) : (
+                  <p className="text-center text-sm text-muted-foreground">
+                    {t('historyEmptyPrompts')}
+                  </p>
+                )}
+              </div>
+            </TabsContent>
             <TabsContent value="actions">
               <div className="flex justify-between items-center mb-2">
                 <p className="text-sm text-muted-foreground">
