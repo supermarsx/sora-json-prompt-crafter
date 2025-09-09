@@ -476,7 +476,19 @@ describe('offline banner', () => {
   test('toggles visibility based on navigator.onLine', async () => {
     setOnline(false);
     render(<Dashboard />);
-    expect(screen.getByText(i18n.t('offlineNotice'))).toBeTruthy();
+    const notice = screen.getByText(i18n.t('offlineNotice'));
+    const banner = notice.parentElement as HTMLElement;
+    expect(banner.className).toContain('fixed');
+    expect(banner.className).toContain('top-4');
+    expect(banner.className).toContain('left-1/2');
+    expect(banner.className).toContain('-translate-x-1/2');
+    expect(banner.className).toContain('max-w-md');
+    expect(banner.className).toContain('bg-yellow-500');
+    expect(banner.className).toContain('text-black');
+    const dismissButton = screen.getByLabelText(
+      i18n.t('dismiss', { defaultValue: 'Dismiss' }),
+    );
+    expect(dismissButton.className).toContain('border');
 
     act(() => {
       setOnline(true);

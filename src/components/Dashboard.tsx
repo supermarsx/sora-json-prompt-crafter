@@ -9,6 +9,7 @@ import {
   Bug,
   Download,
   RefreshCw,
+  X,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -635,19 +636,20 @@ const Dashboard = () => {
     return (
       <div className="min-h-screen flex flex-col bg-background">
         {!isOnline && !offlineDismissed && (
-        <div className="bg-yellow-500 text-black p-2 text-center">
-          <div className="flex items-center justify-between max-w-2xl mx-auto">
+          <div
+            className="fixed top-4 left-1/2 -translate-x-1/2 w-full max-w-md p-3 rounded bg-yellow-500 text-black shadow flex items-center justify-between gap-2"
+          >
             <span>{t('offlineNotice', { defaultValue: 'You are offline' })}</span>
             <Button
-              variant="ghost"
-              size="sm"
+              variant="outline"
+              size="icon"
               onClick={() => setOfflineDismissed(true)}
+              aria-label={t('dismiss', { defaultValue: 'Dismiss' })}
             >
-              {t('dismiss', { defaultValue: 'Dismiss' })}
+              <X className="h-4 w-4" />
             </Button>
           </div>
-        </div>
-      )}
+        )}
       <div className="container mx-auto p-6 flex flex-col flex-1">
         {headerVisible && (
           <div className="mb-8 flex items-start justify-between">
