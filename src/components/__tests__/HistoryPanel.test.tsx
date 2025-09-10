@@ -101,7 +101,7 @@ jest.mock('@/components/ui/dropdown-menu', () => ({
 
 const sampleHistory = Array.from({ length: 20 }, (_, i) => ({
   id: i + 1,
-  date: 'd',
+  date: Date.now(),
   json: `{"prompt":"p${i}"}`,
   favorite: i % 2 === 0,
   title: `title${i}`,
@@ -316,35 +316,35 @@ describe('HistoryPanel basic actions', () => {
   });
 
   test('sorts history based on sort mode', () => {
-    const history = [
-      {
-        id: 1,
-        date: '2024-01-01',
-        json: '{"prompt":"b"}',
-        favorite: false,
-        title: 'Bravo',
-        editCount: 2,
-        copyCount: 1,
-      },
-      {
-        id: 2,
-        date: '2024-01-03',
-        json: '{"prompt":"a"}',
-        favorite: false,
-        title: 'Alpha',
-        editCount: 1,
-        copyCount: 3,
-      },
-      {
-        id: 3,
-        date: '2024-01-02',
-        json: '{"prompt":"c"}',
-        favorite: false,
-        title: 'Charlie',
-        editCount: 5,
-        copyCount: 2,
-      },
-    ];
+      const history = [
+        {
+          id: 1,
+          date: new Date('2024-01-01').getTime(),
+          json: '{"prompt":"b"}',
+          favorite: false,
+          title: 'Bravo',
+          editCount: 2,
+          copyCount: 1,
+        },
+        {
+          id: 2,
+          date: new Date('2024-01-03').getTime(),
+          json: '{"prompt":"a"}',
+          favorite: false,
+          title: 'Alpha',
+          editCount: 1,
+          copyCount: 3,
+        },
+        {
+          id: 3,
+          date: new Date('2024-01-02').getTime(),
+          json: '{"prompt":"c"}',
+          favorite: false,
+          title: 'Charlie',
+          editCount: 5,
+          copyCount: 2,
+        },
+      ];
     renderPanel({ history });
     const getTitles = () =>
       screen

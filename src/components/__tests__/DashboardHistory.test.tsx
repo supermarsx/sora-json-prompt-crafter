@@ -12,25 +12,26 @@ import { useTracking } from '@/hooks/use-tracking';
 import { useActionHistory } from '@/hooks/use-action-history';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { JSON_HISTORY } from '@/lib/storage-keys';
+import type { HistoryEntry } from '../HistoryPanel';
 jest.mock('@/lib/validateOptions', () => ({
   __esModule: true,
   isValidOptions: jest.fn(() => true),
 }));
 
 let importFn: ((entries: { json: string; title?: string }[]) => void) | null = null;
-let copyFn: ((entry: any) => void) | null = null;
+let copyFn: ((entry: HistoryEntry) => void) | null = null;
 
 jest.mock('../HistoryPanel', () => ({
   __esModule: true,
-  default: ({
-    onImport,
-    onCopy,
-    onEdit,
-  }: {
-    onImport: (entries: { json: string; title?: string }[]) => void;
-    onCopy: (entry: any) => void;
-    onEdit: (entry: any) => void;
-  }) => {
+    default: ({
+      onImport,
+      onCopy,
+      onEdit,
+    }: {
+      onImport: (entries: { json: string; title?: string }[]) => void;
+      onCopy: (entry: HistoryEntry) => void;
+      onEdit: (entry: HistoryEntry) => void;
+    }) => {
     importFn = onImport;
     copyFn = onCopy;
     return null;
@@ -87,17 +88,17 @@ jest.mock('@/components/ui/sonner-toast', () => ({
   toast: { success: jest.fn(), error: jest.fn() },
 }));
 
-function createEntries(n: number) {
-  return Array.from({ length: n }, (_, i) => ({
-    id: i,
-    date: 'd',
-    json: '{}',
-    favorite: false,
-    title: `t${i}`,
-    editCount: 0,
-    copyCount: 0,
-  }));
-}
+  function createEntries(n: number) {
+    return Array.from({ length: n }, (_, i) => ({
+      id: i,
+      date: Date.now(),
+      json: '{}',
+      favorite: false,
+      title: `t${i}`,
+      editCount: 0,
+      copyCount: 0,
+    }));
+  }
 
 describe('Dashboard history limit', () => {
   beforeEach(() => {
@@ -148,15 +149,15 @@ describe('Dashboard history limit', () => {
   });
 
   test('increments copy counter', async () => {
-    const entry = {
-      id: 1,
-      date: 'd',
-      json: '{"prompt":"hi"}',
-      favorite: false,
-      title: 't1',
-      editCount: 0,
-      copyCount: 0,
-    };
+      const entry = {
+        id: 1,
+        date: Date.now(),
+        json: '{"prompt":"hi"}',
+        favorite: false,
+        title: 't1',
+        editCount: 0,
+        copyCount: 0,
+      };
     localStorage.setItem(JSON_HISTORY, JSON.stringify([entry]));
 
     render(<Dashboard />);
