@@ -64,7 +64,11 @@ import {
 
 export interface HistoryEntry {
   id: number;
-  date: string;
+  /**
+   * Timestamp (ms since epoch) when the entry was created. Storing a numeric
+   * value avoids locale-dependent parsing issues.
+   */
+  date: number;
   json: string;
   favorite: boolean;
   title: string;
@@ -154,7 +158,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
           return b.copyCount - a.copyCount;
         case 'date':
         default:
-          return new Date(b.date).getTime() - new Date(a.date).getTime();
+          return b.date - a.date;
       }
     });
     return sorted;

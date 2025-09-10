@@ -9,6 +9,7 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from '@/components/ui/tooltip';
+import { formatDateTime } from '@/lib/date';
 
 interface HistoryItemProps {
   entry: HistoryEntry;
@@ -38,9 +39,9 @@ const HistoryItem: React.FC<HistoryItemProps> = ({
 
   return (
     <div className="border p-3 rounded-md space-y-2">
-      <div className="text-xs text-muted-foreground flex justify-between">
-        <span>{entry.date}</span>
-      </div>
+        <div className="text-xs text-muted-foreground flex justify-between">
+          <span>{formatDateTime(new Date(entry.date))}</span>
+        </div>
       <div className="space-y-1 text-xs text-muted-foreground">
         <div className="font-medium break-words text-foreground">
           {entry.title}

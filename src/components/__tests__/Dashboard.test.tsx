@@ -14,15 +14,16 @@ import type { SoraOptions } from '@/lib/soraOptions';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { useSoraUserscript } from '@/hooks/use-sora-userscript';
 import { CURRENT_JSON, JSON_HISTORY } from '@/lib/storage-keys';
+import type { HistoryEntry } from '../HistoryPanel';
 
-let copyFn: ((entry: any) => void) | null = null;
+let copyFn: ((entry: HistoryEntry) => void) | null = null;
 let updateFn: ((opts: Partial<SoraOptions>) => void) | null = null;
 const mockUseDarkMode = jest.fn(() => [false, jest.fn()] as const);
 let sendFn: (() => void) | null = null;
 let resetFn: (() => void) | null = null;
 jest.mock('../HistoryPanel', () => ({
   __esModule: true,
-  default: ({ onCopy }: { onCopy: (entry: any) => void }) => {
+    default: ({ onCopy }: { onCopy: (entry: HistoryEntry) => void }) => {
     copyFn = onCopy;
     return null;
   },
@@ -233,15 +234,15 @@ describe('copyHistoryEntry', () => {
     render(<Dashboard />);
     await waitFor(() => expect(copyFn).not.toBeNull());
     await act(async () => {
-      copyFn?.({
-        id: 1,
-        date: 'd',
-        json: '{"a":1}',
-        favorite: false,
-        title: '',
-        editCount: 0,
-        copyCount: 0,
-      });
+        copyFn?.({
+          id: 1,
+          date: Date.now(),
+          json: '{"a":1}',
+          favorite: false,
+          title: '',
+          editCount: 0,
+          copyCount: 0,
+        });
       await Promise.resolve();
     });
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith('{"a":1}');
