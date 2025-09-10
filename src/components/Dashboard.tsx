@@ -165,12 +165,16 @@ const Dashboard = () => {
   const [showHistory, setShowHistory] = useState(false);
   const [history, setHistory] = useState<HistoryEntry[]>(() =>
     (safeGet<HistoryEntry[]>(JSON_HISTORY, [], true) ?? []).map((e) => ({
-      favorite: false,
-      title: e.title ?? getTitleFromJson(e.json),
-      editCount: e.editCount ?? 0,
-      copyCount: e.copyCount ?? 0,
-      ...e,
-    })),
+        favorite: false,
+        title: e.title ?? getTitleFromJson(e.json),
+        editCount: e.editCount ?? 0,
+        copyCount: e.copyCount ?? 0,
+        ...e,
+        date:
+          typeof e.date === 'number'
+            ? e.date
+            : new Date(e.date).getTime() || Date.now(),
+      })),
   );
   const isSingleColumn = useIsSingleColumn();
   const [darkMode, setDarkMode] = useDarkMode();
@@ -237,15 +241,15 @@ const Dashboard = () => {
     const success = await copy(jsonString, t('jsonCopied'));
     if (success) {
       setCopied(true);
-      const entry: HistoryEntry = {
-        id: Date.now(),
-        date: new Date().toLocaleString(),
-        json: jsonString,
-        favorite: false,
-        title: getTitleFromJson(jsonString),
-        editCount: 0,
-        copyCount: 0,
-      };
+        const entry: HistoryEntry = {
+          id: Date.now(),
+          date: Date.now(),
+          json: jsonString,
+          favorite: false,
+          title: getTitleFromJson(jsonString),
+          editCount: 0,
+          copyCount: 0,
+        };
       setHistory((prev) => [entry, ...prev].slice(0, 100));
       const opts = options as unknown as Record<string, unknown>;
       const sections = Object.keys(options).filter(
@@ -601,15 +605,15 @@ const Dashboard = () => {
    * Side effects: updates history state and logs analytics.
    */
   const importHistoryEntries = (entries: { json: string; title?: string }[]) => {
-    const mapped = entries.map(({ json, title }) => ({
-      id: Date.now() + Math.random(),
-      date: new Date().toLocaleString(),
-      json,
-      favorite: false,
-      title: title ?? getTitleFromJson(json),
-      editCount: 0,
-      copyCount: 0,
-    }));
+      const mapped = entries.map(({ json, title }) => ({
+        id: Date.now() + Math.random(),
+        date: Date.now(),
+        json,
+        favorite: false,
+        title: title ?? getTitleFromJson(json),
+        editCount: 0,
+        copyCount: 0,
+      }));
     setHistory((prev) => [...mapped, ...prev].slice(0, 100));
     trackEvent(trackingEnabled, AnalyticsEvent.HistoryImport, { type: 'bulk' });
   };

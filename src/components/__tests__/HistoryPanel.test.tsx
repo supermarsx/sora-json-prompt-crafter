@@ -101,7 +101,7 @@ jest.mock('@/components/ui/dropdown-menu', () => ({
 
 const sampleHistory = Array.from({ length: 20 }, (_, i) => ({
   id: i + 1,
-  date: 'd',
+  date: Date.now(),
   json: `{"prompt":"p${i}"}`,
   favorite: i % 2 === 0,
   title: `title${i}`,
@@ -313,6 +313,64 @@ describe('HistoryPanel basic actions', () => {
     expect(screen.getByText('p0')).toBeTruthy();
     fireEvent.click(filterBtn);
     expect(screen.getByText('p1')).toBeTruthy();
+  });
+
+  test('sorts history based on sort mode', () => {
+      const history = [
+        {
+          id: 1,
+          date: new Date('2024-01-01').getTime(),
+          json: '{"prompt":"b"}',
+          favorite: false,
+          title: 'Bravo',
+          editCount: 2,
+          copyCount: 1,
+        },
+        {
+          id: 2,
+          date: new Date('2024-01-03').getTime(),
+          json: '{"prompt":"a"}',
+          favorite: false,
+          title: 'Alpha',
+          editCount: 1,
+          copyCount: 3,
+        },
+        {
+          id: 3,
+          date: new Date('2024-01-02').getTime(),
+          json: '{"prompt":"c"}',
+          favorite: false,
+          title: 'Charlie',
+          editCount: 5,
+          copyCount: 2,
+        },
+      ];
+    renderPanel({ history });
+    const getTitles = () =>
+      screen
+        .getAllByText(/Alpha|Bravo|Charlie/)
+        .filter((el) => ['Alpha', 'Bravo', 'Charlie'].includes(el.textContent || ''))
+        .map((el) => el.textContent);
+
+    // default sort by date
+    expect(getTitles()).toEqual(['Alpha', 'Charlie', 'Bravo']);
+
+    const select = screen.getByRole('combobox', { name: /sort by/i });
+
+    fireEvent.mouseDown(select);
+    fireEvent.click(select);
+    fireEvent.click(screen.getByRole('option', { name: /name/i }));
+    expect(getTitles()).toEqual(['Alpha', 'Bravo', 'Charlie']);
+
+    fireEvent.mouseDown(select);
+    fireEvent.click(select);
+    fireEvent.click(screen.getByRole('option', { name: /edited/i }));
+    expect(getTitles()).toEqual(['Charlie', 'Bravo', 'Alpha']);
+
+    fireEvent.mouseDown(select);
+    fireEvent.click(select);
+    fireEvent.click(screen.getByRole('option', { name: /copied/i }));
+    expect(getTitles()).toEqual(['Alpha', 'Charlie', 'Bravo']);
   });
 });
 
