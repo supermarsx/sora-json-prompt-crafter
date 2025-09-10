@@ -54,6 +54,13 @@ import { useTracking } from '@/hooks/use-tracking';
 import { safeGet, safeSet, safeRemove } from '@/lib/storage';
 import { TRACKING_HISTORY } from '@/lib/storage-keys';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from '@/components/ui/select';
 
 export interface HistoryEntry {
   id: number;
@@ -134,6 +141,24 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
         entry.title.toLowerCase().includes(searchTerm.toLowerCase()),
     )
     .filter((entry) => (!favoritesOnly ? true : entry.favorite));
+  const [sortMode, setSortMode] = useState<'name' | 'date' | 'edited' | 'copied'>('date');
+  const sortedHistory = React.useMemo(() => {
+    const sorted = [...filteredHistory];
+    sorted.sort((a, b) => {
+      switch (sortMode) {
+        case 'name':
+          return a.title.localeCompare(b.title);
+        case 'edited':
+          return b.editCount - a.editCount;
+        case 'copied':
+          return b.copyCount - a.copyCount;
+        case 'date':
+        default:
+          return new Date(b.date).getTime() - new Date(a.date).getTime();
+      }
+    });
+    return sorted;
+  }, [filteredHistory, sortMode]);
 
   useEffect(() => {
     if (open) {
@@ -414,6 +439,17 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                 </Tooltip>
               </div>
               <div className="mb-2 flex items-center gap-2">
+                <Select value={sortMode} onValueChange={setSortMode}>
+                  <SelectTrigger className="w-[140px]" aria-label={t('sortBy')}>
+                    <SelectValue placeholder={t('sortBy')} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="name">{t('sortByName')}</SelectItem>
+                    <SelectItem value="date">{t('sortByDate')}</SelectItem>
+                    <SelectItem value="edited">{t('sortByEdited')}</SelectItem>
+                    <SelectItem value="copied">{t('sortByCopied')}</SelectItem>
+                  </SelectContent>
+                </Select>
                 <Input
                   placeholder={t('searchHistoryPlaceholder', {
                     defaultValue: 'Search history...',
@@ -446,10 +482,10 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                 </Tooltip>
               </div>
               <div className="h-[60vh]">
-                {filteredHistory.length > 0 ? (
+                {sortedHistory.length > 0 ? (
                   <List
                     height={Math.round(window.innerHeight * 0.6)}
-                    itemCount={filteredHistory.length}
+                    itemCount={sortedHistory.length}
                     itemSize={130}
                     width="100%"
                     className="pb-2 overflow-auto"
@@ -458,7 +494,7 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                     {({ index, style }) => (
                       <div style={{ ...style, paddingBottom: 16 }}>
                         <HistoryItem
-                          entry={filteredHistory[index]}
+                          entry={sortedHistory[index]}
                           onEdit={onEdit}
                           onCopy={onCopy}
                           onDelete={(id) => {

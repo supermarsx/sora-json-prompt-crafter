@@ -1125,5 +1125,10 @@
   "showAll": "Show all",
   "showFavoritesOnly": "Show favorites only",
   "rename": "Rename",
-  "title": "Title"
+  "title": "Title",
+  "sortBy": "Sort by",
+  "sortByName": "Name",
+  "sortByDate": "Date",
+  "sortByEdited": "Most Edited",
+  "sortByCopied": "Most Copied"
 }
