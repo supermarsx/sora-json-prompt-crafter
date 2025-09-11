@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Dialog,
@@ -240,12 +240,10 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   const [jsEditorOpen, setJsEditorOpen] = useState(false);
   const [customCss, setCustomCss] = useState('');
   const [customJs, setCustomJs] = useState('');
-  const optionKeys = useMemo(() => {
-    const keys = new Set<string>(KNOWN_OPTION_KEYS);
-    Object.keys(customMap).forEach((k) => keys.add(k));
-    Object.keys(stylePresets).forEach((cat) => keys.add(`style_${cat}`));
-    return Array.from(keys).sort();
-  }, [customMap]);
+  const keys = new Set<string>(KNOWN_OPTION_KEYS);
+  Object.keys(customMap).forEach((k) => keys.add(k));
+  Object.keys(stylePresets).forEach((cat) => keys.add(`style_${cat}`));
+  const optionKeys = Array.from(keys).sort();
 
   const openCssEditor = () => {
     const stored = safeGet(CUSTOM_CSS);
