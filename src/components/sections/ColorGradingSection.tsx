@@ -8,6 +8,7 @@ import type { SoraOptions } from '@/lib/soraOptions';
 import { colorGradingOptions } from '@/data/colorGradingOptions';
 import { mergeCustomValues } from '@/lib/storage';
 import { Button } from '@/components/ui/button';
+import { RotateCcw } from 'lucide-react';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { PresetDropdown } from '../PresetDropdown';
 interface ColorGradingSectionProps {
@@ -57,8 +58,13 @@ export const ColorGradingSection: React.FC<ColorGradingSectionProps> = ({
               updateOptions(values as Partial<SoraOptions>)
             }
           />
-          <Button variant="outline" size="sm" onClick={handleReset}>
-            {t('reset')}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleReset}
+            className="gap-1"
+          >
+            <RotateCcw className="w-4 h-4" /> {t('reset')}
           </Button>
         </div>
         <div>

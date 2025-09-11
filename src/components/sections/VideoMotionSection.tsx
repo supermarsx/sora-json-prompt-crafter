@@ -15,6 +15,7 @@ import { CollapsibleSection } from '../CollapsibleSection';
 import { ToggleField } from '../ToggleField';
 import type { SoraOptions } from '@/lib/soraOptions';
 import { Button } from '@/components/ui/button';
+import { RotateCcw } from 'lucide-react';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { PresetDropdown } from '../PresetDropdown';
 
@@ -88,8 +89,9 @@ export const VideoMotionSection: React.FC<VideoMotionSectionProps> = ({
                 frame_interpolation: DEFAULT_OPTIONS.frame_interpolation,
               })
             }
+            className="gap-1"
           >
-            {t('reset')}
+            <RotateCcw className="w-4 h-4" /> {t('reset')}
           </Button>
         </div>
         <ToggleField

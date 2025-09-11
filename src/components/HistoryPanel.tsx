@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Dialog,
@@ -11,7 +11,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import HistoryItem from '@/components/history/HistoryItem';
-import { FixedSizeList as List } from 'react-window';
 import { Input } from '@/components/ui/input';
 import {
   AlertDialog,
@@ -35,10 +34,6 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from '@/components/ui/tooltip';
-const HistoryListOuter = forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->((props, ref) => <div ref={ref} data-testid="history-list" {...props} />);
 import { toast } from '@/components/ui/sonner-toast';
 import {
   DropdownMenu,
@@ -485,37 +480,32 @@ export const HistoryPanel: React.FC<HistoryPanelProps> = ({
                   </TooltipContent>
                 </Tooltip>
               </div>
-              <div className="h-[60vh]">
+              <div
+                className="h-[60vh] overflow-y-auto pr-2"
+                data-testid="history-list"
+              >
                 {sortedHistory.length > 0 ? (
-                  <List
-                    height={Math.round(window.innerHeight * 0.6)}
-                    itemCount={sortedHistory.length}
-                    itemSize={130}
-                    width="100%"
-                    className="pb-2 overflow-auto"
-                    outerElementType={HistoryListOuter}
-                  >
-                    {({ index, style }) => (
-                      <div style={{ ...style, paddingBottom: 16 }}>
-                        <HistoryItem
-                          entry={sortedHistory[index]}
-                          onEdit={onEdit}
-                          onCopy={onCopy}
-                          onDelete={(id) => {
-                            onDelete(id);
-                            toast.success(t('entryDeleted'));
-                          }}
-                          onPreview={setPreview}
-                          trackingEnabled={trackingEnabled}
-                          onToggleFavorite={onToggleFavorite}
-                          onRename={(entry) => {
-                            setRenaming(entry);
-                            setTitleInput(entry.title);
-                          }}
-                        />
-                      </div>
-                    )}
-                  </List>
+                  <div className="space-y-4">
+                    {sortedHistory.map((entry) => (
+                      <HistoryItem
+                        key={entry.id}
+                        entry={entry}
+                        onEdit={onEdit}
+                        onCopy={onCopy}
+                        onDelete={(id) => {
+                          onDelete(id);
+                          toast.success(t('entryDeleted'));
+                        }}
+                        onPreview={setPreview}
+                        trackingEnabled={trackingEnabled}
+                        onToggleFavorite={onToggleFavorite}
+                        onRename={(entry) => {
+                          setRenaming(entry);
+                          setTitleInput(entry.title);
+                        }}
+                      />
+                    ))}
+                  </div>
                 ) : (
                   <p className="text-center text-sm text-muted-foreground">
                     {t('historyEmptyPrompts')}

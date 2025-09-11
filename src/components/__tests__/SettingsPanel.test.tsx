@@ -23,6 +23,9 @@ jest.mock('@/lib/storage', () => ({
   updateCustomValue: jest.fn(),
   exportCustomValues: jest.fn(() => ({})),
   importCustomValues: jest.fn(),
+  getSectionPresets: jest.fn(() => ({})),
+  removeSectionPreset: jest.fn(),
+  saveSectionPreset: jest.fn(),
 }));
 jest.mock('@/components/ui/sonner-toast', () => ({
   __esModule: true,
@@ -55,6 +58,7 @@ jest.mock('@/components/ui/dialog', () => ({
   ),
   DialogHeader: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   DialogTitle: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  DialogFooter: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
 
 jest.mock('@/components/ui/button', () => ({

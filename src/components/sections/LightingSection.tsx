@@ -8,6 +8,7 @@ import type { SoraOptions } from '@/lib/soraOptions';
 import { lightingOptions } from '@/data/lightingOptions';
 import { mergeCustomValues } from '@/lib/storage';
 import { Button } from '@/components/ui/button';
+import { RotateCcw } from 'lucide-react';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { PresetDropdown } from '../PresetDropdown';
 interface LightingSectionProps {
@@ -56,8 +57,9 @@ export const LightingSection: React.FC<LightingSectionProps> = ({
                 lighting: DEFAULT_OPTIONS.lighting,
               })
             }
+            className="gap-1"
           >
-            {t('reset')}
+            <RotateCcw className="w-4 h-4" /> {t('reset')}
           </Button>
         </div>
         <div>

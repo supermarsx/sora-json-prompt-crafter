@@ -9,6 +9,7 @@ import type { SoraOptions } from '@/lib/soraOptions';
 import { materialOptions } from '@/data/materialOptions';
 import { mergeCustomValues } from '@/lib/storage';
 import { Button } from '@/components/ui/button';
+import { RotateCcw } from 'lucide-react';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { PresetDropdown } from '../PresetDropdown';
 interface MaterialSectionProps {
@@ -61,8 +62,9 @@ export const MaterialSection: React.FC<MaterialSectionProps> = ({
                 secondary_material: DEFAULT_OPTIONS.secondary_material,
               })
             }
+            className="gap-1"
           >
-            {t('reset')}
+            <RotateCcw className="w-4 h-4" /> {t('reset')}
           </Button>
         </div>
         <div>

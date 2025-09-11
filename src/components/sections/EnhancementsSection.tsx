@@ -14,6 +14,7 @@ import {
 } from '@/data/enhancementOptions';
 import { mergeCustomValues } from '@/lib/storage';
 import { Button } from '@/components/ui/button';
+import { RotateCcw } from 'lucide-react';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { PresetDropdown } from '../PresetDropdown';
 interface EnhancementsSectionProps {
@@ -105,8 +106,9 @@ export const EnhancementsSection: React.FC<EnhancementsSectionProps> = ({
                 keep_key_details: DEFAULT_OPTIONS.keep_key_details,
               })
             }
+            className="gap-1"
           >
-            {t('reset')}
+            <RotateCcw className="w-4 h-4" /> {t('reset')}
           </Button>
         </div>
         <div className="flex items-center space-x-2">

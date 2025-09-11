@@ -15,6 +15,7 @@ import {
   characterMoodOptions,
 } from '@/data/faceOptions';
 import { Button } from '@/components/ui/button';
+import { RotateCcw } from 'lucide-react';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { PresetDropdown } from '../PresetDropdown';
 import { mergeCustomValues } from '@/lib/storage';
@@ -78,8 +79,9 @@ export const FaceSection: React.FC<FaceSectionProps> = ({
                 character_mood: DEFAULT_OPTIONS.character_mood,
               })
             }
+            className="gap-1"
           >
-            {t('reset')}
+            <RotateCcw className="w-4 h-4" /> {t('reset')}
           </Button>
         </div>
         <div className="flex items-center space-x-2">
