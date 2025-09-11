@@ -244,13 +244,13 @@ describe('SettingsPanel', () => {
     renderPanel({ defaultTab: 'custom-values' });
     const select = screen.getByTestId('custom-key-dropdown') as HTMLSelectElement;
     const options = Array.from(select.options).map((o) => o.value);
-    expect(options).toContain('prompt');
-    expect(options).not.toContain('use_negative_prompt');
-    fireEvent.change(select, { target: { value: 'prompt' } });
+    expect(options).toContain('material');
+    expect(options).not.toContain('use_material');
+    fireEvent.change(select, { target: { value: 'material' } });
     const input = screen.getByPlaceholderText(
       i18n.t('customKeyPlaceholder'),
     ) as HTMLInputElement;
-    expect(input.value).toBe('prompt');
+    expect(input.value).toBe('material');
   });
 
   test('allows manual entry of custom key', () => {

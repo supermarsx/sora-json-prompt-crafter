@@ -93,6 +93,38 @@ import {
 import { cn } from '@/lib/utils';
 import { SearchableDropdown } from './SearchableDropdown';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
+import { stylePresets } from '@/data/stylePresets';
+
+const KNOWN_OPTION_KEYS = [
+  'material',
+  'camera_type',
+  'lens_type',
+  'shot_type',
+  'camera_angle',
+  'composition_rules',
+  'aperture',
+  'depth_of_field',
+  'blur_style',
+  'subject_gender',
+  'makeup_style',
+  'character_mood',
+  'lighting',
+  'color_grade',
+  'environment',
+  'location',
+  'season',
+  'atmosphere_mood',
+  'safety_filter',
+  'quality_booster',
+  'dnd_character_race',
+  'dnd_character_class',
+  'dnd_character_background',
+  'dnd_character_alignment',
+  'dnd_monster_type',
+  'dnd_environment',
+  'dnd_magic_school',
+  'dnd_item_type',
+];
 
 interface SettingsPanelProps {
   open: boolean;
@@ -208,10 +240,12 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   const [jsEditorOpen, setJsEditorOpen] = useState(false);
   const [customCss, setCustomCss] = useState('');
   const [customJs, setCustomJs] = useState('');
-  const optionKeys = useMemo(
-    () => Object.keys(DEFAULT_OPTIONS).filter((k) => !k.startsWith('use_')),
-    [],
-  );
+  const optionKeys = useMemo(() => {
+    const keys = new Set<string>(KNOWN_OPTION_KEYS);
+    Object.keys(customMap).forEach((k) => keys.add(k));
+    Object.keys(stylePresets).forEach((cat) => keys.add(`style_${cat}`));
+    return Array.from(keys).sort();
+  }, [customMap]);
 
   const openCssEditor = () => {
     const stored = safeGet(CUSTOM_CSS);
