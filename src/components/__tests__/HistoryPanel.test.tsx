@@ -32,7 +32,6 @@ jest.mock('@/components/ui/sonner-toast', () => ({
 jest.mock('@/lib/date', () => ({
   __esModule: true,
   formatDateTime: jest.fn(() => '20240101-000000'),
-  formatDisplayDate: jest.fn(() => 'Jan 1, 2024, 12:00 AM'),
 }));
 
 jest.mock('@/lib/storage', () => ({
@@ -100,10 +99,9 @@ jest.mock('@/components/ui/dropdown-menu', () => ({
   }) => <button onClick={onSelect}>{children}</button>,
 }));
 
-const now = Date.now();
 const sampleHistory = Array.from({ length: 20 }, (_, i) => ({
   id: i + 1,
-  date: now,
+  date: Date.now(),
   json: `{"prompt":"p${i}"}`,
   favorite: i % 2 === 0,
   title: `title${i}`,

@@ -34,7 +34,6 @@ jest.mock('@/components/ui/sonner-toast', () => ({
 jest.mock('@/lib/date', () => ({
   __esModule: true,
   formatDateTime: jest.fn(() => '20240101-000000'),
-  formatDisplayDate: jest.fn(() => 'Jan 1, 2024, 12:00 AM'),
 }));
 jest.mock('@/hooks/use-dark-mode', () => ({
   __esModule: true,

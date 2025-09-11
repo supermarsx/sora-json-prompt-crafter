@@ -260,9 +260,6 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   const [jsEditorOpen, setJsEditorOpen] = useState(false);
   const [customCss, setCustomCss] = useState('');
   const [customJs, setCustomJs] = useState('');
-  const [urlDialogOpen, setUrlDialogOpen] = useState(false);
-  const [urlInput, setUrlInput] = useState('');
-  const [urlMode, setUrlMode] = useState<'sync' | 'load'>('sync');
   const keys = new Set<string>(KNOWN_OPTION_KEYS);
   Object.keys(customMap).forEach((k) => keys.add(k));
   Object.keys(stylePresets).forEach((cat) => keys.add(`style_${cat}`));
@@ -327,32 +324,27 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     );
   };
 
-  const openUrlModal = (mode: 'sync' | 'load') => {
-    setUrlMode(mode);
-    setUrlInput('');
-    setUrlDialogOpen(true);
-  };
-
-  const handleUrlSave = async () => {
-    const url = urlInput.trim();
+  const syncToUrl = async () => {
+    const url = window.prompt('Enter URL');
     if (!url) return;
     try {
-      if (urlMode === 'sync') {
-        await syncConfigToUrl(url);
-        toast.success(t('dataExported', { defaultValue: 'Data exported' }));
-      } else {
-        await loadConfigFromUrl(url);
-        toast.success(t('dataImported', { defaultValue: 'Data imported' }));
-      }
-      setUrlDialogOpen(false);
+      await syncConfigToUrl(url.trim());
+      toast.success(t('dataExported', { defaultValue: 'Data exported' }));
     } catch {
       toast.error(t('requestBlocked'));
     }
   };
 
-  const syncToUrl = () => openUrlModal('sync');
-
-  const loadFromUrl = () => openUrlModal('load');
+  const loadFromUrl = async () => {
+    const url = window.prompt('Enter URL');
+    if (!url) return;
+    try {
+      await loadConfigFromUrl(url.trim());
+      toast.success(t('dataImported', { defaultValue: 'Data imported' }));
+    } catch {
+      toast.error(t('requestBlocked'));
+    }
+  };
 
   const importCustomValuesFile = () => {
     const input = document.createElement('input');
@@ -604,7 +596,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   return (
     <>
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className="w-[90vw] max-w-lg h-[80vh] overflow-hidden">
+        <DialogContent className="top-0 translate-y-0 w-[90vw] max-w-lg h-[80vh] overflow-hidden">
           <DialogHeader>
             <DialogTitle>{t('manage')}</DialogTitle>
           </DialogHeader>
@@ -1556,28 +1548,6 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
           </Tabs>
         </DialogContent>
       </Dialog>
-      <Dialog open={urlDialogOpen} onOpenChange={setUrlDialogOpen}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle>
-              {urlMode === 'sync' ? t('syncToUrl') : t('loadFromUrl')}
-            </DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <Input
-              value={urlInput}
-              onChange={(e) => setUrlInput(e.target.value)}
-              placeholder={t('urlPlaceholder')}
-            />
-            <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setUrlDialogOpen(false)}>
-                {t('cancel')}
-              </Button>
-              <Button onClick={handleUrlSave}>{t('save')}</Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
       <PresetNameDialog
         open={sectionNameDialogOpen}
         onOpenChange={setSectionNameDialogOpen}
@@ -1616,7 +1586,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 setCssEditorOpen(false);
               }}
             >
-              {t('save')}
+              {t('save', { defaultValue: 'Save' })}
             </Button>
           </div>
         </DialogContent>
@@ -1644,7 +1614,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 setJsEditorOpen(false);
               }}
             >
-              {t('save')}
+              {t('save', { defaultValue: 'Save' })}
             </Button>
           </div>
         </DialogContent>

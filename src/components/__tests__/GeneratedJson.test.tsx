@@ -52,7 +52,7 @@ describe('GeneratedJson', () => {
 
     const container = getByTestId('json-container');
     const pre = container.querySelector('pre') as HTMLElement;
-    expect(pre.className).toContain('break-all');
+    expect(pre.className).toContain('break-words');
     expect(container.scrollWidth).toBe(container.clientWidth);
   });
 });
