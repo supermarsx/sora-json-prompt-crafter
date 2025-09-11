@@ -115,11 +115,18 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
         CodeTag="span"
         wrapLongLines
         wrapLines
+        lineProps={{
+          style: {
+            wordBreak: 'break-all',
+            overflowWrap: 'anywhere',
+            whiteSpace: 'pre-wrap',
+          },
+        }}
         customStyle={{
           margin: 0,
           padding: 0,
           background: 'none',
-          wordBreak: 'break-word',
+          wordBreak: 'break-all',
           overflowWrap: 'anywhere',
         }}
       >
@@ -134,7 +141,7 @@ const GeneratedJson: React.FC<Props> = ({ json, trackingEnabled }) => {
       ref={containerRef}
       data-testid="json-container"
     >
-      <pre className="p-6 text-sm font-mono whitespace-pre-wrap break-words leading-relaxed">
+      <pre className="p-6 text-sm font-mono whitespace-pre-wrap break-all leading-relaxed">
         {rows.map((r, i) => renderHighlighted(r.value, Boolean(r.added), i))}
       </pre>
     </div>

@@ -13,3 +13,19 @@ export function formatDateTime(date: Date = new Date()): string {
   const seconds = date.getSeconds().toString().padStart(2, '0');
   return `${year}${month}${day}-${hours}${minutes}${seconds}`;
 }
+
+/**
+ * Returns a human-readable localized date and time string.
+ *
+ * @param date - The date to format. Defaults to the current date and time.
+ * @returns The formatted date string.
+ */
+export function formatDisplayDate(date: Date = new Date()): string {
+  return date.toLocaleString(undefined, {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
