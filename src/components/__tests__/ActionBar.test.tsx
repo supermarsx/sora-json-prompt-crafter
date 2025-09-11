@@ -155,6 +155,8 @@ function createProps(
     onToggleCoreActionLabels: jest.fn(),
     copied: false,
     trackingEnabled: true,
+    temporaryModeEnabled: false,
+    onToggleTemporaryMode: jest.fn(),
     ...overrides,
   } as const;
 }

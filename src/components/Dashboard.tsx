@@ -39,6 +39,7 @@ import { useActionHistory } from '@/hooks/use-action-history';
 import { useUndoRedo } from '@/hooks/use-undo-redo';
 import { useKeyboardShortcuts } from '@/hooks/use-keyboard-shortcuts';
 import { useKeyboardShortcutsEnabled } from '@/hooks/use-keyboard-shortcuts-enabled';
+import { useTemporaryMode } from '@/hooks/use-temporary-mode';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import { trackShare } from '@/lib/share-counter';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
@@ -192,6 +193,7 @@ const Dashboard = () => {
   const actionHistory = useActionHistory();
   const githubStats = useGithubStats();
   const { copy } = useClipboard();
+  const [temporaryModeEnabled, setTemporaryModeEnabled] = useTemporaryMode();
 
   const [shortcutsEnabled, setShortcutsEnabled] =
     useKeyboardShortcutsEnabled();
@@ -241,6 +243,7 @@ const Dashboard = () => {
     const success = await copy(jsonString, t('jsonCopied'));
     if (success) {
       setCopied(true);
+      if (!temporaryModeEnabled) {
         const entry: HistoryEntry = {
           id: Date.now(),
           date: Date.now(),
@@ -250,7 +253,8 @@ const Dashboard = () => {
           editCount: 0,
           copyCount: 0,
         };
-      setHistory((prev) => [entry, ...prev].slice(0, 100));
+        setHistory((prev) => [entry, ...prev].slice(0, 100));
+      }
       const opts = options as unknown as Record<string, unknown>;
       const sections = Object.keys(options).filter(
         (key) => key.startsWith('use_') && opts[key],
@@ -992,6 +996,10 @@ const Dashboard = () => {
         coreActionLabelsOnly={coreActionLabelsOnly}
         onToggleCoreActionLabels={() =>
           setCoreActionLabelsOnly(!coreActionLabelsOnly)
+        }
+        temporaryModeEnabled={temporaryModeEnabled}
+        onToggleTemporaryMode={() =>
+          setTemporaryModeEnabled(!temporaryModeEnabled)
         }
         copied={copied}
         showJumpToJson={isSingleColumn && !floatingJsonEnabled}

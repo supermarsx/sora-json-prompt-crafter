@@ -43,6 +43,8 @@ import {
   EyeOff,
   Trash2,
   Medal,
+  Clock,
+  ClockOff,
 } from 'lucide-react';
 import { toast } from '@/components/ui/sonner-toast';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
@@ -158,6 +160,8 @@ interface SettingsPanelProps {
   onToggleActionLabels: () => void;
   coreActionLabelsOnly: boolean;
   onToggleCoreActionLabels: () => void;
+  temporaryModeEnabled: boolean;
+  onToggleTemporaryMode: () => void;
   defaultTab?:
     | 'manage'
     | 'general'
@@ -223,6 +227,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   onToggleActionLabels,
   coreActionLabelsOnly,
   onToggleCoreActionLabels,
+  temporaryModeEnabled,
+  onToggleTemporaryMode,
   defaultTab = 'manage',
 }) => {
   const { t } = useTranslation();
@@ -792,6 +798,55 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       {soraToolsEnabled
                         ? 'Hide Sora Integration'
                         : 'Show Sora Integration'}
+                    </TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="w-full justify-start gap-2"
+                        onClick={() => {
+                          try {
+                            onToggleTemporaryMode();
+                            toast.success(
+                              !temporaryModeEnabled
+                                ? t('temporaryModeEnabled', {
+                                    defaultValue: 'Temporary mode enabled!',
+                                  })
+                                : t('temporaryModeDisabled', {
+                                    defaultValue: 'Temporary mode disabled!',
+                                  }),
+                            );
+                          } catch {
+                            toast.error('Failed to toggle temporary mode');
+                          }
+                        }}
+                      >
+                        {temporaryModeEnabled ? (
+                          <>
+                            <ClockOff className="w-4 h-4" />{' '}
+                            {t('disableTemporaryMode', {
+                              defaultValue: 'Disable Temporary Mode',
+                            })}
+                          </>
+                        ) : (
+                          <>
+                            <Clock className="w-4 h-4" />{' '}
+                            {t('enableTemporaryMode', {
+                              defaultValue: 'Enable Temporary Mode',
+                            })}
+                          </>
+                        )}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {temporaryModeEnabled
+                        ? t('disableTemporaryMode', {
+                            defaultValue: 'Disable Temporary Mode',
+                          })
+                        : t('enableTemporaryMode', {
+                            defaultValue: 'Enable Temporary Mode',
+                          })}
                     </TooltipContent>
                   </Tooltip>
                   <Tooltip>

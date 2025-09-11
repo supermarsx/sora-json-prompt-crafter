@@ -81,6 +81,8 @@ interface ActionBarProps {
   copied: boolean;
   showJumpToJson?: boolean;
   onJumpToJson?: () => void;
+  temporaryModeEnabled: boolean;
+  onToggleTemporaryMode: () => void;
 }
 /**
  * Renders a floating toolbar providing prompt controls such as undo/redo,
@@ -131,6 +133,8 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   copied,
   showJumpToJson,
   onJumpToJson,
+  temporaryModeEnabled,
+  onToggleTemporaryMode,
 }) => {
   const { t } = useTranslation();
   const [locale, setLocale] = useLocale();
@@ -685,6 +689,8 @@ const { toast: notify } = useToast();
         onToggleActionLabels={onToggleActionLabels}
         coreActionLabelsOnly={coreActionLabelsOnly}
         onToggleCoreActionLabels={onToggleCoreActionLabels}
+        temporaryModeEnabled={temporaryModeEnabled}
+        onToggleTemporaryMode={onToggleTemporaryMode}
       />
     </div>
   );
