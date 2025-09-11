@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import SettingsPanel from '../SettingsPanel';
+import { stylePresets } from '@/data/stylePresets';
 import { purgeCache } from '@/lib/purgeCache';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import i18n from '@/i18n';
@@ -84,6 +85,34 @@ jest.mock('@/components/ui/alert-dialog', () => ({
   AlertDialogCancel: ({ children }: { children: React.ReactNode }) => <button>{children}</button>,
 }));
 
+jest.mock('@/components/SearchableDropdown', () => ({
+  __esModule: true,
+  SearchableDropdown: ({
+    options,
+    value,
+    onValueChange,
+    placeholder,
+  }: {
+    options: string[];
+    value: string;
+    onValueChange: (v: string) => void;
+    placeholder?: string;
+  }) => (
+    <select
+      data-testid="custom-key-dropdown"
+      value={value}
+      onChange={(e) => onValueChange(e.target.value)}
+    >
+      <option value="">{placeholder}</option>
+      {options.map((opt) => (
+        <option key={opt} value={opt}>
+          {opt}
+        </option>
+      ))}
+    </select>
+  ),
+}));
+
 beforeEach(() => {
   jest.clearAllMocks();
 });
@@ -118,7 +147,7 @@ function renderPanel(overrides: Partial<React.ComponentProps<typeof SettingsPane
     onToggleCoreActionLabels: jest.fn(),
     ...overrides,
   };
-  return render(<SettingsPanel {...props} />);
+  return { ...render(<SettingsPanel {...props} />), props };
 }
 
 describe('SettingsPanel', () => {
@@ -152,7 +181,7 @@ describe('SettingsPanel', () => {
       onchange: null as null | (() => void),
     } as unknown as HTMLInputElement;
     const originalCreate = document.createElement.bind(document);
-    jest
+    const createSpy = jest
       .spyOn(document, 'createElement')
       .mockImplementation((tag: string, opts?: ElementCreationOptions) =>
         tag === 'input' ? (input as HTMLElement) : originalCreate(tag, opts),
@@ -176,6 +205,7 @@ describe('SettingsPanel', () => {
     await waitFor(() => expect(importAppData).toHaveBeenCalledWith({ b: 2 }));
     expect(toast.success).toHaveBeenCalledWith(i18n.t('dataImported'));
     expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.DataImport);
+    createSpy.mockRestore();
   });
 
   test('shows manage tab grouped headings', () => {
@@ -209,5 +239,40 @@ describe('SettingsPanel', () => {
     expect(medalRow).toBeTruthy();
     expect(medalRow?.className).toContain('mt-2');
     expect(medalRow?.className).toContain('flex-wrap');
+  });
+
+  test('custom key dropdown populates input and excludes use_ keys', () => {
+    renderPanel({ defaultTab: 'custom-values' });
+    const select = screen.getByTestId('custom-key-dropdown') as HTMLSelectElement;
+    const options = Array.from(select.options).map((o) => o.value);
+    expect(options).toContain('material');
+    expect(options).not.toContain('use_material');
+    fireEvent.change(select, { target: { value: 'material' } });
+    const input = screen.getByPlaceholderText(
+      i18n.t('customKeyPlaceholder'),
+    ) as HTMLInputElement;
+    expect(input.value).toBe('material');
+  });
+
+  test('updates custom key dropdown when style preset categories change', () => {
+    const { rerender, props } = renderPanel({ defaultTab: 'custom-values' });
+    let select = screen.getByTestId('custom-key-dropdown') as HTMLSelectElement;
+    let options = Array.from(select.options).map((o) => o.value);
+    expect(options).not.toContain('style_Extra');
+    stylePresets.Extra = ['unique'];
+    rerender(<SettingsPanel {...props} />);
+    select = screen.getByTestId('custom-key-dropdown') as HTMLSelectElement;
+    options = Array.from(select.options).map((o) => o.value);
+    expect(options).toContain('style_Extra');
+    delete stylePresets.Extra;
+  });
+
+  test('allows manual entry of custom key', () => {
+    renderPanel({ defaultTab: 'custom-values' });
+    const input = screen.getByPlaceholderText(
+      i18n.t('customKeyPlaceholder'),
+    ) as HTMLInputElement;
+    fireEvent.change(input, { target: { value: 'my_custom_key' } });
+    expect(input.value).toBe('my_custom_key');
   });
 });
