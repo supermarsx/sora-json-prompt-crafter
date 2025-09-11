@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Dialog,
@@ -62,7 +62,11 @@ import {
   importCustomValues,
   syncConfigToUrl,
   loadConfigFromUrl,
+  getSectionPresets,
+  removeSectionPreset,
+  saveSectionPreset,
   type CustomValuesMap,
+  type SectionPreset,
 } from '@/lib/storage';
 import {
   loadCustomPresetsFromUrl,
@@ -94,6 +98,7 @@ import { cn } from '@/lib/utils';
 import { SearchableDropdown } from './SearchableDropdown';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { stylePresets } from '@/data/stylePresets';
+import PresetNameDialog from './PresetNameDialog';
 
 const KNOWN_OPTION_KEYS = [
   'material',
@@ -231,6 +236,21 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     return typeof stored === 'string' ? stored : '';
   });
   const [presetEditor, setPresetEditor] = useState('');
+  const [sectionPresets, setSectionPresets] = useState<Record<string, SectionPreset[]>>(() =>
+    getSectionPresets(),
+  );
+  const refreshSectionPresets = useCallback(
+    () => setSectionPresets(getSectionPresets()),
+    [],
+  );
+  const [sectionRename, setSectionRename] = useState<{
+    section: string;
+    preset: SectionPreset;
+  } | null>(null);
+  const [sectionNameDialogOpen, setSectionNameDialogOpen] = useState(false);
+  useEffect(() => {
+    if (open) refreshSectionPresets();
+  }, [open, refreshSectionPresets]);
   const [customMap, setCustomMap] = useState<CustomValuesMap>(() =>
     getCustomValues(),
   );
@@ -580,7 +600,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
           <DialogHeader>
             <DialogTitle>{t('manage')}</DialogTitle>
           </DialogHeader>
-          <Tabs defaultValue={defaultTab}>
+          <Tabs defaultValue={defaultTab} className="flex flex-col h-full">
             <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="manage">{t('manage')}</TabsTrigger>
               <TabsTrigger value="general">{t('general')}</TabsTrigger>
@@ -590,8 +610,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
               </TabsTrigger>
               <TabsTrigger value="milestones">{t('milestones')}</TabsTrigger>
             </TabsList>
-            <TabsContent value="manage">
-              <ScrollArea className="max-h-[70vh]">
+            <TabsContent value="manage" className="flex-1">
+              <ScrollArea className="h-full">
                 <div className="space-y-4 py-2">
                   <div className="space-y-2">
                     <h3 className="text-sm font-medium">
@@ -697,8 +717,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 </div>
               </ScrollArea>
             </TabsContent>
-            <TabsContent value="general">
-              <ScrollArea className="max-h-[70vh]">
+            <TabsContent value="general" className="flex-1">
+              <ScrollArea className="h-full">
                 <div className="space-y-2 py-2">
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -1252,8 +1272,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 </div>
               </ScrollArea>
             </TabsContent>
-            <TabsContent value="presets">
-              <ScrollArea className="max-h-[70vh]">
+            <TabsContent value="presets" className="flex-1">
+              <ScrollArea className="h-full">
                 <div className="space-y-2 py-2">
                   <div className="flex gap-2">
                     <Button
@@ -1301,11 +1321,63 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       {t('clearPresets', { defaultValue: 'Clear presets' })}
                     </Button>
                   </div>
+                  <div className="space-y-2 mt-4">
+                    <h3 className="text-sm font-medium">
+                      {t('manage', { defaultValue: 'Manage' })}
+                    </h3>
+                    {Object.entries(sectionPresets).map(([section, list]) => (
+                      <div key={section} className="space-y-1">
+                        <h4 className="text-xs font-semibold capitalize">
+                          {section}
+                        </h4>
+                        {list.length === 0 ? (
+                          <p className="text-xs text-muted-foreground">
+                            {t('noPresets')}
+                          </p>
+                        ) : (
+                          <ul className="space-y-1">
+                            {list.map((p) => (
+                              <li
+                                key={p.name}
+                                className="flex items-center justify-between"
+                              >
+                                <span className="text-xs">{p.name}</span>
+                                <div className="flex gap-1">
+                                  <Button
+                                    size="icon"
+                                    variant="outline"
+                                    onClick={() => {
+                                      setSectionRename({ section, preset: p });
+                                      setSectionNameDialogOpen(true);
+                                    }}
+                                    aria-label={t('rename')}
+                                  >
+                                    <Pencil className="w-4 h-4" />
+                                  </Button>
+                                  <Button
+                                    size="icon"
+                                    variant="destructive"
+                                    onClick={() => {
+                                      removeSectionPreset(section, p.name);
+                                      refreshSectionPresets();
+                                    }}
+                                    aria-label={t('delete')}
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </Button>
+                                </div>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </ScrollArea>
             </TabsContent>
-            <TabsContent value="custom-values">
-              <ScrollArea className="max-h-[70vh]">
+            <TabsContent value="custom-values" className="flex-1">
+              <ScrollArea className="h-full">
                 <div className="space-y-2 py-2">
                   <div className="flex gap-2">
                     <div className="flex flex-1 flex-col gap-2">
@@ -1410,8 +1482,8 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                 </div>
               </ScrollArea>
             </TabsContent>
-            <TabsContent value="milestones">
-              <ScrollArea className="max-h-[70vh]">
+            <TabsContent value="milestones" className="flex-1">
+              <ScrollArea className="h-full">
                 <div className="space-y-3 py-2">
                   {milestoneCategories.map((cat) => {
                     const achieved =
@@ -1476,7 +1548,22 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
           </Tabs>
         </DialogContent>
       </Dialog>
-
+      <PresetNameDialog
+        open={sectionNameDialogOpen}
+        onOpenChange={setSectionNameDialogOpen}
+        initialName={sectionRename?.preset.name ?? ''}
+        title={t('rename')}
+        onSave={(name) => {
+          if (sectionRename) {
+            removeSectionPreset(sectionRename.section, sectionRename.preset.name);
+            saveSectionPreset(sectionRename.section, {
+              name,
+              values: sectionRename.preset.values,
+            });
+            refreshSectionPresets();
+          }
+        }}
+      />
       <Dialog open={cssEditorOpen} onOpenChange={setCssEditorOpen}>
         <DialogContent className="max-w-lg">
           <DialogHeader>

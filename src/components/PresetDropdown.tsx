@@ -17,8 +17,9 @@ import {
   removeSectionPreset,
   SectionPreset,
 } from '@/lib/storage';
-import { Trash2 } from 'lucide-react';
+import { Trash2, Check, Save, List, Pencil } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import PresetNameDialog from './PresetNameDialog';
 
 interface PresetDropdownProps {
   /**
@@ -50,6 +51,9 @@ export const PresetDropdown: React.FC<PresetDropdownProps> = ({
   const [presets, setPresets] = React.useState<SectionPreset[]>([]);
   const [confirmDelete, setConfirmDelete] = React.useState<Record<string, boolean>>({});
   const deleteTimers = React.useRef<Record<string, ReturnType<typeof setTimeout>>>({});
+  const [nameDialogOpen, setNameDialogOpen] = React.useState(false);
+  const [nameInput, setNameInput] = React.useState('');
+  const [renaming, setRenaming] = React.useState<SectionPreset | null>(null);
 
   /**
    * Loads all presets for the current section from storage.
@@ -67,10 +71,9 @@ export const PresetDropdown: React.FC<PresetDropdownProps> = ({
    * Prompts the user for a preset name and saves the current section values.
    */
   const handleSave = () => {
-    const name = window.prompt(t('presetNamePrompt'));
-    if (!name) return;
-    saveSectionPreset(sectionKey, { name, values: currentValues });
-    loadPresets();
+    setRenaming(null);
+    setNameInput('');
+    setNameDialogOpen(true);
   };
 
   /**
@@ -131,8 +134,8 @@ export const PresetDropdown: React.FC<PresetDropdownProps> = ({
       if (!open) resetConfirmDelete();
     }}>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="sm">
-          {t('presets')}
+        <Button variant="outline" size="sm" className="gap-1">
+          <List className="w-4 h-4" /> {t('presets')}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
@@ -143,8 +146,18 @@ export const PresetDropdown: React.FC<PresetDropdownProps> = ({
           <DropdownMenuSub key={preset.name}>
             <DropdownMenuSubTrigger>{preset.name}</DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
-              <DropdownMenuItem onClick={() => handleApply(preset)}>
-                {t('apply')}
+              <DropdownMenuItem onClick={() => handleApply(preset)} className="gap-2">
+                <Check className="w-4 h-4" /> {t('apply')}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  setRenaming(preset);
+                  setNameInput(preset.name);
+                  setNameDialogOpen(true);
+                }}
+                className="gap-2"
+              >
+                <Pencil className="w-4 h-4" /> {t('rename')}
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={(e) => handleDeleteClick(e, preset.name)}
@@ -162,10 +175,25 @@ export const PresetDropdown: React.FC<PresetDropdownProps> = ({
           </DropdownMenuSub>
         ))}
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleSave}>
-          {t('savePreset')}
+        <DropdownMenuItem onClick={handleSave} className="gap-2">
+          <Save className="w-4 h-4" /> {t('savePreset')}
         </DropdownMenuItem>
       </DropdownMenuContent>
+      <PresetNameDialog
+        open={nameDialogOpen}
+        onOpenChange={setNameDialogOpen}
+        initialName={nameInput}
+        title={renaming ? t('rename') : t('savePreset')}
+        onSave={(name) => {
+          if (renaming) {
+            removeSectionPreset(sectionKey, renaming.name);
+            saveSectionPreset(sectionKey, { name, values: renaming.values });
+          } else {
+            saveSectionPreset(sectionKey, { name, values: currentValues });
+          }
+          loadPresets();
+        }}
+      />
     </DropdownMenu>
   );
 };

@@ -27,6 +27,21 @@ jest.mock('@/hooks/use-dark-mode', () => ({
   useDarkMode: jest.fn(() => [false, jest.fn()] as const),
 }));
 
+jest.mock('@/lib/storage', () => ({
+  exportAppData: jest.fn(() => ({})),
+  importAppData: jest.fn(),
+  safeGet: jest.fn((key: string) => (key === 'customPresetsUrl' ? '' : [])),
+  getCustomValues: jest.fn(() => ({})),
+  addCustomValue: jest.fn(),
+  removeCustomValue: jest.fn(),
+  updateCustomValue: jest.fn(),
+  exportCustomValues: jest.fn(() => ({})),
+  importCustomValues: jest.fn(),
+  getSectionPresets: jest.fn(() => ({})),
+  removeSectionPreset: jest.fn(),
+  saveSectionPreset: jest.fn(),
+}));
+
 jest.mock('@/components/ui/dialog', () => ({
   __esModule: true,
   Dialog: ({ open, children }: { open: boolean; children: React.ReactNode }) =>
@@ -34,6 +49,7 @@ jest.mock('@/components/ui/dialog', () => ({
   DialogContent: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   DialogHeader: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   DialogTitle: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  DialogFooter: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
 }));
 
 jest.mock('@/components/ui/button', () => ({

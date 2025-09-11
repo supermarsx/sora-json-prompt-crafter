@@ -13,6 +13,7 @@ import { CollapsibleSection } from '../CollapsibleSection';
 import type { SoraOptions } from '@/lib/soraOptions';
 import { stylePresets } from '@/data/stylePresets';
 import { Button } from '@/components/ui/button';
+import { RotateCcw } from 'lucide-react';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { PresetDropdown } from '../PresetDropdown';
 import { mergeCustomValues } from '@/lib/storage';
@@ -96,8 +97,9 @@ export const StyleSection: React.FC<StyleSectionProps> = ({
                 DEFAULT_OPTIONS.style_preset.style,
               );
             }}
+            className="gap-1"
           >
-            {t('reset')}
+            <RotateCcw className="w-4 h-4" /> {t('reset')}
           </Button>
         </div>
         <div>

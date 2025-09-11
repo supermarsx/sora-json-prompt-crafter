@@ -14,6 +14,7 @@ import {
 } from '@/data/locationPresets';
 import { mergeCustomValues } from '@/lib/storage';
 import { Button } from '@/components/ui/button';
+import { RotateCcw } from 'lucide-react';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { PresetDropdown } from '../PresetDropdown';
 
@@ -84,8 +85,9 @@ export const SettingsLocationSection: React.FC<
                 atmosphere_mood: DEFAULT_OPTIONS.atmosphere_mood,
               })
             }
+            className="gap-1"
           >
-            {t('reset')}
+            <RotateCcw className="w-4 h-4" /> {t('reset')}
           </Button>
         </div>
         <ToggleField
