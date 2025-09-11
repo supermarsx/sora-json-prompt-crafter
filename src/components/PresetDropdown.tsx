@@ -17,6 +17,8 @@ import {
   removeSectionPreset,
   SectionPreset,
 } from '@/lib/storage';
+import { Trash2 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface PresetDropdownProps {
   /**
@@ -46,6 +48,8 @@ export const PresetDropdown: React.FC<PresetDropdownProps> = ({
 }) => {
   const { t } = useTranslation();
   const [presets, setPresets] = React.useState<SectionPreset[]>([]);
+  const [confirmDelete, setConfirmDelete] = React.useState<Record<string, boolean>>({});
+  const deleteTimers = React.useRef<Record<string, ReturnType<typeof setTimeout>>>({});
 
   /**
    * Loads all presets for the current section from storage.
@@ -88,8 +92,44 @@ export const PresetDropdown: React.FC<PresetDropdownProps> = ({
     loadPresets();
   };
 
+  const resetConfirmDelete = React.useCallback((name?: string) => {
+    if (name) {
+      if (deleteTimers.current[name]) {
+        clearTimeout(deleteTimers.current[name]);
+        delete deleteTimers.current[name];
+      }
+      setConfirmDelete((prev) => {
+        const updated = { ...prev };
+        delete updated[name];
+        return updated;
+      });
+    } else {
+      Object.values(deleteTimers.current).forEach(clearTimeout);
+      deleteTimers.current = {};
+      setConfirmDelete({});
+    }
+  }, []);
+
+  const handleDeleteClick = (
+    e: React.MouseEvent,
+    name: string,
+  ) => {
+    if (confirmDelete[name]) {
+      resetConfirmDelete(name);
+      handleDelete(name);
+    } else {
+      e.preventDefault();
+      setConfirmDelete((prev) => ({ ...prev, [name]: true }));
+      deleteTimers.current[name] = setTimeout(() => {
+        resetConfirmDelete(name);
+      }, 1500);
+    }
+  };
+
   return (
-    <DropdownMenu>
+    <DropdownMenu onOpenChange={(open) => {
+      if (!open) resetConfirmDelete();
+    }}>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="sm">
           {t('presets')}
@@ -106,7 +146,16 @@ export const PresetDropdown: React.FC<PresetDropdownProps> = ({
               <DropdownMenuItem onClick={() => handleApply(preset)}>
                 {t('apply')}
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => handleDelete(preset.name)}>
+              <DropdownMenuItem
+                onClick={(e) => handleDeleteClick(e, preset.name)}
+                className="gap-2"
+              >
+                <Trash2
+                  className={cn(
+                    'w-4 h-4',
+                    confirmDelete[preset.name] && 'animate-pulse',
+                  )}
+                />
                 {t('delete')}
               </DropdownMenuItem>
             </DropdownMenuSubContent>
