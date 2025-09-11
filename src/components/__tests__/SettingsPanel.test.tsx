@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import SettingsPanel from '../SettingsPanel';
+import { stylePresets } from '@/data/stylePresets';
 import { purgeCache } from '@/lib/purgeCache';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import i18n from '@/i18n';
@@ -146,7 +147,7 @@ function renderPanel(overrides: Partial<React.ComponentProps<typeof SettingsPane
     onToggleCoreActionLabels: jest.fn(),
     ...overrides,
   };
-  return render(<SettingsPanel {...props} />);
+  return { ...render(<SettingsPanel {...props} />), props };
 }
 
 describe('SettingsPanel', () => {
@@ -251,6 +252,19 @@ describe('SettingsPanel', () => {
       i18n.t('customKeyPlaceholder'),
     ) as HTMLInputElement;
     expect(input.value).toBe('material');
+  });
+
+  test('updates custom key dropdown when style preset categories change', () => {
+    const { rerender, props } = renderPanel({ defaultTab: 'custom-values' });
+    let select = screen.getByTestId('custom-key-dropdown') as HTMLSelectElement;
+    let options = Array.from(select.options).map((o) => o.value);
+    expect(options).not.toContain('style_Extra');
+    stylePresets.Extra = ['unique'];
+    rerender(<SettingsPanel {...props} />);
+    select = screen.getByTestId('custom-key-dropdown') as HTMLSelectElement;
+    options = Array.from(select.options).map((o) => o.value);
+    expect(options).toContain('style_Extra');
+    delete stylePresets.Extra;
   });
 
   test('allows manual entry of custom key', () => {
