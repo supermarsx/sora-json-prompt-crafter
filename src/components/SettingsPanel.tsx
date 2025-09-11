@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Dialog,
@@ -91,6 +91,8 @@ import {
   CUSTOM_JS,
 } from '@/lib/storage-keys';
 import { cn } from '@/lib/utils';
+import { SearchableDropdown } from './SearchableDropdown';
+import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 
 interface SettingsPanelProps {
   open: boolean;
@@ -206,6 +208,10 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   const [jsEditorOpen, setJsEditorOpen] = useState(false);
   const [customCss, setCustomCss] = useState('');
   const [customJs, setCustomJs] = useState('');
+  const optionKeys = useMemo(
+    () => Object.keys(DEFAULT_OPTIONS).filter((k) => !k.startsWith('use_')),
+    [],
+  );
 
   const openCssEditor = () => {
     const stored = safeGet(CUSTOM_CSS);
@@ -1270,14 +1276,26 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
               <ScrollArea className="max-h-[70vh]">
                 <div className="space-y-2 py-2">
                   <div className="flex gap-2">
-                    <Input
-                      value={customKey}
-                      onChange={(e) => setCustomKey(e.target.value)}
-                      placeholder={t('optionKey', {
-                        defaultValue: 'Option key',
-                      })}
-                      className="flex-1"
-                    />
+                    <div className="flex flex-1 flex-col gap-2">
+                      <SearchableDropdown
+                        options={optionKeys}
+                        value={customKey}
+                        onValueChange={setCustomKey}
+                        placeholder={t('selectOptionKey', {
+                          defaultValue: 'Select option key',
+                        })}
+                        label={t('selectOptionKey', {
+                          defaultValue: 'Select option key',
+                        })}
+                      />
+                      <Input
+                        value={customKey}
+                        onChange={(e) => setCustomKey(e.target.value)}
+                        placeholder={t('customKeyPlaceholder', {
+                          defaultValue: 'Custom key',
+                        })}
+                      />
+                    </div>
                     <Input
                       value={customValue}
                       onChange={(e) => setCustomValue(e.target.value)}

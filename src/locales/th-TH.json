@@ -1114,6 +1114,8 @@
   "customCss": "Custom CSS",
   "customJs": "Custom JS",
   "optionKey": "Option key",
+  "selectOptionKey": "Select option key",
+  "customKeyPlaceholder": "Custom key",
   "customValue": "Custom value",
   "editCustomCss": "Edit custom CSS",
   "editCustomJs": "Edit custom JS",
