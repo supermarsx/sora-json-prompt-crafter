@@ -20,6 +20,7 @@ jest.mock('@/lib/validateOptions', () => ({
 
 let importFn: ((entries: { json: string; title?: string }[]) => void) | null = null;
 let copyFn: ((entry: HistoryEntry) => void) | null = null;
+const mockUseTemporaryMode = jest.fn(() => [false, jest.fn()] as const);
 
 jest.mock('../HistoryPanel', () => ({
   __esModule: true,
@@ -74,6 +75,10 @@ jest.mock('@/hooks/use-dark-mode-toggle-visibility', () => ({
 jest.mock('@/hooks/use-tracking', () => ({
   __esModule: true,
   useTracking: jest.fn(() => [true, jest.fn()] as const),
+}));
+jest.mock('@/hooks/use-temporary-mode', () => ({
+  __esModule: true,
+  useTemporaryMode: (...args: unknown[]) => mockUseTemporaryMode(...args),
 }));
 jest.mock('@/hooks/use-action-history', () => ({
   __esModule: true,
@@ -171,5 +176,19 @@ describe('Dashboard history limit', () => {
       const stored = JSON.parse(localStorage.getItem(JSON_HISTORY) || '[]');
       expect(stored[0].copyCount).toBe(1);
     });
+  });
+
+  test('does not add history entry when temporary mode active', async () => {
+    mockUseTemporaryMode.mockReturnValue([true, jest.fn()] as const);
+    render(<Dashboard />);
+    const copyButton = screen.getByText('Copy');
+    await act(async () => {
+      fireEvent.click(copyButton);
+    });
+    await waitFor(() => {
+      const history = JSON.parse(localStorage.getItem(JSON_HISTORY) || '[]');
+      expect(history).toHaveLength(0);
+    });
+    mockUseTemporaryMode.mockReturnValue([false, jest.fn()] as const);
   });
 });

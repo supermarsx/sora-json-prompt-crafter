@@ -107,6 +107,8 @@ function renderPanel(overrides: Partial<React.ComponentProps<typeof SettingsPane
     onToggleActionLabels: jest.fn(),
     coreActionLabelsOnly: false,
     onToggleCoreActionLabels: jest.fn(),
+    temporaryModeEnabled: false,
+    onToggleTemporaryMode: jest.fn(),
     defaultTab: 'presets' as const,
     ...overrides,
   };

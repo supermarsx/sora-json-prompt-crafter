@@ -21,6 +21,7 @@ export const JSON_CHANGE_COUNT = 'jsonChangeCount';
 export const JSON_CHANGE_MILESTONES = 'jsonChangeMilestones';
 export const SHARE_COUNT = 'shareCount';
 export const SHARE_MILESTONES = 'shareMilestones';
+export const TEMPORARY_MODE = 'temporaryMode';
 export const UNDO_COUNT = 'undoCount';
 export const UNDO_MILESTONES = 'undoMilestones';
 export const REDO_COUNT = 'redoCount';

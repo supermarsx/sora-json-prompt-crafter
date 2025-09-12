@@ -19,6 +19,7 @@ import type { HistoryEntry } from '../HistoryPanel';
 let copyFn: ((entry: HistoryEntry) => void) | null = null;
 let updateFn: ((opts: Partial<SoraOptions>) => void) | null = null;
 const mockUseDarkMode = jest.fn(() => [false, jest.fn()] as const);
+const mockUseTemporaryMode = jest.fn(() => [false, jest.fn()] as const);
 let sendFn: (() => void) | null = null;
 let resetFn: (() => void) | null = null;
 jest.mock('../HistoryPanel', () => ({
@@ -74,6 +75,10 @@ jest.mock('@/hooks/use-single-column', () => ({
 jest.mock('@/hooks/use-dark-mode', () => ({
   __esModule: true,
   useDarkMode: (...args: unknown[]) => mockUseDarkMode(...args),
+}));
+jest.mock('@/hooks/use-temporary-mode', () => ({
+  __esModule: true,
+  useTemporaryMode: (...args: unknown[]) => mockUseTemporaryMode(...args),
 }));
 jest.mock('@/hooks/use-dark-mode-toggle-visibility', () => ({
   __esModule: true,
@@ -308,6 +313,25 @@ describe('Dashboard interactions', () => {
       expect(history).toHaveLength(1);
       expect(history[0].json).toContain('foo');
     });
+  });
+
+  test('copy does not store history when temporary mode enabled', async () => {
+    mockUseTemporaryMode.mockReturnValue([true, jest.fn()] as const);
+    render(<Dashboard />);
+    await waitFor(() => expect(updateFn).not.toBeNull());
+    act(() => {
+      updateFn?.({ prompt: 'foo' });
+    });
+    const copyButton = screen.getByRole('button', { name: /copy/i });
+    await act(async () => {
+      fireEvent.click(copyButton);
+      await Promise.resolve();
+    });
+    await waitFor(() => {
+      const history = JSON.parse(localStorage.getItem(JSON_HISTORY) || '[]');
+      expect(history).toHaveLength(0);
+    });
+    mockUseTemporaryMode.mockReturnValue([false, jest.fn()] as const);
   });
 
   test('undo and redo revert option changes', async () => {
