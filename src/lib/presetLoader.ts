@@ -67,9 +67,8 @@ export function importCustomPresets(data: string | CustomPresetData): void {
         key as keyof typeof cameraPresets
       ];
       if (Array.isArray(arr) && Array.isArray(target)) {
-        (cameraPresets as Record<string, string[]>)[
-          key as keyof typeof cameraPresets
-        ] = Array.from(new Set([...target, ...arr]));
+        const unique = arr.filter((s) => !target.includes(s));
+        target.push(...unique);
       }
     }
   }
@@ -111,9 +110,8 @@ export function importCustomPresets(data: string | CustomPresetData): void {
         key as keyof typeof dndPresets
       ];
       if (Array.isArray(arr) && Array.isArray(target)) {
-        (dndPresets as Record<string, string[]>)[
-          key as keyof typeof dndPresets
-        ] = Array.from(new Set([...target, ...arr]));
+        const unique = arr.filter((e) => !target.includes(e));
+        target.push(...unique);
       }
     }
   }
@@ -184,9 +182,8 @@ export function resetPresetCollections(): void {
     stylePresets[key] = [...originalStylePresets[key]];
   }
   for (const key of Object.keys(originalCameraPresets)) {
-    (cameraPresets as Record<string, string[]>)[key] = [
-      ...originalCameraPresets[key],
-    ];
+    const target = (cameraPresets as Record<string, string[]>)[key];
+    target.splice(0, target.length, ...originalCameraPresets[key]);
   }
   environmentOptions.splice(
     0,
@@ -209,8 +206,7 @@ export function resetPresetCollections(): void {
     ...originalLocationPresets.atmosphereMoodOptions,
   );
   for (const key of Object.keys(originalDndPresets)) {
-    (dndPresets as Record<string, string[]>)[key] = [
-      ...originalDndPresets[key],
-    ];
+    const target = (dndPresets as Record<string, string[]>)[key];
+    target.splice(0, target.length, ...originalDndPresets[key]);
   }
 }
