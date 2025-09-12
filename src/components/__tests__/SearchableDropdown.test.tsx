@@ -74,9 +74,6 @@ describe('SearchableDropdown', () => {
   test('allows adding a custom value', () => {
     localStorage.clear();
     const handleChange = jest.fn();
-    const promptSpy = jest
-      .spyOn(window, 'prompt')
-      .mockReturnValue('orange');
     render(
       <SearchableDropdown
         options={options}
@@ -90,10 +87,12 @@ describe('SearchableDropdown', () => {
       screen.getByRole('button', { name: i18n.t('searchablePlaceholder') }),
     );
     fireEvent.click(screen.getByRole('button', { name: 'Add custom value' }));
+    const input = screen.getByPlaceholderText('Enter custom value');
+    fireEvent.change(input, { target: { value: 'orange' } });
+    fireEvent.click(screen.getByRole('button', { name: /^Add$/i }));
 
     expect(handleChange).toHaveBeenCalledWith('orange');
     const stored = JSON.parse(localStorage.getItem('customValues') || '{}');
     expect(stored.fruits).toContain('orange');
-    promptSpy.mockRestore();
   });
 });

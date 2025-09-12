@@ -19,7 +19,7 @@ import {
 } from '@/lib/storage';
 import { Trash2, Check, Save, List, Pencil } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import PresetNameDialog from './PresetNameDialog';
+import PromptDialog from '@/components/ui/prompt-dialog';
 
 interface PresetDropdownProps {
   /**
@@ -52,7 +52,6 @@ export const PresetDropdown: React.FC<PresetDropdownProps> = ({
   const [confirmDelete, setConfirmDelete] = React.useState<Record<string, boolean>>({});
   const deleteTimers = React.useRef<Record<string, ReturnType<typeof setTimeout>>>({});
   const [nameDialogOpen, setNameDialogOpen] = React.useState(false);
-  const [nameInput, setNameInput] = React.useState('');
   const [renaming, setRenaming] = React.useState<SectionPreset | null>(null);
 
   /**
@@ -72,7 +71,6 @@ export const PresetDropdown: React.FC<PresetDropdownProps> = ({
    */
   const handleSave = () => {
     setRenaming(null);
-    setNameInput('');
     setNameDialogOpen(true);
   };
 
@@ -152,7 +150,6 @@ export const PresetDropdown: React.FC<PresetDropdownProps> = ({
               <DropdownMenuItem
                 onClick={() => {
                   setRenaming(preset);
-                  setNameInput(preset.name);
                   setNameDialogOpen(true);
                 }}
                 className="gap-2"
@@ -179,12 +176,13 @@ export const PresetDropdown: React.FC<PresetDropdownProps> = ({
           <Save className="w-4 h-4" /> {t('savePreset')}
         </DropdownMenuItem>
       </DropdownMenuContent>
-      <PresetNameDialog
+      <PromptDialog
         open={nameDialogOpen}
         onOpenChange={setNameDialogOpen}
-        initialName={nameInput}
         title={renaming ? t('rename') : t('savePreset')}
-        onSave={(name) => {
+        placeholder={t('presetNamePrompt')}
+        defaultValue={renaming?.name ?? ''}
+        onConfirm={(name) => {
           if (renaming) {
             removeSectionPreset(sectionKey, renaming.name);
             saveSectionPreset(sectionKey, { name, values: renaming.values });
