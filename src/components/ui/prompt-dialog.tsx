@@ -6,63 +6,70 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
-interface PresetNameDialogProps {
+interface PromptDialogProps {
   open: boolean;
-  initialName?: string;
   title: string;
+  defaultValue?: string;
+  placeholder?: string;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  onConfirm: (value: string) => void;
   onOpenChange: (open: boolean) => void;
-  onSave: (name: string) => void;
 }
 
-const PresetNameDialog: React.FC<PresetNameDialogProps> = ({
+const PromptDialog: React.FC<PromptDialogProps> = ({
   open,
-  initialName = '',
   title,
+  defaultValue = '',
+  placeholder,
+  confirmLabel,
+  cancelLabel,
+  onConfirm,
   onOpenChange,
-  onSave,
 }) => {
   const { t } = useTranslation();
-  const [name, setName] = useState(initialName);
+  const [value, setValue] = useState(defaultValue);
 
   useEffect(() => {
     if (open) {
-      setName(initialName);
+      setValue(defaultValue);
     }
-  }, [open, initialName]);
+  }, [open, defaultValue]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
+          <DialogDescription className="sr-only">
+            {placeholder}
+          </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-2">
           <Input
             autoFocus
-            placeholder={t('presetNamePrompt')}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            placeholder={placeholder}
           />
         </div>
         <DialogFooter className="gap-2">
-          <Button
-            variant="outline"
-            onClick={() => onOpenChange(false)}
-          >
-            {t('cancel')}
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            {cancelLabel ?? t('cancel')}
           </Button>
           <Button
             onClick={() => {
-              onSave(name);
+              onConfirm(value);
               onOpenChange(false);
             }}
-            disabled={!name.trim()}
+            disabled={!value.trim()}
           >
-            {t('save')}
+            {confirmLabel ?? t('save')}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -70,4 +77,4 @@ const PresetNameDialog: React.FC<PresetNameDialogProps> = ({
   );
 };
 
-export default PresetNameDialog;
+export default PromptDialog;

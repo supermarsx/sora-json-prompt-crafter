@@ -18,6 +18,7 @@ import {
   TooltipContent,
 } from '@/components/ui/tooltip';
 import { addCustomValue } from '@/lib/storage';
+import PromptDialog from '@/components/ui/prompt-dialog';
 
 interface SearchableDropdownProps {
   options: readonly string[];
@@ -45,6 +46,7 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
   const labelText = label ?? t('searchableLabel');
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [customDialogOpen, setCustomDialogOpen] = useState(false);
 
   useEffect(() => {
     if (disabled) {
@@ -149,15 +151,7 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
             <Button
               variant="outline"
               className="w-full"
-              onClick={() => {
-                const input = window.prompt('Enter custom value');
-                const custom = input?.trim();
-                if (!custom) return;
-                addCustomValue(optionKey, custom);
-                onValueChange(custom);
-                setIsOpen(false);
-                setSearchQuery('');
-              }}
+              onClick={() => setCustomDialogOpen(true)}
               disabled={disabled}
             >
               Add custom value
@@ -165,6 +159,23 @@ export const SearchableDropdown: React.FC<SearchableDropdownProps> = ({
           )}
         </div>
       </DialogContent>
+      {optionKey && (
+        <PromptDialog
+          open={customDialogOpen}
+          onOpenChange={setCustomDialogOpen}
+          title={t('addCustomValue', { defaultValue: 'Add custom value' })}
+          placeholder={t('enterCustomValue', { defaultValue: 'Enter custom value' })}
+          confirmLabel={t('add', { defaultValue: 'Add' })}
+          onConfirm={(val) => {
+            const custom = val.trim();
+            if (!custom) return;
+            addCustomValue(optionKey, custom);
+            onValueChange(custom);
+            setIsOpen(false);
+            setSearchQuery('');
+          }}
+        />
+      )}
     </Dialog>
   );
 };

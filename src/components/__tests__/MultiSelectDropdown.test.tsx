@@ -119,9 +119,6 @@ describe('MultiSelectDropdown', () => {
   test('adds a custom value and selects it', () => {
     localStorage.clear();
     const handleChange = jest.fn();
-    const promptSpy = jest
-      .spyOn(window, 'prompt')
-      .mockReturnValue('bazooka');
     render(
       <MultiSelectDropdown
         options={options}
@@ -133,10 +130,12 @@ describe('MultiSelectDropdown', () => {
 
     fireEvent.click(screen.getByRole('button'));
     fireEvent.click(screen.getByRole('button', { name: 'Add custom value' }));
+    const input = screen.getByPlaceholderText('Enter custom value');
+    fireEvent.change(input, { target: { value: 'bazooka' } });
+    fireEvent.click(screen.getByRole('button', { name: /^Add$/i }));
 
     expect(handleChange).toHaveBeenCalledWith(['bazooka']);
     const stored = JSON.parse(localStorage.getItem('customValues') || '{}');
     expect(stored.things).toContain('bazooka');
-    promptSpy.mockRestore();
   });
 });

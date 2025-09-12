@@ -100,7 +100,7 @@ import { cn } from '@/lib/utils';
 import { SearchableDropdown } from './SearchableDropdown';
 import { DEFAULT_OPTIONS } from '@/lib/defaultOptions';
 import { stylePresets } from '@/data/stylePresets';
-import PresetNameDialog from './PresetNameDialog';
+import PromptDialog from '@/components/ui/prompt-dialog';
 
 const KNOWN_OPTION_KEYS = [
   'material',
@@ -260,6 +260,9 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   const [customMap, setCustomMap] = useState<CustomValuesMap>(() =>
     getCustomValues(),
   );
+  const [editValue, setEditValue] = useState<{ key: string; old: string } | null>(
+    null,
+  );
   const [customKey, setCustomKey] = useState('');
   const [customValue, setCustomValue] = useState('');
   const [cssEditorOpen, setCssEditorOpen] = useState(false);
@@ -267,7 +270,6 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   const [customCss, setCustomCss] = useState('');
   const [customJs, setCustomJs] = useState('');
   const [urlDialogOpen, setUrlDialogOpen] = useState(false);
-  const [urlInput, setUrlInput] = useState('');
   const [urlMode, setUrlMode] = useState<'sync' | 'load'>('sync');
   const keys = new Set<string>(KNOWN_OPTION_KEYS);
   Object.keys(customMap).forEach((k) => keys.add(k));
@@ -335,12 +337,11 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
 
   const openUrlModal = (mode: 'sync' | 'load') => {
     setUrlMode(mode);
-    setUrlInput('');
     setUrlDialogOpen(true);
   };
 
-  const handleUrlSave = async () => {
-    const url = urlInput.trim();
+  const handleUrlSave = async (input: string) => {
+    const url = input.trim();
     if (!url) return;
     try {
       if (urlMode === 'sync') {
@@ -350,7 +351,6 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         await loadConfigFromUrl(url);
         toast.success(t('dataImported', { defaultValue: 'Data imported' }));
       }
-      setUrlDialogOpen(false);
     } catch {
       toast.error(t('requestBlocked'));
     }
@@ -1515,16 +1515,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => {
-                              const input = window.prompt(
-                                t('editValue', { defaultValue: 'Edit value' }),
-                                val,
-                              );
-                              const newVal = input?.trim();
-                              if (!newVal || newVal === val) return;
-                              updateCustomValue(key, val, newVal);
-                              setCustomMap(getCustomValues());
-                            }}
+                            onClick={() => setEditValue({ key, old: val })}
                           >
                             <Pencil className="w-4 h-4" />
                           </Button>
@@ -1611,34 +1602,36 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
           </Tabs>
         </DialogContent>
       </Dialog>
-      <Dialog open={urlDialogOpen} onOpenChange={setUrlDialogOpen}>
-        <DialogContent className="max-w-lg">
-          <DialogHeader>
-            <DialogTitle>
-              {urlMode === 'sync' ? t('syncToUrl') : t('loadFromUrl')}
-            </DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4">
-            <Input
-              value={urlInput}
-              onChange={(e) => setUrlInput(e.target.value)}
-              placeholder={t('urlPlaceholder')}
-            />
-            <div className="flex justify-end gap-2">
-              <Button variant="outline" onClick={() => setUrlDialogOpen(false)}>
-                {t('cancel')}
-              </Button>
-              <Button onClick={handleUrlSave}>{t('save')}</Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-      <PresetNameDialog
+      <PromptDialog
+        open={urlDialogOpen}
+        onOpenChange={setUrlDialogOpen}
+        title={urlMode === 'sync' ? t('syncToUrl') : t('loadFromUrl')}
+        placeholder={t('urlPlaceholder')}
+        confirmLabel={t('save')}
+        onConfirm={handleUrlSave}
+      />
+      <PromptDialog
+        open={!!editValue}
+        onOpenChange={(open) => {
+          if (!open) setEditValue(null);
+        }}
+        title={t('editValue', { defaultValue: 'Edit value' })}
+        defaultValue={editValue?.old ?? ''}
+        onConfirm={(newVal) => {
+          if (!editValue) return;
+          const trimmed = newVal.trim();
+          if (!trimmed || trimmed === editValue.old) return;
+          updateCustomValue(editValue.key, editValue.old, trimmed);
+          setCustomMap(getCustomValues());
+        }}
+      />
+      <PromptDialog
         open={sectionNameDialogOpen}
         onOpenChange={setSectionNameDialogOpen}
-        initialName={sectionRename?.preset.name ?? ''}
         title={t('rename')}
-        onSave={(name) => {
+        placeholder={t('presetNamePrompt')}
+        defaultValue={sectionRename?.preset.name ?? ''}
+        onConfirm={(name) => {
           if (sectionRename) {
             removeSectionPreset(sectionRename.section, sectionRename.preset.name);
             saveSectionPreset(sectionRename.section, {

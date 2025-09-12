@@ -19,6 +19,7 @@ import {
   TooltipContent,
 } from '@/components/ui/tooltip';
 import { addCustomValue } from '@/lib/storage';
+import PromptDialog from '@/components/ui/prompt-dialog';
 
 interface MultiSelectDropdownProps {
   options: readonly string[];
@@ -60,6 +61,7 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   const labelText = label ?? t('multiSelectLabel');
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [customDialogOpen, setCustomDialogOpen] = useState(false);
 
   const sortedOptions = useMemo(() => {
     const priorityOptions = [
@@ -184,15 +186,7 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
             <Button
               variant="outline"
               className="w-full"
-              onClick={() => {
-                const input = window.prompt('Enter custom value');
-                const custom = input?.trim();
-                if (!custom) return;
-                addCustomValue(optionKey, custom);
-                onValueChange([...value, custom]);
-                setIsOpen(false);
-                setSearchQuery('');
-              }}
+              onClick={() => setCustomDialogOpen(true)}
               disabled={disabled}
             >
               Add custom value
@@ -200,6 +194,23 @@ export const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
           )}
         </div>
       </DialogContent>
+      {optionKey && (
+        <PromptDialog
+          open={customDialogOpen}
+          onOpenChange={setCustomDialogOpen}
+          title={t('addCustomValue', { defaultValue: 'Add custom value' })}
+          placeholder={t('enterCustomValue', { defaultValue: 'Enter custom value' })}
+          confirmLabel={t('add', { defaultValue: 'Add' })}
+          onConfirm={(val) => {
+            const custom = val.trim();
+            if (!custom) return;
+            addCustomValue(optionKey, custom);
+            onValueChange([...value, custom]);
+            setIsOpen(false);
+            setSearchQuery('');
+          }}
+        />
+      )}
     </Dialog>
   );
 };
