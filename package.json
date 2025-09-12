@@ -15,7 +15,8 @@
     "format": "prettier --write .",
     "accessibility": "node scripts/accessibilityCheck.js",
     "copy-locales": "node scripts/copyTranslations.js",
-    "generate-sw-assets": "node scripts/generate-sw-assets.js"
+    "generate-sw-assets": "node scripts/generate-sw-assets.js",
+    "check-locales": "node scripts/check-locales.mjs"
   },
   "overrides": {
     "test-exclude": "^7.0.1"
