@@ -43,9 +43,8 @@ jest.mock('@/hooks/use-dark-mode', () => ({
 
 jest.mock('@/components/ui/dialog', () => ({
   __esModule: true,
-  Dialog: ({ open, children }: { open: boolean; children: React.ReactNode }) => (
-    open ? <div>{children}</div> : null
-  ),
+  Dialog: ({ open, children }: { open: boolean; children: React.ReactNode }) =>
+    open ? <div>{children}</div> : null,
   DialogContent: ({
     className,
     children,
@@ -57,37 +56,71 @@ jest.mock('@/components/ui/dialog', () => ({
       {children}
     </div>
   ),
-  DialogHeader: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  DialogTitle: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  DialogFooter: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  DialogHeader: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  DialogTitle: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  DialogDescription: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  DialogFooter: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
 }));
 
 jest.mock('@/components/ui/button', () => ({
   __esModule: true,
-  Button: ({ children, ...props }: { children: React.ReactNode } & React.ComponentProps<'button'>) => (
+  Button: ({
+    children,
+    ...props
+  }: { children: React.ReactNode } & React.ComponentProps<'button'>) => (
     <button {...props}>{children}</button>
   ),
 }));
 
 jest.mock('@/components/ui/scroll-area', () => ({
   __esModule: true,
-  ScrollArea: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  ScrollArea: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
 }));
 
 jest.mock('@/components/ui/alert-dialog', () => ({
   __esModule: true,
-  AlertDialog: ({ open, children }: { open: boolean; children: React.ReactNode }) => (
-    open ? <div>{children}</div> : null
+  AlertDialog: ({
+    open,
+    children,
+  }: {
+    open: boolean;
+    children: React.ReactNode;
+  }) => (open ? <div>{children}</div> : null),
+  AlertDialogContent: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
   ),
-  AlertDialogContent: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  AlertDialogHeader: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  AlertDialogFooter: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  AlertDialogTitle: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  AlertDialogDescription: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  AlertDialogAction: ({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) => (
-    <button onClick={onClick}>{children}</button>
+  AlertDialogHeader: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
   ),
-  AlertDialogCancel: ({ children }: { children: React.ReactNode }) => <button>{children}</button>,
+  AlertDialogFooter: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  AlertDialogTitle: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  AlertDialogDescription: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+  AlertDialogAction: ({
+    children,
+    onClick,
+  }: {
+    children: React.ReactNode;
+    onClick?: () => void;
+  }) => <button onClick={onClick}>{children}</button>,
+  AlertDialogCancel: ({ children }: { children: React.ReactNode }) => (
+    <button>{children}</button>
+  ),
 }));
 
 jest.mock('@/components/SearchableDropdown', () => ({
@@ -122,7 +155,9 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-function renderPanel(overrides: Partial<React.ComponentProps<typeof SettingsPanel>> = {}) {
+function renderPanel(
+  overrides: Partial<React.ComponentProps<typeof SettingsPanel>> = {},
+) {
   const props = {
     open: true,
     onOpenChange: jest.fn(),
@@ -167,10 +202,7 @@ describe('SettingsPanel', () => {
     });
     fireEvent.click(confirmBtn);
     expect(purgeCache).toHaveBeenCalled();
-    expect(trackEvent).toHaveBeenCalledWith(
-      true,
-      AnalyticsEvent.PurgeCache,
-    );
+    expect(trackEvent).toHaveBeenCalledWith(true, AnalyticsEvent.PurgeCache);
   });
 
   test('export and import data buttons work', async () => {
@@ -250,7 +282,9 @@ describe('SettingsPanel', () => {
 
   test('custom key dropdown populates input and excludes use_ keys', () => {
     renderPanel({ defaultTab: 'custom-values' });
-    const select = screen.getByTestId('custom-key-dropdown') as HTMLSelectElement;
+    const select = screen.getByTestId(
+      'custom-key-dropdown',
+    ) as HTMLSelectElement;
     const options = Array.from(select.options).map((o) => o.value);
     expect(options).toContain('material');
     expect(options).not.toContain('use_material');

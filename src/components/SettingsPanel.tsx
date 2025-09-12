@@ -44,7 +44,7 @@ import {
   Trash2,
   Medal,
   Clock,
-  ClockOff,
+  AlarmClockOff,
 } from 'lucide-react';
 import { toast } from '@/components/ui/sonner-toast';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
@@ -242,9 +242,9 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
     return typeof stored === 'string' ? stored : '';
   });
   const [presetEditor, setPresetEditor] = useState('');
-  const [sectionPresets, setSectionPresets] = useState<Record<string, SectionPreset[]>>(() =>
-    getSectionPresets(),
-  );
+  const [sectionPresets, setSectionPresets] = useState<
+    Record<string, SectionPreset[]>
+  >(() => getSectionPresets());
   const refreshSectionPresets = useCallback(
     () => setSectionPresets(getSectionPresets()),
     [],
@@ -260,9 +260,10 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
   const [customMap, setCustomMap] = useState<CustomValuesMap>(() =>
     getCustomValues(),
   );
-  const [editValue, setEditValue] = useState<{ key: string; old: string } | null>(
-    null,
-  );
+  const [editValue, setEditValue] = useState<{
+    key: string;
+    old: string;
+  } | null>(null);
   const [customKey, setCustomKey] = useState('');
   const [customValue, setCustomValue] = useState('');
   const [cssEditorOpen, setCssEditorOpen] = useState(false);
@@ -824,7 +825,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       >
                         {temporaryModeEnabled ? (
                           <>
-                            <ClockOff className="w-4 h-4" />{' '}
+                            <AlarmClockOff className="w-4 h-4" />{' '}
                             {t('disableTemporaryMode', {
                               defaultValue: 'Disable Temporary Mode',
                             })}
@@ -1633,7 +1634,10 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
         defaultValue={sectionRename?.preset.name ?? ''}
         onConfirm={(name) => {
           if (sectionRename) {
-            removeSectionPreset(sectionRename.section, sectionRename.preset.name);
+            removeSectionPreset(
+              sectionRename.section,
+              sectionRename.preset.name,
+            );
             saveSectionPreset(sectionRename.section, {
               name,
               values: sectionRename.preset.values,
