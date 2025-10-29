@@ -20,6 +20,7 @@ const SUPPORTED_LOCALES = [
   'fi-FI',
   'fr-BE',
   'fr-FR',
+  'hu-HU',
   'it-IT',
   'ja-JP',
   'ko-KR',
