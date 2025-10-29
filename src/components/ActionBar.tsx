@@ -396,6 +396,17 @@ const { toast: notify } = useToast();
             Français (France)
           </DropdownMenuItem>
           <DropdownMenuItem
+            onSelect={() => setLocale('hu-HU')}
+            className="gap-2"
+          >
+            <img
+              src="/flags/hu-HU.svg"
+              alt="Magyar (Magyarország)"
+              className="w-4 h-4"
+            />{' '}
+            Magyar (Magyarország)
+          </DropdownMenuItem>
+          <DropdownMenuItem
             onSelect={() => setLocale('de-DE')}
             className="gap-2"
           >

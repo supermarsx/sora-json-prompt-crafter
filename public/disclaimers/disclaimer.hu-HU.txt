@@ -1,0 +1,20 @@
+Szellemi Tulajdonra és Szoftverre Vonatkozó Nyilatkozat
+
+Ez a Szoftver és minden kapcsolódó tartalom, ideértve többek között a forráskódot, a dokumentációt, a példákat és a médiát, kizárólag tájékoztató, oktatási és kreatív célokat szolgál.
+
+A Szoftverrel kapcsolatos valamennyi szellemi tulajdonjog a jogosultaknál marad. Nem másolhatja, nem terjesztheti, nem módosíthatja, nem végezhet rajta visszafejtést, és nem készíthet származékos műveket, kivéve, ha azt ezek a feltételek vagy az alkalmazandó jog kifejezetten megengedi, továbbá nem használhatja a Szoftvert olyan módon, amely sérti a vonatkozó jogszabályokat vagy a szellemi tulajdonjogokat.
+
+A Szoftver „ahogy van” állapotban kerül biztosításra, mindenféle kifejezett vagy vélelmezett garancia nélkül, beleértve többek között az eladhatóságra, a jogsértés-mentességre, a teljesítményre vagy egy adott célra való alkalmasságra vonatkozó garanciákat.
+
+A Szoftver használatával Ön elfogadja, hogy:
+
+    Ön teljes mértékben felelős azért, hogy miként használja, osztja meg vagy módosítja a Szoftvert és az általa generált kimeneteket.
+
+    A Szoftver készítői, szerzői, karbantartói és licencadói nem felelősek semmilyen kárért, veszteségért vagy következményért, amely a Szoftver használatából vagy helytelen használatából ered.
+
+    Nem használja a Szoftvert jogellenes, etikátlan vagy jogsértő tevékenységekhez.
+
+    A Szoftverrel előállított kimenetek, eredmények vagy kreatív művek ugyanilyen nyilatkozatok hatálya alá esnek, és harmadik felek jogainak tárgyai lehetnek.
+
+A Szoftvert kizárólag saját felelősségére használhatja.
+Ha nem ért egyet ezekkel a feltételekkel, ne használja, ne másolja, ne terjessze és ne módosítsa a Szoftvert.
