@@ -616,14 +616,37 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
             <DialogTitle>{t('manage')}</DialogTitle>
           </DialogHeader>
           <Tabs defaultValue={defaultTab} className="flex flex-col h-full">
-            <TabsList className="grid w-full grid-cols-5">
-              <TabsTrigger value="manage">{t('manage')}</TabsTrigger>
-              <TabsTrigger value="general">{t('general')}</TabsTrigger>
-              <TabsTrigger value="presets">{t('presets')}</TabsTrigger>
-              <TabsTrigger value="custom-values">
+            <TabsList className="grid w-full grid-cols-5 gap-2 items-start justify-start">
+              <TabsTrigger
+                value="manage"
+                className="items-start justify-start whitespace-normal text-left"
+              >
+                {t('manage')}
+              </TabsTrigger>
+              <TabsTrigger
+                value="general"
+                className="items-start justify-start whitespace-normal text-left"
+              >
+                {t('general')}
+              </TabsTrigger>
+              <TabsTrigger
+                value="presets"
+                className="items-start justify-start whitespace-normal text-left"
+              >
+                {t('presets')}
+              </TabsTrigger>
+              <TabsTrigger
+                value="custom-values"
+                className="items-start justify-start whitespace-normal text-left"
+              >
                 {t('customValues', { defaultValue: 'Custom values' })}
               </TabsTrigger>
-              <TabsTrigger value="milestones">{t('milestones')}</TabsTrigger>
+              <TabsTrigger
+                value="milestones"
+                className="items-start justify-start whitespace-normal text-left"
+              >
+                {t('milestones')}
+              </TabsTrigger>
             </TabsList>
             <TabsContent value="manage" className="flex-1">
               <ScrollArea className="h-full">
