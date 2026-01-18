@@ -45,6 +45,11 @@ describe('isValidOptions', () => {
     ).toBe(false);
   });
 
+  test('rejects partial style_preset objects', () => {
+    expect(isValidOptions({ style_preset: { category: 'only' } })).toBe(false);
+    expect(isValidOptions({ style_preset: { style: 'only' } })).toBe(false);
+  });
+
   test('rejects invalid types for specific fields', () => {
     expect(
       isValidOptions({ composition_rules: {} as unknown as string[] }),

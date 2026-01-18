@@ -75,6 +75,17 @@ test('loads options from url', async () => {
   mockFetch.mockRestore();
 });
 
+test('falls back to defaults when url fetch fails', async () => {
+  const mockFetch = jest
+    .spyOn(globalThis, 'fetch')
+    .mockRejectedValue(new Error('network'));
+  const out = await runCli(['--url', 'https://example.com/data.json']);
+  const obj = JSON.parse(out);
+  expect(obj.prompt).toBeDefined();
+  expect(obj.prompt.length).toBeGreaterThan(0);
+  mockFetch.mockRestore();
+});
+
 test('outputs share URL when --share-url is provided', async () => {
   const out = await runCli(['--prompt', 'share', '--width', '111', '--share-url']);
   const url = new URL(out.trim());

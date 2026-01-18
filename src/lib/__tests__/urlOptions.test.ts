@@ -30,6 +30,16 @@ describe('urlOptions', () => {
     expect(parsed).toEqual(opts);
   });
 
+  test('prefers hash over query param when both are present', () => {
+    const hashOpts = { ...DEFAULT_OPTIONS, prompt: 'hash wins' };
+    const queryOpts = { ...DEFAULT_OPTIONS, prompt: 'query loses' };
+    const hash = serializeOptions(hashOpts);
+    const query = serializeOptions(queryOpts);
+    const url = `https://example.com/?o=${query}#${hash}`;
+    const parsed = getOptionsFromUrl(url);
+    expect(parsed).toEqual(hashOpts);
+  });
+
   test('returns null for invalid compressed strings', () => {
     expect(deserializeOptions('not-valid')).toBeNull();
     const badJson = compressToEncodedURIComponent('not json');

@@ -24,6 +24,16 @@ describe('loadOptionsFromJson', () => {
     expect(loadOptionsFromJson(bad)).toBeNull();
   });
 
+  test('returns null when unknown keys are present', () => {
+    const json = JSON.stringify({ prompt: 'ok', unknown_key: 'nope' });
+    expect(loadOptionsFromJson(json)).toBeNull();
+  });
+
+  test('returns null when style_preset shape is invalid', () => {
+    const json = JSON.stringify({ style_preset: { category: 'test' } });
+    expect(loadOptionsFromJson(json)).toBeNull();
+  });
+
   test('normalizes composition_rules from snake_case', () => {
     const json = JSON.stringify({ composition_rules: ['rule_of_thirds'] });
     const result = loadOptionsFromJson(json);
