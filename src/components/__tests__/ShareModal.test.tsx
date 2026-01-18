@@ -207,6 +207,20 @@ describe('ShareModal', () => {
     expect(toast.error).toHaveBeenCalledWith(i18n.t('somethingWentWrong'));
   });
 
+  test('does not show error on native share abort', async () => {
+    const abortError = new Error('Abort');
+    abortError.name = 'AbortError';
+    const shareMock = jest.fn().mockRejectedValue(abortError);
+    Object.defineProperty(navigator, 'share', {
+      configurable: true,
+      value: shareMock,
+    });
+    renderModal();
+    fireEvent.click(screen.getByRole('button', { name: /share./i }));
+    await waitFor(() => expect(shareMock).toHaveBeenCalled());
+    expect(toast.error).not.toHaveBeenCalled();
+  });
+
   test('renders QR code with share URL when toggled', () => {
     renderModal();
     fireEvent.click(screen.getByRole('button', { name: /show qr code/i }));

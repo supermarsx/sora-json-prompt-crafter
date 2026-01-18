@@ -130,6 +130,46 @@ describe('ImportModal', () => {
     expect(onImport).not.toHaveBeenCalled();
   });
 
+  test('non-ok response shows error toast', async () => {
+    const onImport = jest.fn();
+    const onClose = jest.fn();
+    // @ts-expect-error mock fetch
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: false,
+      type: 'cors',
+      text: () => Promise.resolve('{"prompt":"test"}'),
+    });
+
+    render(<ImportModal isOpen={true} onClose={onClose} onImport={onImport} />);
+    const urlInput = screen.getByPlaceholderText(/enter url/i);
+    fireEvent.change(urlInput, { target: { value: 'https://example.com/test.json' } });
+    const fetchButton = screen.getByRole('button', { name: /fetch/i });
+    fireEvent.click(fetchButton);
+
+    await waitFor(() => expect(toast.error).toHaveBeenCalledWith(i18n.t('requestBlocked')));
+    expect(onImport).not.toHaveBeenCalled();
+  });
+
+  test('opaque response shows error toast', async () => {
+    const onImport = jest.fn();
+    const onClose = jest.fn();
+    // @ts-expect-error mock fetch
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      type: 'opaque',
+      text: () => Promise.resolve('{"prompt":"test"}'),
+    });
+
+    render(<ImportModal isOpen={true} onClose={onClose} onImport={onImport} />);
+    const urlInput = screen.getByPlaceholderText(/enter url/i);
+    fireEvent.change(urlInput, { target: { value: 'https://example.com/test.json' } });
+    const fetchButton = screen.getByRole('button', { name: /fetch/i });
+    fireEvent.click(fetchButton);
+
+    await waitFor(() => expect(toast.error).toHaveBeenCalledWith(i18n.t('requestBlocked')));
+    expect(onImport).not.toHaveBeenCalled();
+  });
+
   test('invalid JSON from URL shows error toast', async () => {
     const onImport = jest.fn();
     const onClose = jest.fn();

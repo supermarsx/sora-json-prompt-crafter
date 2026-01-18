@@ -86,6 +86,51 @@ test('falls back to defaults when url fetch fails', async () => {
   mockFetch.mockRestore();
 });
 
+test('falls back to defaults when url JSON is invalid', async () => {
+  const mockFetch = jest
+    .spyOn(globalThis, 'fetch')
+    .mockResolvedValue({
+      text: async () => 'not json',
+    } as unknown as Response);
+  const out = await runCli(['--url', 'https://example.com/data.json']);
+  const obj = JSON.parse(out);
+  expect(obj.prompt).toBeDefined();
+  expect(obj.prompt.length).toBeGreaterThan(0);
+  mockFetch.mockRestore();
+});
+
+test('falls back to defaults when file JSON is invalid', async () => {
+  const file = join(tmpdir(), 'bad-options.json');
+  fs.writeFileSync(file, '{bad json');
+  const out = await runCli(['--file', file]);
+  const obj = JSON.parse(out);
+  expect(obj.prompt).toBeDefined();
+  expect(obj.prompt.length).toBeGreaterThan(0);
+});
+
+test('parses boolean flags and omits disabled fields', async () => {
+  const out = await runCli([
+    '--prompt',
+    'bool test',
+    '--use_negative_prompt',
+    'false',
+  ]);
+  const obj = JSON.parse(out);
+  expect(obj.prompt).toBe('bool test');
+  expect(obj.negative_prompt).toBeUndefined();
+});
+
+test('parses comma-separated arrays from flags', async () => {
+  const out = await runCli([
+    '--prompt',
+    'array test',
+    '--composition_rules',
+    'rule_of_thirds,leading_lines',
+  ]);
+  const obj = JSON.parse(out);
+  expect(obj.composition_rules).toEqual(['rule_of_thirds', 'leading_lines']);
+});
+
 test('outputs share URL when --share-url is provided', async () => {
   const out = await runCli(['--prompt', 'share', '--width', '111', '--share-url']);
   const url = new URL(out.trim());

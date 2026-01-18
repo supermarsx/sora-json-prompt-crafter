@@ -79,5 +79,72 @@ describe('i18n', () => {
     );
     expect(screen.getByText('Kopieren')).toBeTruthy();
   });
+
+  test('uses cached translations when available', async () => {
+    jest.resetModules();
+    const cacheResponse = {
+      json: async () => ({ copy: 'Cached Copy' }),
+    };
+    const matchSpy = jest
+      .spyOn(caches, 'match')
+      .mockResolvedValue(cacheResponse as Response);
+    const fetchSpy = jest
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValue({
+        ok: true,
+        status: 200,
+        json: async () => ({ copy: 'Fetched Copy' }),
+        clone() {
+          return this;
+        },
+      } as unknown as Response);
+
+    const { default: i18n, changeLanguageAsync } = await import('../i18n');
+    await changeLanguageAsync('fr-FR');
+    render(
+      <I18nextProvider i18n={i18n}>
+        <span>{i18n.t('copy')}</span>
+      </I18nextProvider>,
+    );
+    expect(screen.getByText('Cached Copy')).toBeTruthy();
+    expect(fetchSpy).not.toHaveBeenCalled();
+    expect(matchSpy).toHaveBeenCalled();
+    fetchSpy.mockRestore();
+    matchSpy.mockRestore();
+  });
+
+  test('caches fetched translations when cache is empty', async () => {
+    jest.resetModules();
+    const put = jest.fn();
+    const openSpy = jest
+      .spyOn(caches, 'open')
+      .mockResolvedValue({ put } as unknown as Cache);
+    const matchSpy = jest
+      .spyOn(caches, 'match')
+      .mockResolvedValue(undefined);
+    const response = {
+      ok: true,
+      status: 200,
+      json: async () => ({ copy: 'Fetched Copy' }),
+      clone() {
+        return this;
+      },
+    };
+    const fetchSpy = jest
+      .spyOn(globalThis, 'fetch')
+      .mockResolvedValue(response as unknown as Response);
+
+    const { changeLanguageAsync } = await import('../i18n');
+    await changeLanguageAsync('de-DE');
+
+    const expectedUrl = '/locales/de-DE.json';
+    expect(matchSpy).toHaveBeenCalledWith(expectedUrl);
+    expect(openSpy).toHaveBeenCalled();
+    expect(put).toHaveBeenCalledWith(expectedUrl, response);
+
+    fetchSpy.mockRestore();
+    matchSpy.mockRestore();
+    openSpy.mockRestore();
+  });
 });
 
