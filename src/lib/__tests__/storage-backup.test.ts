@@ -10,6 +10,8 @@ import {
   DARK_MODE,
   PRESETS,
   CUSTOM_VALUES,
+  CUSTOM_CSS,
+  CUSTOM_JS,
 } from '../storage-keys';
 import {
   importCustomPresets,
@@ -54,5 +56,13 @@ describe('exportAppData/importAppData', () => {
     });
     expect(exportCurrentPresets().stylePresets?.foo).toEqual(['bar']);
     expect(getCustomValues()).toEqual({ color: ['red'] });
+  });
+
+  test('exports only non-empty custom CSS/JS', () => {
+    localStorage.setItem(CUSTOM_CSS, '');
+    localStorage.setItem(CUSTOM_JS, 'alert("hi")');
+    const exported = exportAppData();
+    expect(exported.preferences[CUSTOM_CSS]).toBeUndefined();
+    expect(exported.preferences[CUSTOM_JS]).toBe('alert("hi")');
   });
 });
