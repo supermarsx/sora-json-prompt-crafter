@@ -22,6 +22,14 @@ describe('urlOptions', () => {
     expect(parsed).toEqual(opts);
   });
 
+  test('parses options from query param', () => {
+    const opts = { ...DEFAULT_OPTIONS, prompt: 'query test' };
+    const encoded = serializeOptions(opts);
+    const url = `https://example.com/?o=${encoded}`;
+    const parsed = getOptionsFromUrl(url);
+    expect(parsed).toEqual(opts);
+  });
+
   test('returns null for invalid compressed strings', () => {
     expect(deserializeOptions('not-valid')).toBeNull();
     const badJson = compressToEncodedURIComponent('not json');
