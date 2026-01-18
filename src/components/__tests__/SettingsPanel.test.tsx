@@ -6,7 +6,12 @@ import { purgeCache } from '@/lib/purgeCache';
 import { trackEvent, AnalyticsEvent } from '@/lib/analytics';
 import i18n from '@/i18n';
 import { toast } from '@/components/ui/sonner-toast';
-import { exportAppData, importAppData } from '@/lib/storage';
+import {
+  exportAppData,
+  importAppData,
+  syncConfigToUrl,
+  loadConfigFromUrl,
+} from '@/lib/storage';
 
 jest.mock('@/lib/purgeCache', () => ({ purgeCache: jest.fn() }));
 jest.mock('@/lib/analytics', () => {
@@ -23,6 +28,8 @@ jest.mock('@/lib/storage', () => ({
   updateCustomValue: jest.fn(),
   exportCustomValues: jest.fn(() => ({})),
   importCustomValues: jest.fn(),
+  syncConfigToUrl: jest.fn(),
+  loadConfigFromUrl: jest.fn(),
   getSectionPresets: jest.fn(() => ({})),
   removeSectionPreset: jest.fn(),
   saveSectionPreset: jest.fn(),
