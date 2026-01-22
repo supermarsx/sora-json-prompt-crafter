@@ -323,4 +323,66 @@ describe('SettingsPanel', () => {
     fireEvent.change(input, { target: { value: 'my_custom_key' } });
     expect(input.value).toBe('my_custom_key');
   });
+
+  test('syncs data to URL via prompt dialog', async () => {
+    (syncConfigToUrl as jest.Mock).mockResolvedValue(undefined);
+    renderPanel({ defaultTab: 'manage' });
+    fireEvent.click(screen.getByRole('button', { name: /sync to url/i }));
+    const input = screen.getByPlaceholderText(
+      i18n.t('urlPlaceholder'),
+    ) as HTMLInputElement;
+    fireEvent.change(input, { target: { value: 'https://example.com/sync' } });
+    fireEvent.click(screen.getByRole('button', { name: /save/i }));
+    await waitFor(() =>
+      expect(syncConfigToUrl).toHaveBeenCalledWith(
+        'https://example.com/sync',
+      ),
+    );
+    expect(toast.success).toHaveBeenCalledWith(i18n.t('dataExported'));
+  });
+
+  test('loads data from URL via prompt dialog', async () => {
+    (loadConfigFromUrl as jest.Mock).mockResolvedValue(undefined);
+    renderPanel({ defaultTab: 'manage' });
+    fireEvent.click(screen.getByRole('button', { name: /load from url/i }));
+    const input = screen.getByPlaceholderText(
+      i18n.t('urlPlaceholder'),
+    ) as HTMLInputElement;
+    fireEvent.change(input, { target: { value: 'https://example.com/load' } });
+    fireEvent.click(screen.getByRole('button', { name: /save/i }));
+    await waitFor(() =>
+      expect(loadConfigFromUrl).toHaveBeenCalledWith(
+        'https://example.com/load',
+      ),
+    );
+    expect(toast.success).toHaveBeenCalledWith(i18n.t('dataImported'));
+  });
+
+  test('shows error toast when url sync fails', async () => {
+    (syncConfigToUrl as jest.Mock).mockRejectedValue(new Error('fail'));
+    renderPanel({ defaultTab: 'manage' });
+    fireEvent.click(screen.getByRole('button', { name: /sync to url/i }));
+    const input = screen.getByPlaceholderText(
+      i18n.t('urlPlaceholder'),
+    ) as HTMLInputElement;
+    fireEvent.change(input, { target: { value: 'https://example.com/sync' } });
+    fireEvent.click(screen.getByRole('button', { name: /save/i }));
+    await waitFor(() =>
+      expect(toast.error).toHaveBeenCalledWith(i18n.t('requestBlocked')),
+    );
+  });
+
+  test('shows error toast when url load fails', async () => {
+    (loadConfigFromUrl as jest.Mock).mockRejectedValue(new Error('fail'));
+    renderPanel({ defaultTab: 'manage' });
+    fireEvent.click(screen.getByRole('button', { name: /load from url/i }));
+    const input = screen.getByPlaceholderText(
+      i18n.t('urlPlaceholder'),
+    ) as HTMLInputElement;
+    fireEvent.change(input, { target: { value: 'https://example.com/load' } });
+    fireEvent.click(screen.getByRole('button', { name: /save/i }));
+    await waitFor(() =>
+      expect(toast.error).toHaveBeenCalledWith(i18n.t('requestBlocked')),
+    );
+  });
 });

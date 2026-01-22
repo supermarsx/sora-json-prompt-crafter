@@ -190,4 +190,19 @@ describe('ImportModal', () => {
     expect(onImport).not.toHaveBeenCalled();
     expect(trackEvent).not.toHaveBeenCalled();
   });
+
+  test('empty URL does not trigger fetch', async () => {
+    const onImport = jest.fn();
+    const onClose = jest.fn();
+    const fetchSpy = jest.fn();
+    // @ts-expect-error mock fetch
+    global.fetch = fetchSpy;
+
+    render(<ImportModal isOpen={true} onClose={onClose} onImport={onImport} />);
+    const fetchButton = screen.getByRole('button', { name: /fetch/i });
+    fireEvent.click(fetchButton);
+
+    expect(fetchSpy).not.toHaveBeenCalled();
+    expect(onImport).not.toHaveBeenCalled();
+  });
 });

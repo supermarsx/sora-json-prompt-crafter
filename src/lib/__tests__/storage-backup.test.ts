@@ -12,6 +12,7 @@ import {
   CUSTOM_VALUES,
   CUSTOM_CSS,
   CUSTOM_JS,
+  ACTION_LABELS_ENABLED,
 } from '../storage-keys';
 import {
   importCustomPresets,
@@ -64,5 +65,29 @@ describe('exportAppData/importAppData', () => {
     const exported = exportAppData();
     expect(exported.preferences[CUSTOM_CSS]).toBeUndefined();
     expect(exported.preferences[CUSTOM_JS]).toBe('alert("hi")');
+  });
+
+  test('importAppData ignores non-object input', () => {
+    localStorage.setItem(CURRENT_JSON, 'keep');
+    importAppData(null as unknown as object);
+    expect(localStorage.getItem(CURRENT_JSON)).toBe('keep');
+  });
+
+  test('importAppData stores preferences and custom code', () => {
+    importAppData({
+      currentJson: null,
+      jsonHistory: [],
+      preferences: {
+        [ACTION_LABELS_ENABLED]: true,
+        [CUSTOM_CSS]: 'body{color:red;}',
+        [CUSTOM_JS]: 'console.log("ok")',
+      },
+      sectionPresets: {},
+      presets: {},
+      customValues: {},
+    });
+    expect(localStorage.getItem(ACTION_LABELS_ENABLED)).toBe('true');
+    expect(localStorage.getItem(CUSTOM_CSS)).toBe('body{color:red;}');
+    expect(localStorage.getItem(CUSTOM_JS)).toBe('console.log("ok")');
   });
 });

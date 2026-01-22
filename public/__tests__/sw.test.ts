@@ -192,6 +192,28 @@ describe('service worker', () => {
     expect(result).toBe(cachedIndex);
   });
 
+  test('returns 503 when navigation has no cached index', async () => {
+    await import('../sw.js');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (global as any).caches.match.mockResolvedValue(undefined);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (global as any).fetch.mockRejectedValue(new Error('offline'));
+    let responded: Promise<Response> | undefined;
+    const event = {
+      request: {
+        url: 'http://localhost/unknown',
+        mode: 'navigate',
+        method: 'GET',
+      } as unknown as Request,
+      respondWith: (p: Promise<Response>) => {
+        responded = p;
+      },
+    };
+    listeners.fetch(event);
+    const result = await responded;
+    expect(result.status).toBe(503);
+  });
+
   test('returns 503 when network fails for non-navigation request', async () => {
     await import('../sw.js');
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -108,6 +108,27 @@ test('falls back to defaults when file JSON is invalid', async () => {
   expect(obj.prompt.length).toBeGreaterThan(0);
 });
 
+test('falls back to defaults when file is missing', async () => {
+  const file = join(tmpdir(), 'missing-options.json');
+  const out = await runCli(['--file', file]);
+  const obj = JSON.parse(out);
+  expect(obj.prompt).toBeDefined();
+  expect(obj.prompt.length).toBeGreaterThan(0);
+});
+
+test('falls back to defaults when url JSON has unknown keys', async () => {
+  const mockFetch = jest
+    .spyOn(globalThis, 'fetch')
+    .mockResolvedValue({
+      text: async () => JSON.stringify({ prompt: 'ok', unknown_key: 'nope' }),
+    } as unknown as Response);
+  const out = await runCli(['--url', 'https://example.com/data.json']);
+  const obj = JSON.parse(out);
+  expect(obj.prompt).toBeDefined();
+  expect(obj.prompt.length).toBeGreaterThan(0);
+  mockFetch.mockRestore();
+});
+
 test('parses boolean flags and omits disabled fields', async () => {
   const out = await runCli([
     '--prompt',

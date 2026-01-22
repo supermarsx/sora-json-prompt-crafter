@@ -92,6 +92,19 @@ describe('importCustomPresets', () => {
     expect(dnd.monsterTypeOptions).toContain('sand worm');
     expect(dnd.monsterTypeOptions).toHaveLength(origMonsterLen + 1);
   });
+
+  test('resetPresetCollections restores original presets', async () => {
+    const { stylePresets } = await import('../../data/stylePresets');
+    const original = stylePresets['Classic Art & Painting'][0];
+    importCustomPresets({
+      stylePresets: { 'Classic Art & Painting': ['temp-style'] },
+    });
+    expect(stylePresets['Classic Art & Painting']).toContain('temp-style');
+    const { resetPresetCollections } = await import('../presetLoader');
+    resetPresetCollections();
+    expect(stylePresets['Classic Art & Painting']).not.toContain('temp-style');
+    expect(stylePresets['Classic Art & Painting'][0]).toBe(original);
+  });
 });
 
 describe('loadCustomPresetsFromUrl', () => {
